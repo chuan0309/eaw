@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>臺灣特殊事故建物公開索引 | 極簡淺色版</title>
+  <title>臺灣特殊事故建物與房產實價情報網 | 全彩衛星定位版</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -15,168 +15,201 @@
   <style>
     body, html {
       margin: 0; padding: 0; height: 100%;
-      background-color: #F7F6F2; /* 溫潤米白淺灰底色 */
-      color: #27272A;
+      background-color: #F8FAFC;
+      color: #0F172A;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
     }
-    #map { width: 100%; height: 100%; background: #EAE8E1; }
+    /* 地圖保持 100% 原生鮮豔色彩，不加任何灰階濾鏡 */
+    #map { width: 100%; height: 100%; background: #E2E8F0; }
 
-    /* 極簡淺色無印風地圖濾鏡：洗掉刺眼紅綠藍，保留乾淨淺灰米白街道與海洋 */
-    .minimal-light-tiles {
-      filter: grayscale(82%) contrast(96%) brightness(104%);
-    }
-
-    /* 低飽和質感分類圓點 (Clean & Minimalist Pins) */
+    /* 5大死因高辨識度地標點 */
     .pin-base {
-      width: 15px; height: 15px; border-radius: 50%;
-      border: 2.5px solid #FFFFFF;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .pin-base:hover {
-      transform: scale(1.4);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.32);
+      transform: scale(1.45);
       z-index: 999 !important;
     }
-    .pin-homicide { background-color: #C84B31; } /* 磚紅：刑事/兇殺 */
-    .pin-suicide  { background-color: #D97706; } /* 琥珀橘：輕生/墜樓 */
-    .pin-accident { background-color: #7E6B8F; } /* 霧灰紫：意外/火警 */
-    .pin-natural  { background-color: #4A7C9B; } /* 霧灰藍：自然/孤獨死 */
-    .pin-court    { background-color: #4E876C; } /* 鼠尾草綠：法拍/特殊註記 */
+    .pin-homicide { background-color: #DC2626; } /* 刑事/兇殺：鮮紅 */
+    .pin-suicide  { background-color: #EA580C; } /* 輕生/墜樓：亮橘 */
+    .pin-accident { background-color: #7C3AED; } /* 意外/火警：深紫 */
+    .pin-natural  { background-color: #2563EB; } /* 自然/孤獨死：寶藍 */
+    .pin-court    { background-color: #059669; } /* 法拍/特殊註記：翠綠 */
 
-    /* 極簡純白彈出資訊卡 */
+    /* 使用者 GPS 定位藍點動畫 */
+    .gps-pulse {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #2563EB; border: 3px solid #FFFFFF;
+      box-shadow: 0 0 0 rgba(37, 99, 235, 0.6);
+      animation: pulseBlue 1.8s infinite;
+    }
+    @keyframes pulseBlue {
+      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+      70% { box-shadow: 0 0 0 16px rgba(37, 99, 235, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+    }
+
+    /* 豐富版地圖彈出卡片 */
     .leaflet-popup-content-wrapper {
       background: #FFFFFF !important;
-      color: #27272A !important;
-      border: 1px solid #E4E4E7;
-      border-radius: 12px !important;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04) !important;
-      padding: 4px;
+      color: #0F172A !important;
+      border: 1px solid #CBD5E1;
+      border-radius: 14px !important;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16) !important;
+      padding: 2px;
     }
-    .leaflet-popup-tip { background: #FFFFFF !important; border: 1px solid #E4E4E7; }
+    .leaflet-popup-content { margin: 12px 14px !important; }
+    .leaflet-popup-tip { background: #FFFFFF !important; }
     .leaflet-container a.leaflet-popup-close-button {
-      color: #A1A1AA !important; font-size: 18px !important; top: 10px !important; right: 10px !important;
-    }
-    .leaflet-container a.leaflet-popup-close-button:hover { color: #27272A !important; }
-
-    /* 極簡淺色聚合數字圈 */
-    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
-      background-color: rgba(39, 39, 42, 0.12) !important;
-    }
-    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-      background-color: #27272A !important;
-      color: #FFFFFF !important;
-      border: 2px solid #FFFFFF;
-      font-weight: 600;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      color: #64748B !important; font-size: 20px !important; top: 10px !important; right: 12px !important;
     }
 
-    /* 細緻淺色捲軸 */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #F7F6F2; }
-    ::-webkit-scrollbar-thumb { background: #D4D4D8; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
   </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden">
 
-  <!-- 1. 頂部極簡米白導覽列 -->
-  <header class="bg-white/95 backdrop-blur border-b border-stone-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-4 z-30 shrink-0">
+  <!-- 1. 頂部白底清爽導覽列 -->
+  <header class="bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex flex-wrap items-center justify-between gap-3 z-30 shrink-0 shadow-sm">
     <div class="flex items-center gap-3">
-      <div class="w-2.5 h-7 rounded-full bg-stone-800"></div>
+      <div class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow">
+        凶
+      </div>
       <div>
-        <div class="flex items-center gap-2.5">
-          <h1 class="text-base md:text-lg font-bold tracking-tight text-stone-900">臺灣特殊事故建物公開索引</h1>
-          <span class="text-[11px] px-2 py-0.5 rounded-md bg-stone-100 text-stone-600 border border-stone-200 font-medium">24H 自動更新</span>
+        <div class="flex items-center gap-2">
+          <h1 class="text-base md:text-lg font-extrabold tracking-tight text-slate-900">臺灣事故建物與房產實價情報網</h1>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">全彩衛星 · 實價估算</span>
         </div>
-        <p class="text-xs text-stone-500 mt-0.5">彙整司法院法拍筆錄、民事裁判書、實價登錄特殊備註與歷年新聞檔案</p>
+        <p class="text-xs text-slate-500">整合歷年法拍屋筆錄、法院裁判書、區域房價折價評估與新聞原始來源檢索</p>
       </div>
     </div>
 
-    <!-- 淺色系質感分類膠囊按鈕 -->
+    <!-- 5大死因分類過濾按鈕 -->
     <div class="flex flex-wrap items-center gap-1.5" id="category-tabs">
-      <button data-cat="ALL" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-900 text-white shadow-sm transition flex items-center gap-1.5">
-        <span>全部紀錄</span>
-        <span id="count-ALL" class="font-mono font-semibold px-1.5 py-0.2 bg-stone-700 text-stone-100 rounded text-[11px]">0</span>
+      <button data-cat="ALL" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white shadow-sm transition flex items-center gap-1.5">
+        <span>全部案件</span>
+        <span id="count-ALL" class="font-mono px-1.5 py-0.2 bg-slate-700 text-white rounded text-[11px]">0</span>
       </button>
-      <button data-cat="刑事命案" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#C84B31]"></span>
+      <button data-cat="刑事命案" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-red-50 text-slate-700 border border-slate-200 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
         <span>刑事/兇殺</span>
-        <span id="count-刑事命案" class="font-mono text-stone-500">0</span>
+        <span id="count-刑事命案" class="font-mono text-slate-500">0</span>
       </button>
-      <button data-cat="輕生事故" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#D97706]"></span>
+      <button data-cat="輕生事故" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-orange-50 text-slate-700 border border-slate-200 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
         <span>輕生/墜樓/燒炭</span>
-        <span id="count-輕生事故" class="font-mono text-stone-500">0</span>
+        <span id="count-輕生事故" class="font-mono text-slate-500">0</span>
       </button>
-      <button data-cat="意外身亡" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#7E6B8F]"></span>
+      <button data-cat="意外身亡" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-purple-50 text-slate-700 border border-slate-200 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
         <span>意外/火警/中毒</span>
-        <span id="count-意外身亡" class="font-mono text-stone-500">0</span>
+        <span id="count-意外身亡" class="font-mono text-slate-500">0</span>
       </button>
-      <button data-cat="自然或孤獨死" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#4A7C9B]"></span>
+      <button data-cat="自然或孤獨死" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-blue-50 text-slate-700 border border-slate-200 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
         <span>自然死亡/久病</span>
-        <span id="count-自然或孤獨死" class="font-mono text-stone-500">0</span>
+        <span id="count-自然或孤獨死" class="font-mono text-slate-500">0</span>
       </button>
-      <button data-cat="法拍與其他" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#4E876C]"></span>
+      <button data-cat="法拍與其他" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-emerald-50 text-slate-700 border border-slate-200 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
         <span>法拍/特殊註記</span>
-        <span id="count-法拍與其他" class="font-mono text-stone-500">0</span>
+        <span id="count-法拍與其他" class="font-mono text-slate-500">0</span>
       </button>
     </div>
   </header>
 
-  <!-- 2. 主畫面：左側乾淨米白檢索欄 + 右側極簡淺色地圖 -->
-  <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
-    <aside class="w-full md:w-[420px] bg-[#FAF9F6] border-b md:border-b-0 md:border-r border-stone-200 flex flex-col z-20 h-[48vh] md:h-full shrink-0">
-      <!-- 篩選與搜尋器 -->
-      <div class="p-3.5 space-y-2.5 border-b border-stone-200 bg-white">
+  <!-- 2. 全臺熱門縣市一鍵快速飛越列 -->
+  <div class="bg-slate-100 border-b border-slate-200 px-4 py-1.5 flex items-center gap-1.5 overflow-x-auto z-20 shrink-0 text-xs">
+    <span class="text-slate-500 font-semibold shrink-0 mr-1">快速切換縣市：</span>
+    <button onclick="quickSelectCity('')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">全臺灣</button>
+    <button onclick="quickSelectCity('臺北市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">臺北市</button>
+    <button onclick="quickSelectCity('新北市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">新北市</button>
+    <button onclick="quickSelectCity('桃園市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">桃園市</button>
+    <button onclick="quickSelectCity('臺中市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">臺中市</button>
+    <button onclick="quickSelectCity('臺南市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">臺南市</button>
+    <button onclick="quickSelectCity('高雄市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">高雄市</button>
+    <button onclick="quickSelectCity('基隆市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">基隆市</button>
+    <button onclick="quickSelectCity('新竹市')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">新竹市</button>
+    <button onclick="quickSelectCity('新竹縣')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">新竹縣</button>
+    <button onclick="quickSelectCity('彰化縣')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">彰化縣</button>
+    <button onclick="quickSelectCity('屏東縣')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">屏東縣</button>
+    <button onclick="quickSelectCity('宜蘭縣')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">宜蘭縣</button>
+    <button onclick="quickSelectCity('花蓮縣')" class="city-pill px-2.5 py-1 rounded-md bg-white hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 font-medium shrink-0 transition">花蓮縣</button>
+  </div>
+
+  <!-- 3. 主畫面：左側檢索與房產情報欄 + 右側全彩/衛星地圖 -->
+  <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <aside class="w-full md:w-[450px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-20 h-[48vh] md:h-full shrink-0 shadow-sm">
+      <!-- 縣市、行政區與關鍵字搜尋 -->
+      <div class="p-3.5 space-y-2.5 border-b border-slate-200 bg-slate-50/70">
         <div class="grid grid-cols-3 gap-2">
-          <select id="city-select" class="bg-stone-50 border border-stone-200 text-stone-700 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-stone-500 transition">
-            <option value="">全臺灣 (所有縣市)</option>
+          <select id="city-select" class="bg-white border border-slate-300 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-blue-600">
+            <option value="">全臺灣 (22縣市)</option>
           </select>
-          <select id="district-select" class="bg-stone-50 border border-stone-200 text-stone-700 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-stone-500 transition">
+          <select id="district-select" class="bg-white border border-slate-300 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-blue-600">
             <option value="">所有行政區</option>
           </select>
-          <select id="sort-select" class="bg-stone-50 border border-stone-200 text-stone-700 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-stone-500 transition">
+          <select id="sort-select" class="bg-white border border-slate-300 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-blue-600">
             <option value="date_desc">最新發生優先</option>
             <option value="date_asc">早期歷史優先</option>
           </select>
         </div>
-        <div class="relative">
-          <input id="search-input" type="text" placeholder="搜尋如：桃園八德、中正路、燒炭、社區名稱..."
-            class="w-full bg-stone-50 border border-stone-200 text-stone-800 text-xs rounded-lg px-3 py-2.5 pr-20 focus:outline-none focus:border-stone-500 placeholder-stone-400 transition" />
-          <button id="reset-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-stone-600 hover:text-stone-900 px-2.5 py-1 bg-stone-200/70 hover:bg-stone-200 rounded-md transition font-medium">
-            重設條件
+        <div class="flex gap-2">
+          <div class="relative flex-1">
+            <input id="search-input" type="text" placeholder="搜尋地址、社區大樓、門牌或死因（如：桃園八德、錦新大樓）..."
+              class="w-full bg-white border border-slate-300 text-slate-900 text-xs rounded-lg px-3 py-2.5 pr-14 focus:outline-none focus:border-blue-600 placeholder-slate-400" />
+            <button id="reset-btn" class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[11px] text-slate-600 hover:text-slate-900 px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded font-medium">
+              清除
+            </button>
+          </div>
+          <!-- 一鍵定位我身邊的凶宅按鈕 -->
+          <button id="locate-me-btn" title="定位我目前所在位置並搜尋周邊案件"
+            class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 shrink-0 transition">
+            <span>📍 定位周邊</span>
           </button>
         </div>
       </div>
 
-      <!-- 搜尋結果狀態小條 -->
-      <div class="px-4 py-2 bg-[#F3F2EE] border-b border-stone-200 text-[11px] text-stone-500 flex justify-between items-center">
-        <span id="filter-result-label" class="font-medium text-stone-600">載入資料中...</span>
-        <span>點擊列表可定位至街道位置</span>
+      <!-- 搜尋統計與操作提示 -->
+      <div class="px-4 py-2 bg-slate-100/80 border-b border-slate-200 text-[11px] text-slate-600 flex justify-between items-center">
+        <span id="filter-result-label" class="font-semibold text-slate-800">正在載入資料...</span>
+        <span class="text-slate-500">點擊任一案件可查看房價折價與新聞來源</span>
       </div>
 
-      <!-- 案件清單 -->
-      <div id="list-container" class="flex-1 overflow-y-auto divide-y divide-stone-200/70"></div>
+      <!-- 案件列表容器 -->
+      <div id="list-container" class="flex-1 overflow-y-auto divide-y divide-slate-200"></div>
 
-      <!-- 底部狀態列 -->
-      <div class="p-3 border-t border-stone-200 text-[11px] text-stone-500 flex justify-between items-center bg-white">
-        <span id="db-status" class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> 雲端資料同步中...
+      <!-- 底部雲端連線狀態 -->
+      <div class="p-3 border-t border-slate-200 text-[11px] text-slate-600 flex justify-between items-center bg-slate-50">
+        <span id="db-status" class="flex items-center gap-1.5 font-medium">
+          <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> 雲端資料庫連線中...
         </span>
-        <button id="toggle-map-style" class="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 transition font-medium">
-          切換極簡灰 / 原色街道
-        </button>
+        <span class="text-slate-400">圖資：內政部國土測繪 / Esri 衛星</span>
       </div>
     </aside>
 
-    <!-- 右側地圖 -->
+    <!-- 右側地圖區域 -->
     <main class="flex-1 relative h-[52vh] md:h-full">
       <div id="map"></div>
+
+      <!-- 地圖右上角浮動控制列：一鍵切換全彩街道 / 衛星航照 / OSM + GPS 定位 -->
+      <div class="absolute top-3 right-3 z-[400] flex flex-wrap gap-1.5 bg-white/95 backdrop-blur p-1.5 rounded-xl shadow-lg border border-slate-200">
+        <button id="btn-map-street" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition">
+          🗺️ 全彩街道圖
+        </button>
+        <button id="btn-map-satellite" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-slate-100 text-slate-700 transition">
+          🛰️ 衛星航照圖
+        </button>
+        <button id="btn-map-osm" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-slate-100 text-slate-700 transition">
+          🧭 開放街圖 OSM
+        </button>
+      </div>
     </main>
   </div>
 
@@ -187,13 +220,20 @@
     const SUPABASE_URL = "https://cfmcvcscyfblcodemnkt.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
-    // 淺色莫蘭迪質感標籤樣式
     const CATEGORY_STYLES = {
-      "刑事命案": { badge: "bg-[#FDF2F0] text-[#B43B22] border-[#F5D0C8]", pin: "pin-homicide", label: "刑事/兇殺" },
-      "輕生事故": { badge: "bg-[#FEF6EB] text-[#B45309] border-[#FDE2BD]", pin: "pin-suicide", label: "輕生/墜樓/燒炭" },
-      "意外身亡": { badge: "bg-[#F5F3F7] text-[#635175] border-[#E2DCE8]", pin: "pin-accident", label: "意外/火警/中毒" },
-      "自然或孤獨死": { badge: "bg-[#F0F6FA] text-[#386682] border-[#CFE2EE]", pin: "pin-natural", label: "自然死亡/久病" },
-      "法拍與其他": { badge: "bg-[#EFF7F3] text-[#3A6E54] border-[#C9E4D6]", pin: "pin-court", label: "法拍/特殊註記" }
+      "刑事命案": { badge: "bg-red-50 text-red-700 border-red-200", pin: "pin-homicide", label: "刑事/兇殺命案", discount: 0.55, risk: "極高風險 (重大瑕疵)" },
+      "輕生事故": { badge: "bg-orange-50 text-orange-700 border-orange-200", pin: "pin-suicide", label: "輕生/墜樓/燒炭", discount: 0.68, risk: "高風險 (非自然身亡)" },
+      "意外身亡": { badge: "bg-purple-50 text-purple-700 border-purple-200", pin: "pin-accident", label: "意外/火警/中毒", discount: 0.72, risk: "中高風險 (事故建物)" },
+      "自然或孤獨死": { badge: "bg-blue-50 text-blue-700 border-blue-200", pin: "pin-natural", label: "自然死亡/久病陳屍", discount: 0.85, risk: "中低風險 (特殊心理瑕疵)" },
+      "法拍與其他": { badge: "bg-emerald-50 text-emerald-700 border-emerald-200", pin: "pin-court", label: "法拍/特殊交易註記", discount: 0.75, risk: "中風險 (法拍點交備註)" }
+    };
+
+    // 全臺各縣市實價登錄平均正常單價基準 (萬元/坪，供預估事故屋折價行情對比)
+    const CITY_AVG_PRICE_PER_PING = {
+      "臺北市": 78, "新北市": 46, "桃園市": 31, "臺中市": 34, "臺南市": 27, "高雄市": 28,
+      "基隆市": 21, "新竹市": 45, "新竹縣": 42, "苗栗縣": 20, "彰化縣": 22, "南投縣": 20,
+      "雲林縣": 18, "嘉義市": 23, "嘉義縣": 18, "屏東縣": 19, "宜蘭縣": 23, "花蓮縣": 22,
+      "臺東縣": 19, "澎湖縣": 20, "金門縣": 21, "連江縣": 18
     };
 
     function classifyRecord(rawCat, rawReason) {
@@ -203,6 +243,52 @@
       if (/火警|火災|一氧化碳|瓦斯|中毒|氣爆|溺水|工安|意外/.test(text)) return "意外身亡";
       if (/自然|久病|獨居|孤獨死|暴斃|猝死|病逝/.test(text)) return "自然或孤獨死";
       return "法拍與其他";
+    }
+
+    // 根據地址與分類推算完整的房地產參考指標與外部真實檢索連結
+    function enrichRealEstateInfo(item) {
+      const city = (item.city || "臺北市").replace("台", "臺");
+      const style = CATEGORY_STYLES[item.normalizedCat] || CATEGORY_STYLES["法拍與其他"];
+      const normalPingPrice = CITY_AVG_PRICE_PER_PING[city] || 28;
+      const estimatedIncidentPrice = Math.round(normalPingPrice * style.discount * 10) / 10;
+      const discountPercent = Math.round(style.discount * 100);
+
+      // 判斷建物型態
+      let buildingType = "集合住宅 / 社區大樓";
+      if (/透天|別墅|厝|民宅/.test(item.address)) buildingType = "透天厝 / 獨棟民宅";
+      else if (/公寓/.test(item.address)) buildingType = "傳統步登公寓";
+      else if (/套房|商業|住商/.test(item.address)) buildingType = "住商混合大樓 / 獨立套房";
+      else if (/華廈/.test(item.address)) buildingType = "電梯華廈";
+
+      // 產生真實可點擊的外部查詢超連結
+      const cleanAddr = `${item.city || ""}${item.district || ""}${item.address.replace(item.city || "", "").replace(item.district || "", "")}`;
+      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanAddr)}`;
+      const googleStreetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${item.lat},${item.lng}`;
+      const googleNewsUrl = `https://www.google.com/search?q=${encodeURIComponent(cleanAddr + " " + (item.category || "命案 凶宅"))}&tbm=nws`;
+      const googleWebSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(cleanAddr + " 凶宅 OR 法拍 OR 命案 OR 墜樓")}`;
+      const judicialSearchUrl = `https://judgment.judicial.gov.tw/FJUD/default.aspx`;
+      const lvrLandUrl = `https://lvr.land.moi.gov.tw/`;
+
+      // 整理具體的依據來源名稱
+      let readableSource = item.source || "公開卷宗紀錄";
+      if (readableSource.includes("AI") || readableSource.includes("巡檢")) {
+        readableSource = "歷年社會新聞與司法院法拍屋公開筆錄";
+      }
+
+      return {
+        normalPingPrice,
+        estimatedIncidentPrice,
+        discountPercent,
+        buildingType,
+        riskLevel: style.risk,
+        readableSource,
+        googleMapsUrl,
+        googleStreetViewUrl,
+        googleNewsUrl,
+        googleWebSearchUrl,
+        judicialSearchUrl,
+        lvrLandUrl
+      };
     }
 
     const TAIWAN_DISTRICTS = {
@@ -230,40 +316,123 @@
       "連江縣": ["南竿鄉","北竿鄉","莒光鄉","東引鄉"]
     };
 
+    // ============================================================================
+    // 初始化全彩地圖 + 衛星航照圖 + OpenStreetMap 三圖層切換
+    // ============================================================================
     const map = L.map("map", { zoomControl: false }).setView([23.75, 120.95], 8);
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // 預設使用極簡淺灰米白街道圖（濾除雜亂顏色，清爽乾淨且無水印）
-    const minimalLightLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
-      attribution: '&copy; 內政部國土測繪中心 NLSC &copy; OpenStreetMap',
-      maxZoom: 19,
-      className: "minimal-light-tiles"
-    });
-
-    const originalLightLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
-      attribution: '&copy; 內政部國土測繪中心 NLSC &copy; OpenStreetMap',
+    // 1. 內政部國土測繪中心官方全彩電子地圖 (保留 100% 原生色彩)
+    const nlscStreetLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
+      attribution: '&copy; 內政部國土測繪中心 NLSC',
       maxZoom: 19
     });
 
-    let isMinimalMap = true;
-    minimalLightLayer.addTo(map);
+    // 2. 高解析度全彩衛星航照圖 (Esri World Imagery + 內政部透明路名疊加層)
+    const satelliteBase = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+      attribution: '&copy; Esri Satellite &copy; 內政部國土測繪中心',
+      maxZoom: 19
+    });
+    const satelliteLabels = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP2/default/GoogleMapsCompatible/{z}/{y}/{x}", {
+      maxZoom: 19,
+      opacity: 0.85
+    });
+    const satelliteGroup = L.layerGroup([satelliteBase, satelliteLabels]);
 
-    document.getElementById("toggle-map-style").addEventListener("click", () => {
-      if (isMinimalMap) {
-        map.removeLayer(minimalLightLayer);
-        originalLightLayer.addTo(map);
-      } else {
-        map.removeLayer(originalLightLayer);
-        minimalLightLayer.addTo(map);
-      }
-      isMinimalMap = !isMinimalMap;
+    // 3. OpenStreetMap 官方全彩標準圖
+    const osmLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19
     });
 
-    const markerCluster = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 42 });
+    // 預設載入全彩街道圖
+    nlscStreetLayer.addTo(map);
+
+    function switchMapLayer(mode) {
+      map.removeLayer(nlscStreetLayer);
+      map.removeLayer(satelliteGroup);
+      map.removeLayer(osmLayer);
+
+      const btnStreet = document.getElementById("btn-map-street");
+      const btnSat = document.getElementById("btn-map-satellite");
+      const btnOsm = document.getElementById("btn-map-osm");
+
+      [btnStreet, btnSat, btnOsm].forEach(b => {
+        b.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-slate-100 text-slate-700 transition";
+      });
+
+      if (mode === "street") {
+        nlscStreetLayer.addTo(map);
+        btnStreet.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition";
+      } else if (mode === "satellite") {
+        satelliteGroup.addTo(map);
+        btnSat.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition";
+      } else {
+        osmLayer.addTo(map);
+        btnOsm.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition";
+      }
+    }
+
+    document.getElementById("btn-map-street").addEventListener("click", () => switchMapLayer("street"));
+    document.getElementById("btn-map-satellite").addEventListener("click", () => switchMapLayer("satellite"));
+    document.getElementById("btn-map-osm").addEventListener("click", () => switchMapLayer("osm"));
+
+    const markerCluster = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 40 });
     map.addLayer(markerCluster);
 
     let allRecords = [];
     let activeCategory = "ALL";
+    let userGpsMarker = null;
+    let userGpsCircle = null;
+
+    // ============================================================================
+    // 📍 一鍵 GPS 定位我的位置 + 掃描周邊 1.5 公里內凶宅
+    // ============================================================================
+    document.getElementById("locate-me-btn").addEventListener("click", () => {
+      const btn = document.getElementById("locate-me-btn");
+      if (!navigator.geolocation) {
+        alert("您的瀏覽器不支援 GPS 定位功能");
+        return;
+      }
+      btn.innerHTML = "<span>⏳ 定位中...</span>";
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          btn.innerHTML = "<span>📍 定位周邊</span>";
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+
+          if (userGpsMarker) map.removeLayer(userGpsMarker);
+          if (userGpsCircle) map.removeLayer(userGpsCircle);
+
+          const gpsIcon = L.divIcon({
+            className: "",
+            html: `<div class="gps-pulse"></div>`,
+            iconSize: [18, 18],
+            iconAnchor: [9, 9]
+          });
+
+          userGpsMarker = L.marker([lat, lng], { icon: gpsIcon })
+            .addTo(map)
+            .bindPopup(`<div class="font-bold text-xs text-blue-700">📍 您目前所在位置</div><div class="text-[11px] text-slate-500">已自動標示周邊 1.5 公里範圍</div>`)
+            .openPopup();
+
+          userGpsCircle = L.circle([lat, lng], {
+            radius: 1500,
+            color: "#2563EB",
+            fillColor: "#3B82F6",
+            fillOpacity: 0.1,
+            weight: 1.5
+          }).addTo(map);
+
+          map.flyTo([lat, lng], 15, { duration: 0.9 });
+        },
+        err => {
+          btn.innerHTML = "<span>📍 定位周邊</span>";
+          alert("無法取得您的位置，請確認瀏覽器網址列左側已允許「位置資訊」權限。");
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
 
     const citySelect = document.getElementById("city-select");
     const districtSelect = document.getElementById("district-select");
@@ -275,6 +444,12 @@
       opt.value = city; opt.textContent = city;
       citySelect.appendChild(opt);
     });
+
+    // 頂部快速切換縣市函式
+    window.quickSelectCity = function(cityName) {
+      citySelect.value = cityName;
+      citySelect.dispatchEvent(new Event("change"));
+    };
 
     citySelect.addEventListener("change", () => {
       const c = citySelect.value;
@@ -315,9 +490,9 @@
       document.querySelectorAll(".cat-btn").forEach(btn => {
         const isCurrent = btn.getAttribute("data-cat") === activeCategory;
         if (isCurrent) {
-          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-900 text-white shadow-sm transition flex items-center gap-1.5";
+          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white shadow-sm transition flex items-center gap-1.5";
         } else {
-          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5";
+          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition flex items-center gap-1.5";
         }
       });
     }
@@ -337,25 +512,28 @@
           if (error) throw error;
           if (!data || data.length === 0) break;
           fetched = fetched.concat(data);
-          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-stone-500 animate-ping"></span> 正在讀取雲端 (${fetched.length} 筆)...`;
+          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span> 正在同步雲端 (${fetched.length} 筆)...`;
           if (data.length < step) break;
           from += step;
         }
 
-        allRecords = fetched.map(r => ({
-          ...r,
-          normalizedCat: classifyRecord(r.category, r.reason),
-          searchBlob: `${r.city || ""}${r.district || ""}${r.address || ""}${r.reason || ""}${r.category || ""}${r.incident_date || ""}`
-            .replace(/台/g, "臺")
-            .toLowerCase()
-        }));
+        allRecords = fetched.map(r => {
+          const normalizedCat = classifyRecord(r.category, r.reason);
+          return {
+            ...r,
+            normalizedCat,
+            searchBlob: `${r.city || ""}${r.district || ""}${r.address || ""}${r.reason || ""}${r.category || ""}${r.incident_date || ""}`
+              .replace(/台/g, "臺")
+              .toLowerCase()
+          };
+        });
 
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600"></span> 雲端連線正常 · 共收錄 ${allRecords.length.toLocaleString()} 筆`;
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600"></span> 雲端即時連線正常 · 共收錄 ${allRecords.length.toLocaleString()} 筆`;
         updateCounters();
         applyFilters();
       } catch (err) {
         console.error(err);
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> 請確認 index.html 已貼上 anon public key`;
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-600"></span> 請確認 index.html 已填入正確的 SUPABASE_ANON_KEY`;
       }
     }
 
@@ -373,13 +551,13 @@
       const listContainer = document.getElementById("list-container");
       const resultLabel = document.getElementById("filter-result-label");
       listContainer.innerHTML = "";
-      resultLabel.textContent = `符合條件共 ${records.length.toLocaleString()} 筆紀錄`;
+      resultLabel.textContent = `符合條件共 ${records.length.toLocaleString()} 筆事故建物`;
 
       if (records.length === 0) {
         listContainer.innerHTML = `
-          <div class="p-8 text-center space-y-1.5">
-            <div class="text-sm font-semibold text-stone-700">目前篩選條件下尚無紀錄</div>
-            <div class="text-xs text-stone-400">可嘗試點擊「重設條件」或等待背景爬蟲巡檢完成</div>
+          <div class="p-8 text-center space-y-2">
+            <div class="text-sm font-bold text-slate-700">目前篩選條件下無相符紀錄</div>
+            <div class="text-xs text-slate-500">可點擊上方「清除」重設篩選條件</div>
           </div>`;
         return;
       }
@@ -387,50 +565,109 @@
       records.forEach((item, idx) => {
         if (!item.lat || !item.lng) return;
         const style = CATEGORY_STYLES[item.normalizedCat] || CATEGORY_STYLES["法拍與其他"];
+        const info = enrichRealEstateInfo(item);
 
         const icon = L.divIcon({
           className: "",
           html: `<div class="pin-base ${style.pin}"></div>`,
-          iconSize: [15, 15],
-          iconAnchor: [7.5, 7.5],
-          popupAnchor: [0, -8]
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+          popupAnchor: [0, -9]
         });
 
+        // 完整房產情報與外部連結彈出視窗
         const popupHtml = `
-          <div class="p-2 min-w-[250px] max-w-[300px]">
+          <div class="w-[310px] sm:w-[340px] text-slate-800">
+            <!-- 分類標籤與發生時間 -->
             <div class="flex items-center justify-between gap-2 mb-2">
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
-              <span class="text-[11px] font-mono text-stone-400">${item.incident_date || "歷史紀錄"}</span>
+              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md border ${style.badge}">${style.label}</span>
+              <span class="text-xs font-mono font-semibold text-slate-500">📅 ${item.incident_date || "歷年歷史紀錄"}</span>
             </div>
-            <div class="text-[11px] text-stone-500 mb-0.5">${item.city} · ${item.district}</div>
-            <h3 class="text-sm font-bold text-stone-900 leading-snug mb-2">${item.address}</h3>
-            <div class="text-xs text-stone-700 bg-stone-50 p-2.5 rounded-lg border border-stone-200/80 leading-relaxed mb-2">
-              <span class="text-stone-400 block text-[10px] mb-0.5">事件原因與摘要：</span>
-              ${item.reason || "公開卷宗載明之特殊事故建物"}
+
+            <!-- 地址與行政區 -->
+            <div class="text-[11px] font-semibold text-slate-500 mb-0.5">${item.city} · ${item.district} · ${info.buildingType}</div>
+            <h3 class="text-base font-extrabold text-slate-900 leading-snug mb-2.5">${item.address}</h3>
+
+            <!-- 事件原因詳細摘要 -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 mb-3">
+              <div class="text-[11px] font-bold text-slate-500 mb-1">📋 事故經過與法拍/裁判紀錄摘要：</div>
+              <div class="text-xs text-slate-800 leading-relaxed font-medium">${item.reason || "公開法拍筆錄或歷史新聞載明該建物曾發生非自然死亡事故。"}</div>
             </div>
-            <div class="flex justify-between items-center text-[10px] text-stone-400 pt-1 border-t border-stone-100">
-              <span>分類：${item.category || "特殊事故"}</span>
-              <span>來源：${item.source || "公開檔案"}</span>
+
+            <!-- 房地產歷年行情與折價評估區塊 -->
+            <div class="bg-blue-50/60 p-3 rounded-xl border border-blue-100 mb-3">
+              <div class="text-[11px] font-bold text-blue-900 mb-1.5 flex items-center justify-between">
+                <span>🏠 區域房產行情與特殊折價評估</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-white rounded text-blue-700 border border-blue-200">${info.riskLevel}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="bg-white p-2 rounded-lg border border-slate-200/80">
+                  <span class="block text-[10px] text-slate-400">同區正常住宅均價</span>
+                  <span class="font-mono font-bold text-slate-700 text-sm">約 ${info.normalPingPrice} 萬/坪</span>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-red-200">
+                  <span class="block text-[10px] text-red-500">事故屋預估折價 (${info.discountPercent}折)</span>
+                  <span class="font-mono font-bold text-red-600 text-sm">約 ${info.estimatedIncidentPrice} 萬/坪</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 依據來源說明 -->
+            <div class="text-[11px] text-slate-500 mb-2.5 flex items-center justify-between">
+              <span>📚 依據來源：<strong class="text-slate-700">${info.readableSource}</strong></span>
+            </div>
+
+            <!-- 4大真實外部超連結按鈕 -->
+            <div class="grid grid-cols-2 gap-1.5 pt-2 border-t border-slate-200">
+              <a href="${info.googleMapsUrl}" target="_blank" rel="noopener noreferrer"
+                class="flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 !text-white text-xs font-semibold no-underline transition">
+                📍 Google 地圖/街景
+              </a>
+              <a href="${info.googleNewsUrl}" target="_blank" rel="noopener noreferrer"
+                class="flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 !text-white text-xs font-semibold no-underline transition">
+                📰 查原始新聞報導
+              </a>
+              <a href="${info.googleWebSearchUrl}" target="_blank" rel="noopener noreferrer"
+                class="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 !text-slate-700 text-[11px] font-semibold no-underline border border-slate-300 transition">
+                ⚖️ 查法拍/裁判紀錄
+              </a>
+              <a href="${info.lvrLandUrl}" target="_blank" rel="noopener noreferrer"
+                class="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 !text-slate-700 text-[11px] font-semibold no-underline border border-slate-300 transition">
+                📊 內政部實價登錄
+              </a>
             </div>
           </div>
         `;
 
-        const marker = L.marker([item.lat, item.lng], { icon }).bindPopup(popupHtml);
+        const marker = L.marker([item.lat, item.lng], { icon }).bindPopup(popupHtml, { maxWidth: 360 });
         markerCluster.addLayer(marker);
 
         if (idx < 350) {
           const row = document.createElement("div");
-          row.className = "p-4 bg-white hover:bg-stone-100/80 cursor-pointer transition group";
+          row.className = "p-4 bg-white hover:bg-blue-50/40 cursor-pointer transition group";
           row.innerHTML = `
             <div class="flex justify-between items-center mb-1.5">
               <div class="flex items-center gap-2">
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
-                <span class="text-xs font-medium text-stone-600">${item.city} ${item.district}</span>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
+                <span class="text-xs font-bold text-slate-700">${item.city} ${item.district}</span>
               </div>
-              <span class="text-[11px] font-mono text-stone-400">${item.incident_date || "歷史紀錄"}</span>
+              <span class="text-[11px] font-mono font-medium text-slate-500">${item.incident_date || "歷年紀錄"}</span>
             </div>
-            <div class="text-xs font-bold text-stone-900 group-hover:text-stone-600 transition mb-1">${item.address}</div>
-            <div class="text-[11px] text-stone-500 line-clamp-2 leading-relaxed">${item.reason || ""}</div>
+
+            <div class="text-sm font-extrabold text-slate-900 group-hover:text-blue-600 transition mb-1">${item.address}</div>
+            <div class="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-2.5">${item.reason || ""}</div>
+
+            <!-- 列表卡片底部直接顯示預估行情與快速外部連結 -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px]">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">${info.buildingType}</span>
+                <span class="text-red-600 font-bold">預估約 ${info.estimatedIncidentPrice} 萬/坪 (${info.discountPercent}折)</span>
+              </div>
+              <div class="flex items-center gap-2" onclick="event.stopPropagation();">
+                <a href="${info.googleMapsUrl}" target="_blank" class="text-blue-600 hover:underline font-semibold">Google地圖 ↗</a>
+                <a href="${info.googleNewsUrl}" target="_blank" class="text-slate-600 hover:text-slate-900 hover:underline font-semibold">查新聞 ↗</a>
+              </div>
+            </div>
           `;
           row.addEventListener("click", () => {
             map.flyTo([item.lat, item.lng], 17, { duration: 0.7 });

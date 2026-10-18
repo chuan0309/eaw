@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>臺灣特殊事故建物公開資料庫 | 全臺歷年實價與法拍索引</title>
+  <title>臺灣特殊事故建物公開資料庫 | 全臺歷年實價、法拍與死因分類索引</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -13,103 +13,164 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body, html { margin: 0; padding: 0; height: 100%; background-color: #0a0a0a; color: #e5e5e5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; }
-    #map { width: 100%; height: 100%; background: #0d0d0d; }
+    body, html { margin: 0; padding: 0; height: 100%; background-color: #0b0f17; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; }
+    #map { width: 100%; height: 100%; background: #0f172a; }
 
-    /* 將免費免 Key 的內政部/OSM 地圖直接渲染成極簡純黑高冷風格，永遠不會跳出 API KEY REQUIRED */
-    .dark-minimal-tiles {
-      filter: invert(100%) hue-rotate(180deg) grayscale(100%) brightness(88%) contrast(115%);
+    /* 5大死因彩色發光座標點 */
+    .pin-base {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2.5px solid #ffffff;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .pin-base:hover { transform: scale(1.45); z-index: 999 !important; }
+    .pin-homicide { background-color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.85); }   /* 刑事/兇殺：紅 */
+    .pin-suicide  { background-color: #f97316; box-shadow: 0 0 12px rgba(249, 115, 22, 0.85); }  /* 輕生/墜樓：橘 */
+    .pin-accident { background-color: #a855f7; box-shadow: 0 0 12px rgba(168, 85, 247, 0.85); }  /* 意外/火警：紫 */
+    .pin-natural  { background-color: #3b82f6; box-shadow: 0 0 12px rgba(59, 130, 246, 0.85); }  /* 自然/孤獨死：藍 */
+    .pin-court    { background-color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.85); }  /* 法拍/其他：綠 */
 
-    /* 極簡黑白座標點 */
-    .custom-pin {
-      width: 14px; height: 14px; border-radius: 50%;
-      background-color: #ffffff; border: 3px solid #000000;
-      box-shadow: 0 0 12px rgba(255,255,255,0.85);
-      transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-    .custom-pin:hover { transform: scale(1.45); background-color: #ef4444; border-color: #ffffff; }
-
-    /* 極簡黑卡彈窗 */
+    /* 彈出視窗質感卡片 */
     .leaflet-popup-content-wrapper {
-      background: #121212 !important; color: #f5f5f5 !important;
-      border: 1px solid #333333; border-radius: 8px !important;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.9) !important;
+      background: #111827 !important; color: #f8fafc !important;
+      border: 1px solid #334155; border-radius: 12px !important;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.8) !important;
       padding: 4px;
     }
-    .leaflet-popup-tip { background: #121212 !important; border: 1px solid #333333; }
-    .leaflet-container a.leaflet-popup-close-button { color: #888 !important; }
+    .leaflet-popup-tip { background: #111827 !important; border: 1px solid #334155; }
+    .leaflet-container a.leaflet-popup-close-button { color: #94a3b8 !important; font-size: 18px !important; top: 8px !important; right: 8px !important; }
 
-    /* 黑白灰聚合圓圈 */
-    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color: rgba(255, 255, 255, 0.18) !important; }
+    /* 區域聚合數字圈 */
+    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color: rgba(30, 41, 59, 0.75) !important; }
     .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-      background-color: #111111 !important; color: #ffffff !important;
-      border: 1px solid #666666; font-weight: 700; font-family: monospace;
+      background-color: #1e293b !important; color: #f8fafc !important;
+      border: 1.5px solid #64748b; font-weight: 700; font-family: monospace;
     }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #111; }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
   </style>
 </head>
-<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+<body class="flex flex-col h-screen overflow-hidden">
 
-  <!-- 左側極簡控制欄 -->
-  <aside class="w-full md:w-96 bg-[#0d0d0d] border-b md:border-b-0 md:border-r border-neutral-800 flex flex-col z-20 h-[45vh] md:h-full shrink-0">
-    <div class="p-5 border-b border-neutral-800 flex items-center justify-between">
+  <!-- 1. 頂部標題與死因分類即時統計導覽列 -->
+  <header class="bg-[#0f172a] border-b border-slate-800 px-5 py-3 flex flex-wrap items-center justify-between gap-4 z-30 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-3 h-8 rounded bg-gradient-to-b from-red-500 via-orange-500 to-blue-500"></div>
       <div>
-        <h1 class="text-lg font-bold tracking-wider text-white">臺灣事故建物索引</h1>
-        <p class="text-xs text-neutral-500 mt-0.5">全臺歷年法拍、裁判書與實價備註自動庫</p>
-      </div>
-      <div class="text-right">
-        <span id="total-count" class="text-2xl font-mono font-bold text-white">0</span>
-        <span class="block text-[10px] text-neutral-500 uppercase tracking-widest">已收錄筆數</span>
+        <div class="flex items-center gap-2.5">
+          <h1 class="text-base md:text-lg font-bold tracking-wide text-white">臺灣凶宅與特殊事故建物公開資料庫</h1>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">24H AI 自動巡檢</span>
+        </div>
+        <p class="text-xs text-slate-400">整合司法院法拍屋筆錄、民事瑕疵擔保裁判書、實價登錄特殊備註與歷年新聞檔案</p>
       </div>
     </div>
 
-    <!-- 篩選與搜尋 -->
-    <div class="p-4 space-y-3 border-b border-neutral-800 bg-[#111111]">
-      <div class="grid grid-cols-2 gap-2">
-        <select id="city-select" class="bg-neutral-900 border border-neutral-700 text-neutral-200 text-xs rounded px-3 py-2.5 focus:outline-none focus:border-white transition">
-          <option value="">全臺灣 (所有縣市)</option>
-        </select>
-        <select id="district-select" class="bg-neutral-900 border border-neutral-700 text-neutral-200 text-xs rounded px-3 py-2.5 focus:outline-none focus:border-white transition">
-          <option value="">所有行政區</option>
-        </select>
+    <!-- 死因分類快速過濾膠囊按鈕 (點選可直接切換分類) -->
+    <div class="flex flex-wrap items-center gap-2" id="category-tabs">
+      <button data-cat="ALL" class="cat-btn active px-3 py-1.5 rounded-lg text-xs font-medium bg-white text-slate-900 shadow transition flex items-center gap-1.5">
+        <span>全部案件</span>
+        <span id="count-ALL" class="font-mono font-bold px-1.5 py-0.2 bg-slate-200 rounded text-[11px]">0</span>
+      </button>
+      <button data-cat="刑事命案" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-red-400 border border-red-500/30 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+        <span>刑事/兇殺</span>
+        <span id="count-刑事命案" class="font-mono text-slate-300">0</span>
+      </button>
+      <button data-cat="輕生事故" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-orange-400 border border-orange-500/30 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+        <span>輕生/墜樓/燒炭</span>
+        <span id="count-輕生事故" class="font-mono text-slate-300">0</span>
+      </button>
+      <button data-cat="意外身亡" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-purple-400 border border-purple-500/30 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+        <span>意外/火警/中毒</span>
+        <span id="count-意外身亡" class="font-mono text-slate-300">0</span>
+      </button>
+      <button data-cat="自然或孤獨死" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-blue-400 border border-blue-500/30 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span>自然死亡/久病未發現</span>
+        <span id="count-自然或孤獨死" class="font-mono text-slate-300">0</span>
+      </button>
+      <button data-cat="法拍與其他" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 transition flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        <span>法拍/實價特殊註記</span>
+        <span id="count-法拍與其他" class="font-mono text-slate-300">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. 主畫面：左側多功能檢索欄 + 右側彩色分類地圖 -->
+  <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <aside class="w-full md:w-[410px] bg-[#0f172a] border-b md:border-b-0 md:border-r border-slate-800 flex flex-col z-20 h-[48vh] md:h-full shrink-0">
+      <!-- 縣市、行政區、排序與關鍵字過濾 -->
+      <div class="p-3.5 space-y-2.5 border-b border-slate-800 bg-[#131c31]">
+        <div class="grid grid-cols-3 gap-2">
+          <select id="city-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-blue-500">
+            <option value="">全臺灣 (所有縣市)</option>
+          </select>
+          <select id="district-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-blue-500">
+            <option value="">所有行政區</option>
+          </select>
+          <select id="sort-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-blue-500">
+            <option value="date_desc">最新發生優先</option>
+            <option value="date_asc">早期歷史優先</option>
+          </select>
+        </div>
+        <div class="relative">
+          <input id="search-input" type="text" placeholder="搜尋地址、社區大樓、門牌、死因關鍵字（如：燒炭、兇殺）..."
+            class="w-full bg-slate-900 border border-slate-700 text-slate-100 text-xs rounded-lg px-3 py-2.5 pr-16 focus:outline-none focus:border-blue-500 placeholder-slate-500" />
+          <button id="reset-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-300 hover:text-white px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded-md transition">
+            重設
+          </button>
+        </div>
       </div>
-      <div class="relative">
-        <input id="search-input" type="text" placeholder="輸入地址、路段、社區或事故原因查詢..."
-          class="w-full bg-neutral-900 border border-neutral-700 text-neutral-100 text-xs rounded px-3 py-2.5 pr-16 focus:outline-none focus:border-white transition placeholder-neutral-600" />
-        <button id="reset-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-neutral-300 hover:text-white px-2.5 py-1 bg-neutral-800 rounded border border-neutral-700">
-          重設
+
+      <!-- 案件卡片清單 -->
+      <div id="list-container" class="flex-1 overflow-y-auto divide-y divide-slate-800/80"></div>
+
+      <!-- 底部雲端連線狀態與圖資切換 -->
+      <div class="p-3 border-t border-slate-800 text-[11px] text-slate-400 flex justify-between items-center bg-[#0b0f17]">
+        <span id="db-status" class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> 正在檢查雲端資料庫連線...
+        </span>
+        <button id="toggle-map-style" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          切換明亮/暗黑地圖
         </button>
       </div>
-    </div>
+    </aside>
 
-    <!-- 案件清單 -->
-    <div id="list-container" class="flex-1 overflow-y-auto divide-y divide-neutral-800/70"></div>
-
-    <!-- 底部即時狀態列 -->
-    <div class="p-3 border-t border-neutral-800 text-[11px] text-neutral-400 flex justify-between items-center bg-[#080808]">
-      <span id="db-status" class="flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 正在同步雲端資料庫...
-      </span>
-      <button id="refresh-btn" class="text-[11px] text-neutral-400 hover:text-white underline">立即重新整理</button>
-    </div>
-  </aside>
-
-  <!-- 右側極簡黑白地圖 -->
-  <main class="flex-1 relative h-[55vh] md:h-full">
-    <div id="map"></div>
-  </main>
+    <!-- 右側地圖 -->
+    <main class="flex-1 relative h-[52vh] md:h-full">
+      <div id="map"></div>
+    </main>
+  </div>
 
   <script>
     // ============================================================================
-    // 已自動填入你的 Supabase Project ID (cfmcvcscyfblcodemnkt)
-    // 請將下方 SUPABASE_ANON_KEY 換成你 Supabase -> Settings -> API 裡的 anon public key
+    // 【請把下面這兩行換成你 Supabase 的網址與 anon public key】
     // ============================================================================
     const SUPABASE_URL = "https://cfmcvcscyfblcodemnkt.supabase.co";
-    const SUPABASE_ANON_KEY = "請把你的_anon_public_key_貼在這裡";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
+    // 死因自動歸類與顏色配置引擎
+    const CATEGORY_STYLES = {
+      "刑事命案": { badge: "bg-red-500/20 text-red-300 border-red-500/40", pin: "pin-homicide", label: "刑事/兇殺命案" },
+      "輕生事故": { badge: "bg-orange-500/20 text-orange-300 border-orange-500/40", pin: "pin-suicide", label: "輕生/墜樓/燒炭" },
+      "意外身亡": { badge: "bg-purple-500/20 text-purple-300 border-purple-500/40", pin: "pin-accident", label: "意外/火警/中毒" },
+      "自然或孤獨死": { badge: "bg-blue-500/20 text-blue-300 border-blue-500/40", pin: "pin-natural", label: "自然死亡/孤獨死" },
+      "法拍與其他": { badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40", pin: "pin-court", label: "法拍/特殊註記" }
+    };
+
+    function classifyRecord(rawCat, rawReason) {
+      const text = `${rawCat || ""} ${rawReason || ""}`;
+      if (/兇殺|命案|他殺|情殺|仇殺|分屍|槍擊|砍殺|刑事/.test(text)) return "刑事命案";
+      if (/輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥/.test(text)) return "輕生事故";
+      if (/火警|火災|一氧化碳|瓦斯|中毒|氣爆|溺水|工安|意外/.test(text)) return "意外身亡";
+      if (/自然|久病|獨居|孤獨死|暴斃|猝死|病逝/.test(text)) return "自然或孤獨死";
+      return "法拍與其他";
+    }
+
+    // 臺灣 22 縣市與行政區
     const TAIWAN_DISTRICTS = {
       "臺北市": ["中正區","大同區","中山區","松山區","大安區","萬華區","信義區","士林區","北投區","內湖區","南港區","文山區"],
       "新北市": ["板橋區","三重區","中和區","永和區","新莊區","新店區","土城區","蘆洲區","樹林區","汐止區","鶯歌區","三峽區","淡水區","瑞芳區","五股區","泰山區","林口區","深坑區","石碇區","坪林區","三芝區","石門區","八里區","平溪區","雙溪區","貢寮區","金山區","萬里區","烏來區"],
@@ -135,92 +196,32 @@
       "連江縣": ["南竿鄉","北竿鄉","莒光鄉","東引鄉"]
     };
 
-    // 內建全臺 52 筆歷年重大歷史種子庫（保證一打開網頁就有完整全台資料，連上 Supabase 後會自動合併新增！）
-    const HISTORICAL_SEED_DATA = [
-      { id: 101, city: "臺北市", district: "中山區", address: "臺北市中山區錦州街與新生北路口（錦新大樓）", lat: 25.0601, lng: 121.5284, incident_date: "1984-05-28", category: "重大火警/多起非自然身亡", reason: "前時代大飯店大火與後續30年間累計超過20起火警、墜樓與非自然身亡紀錄，實價與法拍重點備註建物。", source: "歷年法拍/歷史檔案" },
-      { id: 102, city: "臺北市", district: "萬華區", address: "臺北市萬華區西寧南路4號（西寧國宅原址）", lat: 25.0468, lng: 121.5072, incident_date: "2004-02-26", category: "多起墜樓/非自然身亡", reason: "歷年累計超過30起墜樓、暴斃與屋內非自然身亡案件，為臺北市著名特殊事故列管大樓。", source: "公開新聞/歷史卷宗" },
-      { id: 103, city: "臺北市", district: "松山區", address: "臺北市松山區南京東路五段某商業住宅大樓", lat: 25.0515, lng: 121.5632, incident_date: "2018-06-14", category: "屋內輕生", reason: "法拍筆錄載明債務人親屬於屋內燒炭非自然身亡，經法院公告為點交特殊事故物件。", source: "司法院法拍屋公告" },
-      { id: 104, city: "臺北市", district: "大安區", address: "臺北市大安區忠孝東路四段巷弄某華廈4樓", lat: 25.0418, lng: 121.5512, incident_date: "2016-11-03", category: "一氧化碳中毒", reason: "租客於冬季室內一氧化碳中毒身亡，台灣台北地方法院民事瑕疵擔保判決載明。", source: "司法院裁判書系統" },
-      { id: 105, city: "臺北市", district: "信義區", address: "臺北市信義區吳興街284巷某公寓3樓", lat: 25.0254, lng: 121.5648, incident_date: "2020-03-19", category: "屋內輕生", reason: "前屋主於主臥室發生非自然死亡事故，內政部實價登錄特殊交易備註特殊瑕疵折價交易。", source: "實價登錄特殊備註" },
-      { id: 106, city: "臺北市", district: "內湖區", address: "臺北市內湖區康寧路三段某社區大樓8樓", lat: 25.0682, lng: 121.6115, incident_date: "2019-08-22", category: "墜樓事故", reason: "住戶自高樓層墜落於社區中庭身亡，管委會與法院法拍查封筆錄均有記載。", source: "司法院法拍屋公告" },
-      { id: 107, city: "臺北市", district: "文山區", address: "臺北市文山區興隆路三段某公寓頂樓加蓋", lat: 24.9985, lng: 121.5572, incident_date: "2017-04-11", category: "屋內非自然死亡", reason: "房客於租屋處內久病輕生，房東向法院提起民事損害賠償訴訟判決紀錄。", source: "司法院裁判書系統" },
-      { id: 108, city: "臺北市", district: "北投區", address: "臺北市北投區溫泉路某套房社區", lat: 25.1365, lng: 121.5082, incident_date: "2021-01-15", category: "非自然死亡", reason: "獨居住戶於套房內非自然身亡多日後發現，法拍公告載明拍定後點交但具凶宅瑕疵。", source: "司法院法拍屋公告" },
-      { id: 109, city: "臺北市", district: "士林區", address: "臺北市士林區社子街某透天厝2樓", lat: 25.0872, lng: 121.5051, incident_date: "2015-09-08", category: "命案事故", reason: "家庭糾紛引發之屋內命案，台灣士林地方法院刑事與法拍卷宗記載。", source: "司法院裁判書系統" },
-      { id: 110, city: "新北市", district: "新店區", address: "新北市新店區北宜路二段某透天別墅（歷史事件原址）", lat: 24.9482, lng: 121.5541, incident_date: "2001-09-05", category: "重大歷史命案", reason: "臺灣治安史著名洪姓一家焚化爐非自然身亡案件，歷年多次轉手並見諸媒體與公開資料。", source: "公開歷史檔案" },
-      { id: 111, city: "新北市", district: "八里區", address: "新北市八里區龍米路一段某河景社區大樓", lat: 25.1388, lng: 121.4485, incident_date: "2013-02-16", category: "重大社會案件", reason: "相關查扣與法拍資產註記，法拍歷次減價拍賣筆錄載明。", source: "司法院法拍屋公告" },
-      { id: 112, city: "新北市", district: "板橋區", address: "新北市板橋區民生路二段某住商大樓11樓", lat: 25.0258, lng: 121.4712, incident_date: "2020-07-30", category: "屋內輕生", reason: "承租人於屋內燒炭身亡，買賣雙方因物之瑕疵擔保涉訟，新北地院判決公開。", source: "司法院裁判書系統" },
-      { id: 113, city: "新北市", district: "中和區", address: "新北市中和區興南路二段某公寓4樓", lat: 24.9852, lng: 121.5068, incident_date: "2017-11-22", category: "重大縱火火警", reason: "出租套房隔間縱火案造成9人死亡重大事故，相關樓層列管並見諸法拍與裁判紀錄。", source: "公開新聞/裁判書" },
-      { id: 114, city: "新北市", district: "永和區", address: "新北市永和區竹林路某電梯華廈6樓", lat: 25.0124, lng: 121.5188, incident_date: "2022-09-05", category: "屋內命案", reason: "家庭糾紛引發之屋內命案事故，警方封鎖現場並見諸各大社會新聞與後續資產處分。", source: "公開新聞檔案" },
-      { id: 115, city: "新北市", district: "三重區", address: "新北市三重區正義北路某套房大樓", lat: 25.0668, lng: 121.4975, incident_date: "2019-12-10", category: "屋內非自然身亡", reason: "法拍筆錄記載：據債權人陳報及警局函覆，屋內曾有非自然死亡情事。", source: "司法院法拍屋公告" },
-      { id: 116, city: "新北市", district: "新莊區", address: "新北市新莊區中平路某大型社區14樓", lat: 25.0485, lng: 121.4452, incident_date: "2018-03-25", category: "水泥封屍命案", reason: "姑嫂糾紛引發之屋內命案，台灣新北地方法院刑事判決與法拍記錄。", source: "司法院裁判書系統" },
-      { id: 117, city: "新北市", district: "淡水區", address: "新北市淡水區北新路某學生出租套房大樓", lat: 25.1812, lng: 121.4548, incident_date: "2021-05-02", category: "墜樓事故", reason: "房客自陽台墜落身亡，房屋買賣隱匿瑕疵經士林地方法院判決撤銷買賣契約。", source: "司法院裁判書系統" },
-      { id: 118, city: "新北市", district: "汐止區", address: "新北市汐止區新台五路一段某社區大樓", lat: 25.0615, lng: 121.6524, incident_date: "2001-05-07", category: "重大火警/命案", reason: "歷史著名社區大樓事故與法拍實價特殊交易備註。", source: "歷史卷宗/法拍公告" },
-      { id: 119, city: "桃園市", district: "桃園區", address: "桃園市桃園區中正路某住商混合大樓9樓", lat: 24.9965, lng: 121.3112, incident_date: "2020-08-19", category: "屋內輕生", reason: "桃園地方法院法拍公告載明：本件標的物內曾發生非自然死亡事件。", source: "司法院法拍屋公告" },
-      { id: 120, city: "桃園市", district: "中壢區", address: "桃園市中壢區環中東路某電梯大樓7樓", lat: 24.9625, lng: 121.2548, incident_date: "2019-04-14", category: "感情糾紛命案", reason: "租客因感情因素於屋內發生雙亡命案，桃園地院裁判書與法拍公告記載。", source: "司法院裁判書系統" },
-      { id: 121, city: "桃園市", district: "龜山區", address: "桃園市龜山區萬壽路二段某公寓3樓", lat: 24.9942, lng: 121.3418, incident_date: "2021-10-08", category: "一氧化碳中毒", reason: "熱水器安裝不當導致屋內人員一氧化碳中毒身亡，法拍點交筆錄載明。", source: "司法院法拍屋公告" },
-      { id: 122, city: "桃園市", district: "龍潭區", address: "桃園市龍潭區中興路某透天住宅", lat: 24.8685, lng: 121.2245, incident_date: "2016-02-07", category: "重大縱火命案", reason: "除夕夜家庭糾紛縱火造成多起死亡事故，桃園地院刑事判決公開資料。", source: "公開新聞/裁判書" },
-      { id: 123, city: "新竹市", district: "東區", address: "新竹市東區慈雲路某社區大樓高樓層", lat: 24.7912, lng: 121.0154, incident_date: "2022-03-11", category: "墜樓事故", reason: "住戶自高樓層墜落於露台身亡，引發露台戶與原住戶瑕疵擔保實務爭議。", source: "司法院裁判書系統" },
-      { id: 124, city: "新竹縣", district: "竹北市", address: "新竹縣竹北市縣政九路某商業大樓套房", lat: 24.8285, lng: 121.0112, incident_date: "2018-11-29", category: "屋內輕生", reason: "新竹地方法院法拍查封筆錄載明屋內曾有燒炭非自然死亡紀錄。", source: "司法院法拍屋公告" },
-      { id: 125, city: "苗栗縣", district: "頭份市", address: "苗栗縣頭份市中華路某透天住宅", lat: 24.6885, lng: 120.9082, incident_date: "2019-07-15", category: "屋內非自然身亡", reason: "苗栗地方法院民事判決買賣瑕疵擔保退屋案，載明前屋主親屬於三樓輕生。", source: "司法院裁判書系統" },
-      { id: 126, city: "臺中市", district: "中區", address: "臺中市中區綠川西街135號（千越大樓歷史紀錄）", lat: 24.1385, lng: 120.6838, incident_date: "1995-02-15", category: "歷史重大火警", reason: "90年代臺中複合式商業大樓火警與荒廢期間特殊事故歷史紀錄。", source: "公開歷史檔案" },
-      { id: 127, city: "臺中市", district: "西屯區", address: "臺中市西屯區臺灣大道三段某百戶套房大樓", lat: 24.1678, lng: 120.6425, incident_date: "2021-05-19", category: "多起輕生/墜樓", reason: "因戶數眾多且出入複雜，歷年於法拍公告與裁判書中多次出現屋內非自然身亡註記。", source: "司法院法拍屋公告" },
-      { id: 128, city: "臺中市", district: "北屯區", address: "臺中市北屯區文心路四段某電梯華廈5樓", lat: 24.1725, lng: 120.6852, incident_date: "2020-09-12", category: "屋內命案", reason: "債務糾紛引發之屋內兇殺案件，臺中地方法院法拍公告載明為凶宅物件。", source: "司法院法拍屋公告" },
-      { id: 129, city: "臺中市", district: "南屯區", address: "臺中市南屯區大墩路某社區大樓10樓", lat: 24.1485, lng: 120.6512, incident_date: "2018-12-03", category: "墜樓身亡", reason: "住戶自10樓陽台墜落中庭，臺中地院民事判決認定構成交易心理瑕疵。", source: "司法院裁判書系統" },
-      { id: 130, city: "臺中市", district: "豐原區", address: "臺中市豐原區中正路某透天民宅", lat: 24.2512, lng: 120.7185, incident_date: "2019-06-21", category: "屋內輕生", reason: "法拍筆錄經警局函覆確認曾發生屋內上吊非自然身亡事件。", source: "司法院法拍屋公告" },
-      { id: 131, city: "彰化縣", district: "員林市", address: "彰化縣員林市中山路二段某商業大樓", lat: 23.9635, lng: 120.5712, incident_date: "2017-08-14", category: "屋內非自然死亡", reason: "彰化地方法院法拍屋公告備註：據查封筆錄記載曾發生非自然死亡事故。", source: "司法院法拍屋公告" },
-      { id: 132, city: "彰化縣", district: "芳苑鄉", address: "彰化縣芳苑鄉草湖村某透天住宅（歷史事件原址）", lat: 23.9412, lng: 120.3825, incident_date: "2001-04-15", category: "家庭集體輕生", reason: "歷史著名社會事件原址，歷年法拍與轉手多次見諸媒體報導。", source: "公開新聞檔案" },
-      { id: 133, city: "南投縣", district: "埔里鎮", address: "南投縣埔里鎮信義路某透天厝", lat: 23.9685, lng: 120.9695, incident_date: "2020-02-18", category: "屋內輕生", reason: "南投地方法院法拍筆錄載明屋內曾有燒炭輕生紀錄，拍定後點交。", source: "司法院法拍屋公告" },
-      { id: 134, city: "雲林縣", district: "斗六市", address: "雲林縣斗六市民生南路某電梯公寓", lat: 23.7025, lng: 120.5385, incident_date: "2019-10-30", category: "非自然死亡", reason: "雲林地方法院民事瑕疵擔保訴訟案，買方於交屋後始知悉前租客於屋內身亡。", source: "司法院裁判書系統" },
-      { id: 135, city: "嘉義市", district: "西區", address: "嘉義市西區博愛路二段某住商大樓", lat: 23.4795, lng: 120.4365, incident_date: "2021-04-05", category: "墜樓/屋內輕生", reason: "嘉義地方法院法拍公告特殊備註：曾有住戶於屋內發生非自然死亡。", source: "司法院法拍屋公告" },
-      { id: 136, city: "嘉義縣", district: "民雄鄉", address: "嘉義縣民雄鄉建國路一段某出租學苑套房", lat: 23.5512, lng: 120.4315, incident_date: "2018-05-19", category: "一氧化碳/輕生", reason: "租客於套房內非自然身亡，房東向家屬求償房屋跌價損失之民事判決紀錄。", source: "司法院裁判書系統" },
-      { id: 137, city: "臺南市", district: "永康區", address: "臺南市永康區中華路某住商混合大樓", lat: 23.0085, lng: 120.2345, incident_date: "2020-11-11", category: "屋內非自然死亡", reason: "臺南地方法院法拍公告載明：經警局查訪，該址曾發生屋內燒炭輕生事件。", source: "司法院法拍屋公告" },
-      { id: 138, city: "臺南市", district: "中西區", address: "臺南市中西區西門路二段巷弄某透天老宅", lat: 22.9952, lng: 120.1995, incident_date: "2017-03-28", category: "屋內命案", reason: "歷史感情糾紛命案現場，經法拍多次減價拍賣並由投資客標得翻修。", source: "司法院法拍屋公告" },
-      { id: 139, city: "臺南市", district: "東區", address: "臺南市東區林森路二段某國宅社區6樓", lat: 22.9895, lng: 120.2215, incident_date: "2019-09-02", category: "墜樓事故", reason: "住戶自高樓層墜落身亡，臺南地院民事判決載明買賣資訊揭露爭議。", source: "司法院裁判書系統" },
-      { id: 140, city: "高雄市", district: "鹽埕區", address: "高雄市鹽埕區府北路31號（城中城大樓原址）", lat: 22.6285, lng: 120.2845, incident_date: "2021-10-14", category: "重大火警事故", reason: "造成46人死亡之重大住商大樓火警事故原址，現已拆除改建公園，列為歷史重大建物事故檔案。", source: "公開新聞/歷史檔案" },
-      { id: 141, city: "高雄市", district: "三民區", address: "高雄市三民區建工路某出租套房大樓", lat: 22.6512, lng: 120.3215, incident_date: "2020-06-18", category: "屋內輕生", reason: "高雄地方法院法拍屋公告載明：債務人陳報曾有房客於屋內非自然死亡。", source: "司法院法拍屋公告" },
-      { id: 142, city: "高雄市", district: "左營區", address: "高雄市左營區華夏路某電梯大樓12樓", lat: 22.6785, lng: 120.3045, incident_date: "2021-12-09", category: "墜樓身亡", reason: "住戶自陽台墜落至社區2樓露台身亡，引發高雄地院凶宅瑕疵認定訴訟。", source: "司法院裁判書系統" },
-      { id: 143, city: "高雄市", district: "鳳山區", address: "高雄市鳳山區青年路二段某公寓5樓", lat: 22.6352, lng: 120.3485, incident_date: "2018-07-23", category: "屋內命案/輕生", reason: "家庭糾紛引發之屋內非自然死亡事件，法拍公告與實價登錄特殊交易備註。", source: "司法院法拍屋公告" },
-      { id: 144, city: "高雄市", district: "前鎮區", address: "高雄市前鎮區一心二路某商業住宅大樓", lat: 22.6152, lng: 120.3095, incident_date: "2019-01-30", category: "屋內燒炭", reason: "法拍筆錄載明前屋主因債務問題於主臥室燒炭身亡，屬點交特殊事故物件。", source: "司法院法拍屋公告" },
-      { id: 145, city: "屏東縣", district: "屏東市", address: "屏東縣屏東市民生路某透天住宅", lat: 22.6685, lng: 120.4952, incident_date: "2020-04-12", category: "非自然死亡", reason: "屏東地方法院法拍公告註記：本件拍賣建物內曾有非自然死亡紀錄。", source: "司法院法拍屋公告" },
-      { id: 146, city: "宜蘭縣", district: "羅東鎮", address: "宜蘭縣羅東鎮公正路某電梯華廈", lat: 24.6785, lng: 121.7685, incident_date: "2019-11-05", category: "屋內輕生", reason: "宜蘭地方法院民事判決載明買方主張物之瑕疵（屋內曾有人上吊身亡）減少價金案。", source: "司法院裁判書系統" },
-      { id: 147, city: "花蓮縣", district: "吉安鄉", address: "花蓮縣吉安鄉建國路一段某透天民宅（花蓮五子命案原址）", lat: 23.9895, lng: 121.5765, incident_date: "2006-09-08", category: "重大歷史命案", reason: "臺灣治安史著名花蓮五子命案現場，歷經多次法拍、靈異傳聞與轉手紀錄。", source: "公開歷史檔案/法拍" },
-      { id: 148, city: "臺東縣", district: "臺東市", address: "臺東縣臺東市中華路一段某透天厝", lat: 22.7565, lng: 121.1485, incident_date: "2018-08-19", category: "屋內非自然死亡", reason: "臺東地方法院法拍筆錄載明經警局查報屋內曾有非自然身亡事件。", source: "司法院法拍屋公告" },
-      { id: 149, city: "澎湖縣", district: "馬公市", address: "澎湖縣馬公市光復路某透天住宅", lat: 23.5685, lng: 119.5695, incident_date: "2019-05-10", category: "屋內燒炭", reason: "離島地區法拍與社會新聞記載之屋內燒炭輕生事故建物。", source: "公開新聞/法拍公告" },
-      { id: 150, city: "金門縣", district: "金城鎮", address: "金門縣金城鎮民權路某公寓住宅", lat: 24.4325, lng: 118.3185, incident_date: "2020-10-22", category: "非自然死亡", reason: "金門地方法院民事與法拍紀錄記載之出租屋內非自然身亡案件。", source: "司法院裁判書系統" },
-      { id: 151, city: "連江縣", district: "南竿鄉", address: "連江縣南竿鄉介壽村某民宅建物", lat: 26.1585, lng: 119.9512, incident_date: "2017-12-01", category: "歷史意外/非自然身亡", reason: "離島歷史房屋事故紀錄備註。", source: "歷史卷宗" },
-      { id: 152, city: "基隆市", district: "仁愛區", address: "基隆市仁愛區愛三路某住商大樓套房", lat: 25.1292, lng: 121.7425, incident_date: "2020-01-19", category: "屋內非自然身亡", reason: "基隆地方法院法拍屋公告載明：據查封筆錄，屋內曾發生房客非自然死亡情事。", source: "司法院法拍屋公告" }
-    ];
-
-    // 初始化地圖：使用 100% 永久免費免 Key 的 OpenStreetMap + 臺灣內政部國土測繪中心(NLSC) 雙圖層，加上暗黑極簡濾鏡
+    // 地圖與圖層初始化（支援一鍵切換明亮標準街道圖 / 深色高對比圖）
     const map = L.map("map", { zoomControl: false }).setView([23.75, 120.95], 8);
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    const osmDarkLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      className: "dark-minimal-tiles",
-      attribution: '&copy; OpenStreetMap 臺灣極簡暗黑模式',
-      maxZoom: 19
-    });
+    const darkTiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 20 });
+    const lightTiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 20 });
+    let isDarkMap = true;
+    darkTiles.addTo(map);
 
-    const nlscDarkLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
-      className: "dark-minimal-tiles",
-      attribution: '&copy; 內政部國土測繪中心 NLSC',
-      maxZoom: 19
+    document.getElementById("toggle-map-style").addEventListener("click", () => {
+      if (isDarkMap) { map.removeLayer(darkTiles); lightTiles.addTo(map); }
+      else { map.removeLayer(lightTiles); darkTiles.addTo(map); }
+      isDarkMap = !isDarkMap;
     });
-
-    // 預設載入內政部繁體中文詳細門牌道路圖資
-    nlscDarkLayer.addTo(map);
-    L.control.layers({ "內政部詳細街道 (極簡黑)": nlscDarkLayer, "OpenStreetMap (極簡黑)": osmDarkLayer }, null, { position: "topright" }).addTo(map);
 
     const markerCluster = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 42 });
     map.addLayer(markerCluster);
 
     let allRecords = [];
+    let activeCategory = "ALL";
 
+    // 下拉選單與頂部彩色分類按鈕事件
     const citySelect = document.getElementById("city-select");
     const districtSelect = document.getElementById("district-select");
+    const sortSelect = document.getElementById("sort-select");
     const searchInput = document.getElementById("search-input");
-    const resetBtn = document.getElementById("reset-btn");
-    const refreshBtn = document.getElementById("refresh-btn");
 
     Object.keys(TAIWAN_DISTRICTS).forEach(city => {
       const opt = document.createElement("option");
@@ -229,12 +230,12 @@
     });
 
     citySelect.addEventListener("change", () => {
-      const selectedCity = citySelect.value;
+      const c = citySelect.value;
       districtSelect.innerHTML = '<option value="">所有行政區</option>';
-      if (selectedCity && TAIWAN_DISTRICTS[selectedCity]) {
-        TAIWAN_DISTRICTS[selectedCity].forEach(dist => {
+      if (c && TAIWAN_DISTRICTS[c]) {
+        TAIWAN_DISTRICTS[c].forEach(d => {
           const opt = document.createElement("option");
-          opt.value = dist; opt.textContent = dist;
+          opt.value = d; opt.textContent = d;
           districtSelect.appendChild(opt);
         });
       }
@@ -242,127 +243,180 @@
     });
 
     districtSelect.addEventListener("change", applyFilters);
+    sortSelect.addEventListener("change", applyFilters);
     searchInput.addEventListener("input", applyFilters);
-    resetBtn.addEventListener("click", () => {
+
+    document.getElementById("reset-btn").addEventListener("click", () => {
       citySelect.value = "";
       districtSelect.innerHTML = '<option value="">所有行政區</option>';
       searchInput.value = "";
+      activeCategory = "ALL";
+      updateCategoryTabUI();
       applyFilters();
       map.setView([23.75, 120.95], 8);
     });
-    refreshBtn.addEventListener("click", loadAllData);
 
-    // 自動合併「內建歷史種子庫」與「Supabase 雲端即時爬蟲庫」
+    document.querySelectorAll(".cat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeCategory = btn.getAttribute("data-cat");
+        updateCategoryTabUI();
+        applyFilters();
+      });
+    });
+
+    function updateCategoryTabUI() {
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        if (btn.getAttribute("data-cat") === activeCategory) {
+          btn.classList.add("ring-2", "ring-white", "scale-105");
+        } else {
+          btn.classList.remove("ring-2", "ring-white", "scale-105");
+        }
+      });
+    }
+
+    // 自動分頁載入 Supabase 全量雲端資料庫（支援上萬筆無上限讀取）
     async function loadAllData() {
       const statusEl = document.getElementById("db-status");
-      const mergedMap = new Map();
-      HISTORICAL_SEED_DATA.forEach(item => mergedMap.set(item.address, item));
-
-      if (!SUPABASE_ANON_KEY.startsWith("eyJ")) {
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> 已載入全臺歷史基底庫 (${mergedMap.size} 筆) · 填入 anon key 可同步雲端新增`;
-        allRecords = Array.from(mergedMap.values());
-        applyFilters();
+      if (!SUPABASE_URL.startsWith("http")) {
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> 尚未填入 Supabase 金鑰（請在 index.html 第145行填入以同步萬筆雲端庫）`;
+        allRecords = [];
+        updateCounters();
+        renderData([]);
         return;
       }
 
       try {
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let fetched = [];
         let from = 0;
         const step = 1000;
         while (true) {
           const { data, error } = await supabase
             .from("haunted_houses")
             .select("*")
-            .order("created_at", { ascending: false })
             .range(from, from + step - 1);
           if (error) throw error;
           if (!data || data.length === 0) break;
-          data.forEach(row => mergedMap.set(row.address, row));
+          fetched = fetched.concat(data);
+          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span> 正在從雲端同步資料 (${fetched.length} 筆)...`;
           if (data.length < step) break;
           from += step;
         }
-        allRecords = Array.from(mergedMap.values());
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 雲端自動爬蟲即時連線中 (共 ${allRecords.length} 筆)`;
+
+        allRecords = fetched.map(r => ({
+          ...r,
+          normalizedCat: classifyRecord(r.category, r.reason)
+        }));
+
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> 雲端即時連線正常 · 共收錄 ${allRecords.length.toLocaleString()} 筆`;
+        updateCounters();
         applyFilters();
       } catch (err) {
-        console.warn("Supabase 讀取異常，使用內建全臺歷史庫:", err);
-        allRecords = Array.from(mergedMap.values());
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> 歷史資料庫模式 (${allRecords.length} 筆)`;
-        applyFilters();
+        console.error(err);
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> 雲端連線失敗，請檢查 SUPABASE_URL 與 ANON_KEY`;
       }
+    }
+
+    function updateCounters() {
+      document.getElementById("count-ALL").textContent = allRecords.length.toLocaleString();
+      Object.keys(CATEGORY_STYLES).forEach(cat => {
+        const c = allRecords.filter(r => r.normalizedCat === cat).length;
+        const el = document.getElementById(`count-${cat}`);
+        if (el) el.textContent = c.toLocaleString();
+      });
     }
 
     function renderData(records) {
       markerCluster.clearLayers();
       const listContainer = document.getElementById("list-container");
       listContainer.innerHTML = "";
-      document.getElementById("total-count").textContent = records.length.toLocaleString();
 
-      const customIcon = L.divIcon({
-        className: "",
-        html: '<div class="custom-pin"></div>',
-        iconSize: [14, 14],
-        iconAnchor: [7, 7],
-        popupAnchor: [0, -8]
-      });
+      if (records.length === 0) {
+        listContainer.innerHTML = `<div class="p-8 text-center text-xs text-slate-500">目前篩選條件下無相符資料，或請先執行一鍵批量灌入腳本。</div>`;
+        return;
+      }
 
-      records.forEach(item => {
+      // 為確保萬筆流暢，列表顯示前 300 筆，地圖則全部透過 Cluster 聚合渲染
+      records.forEach((item, idx) => {
         if (!item.lat || !item.lng) return;
+        const style = CATEGORY_STYLES[item.normalizedCat] || CATEGORY_STYLES["法拍與其他"];
+
+        const icon = L.divIcon({
+          className: "",
+          html: `<div class="pin-base ${style.pin}"></div>`,
+          iconSize: [16, 16],
+          iconAnchor: [8, 8],
+          popupAnchor: [0, -8]
+        });
+
         const popupHtml = `
-          <div class="p-2 min-w-[240px] max-w-[290px]">
-            <div class="flex items-center justify-between gap-2 mb-1.5">
-              <span class="text-[10px] font-mono px-2 py-0.5 bg-neutral-800 text-white rounded border border-neutral-600">${item.city} · ${item.district}</span>
-              <span class="text-[11px] font-mono text-neutral-400">${item.incident_date || "歷史紀錄"}</span>
+          <div class="p-2.5 min-w-[250px] max-w-[300px]">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
+              <span class="text-[11px] font-mono text-slate-400">${item.incident_date || "歷史紀錄"}</span>
             </div>
-            <h3 class="text-sm font-bold text-white leading-snug mb-2">${item.address}</h3>
-            <div class="text-xs text-neutral-200 bg-neutral-900 p-2.5 rounded border border-neutral-800 leading-relaxed mb-2">
-              <span class="text-neutral-500 block text-[10px] mb-0.5">事件原因與經過：</span>
-              ${item.reason || "特殊事故紀錄"}
+            <div class="text-[11px] text-slate-400 mb-0.5">${item.city} · ${item.district}</div>
+            <h3 class="text-sm font-bold text-white leading-snug mb-2.5">${item.address}</h3>
+            <div class="text-xs text-slate-200 bg-slate-900 p-2.5 rounded-lg border border-slate-800 leading-relaxed mb-2">
+              <span class="text-slate-400 block text-[10px] mb-1">事件紀錄與死因摘要：</span>
+              ${item.reason || "公開卷宗載明之特殊事故建物"}
             </div>
-            <div class="flex justify-between items-center text-[10px] text-neutral-400">
-              <span>類型：${item.category || "非自然死亡"}</span>
-              <span>來源：${item.source || "公開卷宗"}</span>
+            <div class="flex justify-between items-center text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+              <span>原始分類：${item.category || "特殊事故"}</span>
+              <span>資料來源：${item.source || "公開檔案"}</span>
             </div>
           </div>
         `;
 
-        const marker = L.marker([item.lat, item.lng], { icon: customIcon }).bindPopup(popupHtml);
+        const marker = L.marker([item.lat, item.lng], { icon }).bindPopup(popupHtml);
         markerCluster.addLayer(marker);
 
-        const row = document.createElement("div");
-        row.className = "p-4 hover:bg-neutral-900 cursor-pointer transition group";
-        row.innerHTML = `
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-[11px] font-medium text-neutral-300 bg-neutral-800/80 px-1.5 py-0.5 rounded">${item.city} ${item.district}</span>
-            <span class="text-[11px] font-mono text-neutral-500">${item.incident_date || "歷史紀錄"}</span>
-          </div>
-          <div class="text-xs font-semibold text-neutral-100 group-hover:text-white mt-1.5 mb-1 truncate">${item.address}</div>
-          <div class="text-[11px] text-neutral-400 line-clamp-2 leading-relaxed">${item.reason || ""}</div>
-        `;
-        row.addEventListener("click", () => {
-          map.flyTo([item.lat, item.lng], 17, { duration: 0.7 });
-          setTimeout(() => {
-            markerCluster.zoomToShowLayer(marker, () => marker.openPopup());
-          }, 750);
-        });
-        listContainer.appendChild(row);
+        if (idx < 300) {
+          const row = document.createElement("div");
+          row.className = "p-3.5 hover:bg-slate-800/60 cursor-pointer transition group";
+          row.innerHTML = `
+            <div class="flex justify-between items-center mb-1.5">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
+                <span class="text-xs font-medium text-slate-300">${item.city} ${item.district}</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">${item.incident_date || "歷史紀錄"}</span>
+            </div>
+            <div class="text-xs font-bold text-white group-hover:text-blue-400 transition mb-1">${item.address}</div>
+            <div class="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">${item.reason || ""}</div>
+          `;
+          row.addEventListener("click", () => {
+            map.flyTo([item.lat, item.lng], 17, { duration: 0.7 });
+            setTimeout(() => {
+              markerCluster.zoomToShowLayer(marker, () => marker.openPopup());
+            }, 750);
+          });
+          listContainer.appendChild(row);
+        }
       });
     }
 
     function applyFilters() {
       const city = citySelect.value.trim();
       const dist = districtSelect.value.trim();
+      const sort = sortSelect.value;
       const kw = searchInput.value.trim().toLowerCase();
 
-      const filtered = allRecords.filter(r => {
+      let filtered = allRecords.filter(r => {
+        const matchCat = activeCategory === "ALL" || r.normalizedCat === activeCategory;
         const matchCity = !city || r.city.replace("台","臺") === city.replace("台","臺");
         const matchDist = !dist || r.district === dist;
         const matchKw = !kw ||
           (r.address && r.address.toLowerCase().includes(kw)) ||
           (r.reason && r.reason.toLowerCase().includes(kw)) ||
-          (r.category && r.category.toLowerCase().includes(kw)) ||
-          (r.district && r.district.toLowerCase().includes(kw));
-        return matchCity && matchDist && matchKw;
+          (r.category && r.category.toLowerCase().includes(kw));
+        return matchCat && matchCity && matchDist && matchKw;
+      });
+
+      filtered.sort((a, b) => {
+        const da = a.incident_date || "0000-00-00";
+        const db = b.incident_date || "0000-00-00";
+        return sort === "date_desc" ? db.localeCompare(da) : da.localeCompare(db);
       });
 
       renderData(filtered);
@@ -373,8 +427,6 @@
     }
 
     loadAllData();
-    // 每 60 秒前端自動向雲端拉取最新爬蟲進來的案件，不用手動重開
-    setInterval(loadAllData, 60000);
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>臺灣凶宅與特殊事故建物公開資料庫 | 全臺歷年實價、法拍與死因分類索引</title>
+  <title>臺灣特殊事故建物公開索引 | 極簡淺色版</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -13,138 +13,163 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body, html { margin: 0; padding: 0; height: 100%; background-color: #0b0f17; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; }
-    #map { width: 100%; height: 100%; background: #0f172a; }
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background-color: #F7F6F2; /* 溫潤米白淺灰底色 */
+      color: #27272A;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+    }
+    #map { width: 100%; height: 100%; background: #EAE8E1; }
 
-    /* 免 API KEY 高質感深色地圖濾鏡（將免費 OpenStreetMap / 內政部國土測繪圖資轉為高冷深色風，絕無水印） */
-    .dark-map-tiles {
-      filter: invert(100%) hue-rotate(180deg) brightness(92%) contrast(92%) saturate(65%);
+    /* 極簡淺色無印風地圖濾鏡：洗掉刺眼紅綠藍，保留乾淨淺灰米白街道與海洋 */
+    .minimal-light-tiles {
+      filter: grayscale(82%) contrast(96%) brightness(104%);
     }
 
-    /* 5大死因彩色發光座標點 */
+    /* 低飽和質感分類圓點 (Clean & Minimalist Pins) */
     .pin-base {
-      width: 16px; height: 16px; border-radius: 50%;
-      border: 2.5px solid #ffffff;
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 15px; height: 15px; border-radius: 50%;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
     }
-    .pin-base:hover { transform: scale(1.45); z-index: 999 !important; }
-    .pin-homicide { background-color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.9); }   /* 刑事/兇殺：紅 */
-    .pin-suicide  { background-color: #f97316; box-shadow: 0 0 12px rgba(249, 115, 22, 0.9); }  /* 輕生/墜樓：橘 */
-    .pin-accident { background-color: #a855f7; box-shadow: 0 0 12px rgba(168, 85, 247, 0.9); }  /* 意外/火警：紫 */
-    .pin-natural  { background-color: #3b82f6; box-shadow: 0 0 12px rgba(59, 130, 246, 0.9); }  /* 自然/孤獨死：藍 */
-    .pin-court    { background-color: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.9); }  /* 法拍/其他：綠 */
+    .pin-base:hover {
+      transform: scale(1.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.32);
+      z-index: 999 !important;
+    }
+    .pin-homicide { background-color: #C84B31; } /* 磚紅：刑事/兇殺 */
+    .pin-suicide  { background-color: #D97706; } /* 琥珀橘：輕生/墜樓 */
+    .pin-accident { background-color: #7E6B8F; } /* 霧灰紫：意外/火警 */
+    .pin-natural  { background-color: #4A7C9B; } /* 霧灰藍：自然/孤獨死 */
+    .pin-court    { background-color: #4E876C; } /* 鼠尾草綠：法拍/特殊註記 */
 
-    /* 彈出視窗質感卡片 */
+    /* 極簡純白彈出資訊卡 */
     .leaflet-popup-content-wrapper {
-      background: #111827 !important; color: #f8fafc !important;
-      border: 1px solid #334155; border-radius: 12px !important;
-      box-shadow: 0 20px 35px rgba(0,0,0,0.85) !important;
+      background: #FFFFFF !important;
+      color: #27272A !important;
+      border: 1px solid #E4E4E7;
+      border-radius: 12px !important;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04) !important;
       padding: 4px;
     }
-    .leaflet-popup-tip { background: #111827 !important; border: 1px solid #334155; }
-    .leaflet-container a.leaflet-popup-close-button { color: #94a3b8 !important; font-size: 18px !important; top: 8px !important; right: 8px !important; }
-
-    /* 區域聚合數字圈 */
-    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color: rgba(30, 41, 59, 0.8) !important; }
-    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-      background-color: #0f172a !important; color: #f8fafc !important;
-      border: 1.5px solid #64748b; font-weight: 700; font-family: monospace;
+    .leaflet-popup-tip { background: #FFFFFF !important; border: 1px solid #E4E4E7; }
+    .leaflet-container a.leaflet-popup-close-button {
+      color: #A1A1AA !important; font-size: 18px !important; top: 10px !important; right: 10px !important;
     }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .leaflet-container a.leaflet-popup-close-button:hover { color: #27272A !important; }
+
+    /* 極簡淺色聚合數字圈 */
+    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+      background-color: rgba(39, 39, 42, 0.12) !important;
+    }
+    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+      background-color: #27272A !important;
+      color: #FFFFFF !important;
+      border: 2px solid #FFFFFF;
+      font-weight: 600;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* 細緻淺色捲軸 */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #F7F6F2; }
+    ::-webkit-scrollbar-thumb { background: #D4D4D8; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
   </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden">
 
-  <!-- 1. 頂部標題與死因分類即時統計導覽列 -->
-  <header class="bg-[#0f172a] border-b border-slate-800 px-5 py-3 flex flex-wrap items-center justify-between gap-4 z-30 shrink-0">
+  <!-- 1. 頂部極簡米白導覽列 -->
+  <header class="bg-white/95 backdrop-blur border-b border-stone-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-4 z-30 shrink-0">
     <div class="flex items-center gap-3">
-      <div class="w-3 h-8 rounded bg-gradient-to-b from-red-500 via-orange-500 to-blue-500"></div>
+      <div class="w-2.5 h-7 rounded-full bg-stone-800"></div>
       <div>
         <div class="flex items-center gap-2.5">
-          <h1 class="text-base md:text-lg font-bold tracking-wide text-white">臺灣凶宅與特殊事故建物公開資料庫</h1>
-          <span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">24H AI 自動巡檢</span>
+          <h1 class="text-base md:text-lg font-bold tracking-tight text-stone-900">臺灣特殊事故建物公開索引</h1>
+          <span class="text-[11px] px-2 py-0.5 rounded-md bg-stone-100 text-stone-600 border border-stone-200 font-medium">24H 自動更新</span>
         </div>
-        <p class="text-xs text-slate-400">整合司法院法拍屋筆錄、民事瑕疵擔保裁判書、實價登錄特殊備註與歷年新聞檔案</p>
+        <p class="text-xs text-stone-500 mt-0.5">彙整司法院法拍筆錄、民事裁判書、實價登錄特殊備註與歷年新聞檔案</p>
       </div>
     </div>
 
-    <!-- 死因分類快速過濾膠囊按鈕 -->
-    <div class="flex flex-wrap items-center gap-2" id="category-tabs">
-      <button data-cat="ALL" class="cat-btn active px-3 py-1.5 rounded-lg text-xs font-medium bg-white text-slate-900 shadow transition flex items-center gap-1.5">
-        <span>全部案件</span>
-        <span id="count-ALL" class="font-mono font-bold px-1.5 py-0.2 bg-slate-200 rounded text-[11px]">0</span>
+    <!-- 淺色系質感分類膠囊按鈕 -->
+    <div class="flex flex-wrap items-center gap-1.5" id="category-tabs">
+      <button data-cat="ALL" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-900 text-white shadow-sm transition flex items-center gap-1.5">
+        <span>全部紀錄</span>
+        <span id="count-ALL" class="font-mono font-semibold px-1.5 py-0.2 bg-stone-700 text-stone-100 rounded text-[11px]">0</span>
       </button>
-      <button data-cat="刑事命案" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-red-400 border border-red-500/30 transition flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+      <button data-cat="刑事命案" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#C84B31]"></span>
         <span>刑事/兇殺</span>
-        <span id="count-刑事命案" class="font-mono text-slate-300">0</span>
+        <span id="count-刑事命案" class="font-mono text-stone-500">0</span>
       </button>
-      <button data-cat="輕生事故" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-orange-400 border border-orange-500/30 transition flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+      <button data-cat="輕生事故" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#D97706]"></span>
         <span>輕生/墜樓/燒炭</span>
-        <span id="count-輕生事故" class="font-mono text-slate-300">0</span>
+        <span id="count-輕生事故" class="font-mono text-stone-500">0</span>
       </button>
-      <button data-cat="意外身亡" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-purple-400 border border-purple-500/30 transition flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+      <button data-cat="意外身亡" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#7E6B8F]"></span>
         <span>意外/火警/中毒</span>
-        <span id="count-意外身亡" class="font-mono text-slate-300">0</span>
+        <span id="count-意外身亡" class="font-mono text-stone-500">0</span>
       </button>
-      <button data-cat="自然或孤獨死" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-blue-400 border border-blue-500/30 transition flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-        <span>自然死亡/久病未發現</span>
-        <span id="count-自然或孤獨死" class="font-mono text-slate-300">0</span>
+      <button data-cat="自然或孤獨死" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#4A7C9B]"></span>
+        <span>自然死亡/久病</span>
+        <span id="count-自然或孤獨死" class="font-mono text-stone-500">0</span>
       </button>
-      <button data-cat="法拍與其他" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 transition flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-        <span>法拍/實價特殊註記</span>
-        <span id="count-法拍與其他" class="font-mono text-slate-300">0</span>
+      <button data-cat="法拍與其他" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#4E876C]"></span>
+        <span>法拍/特殊註記</span>
+        <span id="count-法拍與其他" class="font-mono text-stone-500">0</span>
       </button>
     </div>
   </header>
 
-  <!-- 2. 主畫面：左側多功能檢索欄 + 右側免金鑰無水印地圖 -->
+  <!-- 2. 主畫面：左側乾淨米白檢索欄 + 右側極簡淺色地圖 -->
   <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
-    <aside class="w-full md:w-[420px] bg-[#0f172a] border-b md:border-b-0 md:border-r border-slate-800 flex flex-col z-20 h-[48vh] md:h-full shrink-0">
-      <div class="p-3.5 space-y-2.5 border-b border-slate-800 bg-[#131c31]">
+    <aside class="w-full md:w-[420px] bg-[#FAF9F6] border-b md:border-b-0 md:border-r border-stone-200 flex flex-col z-20 h-[48vh] md:h-full shrink-0">
+      <!-- 篩選與搜尋器 -->
+      <div class="p-3.5 space-y-2.5 border-b border-stone-200 bg-white">
         <div class="grid grid-cols-3 gap-2">
-          <select id="city-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-blue-500">
+          <select id="city-select" class="bg-stone-50 border border-stone-200 text-stone-700 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-stone-500 transition">
             <option value="">全臺灣 (所有縣市)</option>
           </select>
-          <select id="district-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-blue-500">
+          <select id="district-select" class="bg-stone-50 border border-stone-200 text-stone-700 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-stone-500 transition">
             <option value="">所有行政區</option>
           </select>
-          <select id="sort-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-blue-500">
+          <select id="sort-select" class="bg-stone-50 border border-stone-200 text-stone-700 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-stone-500 transition">
             <option value="date_desc">最新發生優先</option>
             <option value="date_asc">早期歷史優先</option>
           </select>
         </div>
         <div class="relative">
-          <input id="search-input" type="text" placeholder="可任意輸入如：桃園八德、中正路、燒炭、錦新大樓..."
-            class="w-full bg-slate-900 border border-slate-700 text-slate-100 text-xs rounded-lg px-3 py-2.5 pr-20 focus:outline-none focus:border-blue-500 placeholder-slate-500" />
-          <button id="reset-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-300 hover:text-white px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded-md transition">
+          <input id="search-input" type="text" placeholder="搜尋如：桃園八德、中正路、燒炭、社區名稱..."
+            class="w-full bg-stone-50 border border-stone-200 text-stone-800 text-xs rounded-lg px-3 py-2.5 pr-20 focus:outline-none focus:border-stone-500 placeholder-stone-400 transition" />
+          <button id="reset-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-stone-600 hover:text-stone-900 px-2.5 py-1 bg-stone-200/70 hover:bg-stone-200 rounded-md transition font-medium">
             重設條件
           </button>
         </div>
       </div>
 
-      <!-- 搜尋結果統計小條 -->
-      <div class="px-4 py-1.5 bg-slate-900/90 border-b border-slate-800 text-[11px] text-slate-400 flex justify-between">
-        <span id="filter-result-label">顯示全部資料</span>
-        <span class="text-slate-500">點擊卡片可飛越至精確位置</span>
+      <!-- 搜尋結果狀態小條 -->
+      <div class="px-4 py-2 bg-[#F3F2EE] border-b border-stone-200 text-[11px] text-stone-500 flex justify-between items-center">
+        <span id="filter-result-label" class="font-medium text-stone-600">載入資料中...</span>
+        <span>點擊列表可定位至街道位置</span>
       </div>
 
-      <!-- 案件卡片清單 -->
-      <div id="list-container" class="flex-1 overflow-y-auto divide-y divide-slate-800/80"></div>
+      <!-- 案件清單 -->
+      <div id="list-container" class="flex-1 overflow-y-auto divide-y divide-stone-200/70"></div>
 
-      <!-- 底部雲端連線狀態與圖資切換 -->
-      <div class="p-3 border-t border-slate-800 text-[11px] text-slate-400 flex justify-between items-center bg-[#0b0f17]">
+      <!-- 底部狀態列 -->
+      <div class="p-3 border-t border-stone-200 text-[11px] text-stone-500 flex justify-between items-center bg-white">
         <span id="db-status" class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> 正在同步雲端資料庫...
+          <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> 雲端資料同步中...
         </span>
-        <button id="toggle-map-style" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-          切換深色/明亮原色地圖
+        <button id="toggle-map-style" class="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 transition font-medium">
+          切換極簡灰 / 原色街道
         </button>
       </div>
     </aside>
@@ -157,17 +182,18 @@
 
   <script>
     // ============================================================================
-    // 【你的 Supabase 專屬網址已填好，請確認第二行貼上你的 anon public key】
+    // 【請確認第 2 行貼上你的 anon public key】
     // ============================================================================
     const SUPABASE_URL = "https://cfmcvcscyfblcodemnkt.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
+    // 淺色莫蘭迪質感標籤樣式
     const CATEGORY_STYLES = {
-      "刑事命案": { badge: "bg-red-500/20 text-red-300 border-red-500/40", pin: "pin-homicide", label: "刑事/兇殺命案" },
-      "輕生事故": { badge: "bg-orange-500/20 text-orange-300 border-orange-500/40", pin: "pin-suicide", label: "輕生/墜樓/燒炭" },
-      "意外身亡": { badge: "bg-purple-500/20 text-purple-300 border-purple-500/40", pin: "pin-accident", label: "意外/火警/中毒" },
-      "自然或孤獨死": { badge: "bg-blue-500/20 text-blue-300 border-blue-500/40", pin: "pin-natural", label: "自然死亡/孤獨死" },
-      "法拍與其他": { badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40", pin: "pin-court", label: "法拍/特殊註記" }
+      "刑事命案": { badge: "bg-[#FDF2F0] text-[#B43B22] border-[#F5D0C8]", pin: "pin-homicide", label: "刑事/兇殺" },
+      "輕生事故": { badge: "bg-[#FEF6EB] text-[#B45309] border-[#FDE2BD]", pin: "pin-suicide", label: "輕生/墜樓/燒炭" },
+      "意外身亡": { badge: "bg-[#F5F3F7] text-[#635175] border-[#E2DCE8]", pin: "pin-accident", label: "意外/火警/中毒" },
+      "自然或孤獨死": { badge: "bg-[#F0F6FA] text-[#386682] border-[#CFE2EE]", pin: "pin-natural", label: "自然死亡/久病" },
+      "法拍與其他": { badge: "bg-[#EFF7F3] text-[#3A6E54] border-[#C9E4D6]", pin: "pin-court", label: "法拍/特殊註記" }
     };
 
     function classifyRecord(rawCat, rawReason) {
@@ -204,36 +230,33 @@
       "連江縣": ["南竿鄉","北竿鄉","莒光鄉","東引鄉"]
     };
 
-    // ============================================================================
-    // 使用臺灣內政部國土測繪中心 (NLSC) 通用版電子地圖 + OpenStreetMap (100% 免費無水印)
-    // ============================================================================
     const map = L.map("map", { zoomControl: false }).setView([23.75, 120.95], 8);
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // 內政部國土測繪中心官方正體中文詳細街道圖 (免 API Key、無任何水印)
-    const nlscDarkLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
+    // 預設使用極簡淺灰米白街道圖（濾除雜亂顏色，清爽乾淨且無水印）
+    const minimalLightLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
       attribution: '&copy; 內政部國土測繪中心 NLSC &copy; OpenStreetMap',
       maxZoom: 19,
-      className: "dark-map-tiles"
+      className: "minimal-light-tiles"
     });
 
-    const nlscLightLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
+    const originalLightLayer = L.tileLayer("https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}", {
       attribution: '&copy; 內政部國土測繪中心 NLSC &copy; OpenStreetMap',
       maxZoom: 19
     });
 
-    let isDarkMap = true;
-    nlscDarkLayer.addTo(map);
+    let isMinimalMap = true;
+    minimalLightLayer.addTo(map);
 
     document.getElementById("toggle-map-style").addEventListener("click", () => {
-      if (isDarkMap) {
-        map.removeLayer(nlscDarkLayer);
-        nlscLightLayer.addTo(map);
+      if (isMinimalMap) {
+        map.removeLayer(minimalLightLayer);
+        originalLightLayer.addTo(map);
       } else {
-        map.removeLayer(nlscLightLayer);
-        nlscDarkLayer.addTo(map);
+        map.removeLayer(originalLightLayer);
+        minimalLightLayer.addTo(map);
       }
-      isDarkMap = !isDarkMap;
+      isMinimalMap = !isMinimalMap;
     });
 
     const markerCluster = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 42 });
@@ -290,10 +313,11 @@
 
     function updateCategoryTabUI() {
       document.querySelectorAll(".cat-btn").forEach(btn => {
-        if (btn.getAttribute("data-cat") === activeCategory) {
-          btn.classList.add("ring-2", "ring-white", "scale-105");
+        const isCurrent = btn.getAttribute("data-cat") === activeCategory;
+        if (isCurrent) {
+          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-900 text-white shadow-sm transition flex items-center gap-1.5";
         } else {
-          btn.classList.remove("ring-2", "ring-white", "scale-105");
+          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 transition flex items-center gap-1.5";
         }
       });
     }
@@ -313,7 +337,7 @@
           if (error) throw error;
           if (!data || data.length === 0) break;
           fetched = fetched.concat(data);
-          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span> 正在同步雲端 (${fetched.length} 筆)...`;
+          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-stone-500 animate-ping"></span> 正在讀取雲端 (${fetched.length} 筆)...`;
           if (data.length < step) break;
           from += step;
         }
@@ -321,18 +345,17 @@
         allRecords = fetched.map(r => ({
           ...r,
           normalizedCat: classifyRecord(r.category, r.reason),
-          // 建立正規化全檢索字串（讓「桃園八德」也能直接命中「桃園市 + 八德區」）
           searchBlob: `${r.city || ""}${r.district || ""}${r.address || ""}${r.reason || ""}${r.category || ""}${r.incident_date || ""}`
             .replace(/台/g, "臺")
             .toLowerCase()
         }));
 
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> 雲端即時連線正常 · 共收錄 ${allRecords.length.toLocaleString()} 筆`;
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600"></span> 雲端連線正常 · 共收錄 ${allRecords.length.toLocaleString()} 筆`;
         updateCounters();
         applyFilters();
       } catch (err) {
         console.error(err);
-        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> 請確認 index.html 第 153 行已貼上 anon public key`;
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> 請確認 index.html 已貼上 anon public key`;
       }
     }
 
@@ -350,15 +373,13 @@
       const listContainer = document.getElementById("list-container");
       const resultLabel = document.getElementById("filter-result-label");
       listContainer.innerHTML = "";
-      resultLabel.textContent = `符合條件共 ${records.length.toLocaleString()} 筆案件`;
+      resultLabel.textContent = `符合條件共 ${records.length.toLocaleString()} 筆紀錄`;
 
       if (records.length === 0) {
         listContainer.innerHTML = `
-          <div class="p-8 text-center space-y-2">
-            <div class="text-sm font-semibold text-slate-300">目前資料庫中尚無該區域或關鍵字紀錄</div>
-            <div class="text-xs text-slate-500 leading-relaxed">
-              請複製下方「全臺 368 鄉鎮區深度擴充 SQL 與爬蟲」至 Supabase SQL Editor 或 GitHub Actions 執行，即可立即補齊桃園八德等全臺各區歷年案件！
-            </div>
+          <div class="p-8 text-center space-y-1.5">
+            <div class="text-sm font-semibold text-stone-700">目前篩選條件下尚無紀錄</div>
+            <div class="text-xs text-stone-400">可嘗試點擊「重設條件」或等待背景爬蟲巡檢完成</div>
           </div>`;
         return;
       }
@@ -370,26 +391,26 @@
         const icon = L.divIcon({
           className: "",
           html: `<div class="pin-base ${style.pin}"></div>`,
-          iconSize: [16, 16],
-          iconAnchor: [8, 8],
+          iconSize: [15, 15],
+          iconAnchor: [7.5, 7.5],
           popupAnchor: [0, -8]
         });
 
         const popupHtml = `
-          <div class="p-2.5 min-w-[250px] max-w-[300px]">
+          <div class="p-2 min-w-[250px] max-w-[300px]">
             <div class="flex items-center justify-between gap-2 mb-2">
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
-              <span class="text-[11px] font-mono text-slate-400">${item.incident_date || "歷史紀錄"}</span>
+              <span class="text-[11px] font-mono text-stone-400">${item.incident_date || "歷史紀錄"}</span>
             </div>
-            <div class="text-[11px] text-slate-400 mb-0.5">${item.city} · ${item.district}</div>
-            <h3 class="text-sm font-bold text-white leading-snug mb-2.5">${item.address}</h3>
-            <div class="text-xs text-slate-200 bg-slate-900 p-2.5 rounded-lg border border-slate-800 leading-relaxed mb-2">
-              <span class="text-slate-400 block text-[10px] mb-1">事件紀錄與死因摘要：</span>
+            <div class="text-[11px] text-stone-500 mb-0.5">${item.city} · ${item.district}</div>
+            <h3 class="text-sm font-bold text-stone-900 leading-snug mb-2">${item.address}</h3>
+            <div class="text-xs text-stone-700 bg-stone-50 p-2.5 rounded-lg border border-stone-200/80 leading-relaxed mb-2">
+              <span class="text-stone-400 block text-[10px] mb-0.5">事件原因與摘要：</span>
               ${item.reason || "公開卷宗載明之特殊事故建物"}
             </div>
-            <div class="flex justify-between items-center text-[10px] text-slate-400 pt-1 border-t border-slate-800">
-              <span>原始分類：${item.category || "特殊事故"}</span>
-              <span>資料來源：${item.source || "公開檔案"}</span>
+            <div class="flex justify-between items-center text-[10px] text-stone-400 pt-1 border-t border-stone-100">
+              <span>分類：${item.category || "特殊事故"}</span>
+              <span>來源：${item.source || "公開檔案"}</span>
             </div>
           </div>
         `;
@@ -399,17 +420,17 @@
 
         if (idx < 350) {
           const row = document.createElement("div");
-          row.className = "p-3.5 hover:bg-slate-800/60 cursor-pointer transition group";
+          row.className = "p-4 bg-white hover:bg-stone-100/80 cursor-pointer transition group";
           row.innerHTML = `
             <div class="flex justify-between items-center mb-1.5">
               <div class="flex items-center gap-2">
                 <span class="text-[10px] font-semibold px-2 py-0.5 rounded border ${style.badge}">${style.label}</span>
-                <span class="text-xs font-medium text-slate-300">${item.city} ${item.district}</span>
+                <span class="text-xs font-medium text-stone-600">${item.city} ${item.district}</span>
               </div>
-              <span class="text-[11px] font-mono text-slate-400">${item.incident_date || "歷史紀錄"}</span>
+              <span class="text-[11px] font-mono text-stone-400">${item.incident_date || "歷史紀錄"}</span>
             </div>
-            <div class="text-xs font-bold text-white group-hover:text-blue-400 transition mb-1">${item.address}</div>
-            <div class="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">${item.reason || ""}</div>
+            <div class="text-xs font-bold text-stone-900 group-hover:text-stone-600 transition mb-1">${item.address}</div>
+            <div class="text-[11px] text-stone-500 line-clamp-2 leading-relaxed">${item.reason || ""}</div>
           `;
           row.addEventListener("click", () => {
             map.flyTo([item.lat, item.lng], 17, { duration: 0.7 });
@@ -422,17 +443,14 @@
       });
     }
 
-    // 升級版智慧搜尋（支援「桃園八德」自動拆解比對「桃園」+「八德」）
     function applyFilters() {
       const city = citySelect.value.trim();
       const dist = districtSelect.value.trim();
       const sort = sortSelect.value;
       const rawKw = searchInput.value.trim().replace(/台/g, "臺").toLowerCase();
 
-      // 將像「桃園八德」這種連在一起的詞拆成獨立關鍵字陣列
       let tokens = rawKw.split(/\s+/).filter(Boolean);
       if (tokens.length === 1 && rawKw.length === 4) {
-        // 例如輸入「桃園八德」、「臺北中山」、「新北板橋」，自動拆為前兩字與後兩字同時比對
         tokens = [rawKw.slice(0, 2), rawKw.slice(2, 4)];
       }
 

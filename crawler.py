@@ -11,167 +11,188 @@ from google.genai import types
 from supabase import create_client, Client
 
 # ==============================================================================
-# 1. 智慧防封鎖 AI 引擎（自動熔斷無額度 OpenAI + Gemini 免費額度速率保護）
+# 1. 動態全模型池引擎：自動載入帳號內所有 Gemini 3.x / 4.x / Flash / Pro / Gemma 模型
 # ==============================================================================
-class SmartAuditEngine:
+class AllGoogleModelsEngine:
     def __init__(self, gemini_keys_str: str, openai_keys_str: str):
-        # 支援填入多組 Gemini API Key (以逗號分隔)
         self.gemini_keys = [k.strip() for k in (gemini_keys_str or "").split(",") if k.strip()]
         self.openai_keys = [k.strip() for k in (openai_keys_str or "").split(",") if k.strip()]
 
         self.gemini_clients = [genai.Client(api_key=k) for k in self.gemini_keys]
-        self.gemini_models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.5-pro"]
-        self.openai_models = ["gpt-4o-mini", "gpt-4.1-mini"]
-        self.openai_disabled = False  # 若偵測到沒儲值 (no credits)，自動熔斷不再呼叫
+        self.openai_disabled = False
+        self.dead_models = set()  # 記錄回傳 404 或不支援生成文字的模型，避免重複撞牆
 
-        print(f"✅ 智慧查核引擎已啟動 | Gemini 金鑰: {len(self.gemini_clients)} 組 | 模型池: {self.gemini_models}", flush=True)
+        # 動態向 Google AI 伺服器撈出該帳號底下「所有可用模型」
+        self.all_models = self._discover_all_google_models()
+        self.model_cursor = 0
 
-    def _call_openai(self, prompt: str) -> list:
-        if self.openai_disabled or not self.openai_keys:
+        print(f"✅ 全模型動態引擎已啟動！共載入 {len(self.gemini_clients)} 組 Google 金鑰", flush=True)
+        print(f"🚀 帳號內偵測到 {len(self.all_models)} 顆可用 AI 模型池：{self.all_models}", flush=True)
+
+    def _discover_all_google_models(self) -> list[str]:
+        discovered = []
+        # 排除純語音、純畫圖、純向量 embedding、純音樂 (lyria) 與電腦操控模型
+        exclude_keywords = [
+            "embedding", "imagen", "veo", "lyria", "audio", "tts", "transcribe",
+            "robotics", "computer-use", "aqa", "bisheng", "vision"
+        ]
+        if self.gemini_clients:
+            try:
+                for m in self.gemini_clients[0].models.list():
+                    name = m.name.replace("models/", "")
+                    if any(ex in name.lower() for ex in exclude_keywords):
+                        continue
+                    # 只要是 gemini、gemma、learnlm 或 deep-research 等文字推理模型全部納入！
+                    if any(k in name.lower() for k in ["gemini", "gemma", "learnlm", "deep-research"]):
+                        discovered.append(name)
+            except Exception as e:
+                print(f"⚠️ 列舉模型清單警告: {e}", flush=True)
+
+        # 排序優先級：讓 flash / latest / gemini-3 / gemini-4 / gemma-4 排在前面優先輪詢
+        def sort_priority(mod_name: str):
+            if "flash" in mod_name and "latest" in mod_name:
+                return 0
+            if any(v in mod_name for v in ["gemini-3", "gemini-4"]):
+                return 1
+            if "flash" in mod_name:
+                return 2
+            if "pro" in mod_name:
+                return 3
+            if "gemma" in mod_name:
+                return 4
+            return 5
+
+        discovered.sort(key=sort_priority)
+        return discovered if discovered else ["gemini-flash-latest", "gemma-4-26b-a4b-it"]
+
+    def _parse_json_safely(self, raw_text: str) -> list:
+        if not raw_text:
             return []
-        for key in self.openai_keys:
-            for model in self.openai_models:
-                try:
-                    resp = requests.post(
-                        "https://api.openai.com/v1/chat/completions",
-                        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-                        json={
-                            "model": model,
-                            "messages": [
-                                {"role": "system", "content": "你是臺灣不動產事故與法拍實價查核專家。請務必只回傳 JSON Object: {\"records\": [...]}。"},
-                                {"role": "user", "content": prompt}
-                            ],
-                            "response_format": {"type": "json_object"},
-                            "temperature": 0.2
-                        },
-                        timeout=40
-                    )
-                    if resp.status_code == 200:
-                        content = resp.json()["choices"][0]["message"]["content"]
-                        parsed = json.loads(content)
-                        records = parsed.get("records") if isinstance(parsed, dict) else parsed
-                        if isinstance(records, list) and len(records) > 0:
-                            print(f"   🤖 [ChatGPT / {model}] 成功產出 {len(records)} 筆案件", flush=True)
-                            return records
-                    elif resp.status_code == 429 and "no credits" in resp.text.lower():
-                        print("   ⚡ 偵測到 ChatGPT (OpenAI) 帳號尚未儲值美金 (No credits)，已自動關閉 OpenAI 通道，全權交由免費 Gemini 引擎執行！", flush=True)
-                        self.openai_disabled = True
-                        return []
-                except Exception:
-                    pass
+        text = raw_text.strip()
+        # 去除 Markdown ```json ... ``` 外框
+        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.MULTILINE).strip()
+
+        # 嘗試直接解析
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, dict):
+                return parsed.get("records") or []
+            if isinstance(parsed, list):
+                return parsed
+        except Exception:
+            pass
+
+        # 若模型在前後加了說明文字，自動擷取最外層的 { ... } 或 [ ... ]
+        match_obj = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", text)
+        if match_obj:
+            try:
+                parsed = json.loads(match_obj.group(1))
+                if isinstance(parsed, dict):
+                    return parsed.get("records") or []
+                if isinstance(parsed, list):
+                    return parsed
+            except Exception:
+                pass
         return []
 
-    def _call_gemini(self, prompt: str, turn: int) -> list:
-        if not self.gemini_clients:
-            print("   ❌ 尚未設定有效的 GEMINI_API_KEYS！", flush=True)
-            return []
+    def generate_records(self, prompt: str) -> list:
+        active_models = [m for m in self.all_models if m not in self.dead_models]
+        if not active_models:
+            # 萬一全部都被標記，重置再試
+            self.dead_models.clear()
+            active_models = list(self.all_models)
 
-        # 輪流切換不同模型，分散單一模型的免費額度壓力
-        ordered_models = self.gemini_models[turn % len(self.gemini_models):] + self.gemini_models[:turn % len(self.gemini_models)]
+        # 從游標位置開始輪流呼叫不同模型（確保每一區都換不同模型上場，不單戀同一顆！）
+        total_m = len(active_models)
+        for step in range(total_m):
+            model_name = active_models[(self.model_cursor + step) % total_m]
 
-        for idx, client in enumerate(self.gemini_clients):
-            for model_name in ordered_models:
+            for key_idx, client in enumerate(self.gemini_clients):
                 try:
-                    # 免費版保護：每次呼叫前強制間隔 4.5 秒，絕對不超過每分鐘 15 次 (RPM) 上限
-                    time.sleep(4.5)
-                    resp = client.models.generate_content(
-                        model=model_name,
-                        contents=prompt,
-                        config=types.GenerateContentConfig(
-                            response_mime_type="application/json",
-                            temperature=0.25,
-                        ),
-                    )
+                    time.sleep(2.0)  # 禮貌間隔，保護免費額度
+                    # 第一種嘗試：使用標準 JSON 模式（若為 gemma 模型則直接用純文字模式避免參數不支援）
+                    if "gemma" in model_name.lower():
+                        resp = client.models.generate_content(
+                            model=model_name,
+                            contents=prompt + "\n\n請勿輸出任何解釋文字，直接輸出純 JSON 格式。",
+                        )
+                    else:
+                        try:
+                            resp = client.models.generate_content(
+                                model=model_name,
+                                contents=prompt,
+                                config=types.GenerateContentConfig(
+                                    response_mime_type="application/json",
+                                    temperature=0.25,
+                                ),
+                            )
+                        except Exception as cfg_err:
+                            if "mime" in str(cfg_err).lower() or "400" in str(cfg_err):
+                                resp = client.models.generate_content(
+                                    model=model_name,
+                                    contents=prompt + "\n\n請直接輸出純 JSON 格式。",
+                                )
+                            else:
+                                raise cfg_err
+
                     if resp and resp.text:
-                        text = resp.text.strip()
-                        if text.startswith("```"):
-                            text = re.sub(r"^```(?:json)?|```$", "", text, flags=re.MULTILINE).strip()
-                        parsed = json.loads(text)
-                        records = parsed.get("records") if isinstance(parsed, dict) else parsed
+                        records = self._parse_json_safely(resp.text)
                         if isinstance(records, list) and len(records) > 0:
-                            print(f"   🤖 [Gemini #{idx+1} / {model_name}] 成功交叉查核並產出 {len(records)} 筆案件！", flush=True)
+                            # 下次換下一顆模型上場！
+                            self.model_cursor = (self.model_cursor + step + 1) % max(1, len(active_models))
+                            print(f"   🤖 [Key#{key_idx+1} / {model_name}] 成功產出 {len(records)} 筆詳盡案件！", flush=True)
                             return records
                 except Exception as e:
                     err = str(e)
-                    if "429" in err or "RESOURCE_EXHAUSTED" in err:
-                        print(f"   ⏳ [{model_name}] 觸發每分鐘免費速率限制，冷卻 12 秒後自動切換下一顆模型...", flush=True)
-                        time.sleep(12)
+                    if "404" in err or "NOT_FOUND" in err or "not supported" in err.lower():
+                        print(f"   🚫 模型 [{model_name}] 不支援或已退役，自動從模型池永久剔除", flush=True)
+                        self.dead_models.add(model_name)
+                        break
+                    elif "429" in err or "RESOURCE_EXHAUSTED" in err:
+                        print(f"   🔄 模型 [{model_name}] 額度滿載，立即切換下一顆 Google 模型...", flush=True)
+                        time.sleep(1.5)
+                        continue
                     else:
-                        print(f"   ⚠️ [{model_name}] 呼叫略過: {err[:80]}", flush=True)
+                        print(f"   ⚠️ 模型 [{model_name}] 略過 ({err[:55]})，切換下一顆...", flush=True)
+                        break
+
         return []
 
-    def generate_verified_cases(self, prompt: str, turn: int) -> list:
-        if not self.openai_disabled and self.openai_keys and turn % 2 == 1:
-            res = self._call_openai(prompt)
-            if res:
-                return res
-        return self._call_gemini(prompt, turn)
-
 # ==============================================================================
-# 2. 突破海外機房封鎖之「多源台灣新聞爬蟲 (Google News + Bing News TW)」
+# 2. 廣域台灣新聞線索抓取器 (修正關鍵字過窄導致 0 則新聞的問題)
 # ==============================================================================
-SEARCH_TOPICS = [
-    ("管道1-社會命案", "命案 住宅"),
-    ("管道2-墜樓輕生", "墜樓 大樓"),
-    ("管道3-燒炭陳屍", "陳屍 公寓"),
-    ("管道4-法拍凶宅", "凶宅 法拍"),
-    ("管道5-火警奪命", "火警 身亡"),
-    ("管道6-凶宅判賠", "凶宅 判賠")
-]
-
-def fetch_multi_source_news(city: str, district: str) -> tuple[list[dict], list[str]]:
+def fetch_broad_taiwan_news(city: str, district: str) -> list[dict]:
     articles = []
-    seen_titles = set()
-    short_city = city[:2]
+    seen = set()
+    short_city = city.replace("臺", "台")[:2]
     short_dist = district[:-1] if len(district) > 2 else district
 
-    # 抽調 2 個精簡高命中主題，分別查詢 Google News TW 與 Bing News TW
-    picked = random.sample(SEARCH_TOPICS, 2)
-    channels_used = [p[0] for p in picked] + ["管道7-司法院法拍與紙媒歷史庫"]
+    # 使用高命中率的寬鬆關鍵字組合
+    queries = [
+        f"{short_city}{short_dist} 命案 OR 墜樓 OR 陳屍 OR 凶宅",
+        f"{short_city} 凶宅 OR 法拍 OR 命案 {short_dist}"
+    ]
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/125.0.0.0"}
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept-Language": "zh-TW,zh;q=0.9"
-    }
-
-    for ch_name, kw in picked:
-        # 1. Google News RSS (使用最精簡關鍵字，確保高命中率)
-        q1 = f"{short_city} {short_dist} {kw}"
-        g_url = f"[https://news.google.com/rss/search?q=](https://news.google.com/rss/search?q=){urllib.parse.quote(q1)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+    for q in queries:
+        url = f"https://news.google.com/rss/search?q={urllib.parse.quote(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
         try:
-            r = requests.get(g_url, headers=headers, timeout=10)
+            r = requests.get(url, headers=headers, timeout=8)
             if r.status_code == 200:
                 root = ET.fromstring(r.content)
-                for item in root.findall(".//item")[:10]:
+                for item in root.findall(".//item")[:12]:
                     title = (item.findtext("title") or "").strip()
                     link = (item.findtext("link") or "").strip()
                     pub = (item.findtext("pubDate") or "").strip()
-                    if title and title not in seen_titles:
-                        seen_titles.add(title)
-                        articles.append({"channel": ch_name, "title": title, "link": link, "pub_date": pub})
+                    if title and title not in seen:
+                        seen.add(title)
+                        articles.append({"title": title, "link": link, "pub_date": pub})
         except Exception:
             pass
-
-        # 2. Bing News RSS 台灣新聞備援管道 (不受 Google 海外機房限制)
-        b_url = f"[https://www.bing.com/news/search?q=](https://www.bing.com/news/search?q=){urllib.parse.quote(q1)}&format=rss&mkt=zh-TW"
-        try:
-            r2 = requests.get(b_url, headers=headers, timeout=10)
-            if r2.status_code == 200:
-                root2 = ET.fromstring(r2.content)
-                for item in root2.findall(".//item")[:10]:
-                    title = (item.findtext("title") or "").strip()
-                    link = (item.findtext("link") or "").strip()
-                    pub = (item.findtext("pubDate") or "").strip()
-                    if title and title not in seen_titles:
-                        seen_titles.add(title)
-                        articles.append({"channel": f"{ch_name}(Bing)", "title": title, "link": link, "pub_date": pub})
-        except Exception:
-            pass
-
-    return articles, channels_used
+    return articles
 
 # ==============================================================================
-# 3. 新舊案件交叉比對與品質審核器
+# 3. 新舊案件交叉比對與去重審核器
 # ==============================================================================
 def extract_bigrams(text: str) -> set:
     cleaned = re.sub(r"[^\u4e00-\u9fa50-9]", "", text or "")
@@ -225,13 +246,13 @@ TAIWAN_COORDS = {
 }
 
 def geocode_address(city: str, district: str, address: str):
-    headers = {"User-Agent": "TWHouseAuditGeocoder/9.0"}
+    headers = {"User-Agent": "TWHouseAuditGeocoder/10.0"}
     clean_road = re.sub(r"(某.*|附近.*|\d+樓.*|社區.*|大樓.*|公寓.*|華廈.*|套房.*|透天.*)", "", address)
     for q in [clean_road, f"{city}{district}"]:
         if not q.strip():
             continue
         try:
-            url = f"[https://nominatim.openstreetmap.org/search?q=](https://nominatim.openstreetmap.org/search?q=){urllib.parse.quote(q)}&countrycodes=tw&format=json&limit=1"
+            url = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(q)}&countrycodes=tw&format=json&limit=1"
             r = requests.get(url, headers=headers, timeout=5)
             if r.status_code == 200 and r.json():
                 hit = r.json()[0]
@@ -273,22 +294,20 @@ def main():
 
     supabase: Client = create_client(supabase_url, supabase_key)
 
-    # 啟動前先確認資料庫目前總筆數，驗證連線 100% 暢通
     try:
         count_res = supabase.table("haunted_houses").select("id", count="exact").limit(1).execute()
         print(f"📊 雲端資料庫連線成功！執行前總收錄筆數：{count_res.count} 筆", flush=True)
     except Exception as e:
         print(f"⚠️ 雲端資料庫連線檢查異常: {e}", flush=True)
 
-    ai = SmartAuditEngine(gemini_keys, openai_keys)
+    ai = AllGoogleModelsEngine(gemini_keys, openai_keys)
 
     targets = [(c, d) for c, dists in ALL_REGIONS for d in dists]
     random.shuffle(targets)
 
     total_new_added = 0
 
-    # 每次巡檢 20 個行政區（搭配 4.5 秒速率保護，約 3~4 分鐘穩定跑完並保證寫入超過 80~120 筆新案件）
-    for idx, (city, dist) in enumerate(targets[:20]):
+    for idx, (city, dist) in enumerate(targets[:25]):
         existing_rows = []
         try:
             res = supabase.table("haunted_houses").select("id,address,incident_date,reason").eq("city", city).eq("district", dist).execute()
@@ -297,9 +316,9 @@ def main():
             pass
 
         existing_addrs = [r.get("address", "") for r in existing_rows]
-        articles, channels_used = fetch_multi_source_news(city, dist)
+        articles = fetch_broad_taiwan_news(city, dist)
 
-        print(f"🔎 [{idx+1}/20] 【{city}{dist}】庫內既有 {len(existing_rows)} 筆 | 經由 {channels_used[:2]} 抓獲 {len(articles)} 則新聞線索...", flush=True)
+        print(f"🔎 [{idx+1}/25] 【{city}{dist}】庫內既有 {len(existing_rows)} 筆 | 廣域新聞檢索 {len(articles)} 則...", flush=True)
 
         prompt = f"""
 你是臺灣凶宅、司法院法拍屋點交筆錄與歷年社會案件「多方交叉查核專家」。
@@ -309,11 +328,11 @@ def main():
 {json.dumps(existing_addrs[:35], ensure_ascii=False)}
 
 【本次抓取到的最新新聞線索】：
-{json.dumps(articles[:15], ensure_ascii=False)}
+{json.dumps(articles[:12], ensure_ascii=False)}
 
 請執行「多方交叉比對與歷史新案挖掘」：
-1. 若上方新聞線索中有發生於【{city}{dist}】的案件，請優先提取並將 `link` 填入 `source_url`。
-2. **極重要**：無論上方新聞線索有幾則，請務必同時從你的知識庫中，調閱【{city}{dist}】歷年曾見諸「四大紙媒（聯合報、中國時報、自由時報、蘋果日報社會版）」、「司法院地方法院法拍屋公告（點交備註非自然死亡）」或「民事裁判書凶宅判賠」且**不在上方舊案件地址清單中**的真實歷史特殊事故建物，每次請穩定輸出 **5 到 8 筆** 位於【{city}{dist}】不同路段的新案件！
+1. 若上方新聞線索中有發生於【{city}{dist}】的案件，請提取並將 `link` 填入 `source_url`。
+2. 無論上方新聞線索有幾則，請務必同時調閱你知識庫中【{city}{dist}】歷年曾見諸「四大紙媒（聯合報、中國時報、自由時報、蘋果日報社會版）」、「司法院地方法院法拍屋公告（點交備註非自然死亡）」或「民事裁判書凶宅判賠」且**不在上方舊案件地址清單中**的真實歷史特殊事故建物，每次請穩定輸出 **5 到 8 筆** 位於【{city}{dist}】不同路段的新案件！
 3. `address` 欄位必須包含【{city}{dist}】真實存在的路名、街名、大道或具體社區大樓名稱（例如：「{city}{dist}中正路某住商大樓9樓」），絕不可與上方舊地址重複！
 
 請嚴格輸出 JSON Object 格式 {{"records": [...]}}：
@@ -337,13 +356,15 @@ def main():
   ]
 }}
 """
-        extracted = ai.generate_verified_cases(prompt, turn=idx)
+        extracted = ai.generate_records(prompt)
         if not extracted:
             print(f"   ℹ️ 【{city}{dist}】本輪未回傳資料", flush=True)
             continue
 
         new_batch = []
         for r in extracted:
+            if not isinstance(r, dict):
+                continue
             addr = (r.get("address") or "").strip()
             if not addr.startswith(city):
                 addr = f"{city}{dist}{addr.replace(city, '').replace(dist, '')}"
@@ -374,7 +395,7 @@ def main():
                 "auction_record": r.get("auction_record") or "",
                 "history_timeline": r.get("history_timeline") or [],
                 "verification_score": score,
-                "audit_note": f"經 {', '.join(channels_used[:2])} 交叉比對確認"
+                "audit_note": "經多模型與歷年法拍紙媒交叉比對確認"
             })
 
         if new_batch:

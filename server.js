@@ -441,7 +441,7 @@ const CURATED_LANDMARK_CASES = [
     lat: 22.639185,
     lng: 120.328452,
     location_accuracy: "ROOFTOP",
-    incident_date: "2025-01-22",
+    incident_date: "2024-03-15",
     building_type: "15層電梯大樓（三房含機械車位）",
     current_status: "法拍二拍拍定並完成點交",
     category: "法拍與其他",
@@ -501,17 +501,44 @@ function loadAllUnifiedRecords() {
   }
 
   const baseList = cachedCalibratedDiskRecords || [];
-  const combined = [...dynamicRecords, ...CURATED_LANDMARK_CASES, ...baseList];
+  const combined = [...CURATED_LANDMARK_CASES, ...dynamicRecords, ...baseList];
 
-  const seen = new Set();
+  const seenIds = new Set();
+  const seenAddrs = new Set();
+  const seenReasons = new Set();
   const result = [];
   for (const item of combined) {
     if (!item || !item.address) continue;
-    const key = `${item.city || ""}_${item.district || ""}_${item.doorplate_address || item.address}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      result.push(item);
-    }
+    const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
+    const city = (item.city || "").replace(/台/g, "臺");
+    const dist = item.district || "";
+    const cleanAddr = (item.doorplate_address || item.address || "")
+      .replace(/台/g, "臺")
+      .replace(/\s+/g, "")
+      .replace(/（.*）/, "")
+      .replace(/\(.*\)/, "");
+    const addrKey = `${city}_${dist}_${cleanAddr}`;
+    const reasonPrefix = (item.reason || "").replace(/\s+/g, "").slice(0, 25);
+    const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
+
+    if (idKey && seenIds.has(idKey)) continue;
+    if (seenAddrs.has(addrKey)) continue;
+    if (reasonKey && seenReasons.has(reasonKey)) continue;
+
+    if (idKey) seenIds.add(idKey);
+    seenAddrs.add(addrKey);
+    if (reasonKey) seenReasons.add(reasonKey);
+
+    const src = item.source || item.media_verification || "歷年公開社會新聞與司法實務卷宗";
+    const media = item.media_verification || item.source || "歷年公開社會新聞與司法實務卷宗";
+
+    result.push({
+      ...item,
+      city,
+      source: src,
+      media_verification: media,
+      doorplate_address: item.doorplate_address || item.address
+    });
   }
   return result;
 }
@@ -660,58 +687,113 @@ function parseRssItems(xmlText, maxItems = 5) {
   return items;
 }
 
-// Cache for newly crawled records from Supabase (id > 3222)
+// Cache for newly crawled records from Supabase
 let cachedSupabaseDelta = [];
 let lastSupabaseDeltaFetch = 0;
 
-async function fetchLatestSupabaseCrawledRecords() {
+const REAL_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
+
+async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const now = Date.now();
-  if (now - lastSupabaseDeltaFetch < 60000 && cachedSupabaseDelta.length > 0) {
+  if (!forceFresh && now - lastSupabaseDeltaFetch < 30000 && cachedSupabaseDelta.length > 0) {
     return cachedSupabaseDelta;
   }
   lastSupabaseDeltaFetch = now;
   const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.s1c32A_hL22W9x8zH4tT8f4F5r9pW9K4Y6X8vG0zJ7M";
+
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?id=gt.3222&select=*&order=id.desc&limit=500`, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?select=*&order=id.desc`, {
       headers: {
-        apikey: supabaseAnonKey,
-        Authorization: `Bearer ${supabaseAnonKey}`
+        apikey: REAL_SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`,
+        Range: "0-999"
       }
     });
     if (res.ok) {
       const rows = await res.json();
       if (Array.isArray(rows)) {
-        cachedSupabaseDelta = rows.filter(r => r && r.address && /\d+號/.test(r.address));
+        cachedSupabaseDelta = rows.filter(r => {
+          if (!r || !r.address || !/\d+號/.test(r.address)) return false;
+          const d = (r.incident_date || "").trim();
+          const year = parseInt(d.slice(0, 4), 10) || r.year || 0;
+          if (year > 2024 || d.startsWith("2025") || d.startsWith("2026")) return false;
+          if (r.id === 1712 || (r.address && r.address.includes("自由三路157號"))) return false;
+          if (r.district === "茂林區" && (r.address || "").includes("茂林巷")) return false;
+          const s = (r.source || "").trim();
+          const u = (r.source_url || "").trim();
+          const combined = s + " " + (r.media_verification || "") + " " + u + " " + (r.reason || "");
+          const hasRealUrl = u.startsWith("http");
+          const hasDocket = /年度|字第|\d+號判決|司執|執字|院相|刑智|審交易/.test(combined);
+          const hasSpecificSource = !s.includes("歷年紙媒社會版卷宗") && !s.includes("歷年公開社會新聞與司法實務卷宗") && s.length > 5;
+          if ((s.includes("歷年紙媒社會版卷宗") || s.includes("歷年公開社會新聞與司法實務卷宗")) && !hasRealUrl && !hasDocket) return false;
+          if (!hasRealUrl && !hasDocket && !hasSpecificSource) return false;
+          return true;
+        });
       }
     }
   } catch (e) {}
   return cachedSupabaseDelta;
 }
 
-// GET /api/records
+// GET /api/records - Merges calibrated disk archive with live Supabase delta
 app.get("/api/records", async (req, res) => {
+  cachedCalibratedDiskRecords = null; // Always ensure freshly updated archive is used
   const delta = await fetchLatestSupabaseCrawledRecords();
   const base = loadAllUnifiedRecords();
-  const seen = new Set(base.map(r => `${r.city || ""}_${r.district || ""}_${r.doorplate_address || r.address}`));
+  const seenIds = new Set(base.map(r => String(r.id !== undefined && r.id !== null ? r.id : "")));
+  const seenAddrs = new Set(base.map(r => `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${(r.doorplate_address || r.address || "").replace(/台/g, "臺").replace(/\s+/g, "").replace(/（.*）/, "").replace(/\(.*\)/, "")}`));
+  const seenReasons = new Set(base.map(r => {
+    const p = (r.reason || "").replace(/\s+/g, "").slice(0, 25);
+    return p.length >= 10 ? `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${p}` : "";
+  }).filter(Boolean));
+
   const merged = [...base];
   for (const item of delta) {
-    const k = `${item.city || ""}_${item.district || ""}_${item.address}`;
-    if (!seen.has(k)) {
-      seen.add(k);
-      merged.unshift({
-        ...item,
-        doorplate_address: item.address,
-        location_accuracy: "ROOFTOP"
-      });
-    }
+    if (!item || !item.address) continue;
+    const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
+    const city = (item.city || "").replace(/台/g, "臺");
+    const dist = item.district || "";
+    const cleanAddr = (item.doorplate_address || item.address || "")
+      .replace(/台/g, "臺")
+      .replace(/\s+/g, "")
+      .replace(/（.*）/, "")
+      .replace(/\(.*\)/, "");
+    const addrKey = `${city}_${dist}_${cleanAddr}`;
+    const reasonPrefix = (item.reason || "").replace(/\s+/g, "").slice(0, 25);
+    const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
+
+    if (idKey && seenIds.has(idKey)) continue;
+    if (seenAddrs.has(addrKey)) continue;
+    if (reasonKey && seenReasons.has(reasonKey)) continue;
+
+    if (idKey) seenIds.add(idKey);
+    seenAddrs.add(addrKey);
+    if (reasonKey) seenReasons.add(reasonKey);
+
+    merged.unshift({
+      ...item,
+      city,
+      doorplate_address: item.doorplate_address || item.address,
+      location_accuracy: item.location_accuracy || "ROOFTOP"
+    });
   }
   res.json({
     records: merged,
     totalCount: merged.length,
     mapsConfigured: Boolean(getGoogleMapsApiKey()),
     mapsApiKey: getGoogleMapsApiKey(),
-    attributionId: GMP_ATTRIBUTION_ID
+    attributionId: GMP_ATTRIBUTION_ID,
+    lastSyncTime: new Date().toISOString()
+  });
+});
+
+// GET /api/records/live-sync - Quick endpoint to check for records newer than a given ID or timestamp
+app.get("/api/records/live-sync", async (req, res) => {
+  const delta = await fetchLatestSupabaseCrawledRecords(true);
+  res.json({
+    latestId: delta[0]?.id || 0,
+    records: delta.slice(0, 50),
+    totalLiveCount: delta.length
   });
 });
 

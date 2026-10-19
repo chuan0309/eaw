@@ -213,12 +213,7 @@ CITY_BASE_COORDS = {
 
 def resolve_doorplate_and_coordinates(r: dict, city: str, dist: str, gmaps_key: str) -> tuple[str, float, float]:
     raw_addr = (r.get("address") or "").replace("台", "臺").strip()
-    clean_query = re.sub(r"[（(].*$", "", raw_addr)
-    clean_query = re.sub(r"某.*$", "", clean_query).strip()
-
-    if not re.search(r"\d+號", clean_query):
-        num = (abs(hash(raw_addr)) % 160) + 6
-        clean_query = f"{clean_query}{num}號"
+    clean_query = re.sub(r"[（(].*$", "", raw_addr).strip()
 
     if not clean_query.startswith(city):
         clean_query = f"{city}{dist}{clean_query.replace(city, '').replace(dist, '')}"
@@ -341,17 +336,16 @@ def main():
 
         print(f"🔎 [{idx+1}/35] 正在深挖【{city}{dist}】(目前庫內 {current_cnt} 筆) | 啟用關鍵字：{picked_dims[0]}...", flush=True)
 
-        prompt = f"""你是臺灣 1970–2026 年歷年不動產特殊事故、司法院法拍屋點交筆錄與四大紙媒社會新聞考證專家。
-目前正在擴充【{city}{dist}】的事故建物資料庫。
+        prompt = f"""你是臺灣 1970–2024 年歷年不動產特殊事故與司法院公開判決考證專家。
+目前正在核對【{city}{dist}】的真實事故建物資料。
 【檢索關鍵字】：{json.dumps(picked_dims, ensure_ascii=False)}
 【即時新聞線索參考】：{json.dumps(rss_news[:8], ensure_ascii=False)}
 
-請針對【{city}{dist}】各主要路段、街巷、社區大樓、公寓或透天民宅，整理出 **10 到 14 筆** 發生於 1975 年至 2026 年間的不同真實類型特殊事故建物紀錄（涵蓋：1.刑事命案、2.輕生事故、3.意外身亡、4.自然或孤獨死、5.法拍與其他）。
-
-嚴格要求：
-1. 每筆 `address` 必須包含【{city}{dist}】真實存在的「路、街、段、巷」與「明確門牌號碼（XX號）」（例如：「{city}{dist}中正路128號（7樓住宅大樓）」），禁止出現「某大樓」、「某公寓」、「某草叢」等模糊字眼！
-2. 請提供該門牌在【{city}{dist}】的經緯度 `lat` 與 `lng`。
-3. 請詳述具體案發經過、死因、歷年法拍（一拍/二拍/三拍底價與點交註記）或實價登錄折價轉手時間軸。
+【最高事實準則 - 絕不可捏造虛構】：
+1. 嚴禁任何憑空編造、臆測或虛構的案件！所有紀錄必須有歷史真實新聞報導、法學裁判書或法拍公開筆錄作為鐵證。
+2. 案件日期嚴禁超過 2024 年！絕對禁止出現 2025、2026 等未來虛構年份。
+3. 若【{city}{dist}】查無公開可考之重大特殊事故，請「直接回傳空陣列」{{"records": []}}，切勿為了湊數捏造案件，以維護無辜民眾與社區之名譽！
+4. 門牌必須為公開裁判或新聞已揭露之真實路段，嚴禁自行虛構號碼。
 
 請直接輸出 JSON Object 格式 {{"records": [...]}}：
 {{
@@ -359,18 +353,17 @@ def main():
     {{
       "city": "{city}",
       "district": "{dist}",
-      "address": "{city}{dist}+真實路街段巷+明確門牌號碼（XX號）",
+      "address": "{city}{dist}+真實公開可考之路街段巷或門牌",
       "lat": 25.00000,
       "lng": 121.00000,
-      "incident_date": "YYYY-MM-DD",
+      "incident_date": "YYYY-MM-DD（必須為 1970 至 2024 年間已發生之真實日期）",
       "category": "刑事命案 / 輕生事故 / 意外身亡 / 自然或孤獨死 / 法拍與其他",
-      "reason": "詳述案發原因、死因、警消相驗與法拍/實價備註（45字以上）",
+      "reason": "詳述歷史真實事件始末與公開通報內容（嚴禁虛構情節）",
       "source_url": "若來自上方新聞線索請填真實 link，否則填空字串",
-      "media_verification": "具體列出查證依據（如：司法院法拍屋公告筆錄、聯合報/自由時報地方社會版）",
-      "auction_record": "具體描述法拍拍次底價或特殊交易折價幅度",
+      "media_verification": "具體列出查證依據（如：臺灣XX地方法院判決案號、司法院法拍公告筆錄、聯合報/自由時報/中時社會版具體報導名稱）",
+      "auction_record": "描述法拍或實價登錄備註紀錄（無則填空）",
       "history_timeline": [
-        {{"year": "案發年份", "stage": "案發與警消/媒體紀錄", "detail": "詳述案發經過"}},
-        {{"year": "後續年份", "stage": "法拍點交 / 實價轉手紀錄", "detail": "詳述法拍或轉手折價狀況"}}
+        {{"year": "真實案發年份", "stage": "案發與公開報導", "detail": "真實案情摘要"}}
       ]
     }}
   ]

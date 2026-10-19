@@ -1,8 +1,9 @@
-name: 24H 全自動臺灣凶宅爬蟲與雙 AI 萃取
+name: 24H 全自動臺灣368鄉鎮凶宅普查與純文字AI引擎
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    # 每小時整點自動執行一次，日夜不停歇擴充至萬筆以上
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -22,7 +23,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 4. 啟動 Gemini + ChatGPT 雙引擎爬蟲並寫入 Supabase
+      - name: 4. 啟動全臺368鄉鎮普查並寫入 Supabase
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

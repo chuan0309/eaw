@@ -1,0 +1,10 @@
+{
+  "name": "臺灣特殊事故建物與產權紀錄查詢平台",
+  "description": "整合全臺灣 22 縣市、368 鄉鎮市區歷年特殊事故建物、重大傷亡建築與司法院法拍點交紀錄之空間查詢與產權脈絡平台。",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

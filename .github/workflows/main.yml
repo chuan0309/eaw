@@ -6,6 +6,9 @@ on:
     - cron: '0 * * * *'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   crawl_and_update_db:
     runs-on: ubuntu-latest
@@ -21,7 +24,11 @@ jobs:
       - name: 3. 安裝所需套件
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install "google-genai>=1.0.0" "supabase>=2.4.0" "requests>=2.31.0"
+          fi
 
       - name: 4. 啟動全臺368鄉鎮普查並寫入 Supabase
         env:
@@ -29,4 +36,5 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           OPENAI_API_KEYS: ${{ secrets.OPENAI_API_KEYS }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: python -u crawler.py

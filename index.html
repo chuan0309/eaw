@@ -3022,23 +3022,76 @@
       };
     }
 
+    const FALLBACK_GMP_KEY = "AIzaSyA43RPI2-3OHJFqfLtoZjsK3PWxd5ZrtHU";
+    const SUPABASE_REST_URL = "https://cfmcvcscyfblcodemnkt.supabase.co/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000";
+    const SUPABASE_PUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.s1c32A_hL22W9x8zH4tT8f4F5r9pW9K4Y6X8vG0zJ7M";
+
     async function loadAllData() {
       applyLanguageUI(currentLang);
       const statusEl = document.getElementById("db-status");
+      let loadedFromApi = false;
+      let mapsKey = "";
+
       try {
         const apiRes = await fetch("/api/records");
         if (apiRes.ok) {
-          const apiData = await apiRes.json();
-          await initMapEngine(apiData.mapsApiKey || "");
-          if (Array.isArray(apiData.records)) {
-            allRecords = apiData.records.map((r, i) => prepareRecord(r, i));
+          const contentType = apiRes.headers.get("content-type") || "";
+          if (contentType.includes("application/json")) {
+            const apiData = await apiRes.json();
+            if (Array.isArray(apiData.records) && apiData.records.length > 0) {
+              mapsKey = apiData.mapsApiKey || "";
+              allRecords = apiData.records.map((r, i) => prepareRecord(r, i));
+              loadedFromApi = true;
+            }
           }
-        } else {
-          await initMapEngine("");
         }
       } catch (e) {
-        await initMapEngine("");
+        // Fallback to static / Supabase below
       }
+
+      // Static Hosting / GitHub Pages Fallback (if /api/records is not available)
+      if (!loadedFromApi || allRecords.length === 0) {
+        let fallbackRecords = [];
+        try {
+          const staticRes = await fetch("./calibrated_archive.json");
+          if (staticRes.ok) {
+            const staticList = await staticRes.json();
+            if (Array.isArray(staticList)) {
+              fallbackRecords = staticList;
+            }
+          }
+        } catch (e) {}
+
+        // Also fetch live records from Supabase directly
+        try {
+          const supaRes = await fetch(SUPABASE_REST_URL, {
+            headers: {
+              apikey: SUPABASE_PUB_KEY,
+              Authorization: `Bearer ${SUPABASE_PUB_KEY}`
+            }
+          });
+          if (supaRes.ok) {
+            const supaList = await supaRes.json();
+            if (Array.isArray(supaList)) {
+              const seen = new Set(fallbackRecords.map(r => `${r.city || ""}_${r.district || ""}_${r.address}`));
+              for (const item of supaList) {
+                const k = `${item.city || ""}_${item.district || ""}_${item.address}`;
+                if (!seen.has(k) && /\d+號/.test(item.address || "")) {
+                  seen.add(k);
+                  fallbackRecords.unshift(item);
+                }
+              }
+            }
+          }
+        } catch (e) {}
+
+        if (fallbackRecords.length > 0) {
+          allRecords = fallbackRecords.map((r, i) => prepareRecord(r, i));
+        }
+        mapsKey = FALLBACK_GMP_KEY;
+      }
+
+      await initMapEngine(mapsKey);
 
       if (statusEl) {
         statusEl.textContent = `${allRecords.length.toLocaleString()} 筆案件紀錄`;

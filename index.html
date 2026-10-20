@@ -105,28 +105,25 @@
   <header class="bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 z-30 shrink-0">
     <!-- Zone 1: Brand Title -->
     <a href="#" id="brand-reset-link" class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-slate-900 truncate min-w-0">
-      臺灣特殊事故建物與產權紀錄查詢平台
+      臺灣凶宅查詢與公開資料庫直連篩選平台
     </a>
 
-    <!-- Zone 2: Category Navigation Links (Desktop xl+) -->
+    <!-- Zone 2: Statutory Haunted House Category Navigation Links (Desktop xl+) -->
     <nav class="hidden xl:flex items-center gap-4 2xl:gap-5 text-xs font-medium text-slate-600 shrink-0" id="category-tabs" aria-label="Category Filter">
       <button type="button" data-cat="ALL" class="cat-btn text-slate-900 font-semibold border-b-2 border-slate-900 pb-1 transition-colors whitespace-nowrap shrink-0">
-        <span data-i18n="cat_all">全部紀錄</span> <span id="count-ALL" class="font-mono text-xs text-slate-500 ml-1 tabular-nums">0</span>
+        <span data-i18n="cat_all">全部法定凶宅</span> <span id="count-ALL" class="font-mono text-xs text-slate-500 ml-1 tabular-nums">0</span>
       </button>
       <button type="button" data-cat="刑事命案" class="cat-btn hover:text-slate-900 border-b-2 border-transparent pb-1 transition-colors whitespace-nowrap shrink-0">
-        <span data-i18n="cat_homicide">刑事案件</span> <span id="count-刑事命案" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
+        <span data-i18n="cat_homicide">屋內兇殺命案</span> <span id="count-刑事命案" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
       </button>
       <button type="button" data-cat="輕生事故" class="cat-btn hover:text-slate-900 border-b-2 border-transparent pb-1 transition-colors whitespace-nowrap shrink-0">
-        <span data-i18n="cat_suicide">輕生事故</span> <span id="count-輕生事故" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
+        <span data-i18n="cat_suicide">屋內輕生墜樓</span> <span id="count-輕生事故" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
       </button>
       <button type="button" data-cat="意外身亡" class="cat-btn hover:text-slate-900 border-b-2 border-transparent pb-1 transition-colors whitespace-nowrap shrink-0">
-        <span data-i18n="cat_accident">意外火警</span> <span id="count-意外身亡" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
-      </button>
-      <button type="button" data-cat="自然或孤獨死" class="cat-btn hover:text-slate-900 border-b-2 border-transparent pb-1 transition-colors whitespace-nowrap shrink-0">
-        <span data-i18n="cat_natural">孤獨死與久病</span> <span id="count-自然或孤獨死" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
+        <span data-i18n="cat_accident">一氧化碳與奪命火警</span> <span id="count-意外身亡" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
       </button>
       <button type="button" data-cat="法拍與其他" class="cat-btn hover:text-slate-900 border-b-2 border-transparent pb-1 transition-colors whitespace-nowrap shrink-0">
-        <span data-i18n="cat_court">法拍特殊點交</span> <span id="count-法拍與其他" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
+        <span data-i18n="cat_court">法拍與判決認證凶宅</span> <span id="count-法拍與其他" class="font-mono text-xs text-slate-400 ml-1 tabular-nums">0</span>
       </button>
     </nav>
 
@@ -150,7 +147,7 @@
       </select>
 
       <button type="button" id="open-modal-btn" data-i18n="btn_add_discover" class="min-h-[36px] sm:min-h-[38px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 active:scale-[0.98] transition-all whitespace-nowrap shrink-0">
-        新增與擴充案件
+        公開資料庫直連 / 通報凶宅
       </button>
     </div>
   </header>
@@ -158,22 +155,19 @@
   <!-- Mobile & Tablet Category Bar (< xl screens) -->
   <div class="xl:hidden bg-white border-b border-slate-200 px-3.5 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0 z-20" id="mobile-category-strip">
     <button type="button" data-cat="ALL" class="m-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white whitespace-nowrap shrink-0 transition-colors">
-      <span data-i18n="cat_all_short">全部</span> <span id="m-count-ALL" class="font-mono text-[11px] opacity-80 ml-0.5 tabular-nums">0</span>
+      <span data-i18n="cat_all_short">全部凶宅</span> <span id="m-count-ALL" class="font-mono text-[11px] opacity-80 ml-0.5 tabular-nums">0</span>
     </button>
     <button type="button" data-cat="刑事命案" class="m-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 whitespace-nowrap shrink-0 transition-colors flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-red-600"></span><span data-i18n="cat_homicide">刑事案件</span> <span id="m-count-刑事命案" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
+      <span class="w-2 h-2 rounded-full bg-red-600"></span><span data-i18n="cat_homicide">屋內兇殺命案</span> <span id="m-count-刑事命案" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
     </button>
     <button type="button" data-cat="輕生事故" class="m-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 whitespace-nowrap shrink-0 transition-colors flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-amber-600"></span><span data-i18n="cat_suicide">輕生事故</span> <span id="m-count-輕生事故" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
+      <span class="w-2 h-2 rounded-full bg-amber-600"></span><span data-i18n="cat_suicide">屋內輕生墜樓</span> <span id="m-count-輕生事故" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
     </button>
     <button type="button" data-cat="意外身亡" class="m-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 whitespace-nowrap shrink-0 transition-colors flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-purple-600"></span><span data-i18n="cat_accident">意外火警</span> <span id="m-count-意外身亡" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
-    </button>
-    <button type="button" data-cat="自然或孤獨死" class="m-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 whitespace-nowrap shrink-0 transition-colors flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-blue-600"></span><span data-i18n="cat_natural">孤獨死與久病</span> <span id="m-count-自然或孤獨死" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
+      <span class="w-2 h-2 rounded-full bg-purple-600"></span><span data-i18n="cat_accident">一氧化碳與奪命火警</span> <span id="m-count-意外身亡" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
     </button>
     <button type="button" data-cat="法拍與其他" class="m-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 whitespace-nowrap shrink-0 transition-colors flex items-center gap-1.5">
-      <span class="w-2 h-2 rounded-full bg-emerald-600"></span><span data-i18n="cat_court">法拍特殊點交</span> <span id="m-count-法拍與其他" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
+      <span class="w-2 h-2 rounded-full bg-emerald-600"></span><span data-i18n="cat_court">法拍與判決認證凶宅</span> <span id="m-count-法拍與其他" class="font-mono text-[11px] text-slate-400 tabular-nums">0</span>
     </button>
   </div>
 
@@ -231,7 +225,7 @@
           <div id="google-place-results-list" class="space-y-1.5 max-h-44 overflow-y-auto"></div>
         </div>
 
-        <!-- Row 2: Always-Visible Dropdowns for City (contains All + 22 Cities), District (contains All), and Time -->
+        <!-- Row 2: Always-Visible Dropdowns for City, District, and Time -->
         <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
           <select id="city-select" aria-label="City" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="">全部縣市</option>
@@ -251,7 +245,25 @@
           </select>
         </div>
 
-        <!-- Row 3: Collapsible / Secondary Custom Year & Sort Controls -->
+        <!-- Row 3: Direct Public Database Source Filter + Residential Building Type Filter -->
+        <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
+          <select id="db-source-select" aria-label="Connected Public Database Source" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
+            <option value="ALL">🗄️ 全部直連公開資料庫 (4大庫)</option>
+            <option value="JUDICIAL_AUCTION">⚖️ 司法院法拍屋凶宅筆錄庫</option>
+            <option value="JUDICIAL_JUDGMENT">📜 司法院裁判書凶宅判決庫</option>
+            <option value="MOI_OPEN_DATA">🏛️ 內政部實價登錄特殊交易庫</option>
+            <option value="NEWS_PUBLIC_ARCHIVE">📰 公開新聞與民間凶宅檔案庫</option>
+          </select>
+          <select id="bldg-type-select" aria-label="Residential Building Type" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
+            <option value="ALL">🏢 全部住宅建物型態</option>
+            <option value="大樓">住宅大樓 / 社區華廈</option>
+            <option value="公寓">傳統步登公寓</option>
+            <option value="透天">透天厝 / 獨棟民宅</option>
+            <option value="套房">獨立套房 / 出租雅房</option>
+          </select>
+        </div>
+
+        <!-- Row 4: Collapsible / Secondary Custom Year & Sort Controls -->
         <div id="collapsible-filters" class="hidden md:flex items-center justify-between gap-2 pt-0.5 text-xs">
           <div class="flex items-center gap-1.5 flex-1 min-w-0">
             <span class="text-slate-500 shrink-0" data-i18n="label_year_range">年份：</span>
@@ -287,7 +299,7 @@
               data-i18n="btn_quick_expand"
               class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold shrink-0 transition-colors"
             >
-              + 擴充案件
+              資料庫狀態
             </button>
           </div>
         </div>
@@ -348,11 +360,10 @@
 
       <!-- Map Color Legend -->
       <div class="hidden lg:flex absolute bottom-6 left-4 z-[400] items-center gap-3.5 bg-white/95 backdrop-blur px-3.5 py-2 rounded-lg shadow-sm border border-slate-200 text-[11px] text-slate-700">
-        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-red-600 inline-block"></i><span data-i18n="cat_homicide">刑事案件</span></span>
-        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-amber-600 inline-block"></i><span data-i18n="cat_suicide">輕生事故</span></span>
-        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></i><span data-i18n="cat_accident">意外火警</span></span>
-        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></i><span data-i18n="cat_natural">孤獨死與久病</span></span>
-        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></i><span data-i18n="cat_court">法拍特殊點交</span></span>
+        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-red-600 inline-block"></i><span data-i18n="cat_homicide">屋內兇殺命案</span></span>
+        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-amber-600 inline-block"></i><span data-i18n="cat_suicide">屋內輕生墜樓</span></span>
+        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></i><span data-i18n="cat_accident">一氧化碳與奪命火警</span></span>
+        <span class="flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></i><span data-i18n="cat_court">法拍與判決認證凶宅</span></span>
       </div>
     </main>
 
@@ -653,11 +664,11 @@
     </button>
   </nav>
 
-  <!-- Modal: 新增回報案件 / 擴充檢索地區案件 -->
+  <!-- Modal: 公開凶宅資料庫直連篩選 / 手動通報凶宅 -->
   <div id="record-modal" class="hidden fixed inset-0 z-[600] bg-slate-900/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white border border-slate-200 rounded-t-2xl sm:rounded-xl shadow-xl w-full max-w-lg max-h-[90dvh] flex flex-col overflow-hidden">
       <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0">
-        <h2 class="text-base font-bold text-slate-900" data-i18n="modal_title">新增或擴充檢索案件紀錄</h2>
+        <h2 class="text-base font-bold text-slate-900" data-i18n="modal_title">公開凶宅資料庫直連總覽與案件通報</h2>
         <button type="button" id="close-modal-btn" data-i18n="btn_close" class="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200">
           關閉
         </button>
@@ -666,38 +677,97 @@
       <div class="px-5 sm:px-6 pt-3.5 shrink-0">
         <div class="grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-lg text-xs font-semibold">
           <button type="button" id="tab-discover-btn" data-i18n="tab_discover" class="py-2 rounded-md bg-white text-slate-900 shadow-xs transition-colors">
-            擴充檢索地區/路段案件
+            四大公開凶宅資料庫直連篩選
           </button>
           <button type="button" id="tab-manual-btn" data-i18n="tab_manual" class="py-2 rounded-md text-slate-600 hover:text-slate-900 transition-colors">
-            手動回報實務案件
+            手動通報確認凶宅
           </button>
         </div>
       </div>
 
-      <!-- Tab 1: Regional & Road Keyword Archive Discovery -->
+      <!-- Tab 1: Direct Public Haunted House Databases Hub -->
       <div id="discover-panel" class="p-5 sm:p-6 space-y-4 text-xs overflow-y-auto flex-1">
-        <p class="text-slate-600 leading-relaxed" data-i18n="discover_desc">
-          選擇欲深入查閱的縣市、行政區或輸入特定路名／社區，系統將針對該區歷年社會新聞、司法院法拍屋點交公告與實價登錄特殊交易進行檢索（每次擴充 6 筆）。
-        </p>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_city">目標縣市</label>
-            <select id="disc-city" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800"></select>
+        <!-- Statutory Definition Banner -->
+        <div class="p-3.5 rounded-xl bg-slate-900 text-white space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-bold text-xs flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>內政部法定「凶宅」嚴格篩選標準（免爬蟲 · 公開資料庫直連）</span>
+            </div>
+            <span id="crawler-total-badge" class="px-2 py-0.5 rounded bg-white/10 font-mono text-[11px] font-semibold tabular-nums shrink-0">
+              載入中...
+            </span>
           </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_district">目標行政區</label>
-            <select id="disc-district" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800"></select>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            依據內政部函釋與《不動產說明書應記載事項》，本平台<strong>僅收錄住宅建物專有部分曾發生「兇殺、自殺、一氧化碳中毒或奪命火警等非自然死亡」之法定凶宅</strong>。已全面剔除一般市建都更、商業工地工安、道路車禍、山區海域與自然病逝紀錄。
+          </p>
+        </div>
+
+        <!-- 4 Connected Public Databases Cards -->
+        <div class="space-y-2.5">
+          <div class="font-bold text-slate-900 flex items-center justify-between">
+            <span>點擊下方公開資料庫可直接篩選對應凶宅紀錄：</span>
+            <button type="button" data-quick-db="ALL" class="quick-db-filter-btn text-[11px] text-sky-700 hover:underline font-semibold">顯示全部資料庫</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" data-quick-db="JUDICIAL_AUCTION" class="quick-db-filter-btn text-left p-3 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900">⚖️ 司法院法拍屋凶宅筆錄庫</span>
+                <span id="db-count-JUDICIAL_AUCTION" class="font-mono text-xs font-bold text-emerald-700 tabular-nums">0</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-snug">直連各方法院民事執行處拍賣公告，篩選查封筆錄載明「非自然死亡、輕生、命案」之法拍凶宅。</p>
+            </button>
+
+            <button type="button" data-quick-db="JUDICIAL_JUDGMENT" class="quick-db-filter-btn text-left p-3 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900">📜 司法院裁判書凶宅判決庫</span>
+                <span id="db-count-JUDICIAL_JUDGMENT" class="font-mono text-xs font-bold text-amber-700 tabular-nums">0</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-snug">直連司法院裁判書系統，篩選民事「隱瞞凶宅物之瑕疵擔保減少價金」與住宅刑事命案判決。</p>
+            </button>
+
+            <button type="button" data-quick-db="MOI_OPEN_DATA" class="quick-db-filter-btn text-left p-3 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900">🏛️ 內政部實價登錄特殊交易庫</span>
+                <span id="db-count-MOI_OPEN_DATA" class="font-mono text-xs font-bold text-purple-700 tabular-nums">0</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-snug">直連內政部不動產實價登錄與凶宅揭露備註欄，篩選異常折價與特殊事故註記住宅。</p>
+            </button>
+
+            <button type="button" data-quick-db="NEWS_PUBLIC_ARCHIVE" class="quick-db-filter-btn text-left p-3 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900">📰 公開新聞與台灣凶宅網檔案</span>
+                <span id="db-count-NEWS_PUBLIC_ARCHIVE" class="font-mono text-xs font-bold text-red-700 tabular-nums">0</span>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-snug">整合台灣凶宅網公開檔案與歷年社會新聞，100% 鎖定住宅屋內兇殺、輕生與奪命火警案件。</p>
+            </button>
           </div>
         </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_disc_kw">指定路名、街段或社區關鍵字（選填）</label>
-          <input type="text" id="disc-keyword" placeholder="例如：林森北路、中正路、七期..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
-        </div>
-        <div id="discover-status" class="hidden p-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-700"></div>
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" id="run-discover-btn" data-i18n="btn_run_discover" class="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold">
-            立即檢索 6 筆紀錄
-          </button>
+
+        <!-- Direct Database Query Filter by Region -->
+        <div class="pt-3 border-t border-slate-200 space-y-3">
+          <div class="font-bold text-slate-900">指定縣市／行政區／路名直接篩選公開資料庫</div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_city">目標縣市</label>
+              <select id="disc-city" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800"></select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_district">目標行政區</label>
+              <select id="disc-district" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800"></select>
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_disc_kw">指定路名、街段或社區關鍵字（選填）</label>
+            <input type="text" id="disc-keyword" placeholder="例如：林森北路、中正路、某社區..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
+          </div>
+          <div id="discover-status" class="hidden p-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 leading-relaxed"></div>
+          <div class="pt-1 flex justify-end gap-2">
+            <button type="button" id="run-discover-btn" data-i18n="btn_run_discover" class="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+              立即從公開資料庫篩選此區凶宅
+            </button>
+          </div>
         </div>
       </div>
 
@@ -716,13 +786,12 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_category">事故類型</label>
+            <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_category">凶宅法定成因類型</label>
             <select id="form-category" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800">
-              <option value="刑事命案" data-i18n="cat_homicide">刑事案件</option>
-              <option value="輕生事故" data-i18n="cat_suicide">輕生事故</option>
-              <option value="意外身亡" data-i18n="cat_accident">意外火警</option>
-              <option value="自然或孤獨死" data-i18n="cat_natural">孤獨死與久病</option>
-              <option value="法拍與其他" data-i18n="cat_court">法拍特殊點交</option>
+              <option value="刑事命案" data-i18n="cat_homicide">屋內兇殺命案</option>
+              <option value="輕生事故" data-i18n="cat_suicide">屋內輕生墜樓</option>
+              <option value="意外身亡" data-i18n="cat_accident">一氧化碳與奪命火警</option>
+              <option value="法拍與其他" data-i18n="cat_court">法拍與判決認證凶宅</option>
             </select>
           </div>
           <div>
@@ -834,19 +903,18 @@
     // Clean, Concise 4-Language Dictionary (繁體中文 / English / 日本語 / 한국어)
     const I18N_DICT = {
       "zh-TW": {
-        app_title: "臺灣特殊事故建物與產權紀錄查詢平台",
-        cat_all: "全部紀錄",
-        cat_all_short: "全部",
-        cat_homicide: "刑事案件",
-        cat_suicide: "輕生事故",
-        cat_accident: "意外火警",
-        cat_natural: "孤獨死與久病",
-        cat_court: "法拍特殊點交",
-        btn_add_discover: "新增與擴充案件",
+        app_title: "臺灣凶宅查詢與公開資料庫直連篩選平台",
+        cat_all: "全部法定凶宅",
+        cat_all_short: "全部凶宅",
+        cat_homicide: "屋內兇殺命案",
+        cat_suicide: "屋內輕生墜樓",
+        cat_accident: "一氧化碳與奪命火警",
+        cat_court: "法拍與判決認證凶宅",
+        btn_add_discover: "公開資料庫直連 / 通報凶宅",
         all_taiwan: "全臺灣",
         all_cities_opt: "全部縣市",
         all_districts_opt: "全部行政區",
-        search_placeholder: "搜尋地址、路名、社區或關鍵字...",
+        search_placeholder: "篩選凶宅地址、路名、社區大樓或法拍字號...",
         btn_reset: "重設",
         btn_google_locate: "定位搜尋",
         btn_locating: "搜尋中...",
@@ -864,7 +932,7 @@
         time_before_2010: "2010 年以前",
         time_custom: "自訂年份區間",
         label_year_range: "年份：",
-        btn_quick_expand: "+ 擴充案件",
+        btn_quick_expand: "資料庫狀態",
         footer_auction: "司法院法拍 ↗",
         footer_lvr: "實價登錄 ↗",
         map_roadmap: "街道地圖",
@@ -909,26 +977,26 @@
         mnav_split_sub: "地圖+列表",
         mnav_filter: "進階設定",
         mnav_filter_sub: "自訂年份",
-        modal_title: "新增或擴充檢索案件紀錄",
-        tab_discover: "擴充檢索地區/路段案件",
-        tab_manual: "手動回報實務案件",
-        discover_desc: "選擇欲深入查閱的縣市、行政區或輸入特定路名／社區，系統將針對該區歷年社會新聞、司法院法拍屋點交公告與實價登錄特殊交易進行檢索（每次擴充 6 筆）。",
+        modal_title: "公開凶宅資料庫直連總覽與案件通報",
+        tab_discover: "四大公開凶宅資料庫直連篩選",
+        tab_manual: "手動通報確認凶宅",
+        discover_desc: "直接連線司法院法拍屋公告資料庫、司法院裁判書系統、內政部實價登錄特殊交易與公開凶宅資料庫，依縣市與路名即時篩選法定凶宅。",
         lbl_city: "目標縣市",
         lbl_district: "目標行政區",
         lbl_disc_kw: "指定路名、街段或社區關鍵字（選填）",
-        btn_run_discover: "立即檢索 6 筆紀錄",
-        lbl_category: "事故類型",
+        btn_run_discover: "立即從公開資料庫篩選此區凶宅",
+        lbl_category: "凶宅法定成因類型",
         lbl_form_addr: "完整門牌地址",
-        lbl_form_reason: "案情經過與產權備註",
+        lbl_form_reason: "凶宅事由與法拍／判決備註",
         lbl_form_auction: "法拍底價或折價紀錄 (選填)",
-        lbl_form_url: "相關新聞或公告網址 (選填)",
+        lbl_form_url: "相關新聞或裁判書網址 (選填)",
         btn_cancel: "取消",
         btn_submit_form: "儲存案件",
         doorplate_prefix: "地址：",
         btn_rooftop_locate: "地圖位置",
         btn_open_dossier: "詳細卷宗 →",
-        expand_footer_prompt: "想查詢更多此行政區或特定路段的歷史案件紀錄？",
-        expand_footer_btn: "+ 擴充檢索此區更多案件（每次新增 6 筆）",
+        expand_footer_prompt: "目前篩選條件下無相符之法定凶宅紀錄",
+        expand_footer_btn: "切換至全部公開資料庫或查詢此區",
         portal_btn: "複製地址並前往 ↗",
         popup_open_btn: "查看街景 · 產權卷宗與官方資料庫",
         popup_news: "新聞檢索 ↗",
@@ -1283,10 +1351,25 @@
         "刑事命案": t("cat_homicide"),
         "輕生事故": t("cat_suicide"),
         "意外身亡": t("cat_accident"),
-        "自然或孤獨死": t("cat_natural"),
         "法拍與其他": t("cat_court")
       };
       return map[catKey] || t("cat_court");
+    }
+
+    const DB_SOURCE_META = {
+      "JUDICIAL_AUCTION": { label: "司法院法拍屋筆錄", badgeClass: "bg-emerald-50 text-emerald-800 border-emerald-200" },
+      "JUDICIAL_JUDGMENT": { label: "司法院裁判書認證", badgeClass: "bg-amber-50 text-amber-800 border-amber-200" },
+      "MOI_OPEN_DATA": { label: "內政部實價特殊交易", badgeClass: "bg-purple-50 text-purple-800 border-purple-200" },
+      "NEWS_PUBLIC_ARCHIVE": { label: "公開新聞與凶宅檔案", badgeClass: "bg-slate-100 text-slate-700 border-slate-200" }
+    };
+
+    function inferDbSource(item) {
+      if (item.db_source && DB_SOURCE_META[item.db_source]) return item.db_source;
+      const full = `${item.source || ""} ${item.media_verification || ""} ${item.auction_record || ""} ${item.reason || ""}`;
+      if (/實價登錄|內政部|特殊交易/.test(full)) return "MOI_OPEN_DATA";
+      if (/法拍|拍賣公告|查封筆錄|執行處|點交|應買|一拍|二拍|三拍/.test(full)) return "JUDICIAL_AUCTION";
+      if (/裁判書|判決|地方法院|高等法院|最高法院|字第/.test(full)) return "JUDICIAL_JUDGMENT";
+      return "NEWS_PUBLIC_ARCHIVE";
     }
 
     function formatPriceValue(manVal) {
@@ -1330,12 +1413,6 @@
         textColor: "text-purple-700",
         hex: "#7C3AED",
         discount: 0.72
-      },
-      "自然或孤獨死": {
-        dot: "bg-blue-600",
-        textColor: "text-blue-700",
-        hex: "#2563EB",
-        discount: 0.85
       },
       "法拍與其他": {
         dot: "bg-emerald-600",
@@ -1681,10 +1758,9 @@
 
     function classifyRecord(rawCat, rawReason) {
       const text = `${rawCat || ""} ${rawReason || ""}`;
-      if (/兇殺|命案|他殺|情殺|仇殺|分屍|槍擊|砍殺|割頸|強盜|刑事/.test(text)) return "刑事命案";
+      if (/兇殺|命案|他殺|情殺|仇殺|分屍|槍擊|砍殺|割頸|強盜|弒|虐死|家暴.*死|刑事/.test(text)) return "刑事命案";
       if (/輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥/.test(text)) return "輕生事故";
-      if (/火警|火災|一氧化碳|瓦斯|中毒|氣爆|溺水|工安|意外/.test(text)) return "意外身亡";
-      if (/自然|久病|獨居|孤獨死|暴斃|猝死|病逝/.test(text)) return "自然或孤獨死";
+      if (/火警|火災|一氧化碳|瓦斯|中毒|氣爆|惡火|縱火/.test(text)) return "意外身亡";
       return "法拍與其他";
     }
 
@@ -2682,7 +2758,12 @@
     yearStartInput.addEventListener("input", onCustomYearInput);
     yearEndInput.addEventListener("input", onCustomYearInput);
 
+    const dbSourceSelect = document.getElementById("db-source-select");
+    const bldgTypeSelect = document.getElementById("bldg-type-select");
+
     districtSelect.addEventListener("change", () => applyFilters(true));
+    dbSourceSelect?.addEventListener("change", () => applyFilters(true));
+    bldgTypeSelect?.addEventListener("change", () => applyFilters(true));
     sortSelect.addEventListener("change", () => applyFilters(false));
     searchInput.addEventListener("input", () => applyFilters(true));
 
@@ -2690,6 +2771,8 @@
       citySelect.value = "";
       populateDistrictDropdown("", districtSelect, true);
       timePresetSelect.value = "ALL";
+      if (dbSourceSelect) dbSourceSelect.value = "ALL";
+      if (bldgTypeSelect) bldgTypeSelect.value = "ALL";
       yearStartInput.value = "";
       yearEndInput.value = "";
       searchInput.value = "";
@@ -3200,13 +3283,15 @@
 
     function prepareRecord(r, index) {
       const normalizedCat = classifyRecord(r.category, r.reason);
+      const dbSource = inferDbSource(r);
       const incidentYear = extractIncidentYear(r);
       const keyStr = String(r.id !== undefined && r.id !== null ? r.id : `rec-${index}`);
       const doorplate = extractDoorplateAddress(r);
       const cityEn = (CITY_I18N[r.city] && CITY_I18N[r.city].en) || "";
       const cityJa = (CITY_I18N[r.city] && CITY_I18N[r.city].ja) || "";
       const cityKo = (CITY_I18N[r.city] && CITY_I18N[r.city].ko) || "";
-      const searchBlob = `${r.city || ""}${cityEn}${cityJa}${cityKo}${r.district || ""}${r.address || ""}${doorplate}${r.reason || ""}${r.category || ""}${r.auction_record || ""}`
+      const dbMeta = DB_SOURCE_META[dbSource] || DB_SOURCE_META["NEWS_PUBLIC_ARCHIVE"];
+      const searchBlob = `${r.city || ""}${cityEn}${cityJa}${cityKo}${r.district || ""}${r.address || ""}${doorplate}${r.reason || ""}${r.category || ""}${r.auction_record || ""}${r.building_type || ""}${dbMeta.label}`
         .replace(/台/g, "臺")
         .toLowerCase();
       return {
@@ -3214,6 +3299,7 @@
         __key: keyStr,
         doorplate_address: doorplate,
         normalizedCat,
+        db_source: dbSource,
         incidentYear,
         searchBlob
       };
@@ -3295,67 +3381,80 @@
           console.warn("Could not load local calibrated archive:", e);
         }
 
-        // Fetch latest live crawled records directly from Supabase
+        // Fetch all pages of statutory haunted house records directly from Supabase (bypassing 1,000-row cap)
         try {
-          const supaRes = await fetch(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.desc`, {
-            headers: {
-              apikey: SUPABASE_PUB_KEY,
-              Authorization: `Bearer ${SUPABASE_PUB_KEY}`,
-              Range: "0-999"
-            }
-          });
-          if (supaRes.ok) {
-            const supaList = await supaRes.json();
-            if (Array.isArray(supaList)) {
-              const seenIds = new Set(fallbackRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : "")));
-              const seenAddrs = new Set(fallbackRecords.map(r => `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${(r.doorplate_address || r.address || "").replace(/台/g, "臺").replace(/\s+/g, "").replace(/（.*）/, "").replace(/\(.*\)/, "")}`));
-              const seenReasons = new Set(fallbackRecords.map(r => {
-                const p = (r.reason || "").replace(/\s+/g, "").slice(0, 25);
-                return p.length >= 10 ? `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${p}` : "";
-              }).filter(Boolean));
-
-              for (const item of supaList) {
-                if (!item || !item.address) continue;
-                const d = (item.incident_date || "").trim();
-                const year = parseInt(d.slice(0, 4), 10) || item.year || 0;
-                if (year > 2024 || d.startsWith("2025") || d.startsWith("2026")) continue;
-                if (item.id === 1712 || (item.address && item.address.includes("自由三路157號"))) continue;
-                if (item.district === "茂林區" && (item.address || "").includes("茂林巷")) continue;
-                const s = (item.source || "").trim();
-                const u = (item.source_url || "").trim();
-                const combined = s + " " + (item.media_verification || "") + " " + u + " " + (item.reason || "");
-                const hasRealUrl = u.startsWith("http");
-                const hasDocket = /年度|字第|\d+號判決|司執|執字|院相|刑智|審交易/.test(combined);
-                const hasSpecificSource = !s.includes("歷年紙媒社會版卷宗") && !s.includes("歷年公開社會新聞與司法實務卷宗") && s.length > 5;
-                if ((s.includes("歷年紙媒社會版卷宗") || s.includes("歷年公開社會新聞與司法實務卷宗")) && !hasRealUrl && !hasDocket) continue;
-                if (!hasRealUrl && !hasDocket && !hasSpecificSource) continue;
-                const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
-                const city = (item.city || "").replace(/台/g, "臺");
-                const dist = item.district || "";
-                const cleanAddr = (item.doorplate_address || item.address || "")
-                  .replace(/台/g, "臺")
-                  .replace(/\s+/g, "")
-                  .replace(/（.*）/, "")
-                  .replace(/\(.*\)/, "");
-                const addrKey = `${city}_${dist}_${cleanAddr}`;
-                const reasonPrefix = (item.reason || "").replace(/\s+/g, "").slice(0, 25);
-                const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
-
-                if (idKey && seenIds.has(idKey)) continue;
-                if (seenAddrs.has(addrKey)) continue;
-                if (reasonKey && seenReasons.has(reasonKey)) continue;
-
-                if (idKey) seenIds.add(idKey);
-                seenAddrs.add(addrKey);
-                if (reasonKey) seenReasons.add(reasonKey);
-
-                fallbackRecords.unshift({
-                  ...item,
-                  city,
-                  doorplate_address: item.doorplate_address || item.address,
-                  location_accuracy: item.location_accuracy || "ROOFTOP"
-                });
+          let supaList = [];
+          for (let offset = 0; offset < 5000; offset += 1000) {
+            const supaRes = await fetch(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.desc`, {
+              headers: {
+                apikey: SUPABASE_PUB_KEY,
+                Authorization: `Bearer ${SUPABASE_PUB_KEY}`,
+                Range: `${offset}-${offset + 999}`
               }
+            });
+            if (!supaRes.ok) break;
+            const pageRows = await supaRes.json();
+            if (!Array.isArray(pageRows) || pageRows.length === 0) break;
+            supaList.push(...pageRows);
+            if (pageRows.length < 1000) break;
+          }
+
+          if (supaList.length > 0) {
+            const seenIds = new Set(fallbackRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : "")));
+            const seenAddrs = new Set(fallbackRecords.map(r => `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${(r.doorplate_address || r.address || "").replace(/台/g, "臺").replace(/\s+/g, "").replace(/（.*）/, "").replace(/\(.*\)/, "")}`));
+            const seenReasons = new Set(fallbackRecords.map(r => {
+              const p = (r.reason || "").replace(/\s+/g, "").slice(0, 25);
+              return p.length >= 10 ? `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${p}` : "";
+            }).filter(Boolean));
+
+            for (const item of supaList) {
+              if (!item || !item.address) continue;
+              if (item.id === 1712 || (item.address && item.address.includes("自由三路157號"))) continue;
+              if (item.district === "茂林區" && (item.address || "").includes("茂林巷")) continue;
+
+              const full = `${item.address || ""} ${item.reason || ""} ${item.category || ""} ${item.source || ""} ${item.auction_record || ""}`;
+              if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死/.test(full)) {
+                continue;
+              }
+              if (!/住宅|民宅|住家|公寓|大樓|華廈|透天|套房|社區|雅房|國宅|租屋|屋內|房內|臥室|頂樓|陽台|法拍|凶宅|家宅|自宅|大廈|平房|三合院|別墅/.test(full)) {
+                continue;
+              }
+              if (!/命案|兇殺|他殺|情殺|仇殺|分屍|砍殺|槍擊|弒|虐死|輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥|一氧化碳|瓦斯中毒|氣爆.*死|惡火.*死|火警.*死|火災.*死|縱火.*死|非自然死亡|非自然身亡|凶宅|陳屍.*屋|陳屍.*宅|陳屍.*房|陳屍.*大樓|陳屍.*公寓|雙屍|三屍|母子.*死|夫妻.*死/.test(full)) {
+                continue;
+              }
+
+              const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
+              const city = (item.city || "").replace(/台/g, "臺");
+              const dist = item.district || "";
+              let cleanDoor = (item.doorplate_address || item.address || "").replace(/台/g, "臺").trim();
+              cleanDoor = cleanDoor.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
+              if (!item.source_url || !String(item.source_url).startsWith("http") || Number(item.id) >= 4110) {
+                cleanDoor = cleanDoor.replace(/([路街段巷弄])\d+(?:之\d+)?號/g, "$1");
+              }
+
+              const cleanAddr = cleanDoor
+                .replace(/\s+/g, "")
+                .replace(/（.*）/, "")
+                .replace(/\(.*\)/, "");
+              const addrKey = `${city}_${dist}_${cleanAddr}`;
+              const reasonPrefix = (item.reason || "").replace(/\s+/g, "").slice(0, 25);
+              const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
+
+              if (idKey && seenIds.has(idKey)) continue;
+              if (seenAddrs.has(addrKey)) continue;
+              if (reasonKey && seenReasons.has(reasonKey)) continue;
+
+              if (idKey) seenIds.add(idKey);
+              seenAddrs.add(addrKey);
+              if (reasonKey) seenReasons.add(reasonKey);
+
+              fallbackRecords.push({
+                ...item,
+                city,
+                address: cleanDoor,
+                doorplate_address: cleanDoor.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
+                location_accuracy: item.location_accuracy || "ROOFTOP"
+              });
             }
           }
         } catch (e) {
@@ -3371,12 +3470,12 @@
       await initMapEngine(mapsKey);
 
       if (statusEl) {
-        statusEl.textContent = `${allRecords.length.toLocaleString()} 筆案件紀錄`;
+        statusEl.textContent = `${allRecords.length.toLocaleString()} 筆法定凶宅紀錄`;
       }
       updateCounters(allRecords);
       applyFilters(false);
 
-      // Start quiet background polling for new crawler inserts without annoying notifications
+      // Start quiet background polling for new updates
       startRealtimeSyncWatcher();
     }
 
@@ -3422,24 +3521,30 @@
 
               for (const row of rows) {
                 if (!row || !row.address) continue;
-                const d = (row.incident_date || "").trim();
-                const year = parseInt(d.slice(0, 4), 10) || row.year || 0;
-                if (year > 2024 || d.startsWith("2025") || d.startsWith("2026")) continue;
                 if (row.id === 1712 || (row.address && row.address.includes("自由三路157號"))) continue;
                 if (row.district === "茂林區" && (row.address || "").includes("茂林巷")) continue;
-                const s = (row.source || "").trim();
-                const u = (row.source_url || "").trim();
-                const combined = s + " " + (row.media_verification || "") + " " + u + " " + (row.reason || "");
-                const hasRealUrl = u.startsWith("http");
-                const hasDocket = /年度|字第|\d+號判決|司執|執字|院相|刑智|審交易/.test(combined);
-                const hasSpecificSource = !s.includes("歷年紙媒社會版卷宗") && !s.includes("歷年公開社會新聞與司法實務卷宗") && s.length > 5;
-                if ((s.includes("歷年紙媒社會版卷宗") || s.includes("歷年公開社會新聞與司法實務卷宗")) && !hasRealUrl && !hasDocket) continue;
-                if (!hasRealUrl && !hasDocket && !hasSpecificSource) continue;
+
+                const full = `${row.address || ""} ${row.reason || ""} ${row.category || ""} ${row.source || ""} ${row.auction_record || ""}`;
+                if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死/.test(full)) {
+                  continue;
+                }
+                if (!/住宅|民宅|住家|公寓|大樓|華廈|透天|套房|社區|雅房|國宅|租屋|屋內|房內|臥室|頂樓|陽台|法拍|凶宅|家宅|自宅|大廈|平房|三合院|別墅/.test(full)) {
+                  continue;
+                }
+                if (!/命案|兇殺|他殺|情殺|仇殺|分屍|砍殺|槍擊|弒|虐死|輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥|一氧化碳|瓦斯中毒|氣爆.*死|惡火.*死|火警.*死|火災.*死|縱火.*死|非自然死亡|非自然身亡|凶宅|陳屍.*屋|陳屍.*宅|陳屍.*房|陳屍.*大樓|陳屍.*公寓|雙屍|三屍|母子.*死|夫妻.*死/.test(full)) {
+                  continue;
+                }
+
                 const idKey = row.id !== undefined && row.id !== null ? String(row.id) : "";
                 const city = (row.city || "").replace(/台/g, "臺");
                 const dist = row.district || "";
-                const cleanAddr = (row.doorplate_address || row.address || "")
-                  .replace(/台/g, "臺")
+                let cleanDoor = (row.doorplate_address || row.address || "").replace(/台/g, "臺").trim();
+                cleanDoor = cleanDoor.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
+                if (!row.source_url || !String(row.source_url).startsWith("http") || Number(row.id) >= 4110) {
+                  cleanDoor = cleanDoor.replace(/([路街段巷弄])\d+(?:之\d+)?號/g, "$1");
+                }
+
+                const cleanAddr = cleanDoor
                   .replace(/\s+/g, "")
                   .replace(/（.*）/, "")
                   .replace(/\(.*\)/, "");
@@ -3455,14 +3560,13 @@
                 existingAddrs.add(addrKey);
                 if (reasonKey) existingReasons.add(reasonKey);
 
-                if (/\d+號/.test(row.address || "")) {
-                  newItems.push({
-                    ...row,
-                    city,
-                    doorplate_address: row.doorplate_address || row.address,
-                    location_accuracy: "ROOFTOP"
-                  });
-                }
+                newItems.push({
+                  ...row,
+                  city,
+                  address: cleanDoor,
+                  doorplate_address: cleanDoor.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
+                  location_accuracy: row.location_accuracy || "ROOFTOP"
+                });
               }
             }
           }
@@ -3577,6 +3681,7 @@
           if (isNaN(lat) || isNaN(lng)) return;
 
           const meta = CATEGORY_META[item.normalizedCat] || CATEGORY_META["法拍與其他"];
+          const dbMeta = DB_SOURCE_META[item.db_source] || DB_SOURCE_META["NEWS_PUBLIC_ARCHIVE"];
           const details = buildRecordDetails(item);
           const catLabel = tCategoryLabel(item.normalizedCat);
           const cityLabel = tCity(item.city);
@@ -3589,6 +3694,7 @@
                 <span class="font-semibold ${meta.textColor}">${catLabel}</span>
                 <span aria-hidden="true">·</span>
                 <span class="text-slate-700 font-medium">${cityLabel} ${item.district || ""}</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded border font-medium ${dbMeta.badgeClass}">${dbMeta.label}</span>
               </div>
               <time class="font-mono text-[11px] text-slate-400 tabular-nums shrink-0">${item.incident_date || ""}</time>
             </div>
@@ -3650,7 +3756,7 @@
         loadMoreContainer.className = "p-3.5 bg-slate-50 text-center border-t border-slate-200";
         loadMoreContainer.innerHTML = `
           <button type="button" id="load-more-records-btn" class="w-full sm:w-auto px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors">
-            載入更多案件（已顯示 ${visibleRecords.length} / ${records.length.toLocaleString()}）
+            載入更多凶宅紀錄（已顯示 ${visibleRecords.length} / ${records.length.toLocaleString()}）
           </button>
         `;
         loadMoreContainer.querySelector("#load-more-records-btn")?.addEventListener("click", () => {
@@ -3664,6 +3770,8 @@
     function applyFilters(shouldAutoFitMap = false) {
       const city = citySelect.value.trim();
       const dist = districtSelect.value.trim();
+      const dbFilter = dbSourceSelect ? dbSourceSelect.value : "ALL";
+      const bldgFilter = bldgTypeSelect ? bldgTypeSelect.value : "ALL";
       const sort = sortSelect.value;
       const startYear = parseInt(yearStartInput.value, 10);
       const endYear = parseInt(yearEndInput.value, 10);
@@ -3676,10 +3784,21 @@
         tokens = [rawKw.slice(0, 2), rawKw.slice(2, 4)];
       }
 
-      // 1. Calculate scope records (matching City, District, Year, and Search keyword - without category constraint)
+      // 1. Calculate scope records (matching City, District, DB Source, Building Type, Year, and Search keyword)
       const scopeRecords = allRecords.filter(r => {
         const matchCity = !city || String(r.city || "").replace(/台/g, "臺") === city.replace(/台/g, "臺");
         const matchDist = !dist || String(r.district || "") === dist;
+        const matchDb = dbFilter === "ALL" || r.db_source === dbFilter;
+
+        let matchBldg = true;
+        if (bldgFilter !== "ALL") {
+          const bText = `${r.building_type || ""} ${r.address || ""} ${r.reason || ""}`;
+          if (bldgFilter === "大樓") matchBldg = /大樓|華廈|社區|大廈/.test(bText);
+          else if (bldgFilter === "公寓") matchBldg = /公寓/.test(bText);
+          else if (bldgFilter === "透天") matchBldg = /透天|別墅|平房|三合院|民宅/.test(bText);
+          else if (bldgFilter === "套房") matchBldg = /套房|雅房|租屋/.test(bText);
+        }
+
         const matchKw = tokens.length === 0 || tokens.every(t => r.searchBlob.includes(t));
 
         let matchYear = true;
@@ -3691,7 +3810,7 @@
             if (hasEndY && r.incidentYear > endYear) matchYear = false;
           }
         }
-        return matchCity && matchDist && matchKw && matchYear;
+        return matchCity && matchDist && matchDb && matchBldg && matchKw && matchYear;
       });
 
       // 2. Synchronize all category count tabs to match this exact scope
@@ -3710,7 +3829,7 @@
 
       renderData(filtered);
 
-      if (shouldAutoFitMap && filtered.length > 0 && (city || dist || rawKw)) {
+      if (shouldAutoFitMap && filtered.length > 0 && (city || dist || rawKw || dbFilter !== "ALL" || bldgFilter !== "ALL")) {
         const validCoords = filtered
           .slice(0, 80)
           .map(r => [parseFloat(r.lat), parseFloat(r.lng)])
@@ -3722,18 +3841,9 @@
     }
 
     async function triggerInlineRegionalDiscovery() {
-      const targetCity = citySelect.value || "臺北市";
-      const targetDist = districtSelect.value || (TAIWAN_DISTRICTS[targetCity]?.[0] || "中山區");
-      const kw = searchInput.value.trim();
-
-      discCity.value = targetCity;
-      populateDistrictDropdown(targetCity, discDistrict, false);
-      if (districtSelect.value) discDistrict.value = districtSelect.value;
-      document.getElementById("disc-keyword").value = kw;
-
+      refreshCrawlerStatsUI();
       recordModal.classList.remove("hidden");
       tabDiscoverBtn.click();
-      document.getElementById("run-discover-btn").click();
     }
 
     document.getElementById("quick-expand-cases-btn").addEventListener("click", triggerInlineRegionalDiscovery);
@@ -3869,6 +3979,41 @@
       }
     });
 
+    async function refreshCrawlerStatsUI() {
+      const totalBadge = document.getElementById("crawler-total-badge");
+      if (totalBadge) totalBadge.textContent = `共 ${allRecords.length.toLocaleString()} 筆法定凶宅`;
+
+      const counts = {
+        JUDICIAL_AUCTION: 0,
+        JUDICIAL_JUDGMENT: 0,
+        MOI_OPEN_DATA: 0,
+        NEWS_PUBLIC_ARCHIVE: 0
+      };
+      for (const r of allRecords) {
+        const src = r.db_source || inferDbSource(r);
+        counts[src] = (counts[src] || 0) + 1;
+      }
+      Object.keys(counts).forEach(k => {
+        const el = document.getElementById(`db-count-${k}`);
+        if (el) el.textContent = `${counts[k].toLocaleString()} 筆`;
+      });
+    }
+
+    document.querySelectorAll(".quick-db-filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetDb = btn.getAttribute("data-quick-db") || "ALL";
+        if (dbSourceSelect) {
+          dbSourceSelect.value = targetDb;
+        }
+        closeModal();
+        applyFilters(true);
+        const label = targetDb === "ALL" ? "全部直連公開資料庫" : (DB_SOURCE_META[targetDb]?.label || targetDb);
+        showToast(`已切換篩選：${label}`);
+      });
+    });
+
+    openModalBtn.addEventListener("click", refreshCrawlerStatsUI);
+
     document.getElementById("run-discover-btn").addEventListener("click", async () => {
       const btn = document.getElementById("run-discover-btn");
       const statusBox = document.getElementById("discover-status");
@@ -3878,7 +4023,7 @@
 
       btn.disabled = true;
       statusBox.classList.remove("hidden");
-      statusBox.textContent = `${t("btn_locating")} ${tCity(city)} ${district} ${keyword}...`;
+      statusBox.textContent = `${t("btn_locating")} ${tCity(city)} ${district} ${keyword}（同步檢索新聞與法拍實證資料庫）...`;
 
       try {
         const res = await fetch("/api/discover", {
@@ -3889,19 +4034,23 @@
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed");
 
-        const newItems = (data.records || []).map((r, i) => prepareRecord(r, Date.now() + i));
-        allRecords = [...newItems, ...allRecords];
+        const existingUrls = new Set(allRecords.map(r => (r.source_url || "").split("?")[0]));
+        const newItems = (data.records || [])
+          .filter(r => !existingUrls.has((r.source_url || "").split("?")[0]))
+          .map((r, i) => prepareRecord(r, Date.now() + i));
+        if (newItems.length > 0) {
+          allRecords = [...newItems, ...allRecords];
+        }
         updateCounters();
         citySelect.value = city;
         populateDistrictDropdown(city, districtSelect, true);
         districtSelect.value = district;
         applyFilters(true);
+        await refreshCrawlerStatsUI();
 
-        statusBox.textContent = `+${newItems.length} (${tCity(city)} ${district})`;
-        setTimeout(() => {
-          closeModal();
-          statusBox.classList.add("hidden");
-        }, 1000);
+        statusBox.textContent = newItems.length > 0
+          ? `✅ 已從新聞與法拍資料庫核實新增 +${newItems.length} 筆（${tCity(city)} ${district}）`
+          : (data.message || `已完成該區多源新聞核對，重複案件已自動過濾。`);
       } catch (err) {
         statusBox.textContent = err.message;
       } finally {

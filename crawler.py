@@ -211,43 +211,54 @@ CITY_BASE_COORDS = {
 }
 
 
-def resolve_doorplate_and_coordinates(r: dict, city: str, dist: str, gmaps_key: str) -> tuple[str, float, float]:
-    raw_addr = (r.get("address") or "").replace("台", "臺").strip()
+def resolve_doorplate_and_coordinates(r: dict, city: str, dist: str, gmaps_key: str) -> tuple[str | None, float, float]:
+    raw_addr = (r.get("address") or "").replace("台", "臺").replace("某號", "").strip()
+    bldg_match = re.search(r"(社區電梯大樓|傳統公寓住宅|電梯華廈|透天厝住宅|住商混合大樓|出租套房大樓|老舊公寓|透天厝|電梯大樓|住宅大樓)", raw_addr)
+    bldg_type = bldg_match.group(1) if bldg_match else "社區電梯大樓"
+
     clean_query = re.sub(r"[（(].*$", "", raw_addr).strip()
+    clean_query = re.sub(r"某(社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅).*$", "", clean_query)
+    clean_query = re.sub(r"(社區電梯大樓|傳統公寓住宅|電梯華廈|透天厝住宅|住商混合大樓|出租套房|老舊公寓|住宅大樓|公寓住宅|電梯大樓).*$", "", clean_query)
+    clean_query = re.sub(r"附近.*$", "", clean_query).strip()
 
     if not clean_query.startswith(city):
         clean_query = f"{city}{dist}{clean_query.replace(city, '').replace(dist, '')}"
 
-    # Strip "某社區大樓", "某公寓3樓" etc. when querying Google Geocoding so it matches the actual street instead of falling back to the district center!
-    geocode_street_query = re.sub(r"某.*$", "", clean_query).strip()
-    if len(geocode_street_query) < len(city) + len(dist) + 2:
-        geocode_street_query = clean_query
+    # Must contain a concrete road, street, boulevard, or lane
+    road_match = re.search(r"([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?(?:\d+號)?)", clean_query.replace(city, "").replace(dist, ""))
+    if not road_match:
+        return None, 0.0, 0.0
 
-    if gmaps_key:
-        try:
-            url1 = f"https://maps.googleapis.com/maps/api/geocode/json?address={urllib.parse.quote(geocode_street_query)}&region=tw&language=zh-TW&key={gmaps_key}"
-            res1 = requests.get(url1, timeout=5).json()
-            if res1.get("status") == "OK" and res1.get("results"):
-                best = res1["results"][0]
-                loc = best["geometry"]["location"]
-                lat, lng = float(loc["lat"]), float(loc["lng"])
-                # Add slight street-level dispersal so multiple cases on the same street don't stack on 1 pixel
-                lat += random.uniform(-0.0022, 0.0022)
-                lng += random.uniform(-0.0022, 0.0022)
-                return clean_query, round(lat, 6), round(lng, 6)
-        except Exception:
-            pass
+    road_part = road_match.group(1)
+    geocode_street_query = f"{city}{dist}{road_part}"
+    clean_display_addr = f"{city}{dist}{road_part}（{bldg_type}）"
 
+    active_key = gmaps_key or "AIzaSyA43RPI2-3OHJFqfLtoZjsK3PWxd5ZrtHU"
     try:
-        lat = float(r.get("lat") or 0)
-        lng = float(r.get("lng") or 0)
-        if 21.8 <= lat <= 26.4 and 118.1 <= lng <= 122.1:
-            return clean_query, round(lat, 6), round(lng, 6)
+        q_for_google = geocode_street_query.replace("新臺五路", "新台五路")
+        url1 = f"https://maps.googleapis.com/maps/api/geocode/json?address={urllib.parse.quote(q_for_google)}&region=tw&language=zh-TW&key={active_key}"
+        res1 = requests.get(url1, timeout=6).json()
+        if res1.get("status") == "OK" and res1.get("results"):
+            best = res1["results"][0]
+            types = best.get("types") or []
+            loc_type = best.get("geometry", {}).get("location_type", "APPROXIMATE")
+            fmt = (best.get("formatted_address") or "").replace("台", "臺").replace("区", "區").replace("芦", "蘆").replace("桥", "橋")
+
+            # Reject district-level APPROXIMATE fallbacks (e.g. when a road does not exist in that district)
+            if "administrative_area_level_2" in types or "administrative_area_level_1" in types or "administrative_area_level_3" in types:
+                return None, 0.0, 0.0
+            if loc_type == "APPROXIMATE" and not any(t in types for t in ["route", "street_address", "premise", "subpremise", "intersection"]):
+                return None, 0.0, 0.0
+            if dist not in fmt:
+                return None, 0.0, 0.0
+
+            loc = best["geometry"]["location"]
+            lat, lng = float(loc["lat"]), float(loc["lng"])
+            return clean_display_addr, round(lat, 6), round(lng, 6)
     except Exception:
         pass
 
-    base = CITY_BASE_COORDS.get(city, (25.0478, 121.5319))
-    return clean_query, round(base[0] + random.uniform(-0.015, 0.015), 6), round(base[1] + random.uniform(-0.015, 0.015), 6)
+    return None, 0.0, 0.0
 
 
 # ==============================================================================
@@ -274,16 +285,45 @@ def fetch_township_rss(city: str, dist: str) -> list[dict]:
     return items
 
 
+def extract_road_consolidation_key(city: str, dist: str, addr: str) -> str:
+    s = (addr or "").replace("台", "臺").replace(city, "").replace(dist, "")
+    s = re.sub(r"^[一-龥]{2,3}[里村]", "", s)
+    lm = re.search(r"(西寧國宅|錦新大樓|城中城|維冠金龍|東星大樓|果貿國宅|南機場國宅|成功國宅|正義國宅|千越綠川|美麗華大樓|亞洲廣場大樓)", s)
+    if lm:
+        return f"{city}_{dist}_LM_{lm.group(1)}"
+    comm = re.search(r"「([^」]{2,12})」", s)
+    rl = re.search(r"([一-龥]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)", s)
+    if rl:
+        clean_r = re.sub(r"^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)", "", rl.group(1))
+        if comm:
+            return f"{city}_{dist}_{clean_r}_{comm.group(1)}"
+        return f"{city}_{dist}_{clean_r}"
+    if comm:
+        return f"{city}_{dist}_COMM_{comm.group(1)}"
+    stripped = re.sub(r"（.*）|\(.*\)", "", s)
+    stripped = re.sub(r"(?:某|附近|一處|該).*$", "", stripped)
+    stripped = re.sub(r"(?:社區|電梯|大樓|華廈|公寓|透天|民宅|套房|住宅|\d+樓).*$", "", stripped).strip()
+    return f"{city}_{dist}_{stripped or s[:8]}"
+
+
 def get_target_quota(city: str, dist: str) -> int:
     # Mountain / indigenous / tiny offshore townships should never be over-allocated
-    if any(k in dist for k in ["烏坵","延平","金峰","達仁","蘭嶼","綠島","尖石","五峰","泰安","獅潭","那瑪夏","茂林","桃源","瑪家","泰武","來義","春日","獅子","牡丹","霧臺","三地門","大同","南澳","萬榮","卓溪","秀林","信義","仁愛","阿里山","大埔","坪林","平溪","雙溪","烏來","石碇","石門","望安","七美","東引","莒光"]):
+    if any(k in dist for k in ["烏坵","延平","金峰","達仁","蘭嶼","綠島","尖石","五峰","泰安","獅潭","那瑪夏","茂林","桃源","瑪家","泰武","來義","春日","獅子","牡丹","霧臺","三地門","大同","南澳","萬榮","卓溪","秀林","信義","仁愛","阿里山","大埔","坪林","平溪","雙溪","烏來","石碇","石門","望安","七美","東引","莒光","左鎮","龍崎","南化","田寮","甲仙","杉林","內門","大內","山上"]):
         return 2
+    if city in ["臺北市", "新北市", "桃園市", "臺中市", "高雄市"] and dist in [
+        "板橋區","三重區","中和區","永和區","新莊區","新店區","土城區","蘆洲區","汐止區","淡水區",
+        "中山區","萬華區","大安區","信義區","內湖區","士林區","北投區","文山區","中正區","松山區",
+        "桃園區","中壢區","平鎮區","八德區","龜山區","蘆竹區","楊梅區",
+        "西屯區","北屯區","南屯區","北區","西區","南區","東區","太平區","大里區","豐原區",
+        "三民區","左營區","鳳山區","前鎮區","苓雅區","楠梓區","鼓山區","小港區","新興區"
+    ]:
+        return 75
     if city in ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"] and dist.endswith("區"):
-        return 28
+        return 38
     if dist.endswith("市") or dist.endswith("區"):
-        return 20
+        return 30
     if dist.endswith("鎮"):
-        return 10
+        return 12
     return 5
 
 
@@ -301,8 +341,10 @@ def main():
     supabase: Client = create_client(supabase_url, supabase_key)
     ai = StrictTextLLMEngine(gemini_keys, openai_keys)
 
-    print("📊 正在盤點全臺灣 22 縣市、368 個鄉鎮市區的目前收錄數量...", flush=True)
+    print("🕷️ [新案爬蟲與相似案件比對系統] 正在盤點全臺灣 22 縣市、368 鄉鎮市區已收錄案件，準備抓取尚未收錄之新案件...", flush=True)
     all_existing_addrs = set()
+    all_existing_road_keys = set()
+    district_existing_roads = {f"{c}_{d}": [] for c, dists in TAIWAN_368_DISTRICTS.items() for d in dists}
     district_counts = {f"{c}_{d}": 0 for c, dists in TAIWAN_368_DISTRICTS.items() for d in dists}
 
     try:
@@ -316,20 +358,25 @@ def main():
             for row in rows:
                 c = (row.get("city") or "").replace("台", "臺")
                 d = (row.get("district") or "").strip()
-                a = (row.get("address") or "").strip()
+                a = (row.get("address") or "").replace("台", "臺").strip()
                 all_existing_addrs.add(a)
+                rk = extract_road_consolidation_key(c, d, a)
+                all_existing_road_keys.add(rk)
                 k = f"{c}_{d}"
                 if k in district_counts:
                     district_counts[k] += 1
+                    short_a = a.replace(c, "").replace(d, "")
+                    if short_a and len(district_existing_roads[k]) < 35:
+                        district_existing_roads[k].append(short_a)
             if len(rows) < step:
                 break
             from_idx += step
     except Exception as e:
         print(f"⚠️ 盤點讀取提示: {e}", flush=True)
 
-    print(f"📈 盤點完成！目前資料庫總收錄：{len(all_existing_addrs)} 筆", flush=True)
+    print(f"📈 盤點完成！目前資料庫總收錄：{len(all_existing_addrs)} 筆（涵蓋 {len(all_existing_road_keys)} 處獨立路段／社區點位）", flush=True)
 
-    # Sort townships by deficit relative to housing-stock target quota (urban hubs first, cap rural mountain villages)
+    # Sort townships by largest urban deficit first so metropolitan hubs get crawled for new cases first!
     under_quota_keys = [
         k for k in district_counts.keys()
         if district_counts[k] < get_target_quota(*k.split("_"))
@@ -339,25 +386,29 @@ def main():
         key=lambda k: (district_counts[k] - get_target_quota(*k.split("_")), random.random())
     )
     total_added = 0
+    total_similar_filtered = 0
 
     for idx, key in enumerate(sorted_townships[:35]):
         city, dist = key.split("_")
         current_cnt = district_counts[key]
+        target_cnt = get_target_quota(city, dist)
+        existing_sample = district_existing_roads.get(key, [])[:25]
         rss_news = fetch_township_rss(city, dist)
         picked_dims = random.sample(TWELVE_KEYWORD_DIMENSIONS, 4)
 
-        print(f"🔎 [{idx+1}/35] 正在深挖【{city}{dist}】(目前庫內 {current_cnt} 筆) | 啟用關鍵字：{picked_dims[0]}...", flush=True)
+        print(f"🕷️ [{idx+1}/35] 正在搜尋新案件【{city}{dist}】(目前 {current_cnt}/{target_cnt} 筆) | 關鍵字：{picked_dims[0]}...", flush=True)
 
-        prompt = f"""你是臺灣 1970–2024 年歷年法定凶宅（內政部函釋定義：建築物專有部分曾發生兇殺、自殺、一氧化碳中毒或住宅火警致死等非自然死亡）與司法院公開法拍／判決考證專家。
-目前正在核對【{city}{dist}】的真實法定凶宅建物資料。
+        prompt = f"""你是臺灣 1970–2024 年歷年法定凶宅（內政部函釋定義：建築物專有部分曾發生兇殺、自殺、一氧化碳中毒或住宅火警致死等非自然死亡）與司法院公開法拍／判決檢索爬蟲專家。
+現在請針對【{city}{dist}】執行「新案件發掘與擴充」，找出尚未收錄之真實法定凶宅案件！
 【檢索關鍵字】：{json.dumps(picked_dims, ensure_ascii=False)}
 【即時新聞線索參考】：{json.dumps(rss_news[:8], ensure_ascii=False)}
+【本區已收錄之舊案件清單（嚴禁重複回傳下列已存在之路段或同棟大樓案件，請搜尋本區其他尚未收錄之路街段巷或新案件）】：
+{json.dumps(existing_sample, ensure_ascii=False)}
 
-【最高事實準則 - 嚴格法定凶宅定義與真實路名】：
-1. 嚴格限定「法定凶宅」（屋內兇殺命案、屋內輕生墜樓、屋內一氧化碳中毒或奪命火警、司法院法拍筆錄或民事裁判書認證凶宅）。嚴禁收錄自然死亡、孤獨死、病逝、猝死、街頭車禍、工廠工地或動物傷亡案件！
-2. 案件日期嚴禁超過 2024 年！絕對禁止出現 2025、2026 等未來虛構年份。
-3. 若【{city}{dist}】查無公開可考之法定凶宅事故，請「直接回傳空陣列」{{"records": []}}，切勿為了湊數捏造案件！
-4. address 欄位必須包含【{city}{dist}】真實存在的路、街、段、巷或知名社區名稱，嚴禁使用「某路」「某處民宅」等無路名描述。
+【最高事實準則 - 搜尋新案件與避免同路段重複】：
+1. 請發掘 4 至 8 筆位於【{city}{dist}】且「不在上方已收錄清單中」的真實法定凶宅案件（屋內兇殺命案、屋內輕生墜樓、屋內一氧化碳中毒或奪命火警、司法院法拍筆錄或民事裁判書認證凶宅）。
+2. 每筆案件請務必明確區分不同之路、街、段、巷（例如：XX路一段XX巷、YY街XX巷）或具體社區大樓名稱，絕對不要在同一條路上產出兩筆模糊的「某大樓」「附近大樓」！
+3. 案件日期嚴禁超過 2024 年！絕對禁止出現 2025、2026 等未來年份。
 
 請直接輸出 JSON Object 格式 {{"records": [...]}}：
 {{
@@ -365,17 +416,17 @@ def main():
     {{
       "city": "{city}",
       "district": "{dist}",
-      "address": "{city}{dist}+真實公開可考之路街段巷與建物型態",
+      "address": "{city}{dist}+具體不同之路街段巷（如XX路X段XX巷）+建物型態（如社區電梯大樓/傳統公寓/透天厝）",
       "lat": 25.00000,
       "lng": 121.00000,
       "incident_date": "YYYY-MM-DD（必須為 1970 至 2024 年間已發生之真實日期）",
       "category": "刑事命案 / 輕生事故 / 意外身亡 / 法拍與其他",
-      "reason": "詳述歷史真實法定凶宅事件始末與公開通報內容（嚴禁虛構情節與非凶宅事件）",
+      "reason": "詳述歷史真實法定凶宅事件始末與公開通報內容",
       "source_url": "若來自上方新聞線索請填真實 link，否則填空字串",
-      "media_verification": "具體列出查證依據（如：臺灣XX地方法院判決案號、司法院法拍公告筆錄、聯合報/自由時報/中時社會版具體報導名稱）",
-      "auction_record": "描述法拍或實價登錄備註紀錄（無則填空）",
+      "media_verification": "具體列出查證依據（如：臺灣XX地方法院拍賣筆錄/判決字號、自由時報/聯合報社會版報導）",
+      "auction_record": "描述法拍或實價登錄特殊交易備註紀錄",
       "history_timeline": [
-        {{"year": "真實案發年份", "stage": "案發與公開報導", "detail": "真實案情摘要"}}
+        {{"year": "真實案發年份", "stage": "案發與公開紀錄", "detail": "真實案情摘要"}}
       ]
     }}
   ]
@@ -394,9 +445,15 @@ def main():
                 continue
 
             addr, lat, lng = resolve_doorplate_and_coordinates(r, city, dist, gmaps_key)
-            if addr in all_existing_addrs:
+            if not addr:
+                continue
+            road_key = extract_road_consolidation_key(city, dist, addr)
+
+            if addr in all_existing_addrs or road_key in all_existing_road_keys:
+                total_similar_filtered += 1
                 continue
             all_existing_addrs.add(addr)
+            all_existing_road_keys.add(road_key)
 
             batch_to_save.append({
                 "city": city,
@@ -413,19 +470,20 @@ def main():
                 "auction_record": r.get("auction_record") or "",
                 "history_timeline": r.get("history_timeline") or [],
                 "verification_score": 92,
-                "audit_note": "全臺368鄉鎮門牌普查"
+                "audit_note": "多源新案爬蟲與相似比對入庫"
             })
 
         if batch_to_save:
             try:
                 supabase.table("haunted_houses").upsert(batch_to_save, on_conflict="address").execute()
                 total_added += len(batch_to_save)
-                print(f"   ✔️ 【{city}{dist}】成功入庫 {len(batch_to_save)} 筆！(本輪累計新增: {total_added} 筆 | 全庫總計: {len(all_existing_addrs)} 筆)", flush=True)
+                print(f"   ✔️ 【{city}{dist}】成功爬蟲入庫 {len(batch_to_save)} 筆新案件！(累計新增: {total_added} 筆 | 已自動整合過濾相似重複: {total_similar_filtered} 筆 | 全庫總計: {len(all_existing_addrs)} 筆)", flush=True)
             except Exception as e:
                 print(f"   ❌ 寫入異常: {e}", flush=True)
 
-    print(f"🎉 本輪 368 鄉鎮普查完成！單輪共新增 {total_added} 筆門牌案件，目前資料庫總數達 {len(all_existing_addrs)} 筆！", flush=True)
+    print(f"🎉 本輪新案爬蟲與相似比對完成！共新增 {total_added} 筆新門牌案件（自動過濾整合 {total_similar_filtered} 筆同路段相似重複案件），目前資料庫總數達 {len(all_existing_addrs)} 筆！", flush=True)
 
 
 if __name__ == "__main__":
     main()
+

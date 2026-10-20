@@ -603,3 +603,292 @@ export function getSemanticCaseSignatures(record) {
 
   return sigs;
 }
+
+export const LANDMARK_CANONICAL = {
+  "錦新大樓": {
+    city: "臺北市",
+    district: "中山區",
+    address: "臺北市中山區新生北路二段108號（錦新大樓）",
+    doorplate_address: "臺北市中山區新生北路二段108號",
+    building_type: "住商複合套房大樓",
+    lat: 25.057206,
+    lng: 121.526915
+  },
+  "西寧國宅": {
+    city: "臺北市",
+    district: "萬華區",
+    address: "臺北市萬華區西寧南路4號（西寧國宅）",
+    doorplate_address: "臺北市萬華區西寧南路4號",
+    building_type: "公有住商複合國宅",
+    lat: 25.048354,
+    lng: 121.506845
+  },
+  "城中城": {
+    city: "高雄市",
+    district: "鹽埕區",
+    address: "高雄市鹽埕區府北路28號（城中城大樓原址）",
+    doorplate_address: "高雄市鹽埕區府北路28號",
+    building_type: "住商混合套房大樓",
+    lat: 22.626952,
+    lng: 120.285624
+  },
+  "維冠金龍": {
+    city: "臺南市",
+    district: "永康區",
+    address: "臺南市永康區永大路二段（維冠金龍大樓原址）",
+    doorplate_address: "臺南市永康區永大路二段",
+    building_type: "住商複合電梯大樓",
+    lat: 23.005682,
+    lng: 120.262135
+  },
+  "東星大樓": {
+    city: "臺北市",
+    district: "松山區",
+    address: "臺北市松山區八德路四段660號（東星大樓）",
+    doorplate_address: "臺北市松山區八德路四段660號",
+    building_type: "住商複合電梯大樓",
+    lat: 25.050082,
+    lng: 121.576895
+  },
+  "果貿國宅": {
+    city: "高雄市",
+    district: "左營區",
+    address: "高雄市左營區果峰街（果貿國宅社區）",
+    doorplate_address: "高雄市左營區果峰街",
+    building_type: "集合式國民住宅社區",
+    lat: 22.665645,
+    lng: 120.289132
+  },
+  "南機場國宅": {
+    city: "臺北市",
+    district: "中正區",
+    address: "臺北市中正區中華路二段307巷（南機場國宅）",
+    doorplate_address: "臺北市中正區中華路二段307巷",
+    building_type: "老舊集合式國宅社區",
+    lat: 25.029415,
+    lng: 121.505832
+  },
+  "成功國宅": {
+    city: "臺北市",
+    district: "大安區",
+    address: "臺北市大安區四維路198巷（成功國宅社區）",
+    doorplate_address: "臺北市大安區四維路198巷",
+    building_type: "高層國民住宅社區",
+    lat: 25.025215,
+    lng: 121.547182
+  },
+  "正義國宅": {
+    city: "臺北市",
+    district: "大安區",
+    address: "臺北市大安區忠孝東路三段251巷（正義國宅原址）",
+    doorplate_address: "臺北市大安區忠孝東路三段251巷",
+    building_type: "集合式國宅社區",
+    lat: 25.041285,
+    lng: 121.542615
+  }
+};
+
+// Extract canonical road/lane/building key for Similar Case Comparison & Consolidation (相似案件比對與整合)
+export function extractConsolidationKey(r) {
+  const city = String(r.city || "").replace(/台/g, "臺").trim();
+  const dist = String(r.district || "").trim();
+  let s = String(r.address || "").replace(/台/g, "臺");
+
+  if (city === "臺南市" && s.includes("錦新大樓")) {
+    s = s.replace(/「錦新大樓」/g, "永大路二段");
+  }
+
+  for (const [lmName, lmMeta] of Object.entries(LANDMARK_CANONICAL)) {
+    if (s.includes(lmName) && city === lmMeta.city) {
+      return `${lmMeta.city}_${lmMeta.district}_LM_${lmName}`;
+    }
+  }
+
+  if (city) s = s.replace(new RegExp(city, "g"), "");
+  if (dist) s = s.replace(new RegExp(dist, "g"), "");
+  s = s.replace(/^[一-龥]{2,3}[里村]/, "");
+
+  const comm = s.match(/「([^」]{2,12})」/);
+  const roadLane = s.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+  if (roadLane) {
+    const cleanRoad = roadLane[1]
+      .replace(/^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)/, "")
+      .replace(/路段$/, "路");
+    if (comm && !comm[1].includes("第一凶宅")) return `${city}_${dist}_${cleanRoad}_${comm[1]}`;
+    return `${city}_${dist}_${cleanRoad}`;
+  }
+
+  const alleyOnly = s.match(/([一-龥]{2,5}巷(?:\d+弄)?)/);
+  if (alleyOnly) {
+    return `${city}_${dist}_${alleyOnly[1]}`;
+  }
+
+  const stripped = s
+    .replace(/（.*）|\(.*\)/g, "")
+    .replace(/(?:某|附近|一處|該).*$/g, "")
+    .replace(/(?:社區|電梯|大樓|華廈|公寓|透天|民宅|套房|住宅|\d+樓).*$/g, "")
+    .trim();
+  if (!stripped) return "";
+  return `${city}_${dist}_${stripped}`;
+}
+
+// Smart Similar Case Consolidation Engine: Merges duplicate or same-road vague records into unified multi-source dossiers
+export function consolidateSimilarRecords(records = []) {
+  const groups = new Map();
+  for (const r of records) {
+    if (!r || !r.address) continue;
+    const key = extractConsolidationKey(r);
+    if (!key) continue;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  }
+
+  const consolidated = [];
+  for (const [key, items] of groups.entries()) {
+    let lmMeta = null;
+    for (const [lmName, meta] of Object.entries(LANDMARK_CANONICAL)) {
+      if (key.endsWith(`_LM_${lmName}`)) {
+        lmMeta = meta;
+        break;
+      }
+    }
+
+    const rawPool = [];
+    for (const it of items) {
+      if (Array.isArray(it.merged_cases) && it.merged_cases.length > 1) {
+        for (const sub of it.merged_cases) {
+          rawPool.push({
+            ...it,
+            id: sub.id || it.id,
+            incident_date: sub.incident_date || it.incident_date,
+            category: sub.category || it.category,
+            address: sub.original_address || it.address,
+            reason: sub.reason || it.reason,
+            source: sub.source || it.source,
+            source_url: sub.source_url || it.source_url,
+            db_source: sub.db_source || it.db_source,
+            merged_cases: undefined
+          });
+        }
+      } else {
+        rawPool.push(it);
+      }
+    }
+
+    rawPool.sort((a, b) => {
+      const aGeo = a.location_accuracy === "ROOFTOP_GEOCODED" ? 1 : 0;
+      const bGeo = b.location_accuracy === "ROOFTOP_GEOCODED" ? 1 : 0;
+      if (aGeo !== bGeo) return bGeo - aGeo;
+      const aCurated = String(a.id || "").startsWith("tw-arch-") ? 1 : 0;
+      const bCurated = String(b.id || "").startsWith("tw-arch-") ? 1 : 0;
+      if (aCurated !== bCurated) return bCurated - aCurated;
+      const aHasUrl = a.source_url && String(a.source_url).startsWith("http") ? 1 : 0;
+      const bHasUrl = b.source_url && String(b.source_url).startsWith("http") ? 1 : 0;
+      if (aHasUrl !== bHasUrl) return bHasUrl - aHasUrl;
+      return String(b.incident_date || "").localeCompare(String(a.incident_date || ""));
+    });
+
+    const uniqueSub = [];
+    const seenSubSig = new Set();
+    for (const it of rawPool) {
+      const cleanReason = String(it.reason || "")
+        .replace(/^【[^】]+】/, "")
+        .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
+        .replace(/（系統已比對整合[\s\S]*$/, "")
+        .replace(/\s+/g, "")
+        .slice(0, 28);
+      const subSig = `${it.incident_date}_${cleanReason}`;
+      if (seenSubSig.has(subSig)) continue;
+      seenSubSig.add(subSig);
+      uniqueSub.push(it);
+    }
+
+    const geocodedMaster = items.find(i => i.location_accuracy === "ROOFTOP_GEOCODED") || uniqueSub[0];
+    const primary = { ...uniqueSub[0] };
+    const city = (lmMeta ? lmMeta.city : (primary.city || "")).replace(/台/g, "臺");
+    const dist = lmMeta ? lmMeta.district : (primary.district || "");
+    const bldgType = lmMeta
+      ? lmMeta.building_type
+      : (primary.building_type || (/透天/.test(primary.address) ? "透天厝住宅" : /公寓/.test(primary.address) ? "傳統公寓住宅" : /華廈/.test(primary.address) ? "電梯華廈" : /套房/.test(primary.address) ? "出租套房大樓" : "社區電梯大樓")).replace(/（.*）/, "");
+
+    if (lmMeta) {
+      primary.city = lmMeta.city;
+      primary.district = lmMeta.district;
+      primary.address = lmMeta.address;
+      primary.doorplate_address = lmMeta.doorplate_address;
+      primary.building_type = lmMeta.building_type;
+      primary.lat = lmMeta.lat;
+      primary.lng = lmMeta.lng;
+      primary.location_accuracy = "ROOFTOP_GEOCODED";
+    } else {
+      if (geocodedMaster && geocodedMaster.lat && geocodedMaster.lng) {
+        primary.lat = geocodedMaster.lat;
+        primary.lng = geocodedMaster.lng;
+        primary.location_accuracy = geocodedMaster.location_accuracy || "ROOFTOP_GEOCODED";
+      }
+      const roadPart = key.split("_").slice(2).join("_").replace(/_/g, "");
+      let baseAddr = String(primary.address || "").replace(/台/g, "臺").replace(/某號/g, "");
+      if (/附近|某/.test(baseAddr) || !baseAddr.includes("（")) {
+        baseAddr = `${city}${dist}${roadPart}（${bldgType}）`;
+      }
+      primary.city = city;
+      primary.address = baseAddr;
+      primary.doorplate_address = baseAddr.replace(/（.*）|\(.*\)/g, "").trim();
+      primary.building_type = bldgType;
+    }
+
+    if (uniqueSub.length > 1) {
+      primary.merged_count = uniqueSub.length;
+      primary.merged_cases = uniqueSub.map((u, idx) => ({
+        case_index: idx + 1,
+        id: u.id,
+        incident_date: u.incident_date,
+        category: u.category,
+        original_address: String(u.address || "").replace(/某號/g, ""),
+        reason: String(u.reason || "").replace(/（同址／同路段整合紀錄[\s\S]*$/, "").replace(/（系統已比對整合[\s\S]*$/, "").trim().slice(0, 180),
+        source: u.source || u.media_verification || "公開紀錄",
+        source_url: u.source_url || "",
+        db_source: u.db_source || "NEWS_PUBLIC_ARCHIVE"
+      }));
+
+      const combinedTimeline = [];
+      const seenTl = new Set();
+      for (const u of uniqueSub) {
+        const tlArr = Array.isArray(u.history_timeline) && u.history_timeline.length > 0
+          ? u.history_timeline
+          : [{ year: String(u.incident_date || "2022").slice(0, 4), stage: u.category || "歷史通報紀錄", detail: String(u.reason || "").slice(0, 120) }];
+        for (const t of tlArr) {
+          if (!t || typeof t !== "object") continue;
+          const tk = `${t.year}_${(t.detail || "").slice(0, 20)}`;
+          if (seenTl.has(tk)) continue;
+          seenTl.add(tk);
+          combinedTimeline.push(t);
+        }
+      }
+      combinedTimeline.sort((a, b) => String(a.year || "").localeCompare(String(b.year || "")));
+      primary.history_timeline = combinedTimeline;
+
+      const uniqueSources = Array.from(new Set(uniqueSub.map(u => u.source || u.media_verification).filter(Boolean)));
+      primary.source = uniqueSources.slice(0, 3).join(" ； ");
+      primary.media_verification = primary.source;
+    } else {
+      primary.merged_count = 1;
+      primary.merged_cases = [{
+        case_index: 1,
+        id: primary.id,
+        incident_date: primary.incident_date,
+        category: primary.category,
+        original_address: primary.address,
+        reason: primary.reason,
+        source: primary.source,
+        source_url: primary.source_url || "",
+        db_source: primary.db_source || "NEWS_PUBLIC_ARCHIVE"
+      }];
+    }
+
+    consolidated.push(primary);
+  }
+
+  return consolidated;
+}
+

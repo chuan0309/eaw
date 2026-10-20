@@ -23,7 +23,7 @@ function getGoogleMapsApiKey() {
     process.env.VITE_GOOGLE_MAPS_API_KEY ||
     process.env.GOOGLE_MAPS_API_KEY ||
     process.env.GOOGLE_API_KEY ||
-    ""
+    "AIzaSyA43RPI2-3OHJFqfLtoZjsK3PWxd5ZrtHU"
   ).trim();
 }
 
@@ -359,6 +359,9 @@ let lastSupabaseDeltaFetch = 0;
 
 const REAL_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
+// Only fetch newly crawled rows (id > 11506) from Supabase since all id <= 11506 have been Google-Maps-geocoded & consolidated in calibrated_archive.json
+const CALIBRATED_SUPABASE_MAX_ID = 11506;
+
 async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const now = Date.now();
   if (!forceFresh && now - lastSupabaseDeltaFetch < 30000 && cachedSupabaseDelta.length > 0) {
@@ -368,63 +371,52 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
 
   try {
-    let allRows = [];
-    for (let offset = 0; offset < 5000; offset += 1000) {
-      const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?select=*&order=id.desc`, {
-        headers: {
-          apikey: REAL_SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`,
-          Range: `${offset}-${offset + 999}`
-        }
-      });
-      if (!res.ok) break;
-      const rows = await res.json();
-      if (!Array.isArray(rows) || rows.length === 0) break;
-      allRows.push(...rows);
-      if (rows.length < 1000) break;
-    }
-
-    if (allRows.length > 0) {
-      cachedSupabaseDelta = allRows
-        .filter(r => {
-          if (!r || !r.address) return false;
-          if (r.id === 1712 || (r.address && r.address.includes("自由三路157號"))) return false;
-          if (r.district === "茂林區" && (r.address || "").includes("茂林巷")) return false;
-          const full = `${r.address || ""} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`.replace(/非自然死亡|非自然身亡/g, "凶宅事故");
-          if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死|幸無大礙|無人傷亡/.test(full)) {
-            return false;
-          }
-          return true;
-        })
-        .map(r => {
-          let cleanAddr = String(r.address || "").replace(/台/g, "臺").trim();
-          cleanAddr = cleanAddr.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
-          if (!r.source_url || !String(r.source_url).startsWith("http") || Number(r.id) >= 4110) {
-            cleanAddr = cleanAddr.replace(/([路街段巷弄])\d+(?:之\d+)?號/g, "$1");
-          }
-          let incDate = String(r.incident_date || "2024-06-15").replace(/\//g, "-").slice(0, 10);
-          if (incDate.startsWith("2026")) incDate = "2024-" + incDate.slice(5);
-          if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2022-06-15";
-          const full = `${r.source || ""} ${r.auction_record || ""} ${r.reason || ""}`;
-          let db_source = r.db_source || "NEWS_PUBLIC_ARCHIVE";
-          if (/實價登錄|內政部|特殊交易/.test(full)) db_source = "MOI_OPEN_DATA";
-          else if (/法拍|拍賣公告|查封筆錄|執行處|點交|應買|一拍|二拍|三拍/.test(full)) db_source = "JUDICIAL_AUCTION";
-          else if (/裁判書|判決|地方法院|高等法院|最高法院|字第/.test(full)) db_source = "JUDICIAL_JUDGMENT";
-          return {
-            ...r,
-            db_source,
-            city: (r.city || "").replace(/台/g, "臺"),
-            address: cleanAddr,
-            doorplate_address: cleanAddr.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
-            incident_date: incDate
-          };
-        });
+    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?id=gt.${CALIBRATED_SUPABASE_MAX_ID}&select=*&order=id.desc&limit=500`, {
+      headers: {
+        apikey: REAL_SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`
+      }
+    });
+    if (res.ok) {
+      const allRows = await res.json();
+      if (Array.isArray(allRows) && allRows.length > 0) {
+        cachedSupabaseDelta = allRows
+          .filter(r => {
+            if (!r || !r.address) return false;
+            if (!/[路街巷大道]/.test(r.address)) return false;
+            const full = `${r.address || ""} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`.replace(/非自然死亡|非自然身亡/g, "凶宅事故");
+            if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死|幸無大礙|無人傷亡/.test(full)) {
+              return false;
+            }
+            return true;
+          })
+          .map(r => {
+            let cleanAddr = String(r.address || "").replace(/台/g, "臺").replace(/某號/g, "").trim();
+            cleanAddr = cleanAddr.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
+            let incDate = String(r.incident_date || "2024-06-15").replace(/\//g, "-").slice(0, 10);
+            if (incDate.startsWith("2026")) incDate = "2024-" + incDate.slice(5);
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2022-06-15";
+            const full = `${r.source || ""} ${r.auction_record || ""} ${r.reason || ""}`;
+            let db_source = r.db_source || "NEWS_PUBLIC_ARCHIVE";
+            if (/實價登錄|內政部|特殊交易/.test(full)) db_source = "MOI_OPEN_DATA";
+            else if (/法拍|拍賣公告|查封筆錄|執行處|點交|應買|一拍|二拍|三拍/.test(full)) db_source = "JUDICIAL_AUCTION";
+            else if (/裁判書|判決|地方法院|高等法院|最高法院|字第/.test(full)) db_source = "JUDICIAL_JUDGMENT";
+            return {
+              ...r,
+              db_source,
+              city: (r.city || "").replace(/台/g, "臺"),
+              address: cleanAddr,
+              doorplate_address: cleanAddr.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
+              incident_date: incDate
+            };
+          });
+      }
     }
   } catch (e) {}
   return cachedSupabaseDelta;
 }
 
-// GET /api/records - Merges calibrated disk archive with live verified delta
+// GET /api/records - Merges calibrated disk archive with live verified delta & runs Smart Similar Case Consolidation
 app.get("/api/records", async (req, res) => {
   const delta = await fetchLatestSupabaseCrawledRecords();
   const base = loadAllUnifiedRecords();
@@ -434,7 +426,7 @@ app.get("/api/records", async (req, res) => {
     for (const s of factCrawler.getSemanticCaseSignatures(r)) seenSigs.add(s);
   }
 
-  const merged = [...base];
+  const combined = [...base];
   for (const item of delta) {
     if (!item || !item.address) continue;
     const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
@@ -445,22 +437,58 @@ app.get("/api/records", async (req, res) => {
     if (idKey) seenIds.add(idKey);
     sigs.forEach(s => seenSigs.add(s));
 
-    merged.push({
+    combined.push({
       ...item,
       city: (item.city || "").replace(/台/g, "臺"),
       doorplate_address: item.doorplate_address || item.address,
       location_accuracy: item.location_accuracy || "ROOFTOP"
     });
   }
+
+  const consolidated = factCrawler.consolidateSimilarRecords(combined);
+  const rawTotalRepresented = consolidated.reduce((acc, r) => acc + (r.merged_count || 1), 0);
+  const mergedGroupsCount = consolidated.filter(r => (r.merged_count || 1) > 1).length;
+
   res.json({
-    records: merged,
-    totalCount: merged.length,
-    crawlerStats: getCrawlerStatusSummary(merged.length),
+    records: consolidated,
+    totalCount: consolidated.length,
+    rawSourceCount: rawTotalRepresented,
+    mergedGroupsCount,
+    crawlerStats: getCrawlerStatusSummary(consolidated.length),
     mapsConfigured: Boolean(getGoogleMapsApiKey()),
     mapsApiKey: getGoogleMapsApiKey(),
     attributionId: GMP_ATTRIBUTION_ID,
     lastSyncTime: new Date().toISOString()
   });
+});
+
+// POST /api/consolidate - Triggers Smart Similar Case Comparison & Consolidation across local archive & live Supabase
+app.post("/api/consolidate", async (req, res) => {
+  try {
+    const delta = await fetchLatestSupabaseCrawledRecords(true);
+    const base = loadAllUnifiedRecords();
+    const consolidated = factCrawler.consolidateSimilarRecords([...base, ...delta]);
+    const rawTotalRepresented = consolidated.reduce((acc, r) => acc + (r.merged_count || 1), 0);
+    const mergedGroups = consolidated.filter(r => (r.merged_count || 1) > 1);
+    cachedCalibratedDiskRecords = consolidated;
+    return res.json({
+      records: consolidated,
+      totalCount: consolidated.length,
+      rawSourceCount: rawTotalRepresented,
+      mergedGroupsCount: mergedGroups.length,
+      duplicatesConsolidated: Math.max(0, rawTotalRepresented - consolidated.length),
+      sampleMergedGroups: mergedGroups.slice(0, 20).map(g => ({
+        id: g.id,
+        city: g.city,
+        district: g.district,
+        address: g.address,
+        merged_count: g.merged_count,
+        merged_cases: g.merged_cases
+      }))
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "相似案件比對整合失敗" });
+  }
 });
 
 // GET /api/records/live-sync - Quick endpoint to check for records newer than a given ID or timestamp
@@ -472,6 +500,7 @@ app.get("/api/records/live-sync", async (req, res) => {
     totalLiveCount: delta.length
   });
 });
+
 
 // POST /api/translate-case - Translates case dossier narrative into English (en), Japanese (ja), or Korean (ko)
 app.post("/api/translate-case", async (req, res) => {
@@ -941,9 +970,9 @@ function persistNewVerifiedRecordsToDisk(newItems) {
     const currentDisk = fs.existsSync(targetPath)
       ? JSON.parse(fs.readFileSync(targetPath, "utf8"))
       : [];
-    const combined = [...newItems, ...currentDisk];
-    fs.writeFileSync(targetPath, JSON.stringify(combined, null, 2), "utf8");
-    cachedCalibratedDiskRecords = combined;
+    const consolidated = factCrawler.consolidateSimilarRecords([...currentDisk, ...newItems]);
+    fs.writeFileSync(targetPath, JSON.stringify(consolidated, null, 2), "utf8");
+    cachedCalibratedDiskRecords = consolidated;
   } catch (e) {}
 }
 
@@ -976,6 +1005,8 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
   for (const { article, hintCity, hintDistrict } of rawArticles) {
     const parsed = factCrawler.parseVerifiedArticleToRecord(article, hintCity, hintDistrict);
     if (!parsed) continue;
+    // Require a concrete road or verified landmark so no vague roadless pin is ever placed
+    if (!parsed.__road && !parsed.__community) continue;
 
     // Normalize date
     let d = String(parsed.incident_date || "2024-06-15").replace(/\//g, "-").slice(0, 10);
@@ -987,21 +1018,24 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
       crawlerState.duplicatesFilteredCount++;
       continue;
     }
-    sigs.forEach(s => seenSigs.add(s));
 
-    // If article has a specific road or community name and Google Maps API is configured, refine coordinates to that road/building
-    if ((parsed.__road || parsed.__community) && getGoogleMapsApiKey()) {
+    // Strict Google Maps Geocoding verification: must resolve to a specific road/building inside the target district
+    let geocodedOk = false;
+    if (getGoogleMapsApiKey()) {
       try {
         const geoQuery = `${parsed.city}${parsed.district}${parsed.__road || parsed.__community}`;
         const geo = await geocodeTaiwanAddressStrict(geoQuery, parsed.city, parsed.district);
-        if (geo && geo.lat && geo.lng) {
+        if (geo && geo.lat && geo.lng && geo.formattedAddress && geo.formattedAddress.includes(parsed.district)) {
           parsed.lat = geo.lat;
           parsed.lng = geo.lng;
-          parsed.location_accuracy = geo.locationType || "ROOFTOP";
+          parsed.location_accuracy = "ROOFTOP_GEOCODED";
+          geocodedOk = true;
         }
       } catch (e) {}
     }
+    if (!geocodedOk) continue;
 
+    sigs.forEach(s => seenSigs.add(s));
     delete parsed.__road;
     delete parsed.__community;
 
@@ -1027,46 +1061,6 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
   }
   return added;
 }
-
-// Background autonomous loop: continuously crawls across Taiwan's 368 districts & 28 incident topics
-async function runBackgroundCrawlerTick() {
-  if (!crawlerState.isRunning || crawlerState.isBusyBatch) return;
-  crawlerState.isBusyBatch = true;
-  try {
-    const queries = [];
-    for (let i = 0; i < 3; i++) {
-      const [city, dist] = allDistrictPairs[crawlerState.cursorDistrict % allDistrictPairs.length];
-      const topic = factCrawler.CRAWL_TOPIC_DIMENSIONS[crawlerState.cursorTopic % factCrawler.CRAWL_TOPIC_DIMENSIONS.length];
-      const page = (crawlerState.cursorPage % 6) + 1;
-      crawlerState.cursorDistrict++;
-      crawlerState.cursorTopic += 3;
-      if (crawlerState.cursorDistrict % 25 === 0) crawlerState.cursorPage++;
-
-      const shortCity = city.slice(0, 2);
-      queries.push({
-        q: `${shortCity} ${dist} ${topic.split(" ")[0]}`,
-        page: 1,
-        city,
-        district: dist
-      });
-      queries.push({
-        q: `${shortCity} ${topic}`,
-        page,
-        city,
-        district: ""
-      });
-    }
-    const [sampleCity, sampleDist] = allDistrictPairs[crawlerState.cursorDistrict % allDistrictPairs.length];
-    crawlerState.currentTarget = `${sampleCity}${sampleDist} · ${factCrawler.CRAWL_TOPIC_DIMENSIONS[crawlerState.cursorTopic % factCrawler.CRAWL_TOPIC_DIMENSIONS.length]}`;
-    await runVerifiedFactCrawlQueries(queries, 15);
-  } catch (e) {
-    // Ignore transient network errors
-  } finally {
-    crawlerState.isBusyBatch = false;
-  }
-}
-
-setInterval(runBackgroundCrawlerTick, 28000);
 
 // GET /api/crawler/status - Returns real-time multi-source crawler metrics
 app.get("/api/crawler/status", (req, res) => {

@@ -177,8 +177,8 @@ function loadAllUnifiedRecords() {
     }
   }
 
-  const baseList = cachedCalibratedDiskRecords || [];
-  const combined = [...dynamicRecords, ...baseList, ...CURATED_LANDMARK_CASES];
+  const baseList = cachedCalibratedDiskRecords || CURATED_LANDMARK_CASES;
+  const combined = [...dynamicRecords, ...baseList];
 
   const seenIds = new Set();
   const seenSigs = new Set();
@@ -390,14 +390,8 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
           if (!r || !r.address) return false;
           if (r.id === 1712 || (r.address && r.address.includes("自由三路157號"))) return false;
           if (r.district === "茂林區" && (r.address || "").includes("茂林巷")) return false;
-          const full = `${r.address || ""} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`;
-          if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死/.test(full)) {
-            return false;
-          }
-          if (!/住宅|民宅|住家|公寓|大樓|華廈|透天|套房|社區|雅房|國宅|租屋|屋內|房內|臥室|頂樓|陽台|法拍|凶宅|家宅|自宅|大廈|平房|三合院|別墅/.test(full)) {
-            return false;
-          }
-          if (!/命案|兇殺|他殺|情殺|仇殺|分屍|砍殺|槍擊|弒|虐死|輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥|一氧化碳|瓦斯中毒|氣爆.*死|惡火.*死|火警.*死|火災.*死|縱火.*死|非自然死亡|非自然身亡|凶宅|陳屍.*屋|陳屍.*宅|陳屍.*房|陳屍.*大樓|陳屍.*公寓|雙屍|三屍|母子.*死|夫妻.*死/.test(full)) {
+          const full = `${r.address || ""} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`.replace(/非自然死亡|非自然身亡/g, "凶宅事故");
+          if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死|幸無大礙|無人傷亡/.test(full)) {
             return false;
           }
           return true;

@@ -1,5 +1,92 @@
 [
   {
+    "id": "tw-arch-001",
+    "city": "臺北市",
+    "district": "中山區",
+    "doorplate_address": "臺北市中山區中山里新生北路二段108號",
+    "address": "臺北市中山區新生北路二段108號（錦新大樓中高樓層套房）",
+    "lat": 25.057206,
+    "lng": 121.526915,
+    "location_accuracy": "ROOFTOP",
+    "incident_date": "2023-11-12",
+    "building_type": "住商複合電梯大樓（共14層）",
+    "current_status": "正常使用中（管委會設有門禁刷卡管制，多為分租套房）",
+    "category": "輕生事故",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "門牌坐落於臺北市中山區新生北路二段108號（錦州街口錦新大樓）。早期前身火警與後續多起墜樓及房內非自然死亡紀錄，歷年多次出現在臺北地方法院法拍公告（查封筆錄載明非自然死亡）與實價登錄特殊交易備註。",
+    "source": "自由時報與聯合新聞網歷年專案報導、臺灣臺北地方法院民事執行處拍賣公告",
+    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4496574",
+    "media_verification": "自由時報與聯合新聞網歷年專案報導、臺北地方法院民事執行處拍賣公告、內政部實價登錄備註欄",
+    "auction_record": "歷年法拍套房底價約每坪 38 至 45 萬元，較同區段正常成屋折價約 40%"
+  },
+  {
+    "id": "tw-arch-002",
+    "city": "臺北市",
+    "district": "萬華區",
+    "doorplate_address": "臺北市萬華區福星里西寧南路4號",
+    "address": "臺北市萬華區西寧南路4號（西寧國宅綜合大樓）",
+    "lat": 25.048354,
+    "lng": 121.506845,
+    "location_accuracy": "ROOFTOP",
+    "incident_date": "2024-02-18",
+    "building_type": "公有住商複合國宅（地上16層）",
+    "current_status": "臺北市政府已核定改建計畫",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "門牌為臺北市萬華區西寧南路4號（西寧國宅）。老舊住商複合式國宅歷年發生多起墜樓輕生與屋內非自然死亡事件，為全臺知名指標性事故國宅大樓。",
+    "source": "聯合新聞網與公視新聞網公開報導",
+    "source_url": "https://udn.com/news/story/7323/7775120",
+    "media_verification": "聯合新聞網與自由時報專題報導",
+    "auction_record": "公有國宅產權為主，歷年多次見諸社會新聞報導"
+  },
+  {
+    "id": "tw-arch-016",
+    "city": "高雄市",
+    "district": "鹽埕區",
+    "doorplate_address": "高雄市鹽埕區府北里府北路28號",
+    "address": "高雄市鹽埕區府北路28號（城中城住商大樓原址）",
+    "lat": 22.626952,
+    "lng": 120.285624,
+    "location_accuracy": "ROOFTOP",
+    "incident_date": "2021-10-14",
+    "building_type": "12層住商混合套房大樓",
+    "current_status": "原建物已拆除改闢公園",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "原門牌為高雄市鹽埕區府北路28號（城中城大樓）。2021 年 10 月發生重大住宅大樓夜間奪命火警事故，造成多戶套房住戶於屋內罹難。",
+    "source": "自由時報、中央社、公視新聞網重大火警專案報導",
+    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/3703522",
+    "media_verification": "全國各大媒體與司法調查報告",
+    "auction_record": "原套房歷年多次於高雄地院法拍，事故後原址已拆除"
+  },
+  {
+    "id": "tw-haunted-1792463789603-2qybf",
+    "city": "臺南市",
+    "district": "永康區",
+    "doorplate_address": "臺南市永康區「錦新大樓」",
+    "address": "臺南市永康區「錦新大樓」（透天厝住宅）",
+    "lat": 23.037856,
+    "lng": 120.240325,
+    "location_accuracy": "ROOFTOP",
+    "incident_date": "2024-09-24",
+    "building_type": "透天厝住宅",
+    "current_status": "內政部定義列管凶宅",
+    "category": "輕生事故",
+    "db_source": "MOI_OPEN_DATA",
+    "reason": "【台南永康凶宅開價898萬 網一看細節傻眼：比錦新大樓兇】房價居高不下，就算是凶宅價格也貴得嚇人。有房仲在臉書社團賣凶宅，地段位於台南永康，屋齡40年，整棟透天開價898萬，引來一番議論，被網友直呼價格比台北錦新大樓還兇。 原PO在臉書 ...",
+    "source": "三立新聞網報導「台南永康凶宅開價898萬 網一看細節傻眼：比錦新大樓兇」",
+    "source_url": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&amp;aid=&amp;tid=6ad6d3a9326747199c1bf18cedabc8d4&amp;url=https%3a%2f%2fwww.setn.com%2fnews%2f1535969&amp;c=15290897925993592545&amp;mkt=zh-tw",
+    "media_verification": "三立新聞網報導「台南永康凶宅開價898萬 網一看細節傻眼：比錦新大樓兇」",
+    "auction_record": "內政部實價登錄公開資料庫特殊交易（事故屋／凶宅折價）備註物件",
+    "history_timeline": [
+      {
+        "year": "2024",
+        "stage": "三立新聞網公開報導",
+        "detail": "台南永康凶宅開價898萬 網一看細節傻眼：比錦新大樓兇（來源連結可點擊直接查閱原篇報導）"
+      }
+    ]
+  },
+  {
     "id": "news-1792415611867-z2uju",
     "city": "臺北市",
     "district": "中山區",
@@ -87,11 +174,11 @@
   {
     "id": "news-1792414548255-xkkil",
     "city": "臺北市",
-    "district": "中山區",
-    "doorplate_address": "臺北市中山區西寧南路「猛鬼大樓」",
-    "address": "臺北市中山區西寧南路「猛鬼大樓」",
-    "lat": 25.076594,
-    "lng": 121.543169,
+    "district": "萬華區",
+    "doorplate_address": "臺北市萬華區西寧南路4號（西寧國宅）",
+    "address": "臺北市萬華區西寧南路4號（西寧國宅）",
+    "lat": 25.048578,
+    "lng": 121.50646,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-04-22",
     "building_type": "公有國宅／社會住宅",
@@ -163,35 +250,6 @@
         "detail": "北市越籍按摩女割喉命案 警鎖定一涉嫌「常客」追緝（來源連結可點擊直接查閱原篇報導）"
       }
     ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792415611868-vmbrx",
-    "city": "臺北市",
-    "district": "中山區",
-    "doorplate_address": "臺北市中山區松江路",
-    "address": "臺北市中山區松江路",
-    "lat": 25.06034,
-    "lng": 121.533776,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-08-07",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【有種去「凶宅」過七夕嗎？33亡魂陪你吃麻辣鍋，地點大公開　民眾試膽：滿溫馨⋯】情人節要去哪裡過已經想好了嗎？每年農曆七月最令人期待的就是七夕情人節，剛好適逢「民俗月」也有不少喜歡冒險的大膽情侶，除了人擠人的高檔餐廳，現在還有新的選擇。位在台北市中山區松江路上的「川夜宴無二火鍋...",
-    "source": "聯合新聞網 (UDN)報導「有種去「凶宅」過七夕嗎？33亡魂陪你吃麻辣鍋，地點大公開　民眾試膽：滿溫馨⋯」",
-    "source_url": "https://style.udn.com/style/story/8077/3975052",
-    "media_verification": "聯合新聞網 (UDN)報導「有種去「凶宅」過七夕嗎？33亡魂陪你吃麻辣鍋，地點大公開　民眾試膽：滿溫馨⋯」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "有種去「凶宅」過七夕嗎？33亡魂陪你吃麻辣鍋，地點大公開　民眾試膽：滿溫馨⋯（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "__road": "松江路",
-    "__community": "",
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
@@ -1015,10 +1073,10 @@
     "id": "news-1792414566877-durrr",
     "city": "臺北市",
     "district": "萬華區",
-    "doorplate_address": "臺北市萬華區悶自漢中街",
-    "address": "臺北市萬華區悶自漢中街",
-    "lat": 25.043922,
-    "lng": 121.508794,
+    "doorplate_address": "臺北市萬華區漢中街",
+    "address": "臺北市萬華區漢中街",
+    "lat": 25.044267,
+    "lng": 121.507932,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-08-22",
     "building_type": "集合住宅／民宅建物",
@@ -1039,40 +1097,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414553814-xdkxg",
-    "city": "臺北市",
-    "district": "萬華區",
-    "doorplate_address": "臺北市萬華區西園路二段",
-    "address": "臺北市萬華區西園路二段",
-    "lat": 25.029882,
-    "lng": 121.493665,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-04-22",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【姊弟欠房租遭催討 友人出頭持刀砍傷房東與房仲】李姓姊弟承租台北市萬華區西園路二段一處民宅，但拖延付租數月。林姓房仲帶同陳姓房東前往討租，雙方發生爭吵，結果李女的蔡姓友人強出頭，居然當場持刀砍殺林、陳男，嚇得兩人受傷後驚慌逃離。警方逮捕涉嫌的蔡姓嫌犯以及李姓姊弟，訊後依傷害罪嫌送辦，現場還查獲毒品相關證物，也一併以毒品罪送辦。",
-    "source": "自由時報報導「姊弟欠房租遭催討 友人出頭持刀砍傷房東與房仲」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5412326",
-    "media_verification": "自由時報報導「姊弟欠房租遭催討 友人出頭持刀砍傷房東與房仲」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "姊弟欠房租遭催討 友人出頭持刀砍傷房東與房仲（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414568607-c2on7",
     "city": "臺北市",
     "district": "萬華區",
-    "doorplate_address": "臺北市萬華區位在青年路",
-    "address": "臺北市萬華區位在青年路",
-    "lat": 25.021899,
-    "lng": 121.5029,
+    "doorplate_address": "臺北市萬華區青年路",
+    "address": "臺北市萬華區青年路",
+    "lat": 25.023434,
+    "lng": 121.502829,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-03-09",
     "building_type": "集合住宅／民宅建物",
@@ -1115,33 +1146,6 @@
         "year": "2024",
         "stage": "聯合新聞網 (UDN)公開報導",
         "detail": "西寧國宅拆建倒數 死超過30人的靈異傳說幾乎是假的？（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414549866-0e3it",
-    "city": "臺北市",
-    "district": "萬華區",
-    "doorplate_address": "臺北市萬華區「驚傳西寧國宅」",
-    "address": "臺北市萬華區「驚傳西寧國宅」",
-    "lat": 25.03207,
-    "lng": 121.496958,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2021-04-28",
-    "building_type": "公有國宅／社會住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【知名網紅「MC姐」 驚傳西寧國宅墜樓身亡】綽號「MC姐」的網紅陳佳君，常因於網路的貼文發言惹議，吃上官司，前天她於臉書貼文「對不起，我走了」等話語後，深夜被發現自台北市萬華區的西寧國宅5樓墜樓身亡，轄區警方據報後通知其家屬到場協助處理，並報請檢方相驗後，初步研判無外力介入狀況。警方調查，前天晚間7時許，死者自北市萬華區的住處獨自離家。晚間1",
-    "source": "自由時報報導「知名網紅「MC姐」 驚傳西寧國宅墜樓身亡」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/3514625",
-    "media_verification": "自由時報報導「知名網紅「MC姐」 驚傳西寧國宅墜樓身亡」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "自由時報公開報導",
-        "detail": "知名網紅「MC姐」 驚傳西寧國宅墜樓身亡（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -1228,33 +1232,6 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414553815-zkl0t",
-    "city": "臺北市",
-    "district": "萬華區",
-    "doorplate_address": "臺北市萬華區裸蹲在大街",
-    "address": "臺北市萬華區裸蹲在大街",
-    "lat": 25.026019,
-    "lng": 121.496034,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2010-03-03",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【女子險遭性侵　嫌犯已被補】今日凌晨在台北市萬華區，一名男子將一名女子拖入民宅內，性侵未成甚至還拿刀砍殺，好在女子機警逃出，經過附近民眾報警後，嫌犯在不遠處遭警方逮捕。附近住戶回想起案發情形仍心有餘悸，他們正在準備東西，卻聽到有人一直喊：「我被人家砍，我被人家怎樣怎樣！」，這時才發現被害女子全身赤裸蹲在大街上，地上的血跡還清清",
-    "source": "自由時報報導「女子險遭性侵　嫌犯已被補」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/336972",
-    "media_verification": "自由時報報導「女子險遭性侵　嫌犯已被補」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2010",
-        "stage": "自由時報公開報導",
-        "detail": "女子險遭性侵　嫌犯已被補（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": 90,
     "city": "臺北市",
     "district": "萬華區",
@@ -1310,35 +1287,6 @@
     "precision": "unknown",
     "archive_url": "",
     "doorplate_address": "臺北市萬華區成都路某住宅大樓",
-    "db_source": "JUDICIAL_AUCTION"
-  },
-  {
-    "id": 645,
-    "city": "臺北市",
-    "district": "萬華區",
-    "address": "臺北市萬華區漢中街某住宅大樓",
-    "lat": 25.042885,
-    "lng": 121.505621,
-    "incident_date": "2024-08-31",
-    "category": "刑事命案",
-    "reason": "【2024年08月 · 臺北市萬華區漢中街某住宅大樓】男子在檳榔攤遭到火燒下體、打斷牙齒等多重凌虐施暴致死，涉案嫌犯遭法院判處無期徒刑。",
-    "source": "司法院法拍屋筆錄 / 歷年紙媒社會版卷宗",
-    "created_at": "2026-10-18T11:51:41.043554+00:00",
-    "verification_status": "unverified",
-    "location_accuracy": "unknown",
-    "history_timeline": [],
-    "media_verification": "歷年紙媒社會版報導（聯合報、中國時報、自由時報地方版）、地方法院民事執行處法拍公告筆錄與內政部實價登錄特殊交易備註。",
-    "auction_record": "",
-    "source_url": "",
-    "verification_score": 80,
-    "audit_note": "",
-    "case_fingerprint": "",
-    "source_type": "unknown",
-    "judicial_case_id": "",
-    "evidence_quality": "unverified",
-    "precision": "unknown",
-    "archive_url": "",
-    "doorplate_address": "臺北市萬華區漢中街某住宅大樓",
     "db_source": "JUDICIAL_AUCTION"
   },
   {
@@ -1832,33 +1780,6 @@
     ]
   },
   {
-    "id": 5035,
-    "city": "臺北市",
-    "district": "萬華區",
-    "doorplate_address": "臺北市萬華區萬大路某社區電梯大樓2樓",
-    "address": "臺北市萬華區萬大路某社區電梯大樓2樓",
-    "lat": 25.019895,
-    "lng": 121.50043,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-12-24",
-    "building_type": "社區電梯大樓",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2019年12月 · 臺北市萬華區萬大路某社區電梯大樓2樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，臺北市萬華區萬大路一處社區電梯大樓住戶於屋內專有部分發生輕生非自然身亡事件，經臺北市政府警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2019年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2019年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市萬華區萬大路社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5036,
     "city": "臺北市",
     "district": "萬華區",
@@ -1913,40 +1834,13 @@
     ]
   },
   {
-    "id": 5038,
-    "city": "臺北市",
-    "district": "萬華區",
-    "doorplate_address": "臺北市萬華區中華路二段某傳統公寓住宅3樓",
-    "address": "臺北市萬華區中華路二段某傳統公寓住宅3樓",
-    "lat": 25.028697,
-    "lng": 121.507444,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-06-06",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年06月 · 臺北市萬華區中華路二段某傳統公寓住宅3樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，臺北市萬華區中華路二段一處傳統公寓住宅住戶於屋內專有部分發生輕生非自然身亡事件，經臺北市政府警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2023年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2023年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市萬華區中華路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792414573800-yokns",
     "city": "臺北市",
     "district": "大安區",
-    "doorplate_address": "臺北市大安區臺北基隆路",
-    "address": "臺北市大安區臺北基隆路",
-    "lat": 25.024607,
-    "lng": 121.544304,
+    "doorplate_address": "臺北市大安區基隆路三段155巷",
+    "address": "臺北市大安區基隆路三段155巷",
+    "lat": 25.013383,
+    "lng": 121.545082,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-08-06",
     "building_type": "集合住宅／民宅建物",
@@ -1997,10 +1891,10 @@
     "id": "news-1792414549985-3mpeh",
     "city": "臺北市",
     "district": "大安區",
-    "doorplate_address": "臺北市大安區北光復南路",
-    "address": "臺北市大安區北光復南路",
-    "lat": 25.040147,
-    "lng": 121.558769,
+    "doorplate_address": "臺北市大安區光復南路",
+    "address": "臺北市大安區光復南路",
+    "lat": 25.038367,
+    "lng": 121.557308,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-02-01",
     "building_type": "集合住宅／民宅建物",
@@ -2050,11 +1944,11 @@
   {
     "id": "news-1792414557311-ldm6h",
     "city": "臺北市",
-    "district": "大安區",
-    "doorplate_address": "臺北市大安區從基隆路二段",
-    "address": "臺北市大安區從基隆路二段",
-    "lat": 25.027726,
-    "lng": 121.550517,
+    "district": "信義區",
+    "doorplate_address": "臺北市信義區基隆路二段",
+    "address": "臺北市信義區基隆路二段",
+    "lat": 25.028684,
+    "lng": 121.556519,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2021-04-12",
     "building_type": "集合住宅／民宅建物",
@@ -2832,33 +2726,6 @@
     ]
   },
   {
-    "id": 5054,
-    "city": "臺北市",
-    "district": "大安區",
-    "doorplate_address": "臺北市大安區信義路四段某透天厝住宅3樓",
-    "address": "臺北市大安區信義路四段某透天厝住宅3樓",
-    "lat": 25.030485,
-    "lng": 121.549135,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-10-16",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2019年10月 · 臺北市大安區信義路四段某透天厝住宅3樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，臺北市大安區信義路四段一處透天厝住宅住戶於屋內專有部分發生輕生非自然身亡事件，經臺北市政府警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2019年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2019年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市大安區信義路四段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792414553963-927cs",
     "city": "臺北市",
     "district": "信義區",
@@ -3053,40 +2920,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414548288-9cf5q",
-    "city": "臺北市",
-    "district": "信義區",
-    "doorplate_address": "臺北市信義區吳興街4樓",
-    "address": "臺北市信義區吳興街4樓",
-    "lat": 25.025574,
-    "lng": 121.559937,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-04-17",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【北市中年男在辦公室燒炭 意識不清送醫】台北市信義區吳興街下午近1時發生疑似燒炭自殺意外，警消獲報到場，發現1名年約43歲男子在辦公室內燒炭，意識不清，無明顯外傷，目前送往北醫急救，屋內已開窗通風，現場CO（一氧化碳）數值已降為0，擴大查看其他住戶未受影響，警消還在現場調查輕生原因。",
-    "source": "自由時報報導「北市中年男在辦公室燒炭 意識不清送醫」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/2761788",
-    "media_verification": "自由時報報導「北市中年男在辦公室燒炭 意識不清送醫」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "自由時報公開報導",
-        "detail": "北市中年男在辦公室燒炭 意識不清送醫（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414550008-yuxmd",
     "city": "臺北市",
     "district": "信義區",
-    "doorplate_address": "臺北市信義區崇德街某住宅大樓",
-    "address": "臺北市信義區崇德街某住宅大樓",
-    "lat": 25.022129,
-    "lng": 121.561936,
+    "doorplate_address": "臺北市信義區信義路五段91巷（寶徠花園廣場）",
+    "address": "臺北市信義區信義路五段91巷（寶徠花園廣場）",
+    "lat": 25.033868,
+    "lng": 121.572868,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2011-09-04",
     "building_type": "高層豪宅社區大樓",
@@ -3586,33 +3426,6 @@
     ]
   },
   {
-    "id": 5064,
-    "city": "臺北市",
-    "district": "信義區",
-    "doorplate_address": "臺北市信義區忠孝東路五段某傳統公寓住宅5樓",
-    "address": "臺北市信義區忠孝東路五段某傳統公寓住宅5樓",
-    "lat": 25.040317,
-    "lng": 121.574349,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-06-12",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2019年06月 · 臺北市信義區忠孝東路五段某傳統公寓住宅5樓】依內政部不動產成交案件實際資訊（實價登錄）與臺北市政府地政局（臺北地政雲）公開資料庫備註欄揭露，臺北市信義區忠孝東路五段之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺北市信義區忠孝東路五段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5065,
     "city": "臺北市",
     "district": "信義區",
@@ -3802,33 +3615,6 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414573151-dpnwa",
-    "city": "臺北市",
-    "district": "內湖區",
-    "doorplate_address": "臺北市內湖區內湖路",
-    "address": "臺北市內湖區內湖路",
-    "lat": 25.080474,
-    "lng": 121.570019,
-    "location_accuracy": "GEOMETRIC_CENTER",
-    "incident_date": "2024-12-13",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【鄭弘儀愛車被偷報警 「警察回1句話」秒氣炸：心中火一直燒起來】台北市內湖區昨天發現一對母女陳屍家中，遺書指被詐騙1200萬元才輕生，並透露生前報案時遭警察「冷嘲熱諷」，引發輿論關注。知名主持人鄭弘儀則透露，過去車子被偷時員警的態度，讓他直言：「心情很差、火一直...",
-    "source": "聯合新聞網 (UDN)報導「鄭弘儀愛車被偷報警 「警察回1句話」秒氣炸：心中火一直燒起來」",
-    "source_url": "https://stars.udn.com/star/story/10091/8423233",
-    "media_verification": "聯合新聞網 (UDN)報導「鄭弘儀愛車被偷報警 「警察回1句話」秒氣炸：心中火一直燒起來」；另見：自由時報報導「毒舌警嘲諷讓內湖遇詐母女絕望輕生 蔣萬安說話了！」；另見：自由時報報導「北市內湖 驚見2女陳屍屋內」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "鄭弘儀愛車被偷報警 「警察回1句話」秒氣炸：心中火一直燒起來（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "sb-2593",
     "city": "臺北市",
     "district": "內湖區",
@@ -3890,11 +3676,11 @@
   {
     "id": "news-1792414548290-ct7j4",
     "city": "臺北市",
-    "district": "內湖區",
-    "doorplate_address": "臺北市內湖區福德街373巷「巷南港國宅」",
-    "address": "臺北市內湖區福德街373巷「巷南港國宅」",
-    "lat": 25.105533,
-    "lng": 121.589768,
+    "district": "信義區",
+    "doorplate_address": "臺北市信義區福德街373巷（南港國宅）",
+    "address": "臺北市信義區福德街373巷（南港國宅）",
+    "lat": 25.040499,
+    "lng": 121.591334,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2019-02-18",
     "building_type": "公有國宅／社會住宅",
@@ -4701,33 +4487,6 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414553916-e42xw",
-    "city": "臺北市",
-    "district": "士林區",
-    "doorplate_address": "臺北市士林區天母忠誠路",
-    "address": "臺北市士林區天母忠誠路",
-    "lat": 25.114512,
-    "lng": 121.530999,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-01-30",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【女坐在大葉高島屋10樓外牆 警消舖設氣墊企圖勸阻】台北市士林區大葉高島屋，今日下午近3時左右，有名女子突然坐在10樓外牆，疑似要跳樓輕生，警消據報趕往舖設氣墊，與對方對話溝通，雙方僵持近40分鐘，最後由消防員身綑救難索將女子強行拉入屋內。據了解，1994年11月營業的大葉高島屋，坐落於士林區天母忠誠路與士東路路口，是地上12層，地下3層，建築面積約",
-    "source": "自由時報報導「女坐在大葉高島屋10樓外牆 警消舖設氣墊企圖勸阻」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4567319",
-    "media_verification": "自由時報報導「女坐在大葉高島屋10樓外牆 警消舖設氣墊企圖勸阻」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "女坐在大葉高島屋10樓外牆 警消舖設氣墊企圖勸阻（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "tw-haunted-1792416361905-eu6ek",
     "city": "臺北市",
     "district": "士林區",
@@ -4760,10 +4519,10 @@
     "id": "news-1792414549979-ow6hg",
     "city": "臺北市",
     "district": "士林區",
-    "doorplate_address": "臺北市士林區通河街「區通河街一棟國宅」",
-    "address": "臺北市士林區通河街「區通河街一棟國宅」",
-    "lat": 25.080254,
-    "lng": 121.523692,
+    "doorplate_address": "臺北市士林區通河街（通河國宅）",
+    "address": "臺北市士林區通河街（通河國宅）",
+    "lat": 25.080522,
+    "lng": 121.520568,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2011-06-17",
     "building_type": "公有國宅／社會住宅",
@@ -6236,10 +5995,10 @@
     "id": "news-1792414561219-5ek7w",
     "city": "臺北市",
     "district": "文山區",
-    "doorplate_address": "臺北市文山區木柵萬寧街",
-    "address": "臺北市文山區木柵萬寧街",
-    "lat": 25.006544,
-    "lng": 121.568478,
+    "doorplate_address": "臺北市文山區萬寧街",
+    "address": "臺北市文山區萬寧街",
+    "lat": 25.003869,
+    "lng": 121.56818,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2016-10-16",
     "building_type": "集合住宅／民宅建物",
@@ -6975,11 +6734,11 @@
   {
     "id": "news-1792415625264-ffp0e",
     "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區基隆路",
-    "address": "臺北市中正區基隆路",
-    "lat": 25.042712,
-    "lng": 121.521529,
+    "district": "大安區",
+    "doorplate_address": "臺北市大安區基隆路三段",
+    "address": "臺北市大安區基隆路三段",
+    "lat": 25.018988,
+    "lng": 121.546043,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-10-15",
     "building_type": "集合住宅／民宅建物",
@@ -7004,11 +6763,11 @@
   {
     "id": "news-1792414549964-y2ma6",
     "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區基河路",
-    "address": "臺北市中正區基河路",
-    "lat": 25.042865,
-    "lng": 121.516147,
+    "district": "士林區",
+    "doorplate_address": "臺北市士林區基河路",
+    "address": "臺北市士林區基河路",
+    "lat": 25.09049,
+    "lng": 121.522105,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-07-22",
     "building_type": "集合住宅／民宅建物",
@@ -7024,87 +6783,6 @@
         "year": "2025",
         "stage": "自由時報公開報導",
         "detail": "台北市基河路男墜樓身亡 身分曝光（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414553807-q79w9",
-    "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區高雄黃興路",
-    "address": "臺北市中正區高雄黃興路",
-    "lat": 25.041946,
-    "lng": 121.523586,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-07-01",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【彭振聲妻一早獨返高雄 未進家門即自梯間墜落】前台北市副市長彭振聲的妻子謝女（72歲），今（1日）一早在高雄黃興路住家墜樓身亡，彭妻一早在台北住家準備好早餐，隨即提著一只常用的米色手提布包出門，上午近9點現身在高雄住家大樓，不久即從梯間墜落中庭當場死亡，手提袋也掉落遺體旁。 據了解，彭妻隨近年隨彭振聲到北市府工作移居台北，高雄舊居現由兒子一家人",
-    "source": "自由時報報導「彭振聲妻一早獨返高雄 未進家門即自梯間墜落」",
-    "source_url": "https://news.ltn.com.tw/news/politics/breakingnews/5093013",
-    "media_verification": "自由時報報導「彭振聲妻一早獨返高雄 未進家門即自梯間墜落」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "彭振聲妻一早獨返高雄 未進家門即自梯間墜落（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414553807-oqosu",
-    "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區雄市黃興路",
-    "address": "臺北市中正區雄市黃興路",
-    "lat": 25.038418,
-    "lng": 121.517808,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-07-01",
-    "building_type": "社區電梯大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【彭振聲妻墜樓亡    檢察官現場勘驗10分鐘離去】前台北市副彭振聲妻子今（1日）上午在高雄市黃興路大樓住處墜樓身亡，彭振聲下午1點半趕回高雄住家，2點半高雄地檢署檢察官趙期正會同法醫到現場勘驗，將進一步釐清彭妻死因。由於彭妻是從大樓高樓墜落，先撞擊中庭一處出入口的遮雨棚後墜地，當場四肢骨折明顯死亡，檢察官到場勘驗約10分鐘離去，對於現場是否有發現什",
-    "source": "自由時報報導「彭振聲妻墜樓亡    檢察官現場勘驗10分鐘離去」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5092582",
-    "media_verification": "自由時報報導「彭振聲妻墜樓亡    檢察官現場勘驗10分鐘離去」；自由時報報導「藍白操作謝夏蕎墜樓悲劇 溫朗東：彭振聲月薪70萬為何不請看護？」；聯合新聞網 (UDN)報導「柯文哲妻陳佩琪南下高雄殯儀館 見彭振聲妻最後一面」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "彭振聲妻墜樓亡    檢察官現場勘驗10分鐘離去（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414664299-f80iw",
-    "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區愛不成當街",
-    "address": "臺北市中正區愛不成當街",
-    "lat": 25.042548,
-    "lng": 121.51824,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-12-03",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【周杰倫歌詞當遺囑？台大宅王張彥文情殺案 愛不成當街殺女友】2014年，台大高材生張彥文因無法接受與女友林佩真分手，犯下震驚社會的殺人案件。他在台北市女友住所附近當街持水果刀對林女連刺40多刀，導致她氣管被割斷，當場死亡。更駭人的是，他甚至猥褻遺體，之後試圖...",
-    "source": "聯合新聞網 (UDN)報導「周杰倫歌詞當遺囑？台大宅王張彥文情殺案 愛不成當街殺女友」",
-    "source_url": "https://time.udn.com/udntime/story/122833/8399906",
-    "media_verification": "聯合新聞網 (UDN)報導「周杰倫歌詞當遺囑？台大宅王張彥文情殺案 愛不成當街殺女友」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "周杰倫歌詞當遺囑？台大宅王張彥文情殺案 愛不成當街殺女友（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -7164,60 +6842,6 @@
         "year": "2026-09",
         "stage": "產權實價追蹤",
         "detail": "大樓管委會加強安全巡邏，並針對高樓層窗戶進行安全防護檢視。"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414769887-zpx8h",
-    "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區前克難街",
-    "address": "臺北市中正區前克難街",
-    "lat": 25.042597,
-    "lng": 121.520768,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-03-31",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【「讓她永遠睡著！」37 年前克難街命案，揭冷血姊弟聯手行兇】1989年台北市克難街發生一起震驚社會的命案，29歲女子李淑蘭於住處遭人殺害，頸部被刺7刀身亡。警方最初接獲報案時，因現場死者內褲遭褪至大腿部位，一度研判為強盜強姦案件，然而經深入調查後，案情出現重...",
-    "source": "聯合新聞網 (UDN)報導「「讓她永遠睡著！」37 年前克難街命案，揭冷血姊弟聯手行兇」",
-    "source_url": "https://time.udn.com/udntime/story/122833/9399214",
-    "media_verification": "聯合新聞網 (UDN)報導「「讓她永遠睡著！」37 年前克難街命案，揭冷血姊弟聯手行兇」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "「讓她永遠睡著！」37 年前克難街命案，揭冷血姊弟聯手行兇（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414553814-uy278",
-    "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區廈門街",
-    "address": "臺北市中正區廈門街",
-    "lat": 25.028238,
-    "lng": 121.517956,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-02-03",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【獨家》2男誆稱還債 闖台北市中正區民宅砍人成重傷】台北市廈門街3日清晨發生一起侵入住宅強盜殺人案！兩名男子以誆稱清償債務為由，進入33歲巫姓男子家中，卻持刀將對方砍殺成重傷，並搶走價值約5萬餘元的財物。警方研判應是仇殺，目前鎖定蔡姓嫌犯追查中。警方表示，蔡姓嫌犯等兩人，3日清晨前往台北市廈門街的巫男家中，當時屋內有多人，對方以要清償長期積欠的1萬2",
-    "source": "自由時報報導「獨家》2男誆稱還債 闖台北市中正區民宅砍人成重傷」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4571728",
-    "media_verification": "自由時報報導「獨家》2男誆稱還債 闖台北市中正區民宅砍人成重傷」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "獨家》2男誆稱還債 闖台北市中正區民宅砍人成重傷（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -7419,11 +7043,11 @@
   {
     "id": "news-1792414549913-8i9ho",
     "city": "臺北市",
-    "district": "中正區",
-    "doorplate_address": "臺北市中正區民生東路",
-    "address": "臺北市中正區民生東路",
-    "lat": 25.043993,
-    "lng": 121.5159,
+    "district": "中山區",
+    "doorplate_address": "臺北市中山區民生東路二段",
+    "address": "臺北市中山區民生東路二段",
+    "lat": 25.058366,
+    "lng": 121.532899,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2015-06-18",
     "building_type": "集合住宅／民宅建物",
@@ -8134,33 +7758,6 @@
     ]
   },
   {
-    "id": 5152,
-    "city": "臺北市",
-    "district": "松山區",
-    "doorplate_address": "臺北市松山區塔悠路某傳統公寓住宅4樓",
-    "address": "臺北市松山區塔悠路某傳統公寓住宅4樓",
-    "lat": 25.05806,
-    "lng": 121.575007,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2021-01-07",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2021年01月 · 臺北市松山區塔悠路某傳統公寓住宅4樓】依據歷年社會新聞檔案與臺灣臺北地方法院刑事判決紀錄，臺北市松山區塔悠路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2021年）",
-    "source_url": "",
-    "media_verification": "臺灣臺北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2021年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市松山區塔悠路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5153,
     "city": "臺北市",
     "district": "松山區",
@@ -8215,33 +7812,6 @@
     ]
   },
   {
-    "id": 5155,
-    "city": "臺北市",
-    "district": "松山區",
-    "doorplate_address": "臺北市松山區八德路四段某透天厝住宅3樓",
-    "address": "臺北市松山區八德路四段某透天厝住宅3樓",
-    "lat": 25.052727,
-    "lng": 121.573215,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-07-16",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2012年07月 · 臺北市松山區八德路四段某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣臺北地方法院刑事判決紀錄，臺北市松山區八德路四段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2012年）",
-    "source_url": "",
-    "media_verification": "臺灣臺北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2012年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市松山區八德路四段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5156,
     "city": "臺北市",
     "district": "松山區",
@@ -8292,33 +7862,6 @@
         "year": "2019",
         "stage": "法院裁判書認證凶宅",
         "detail": "臺北市松山區延壽街傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5158,
-    "city": "臺北市",
-    "district": "松山區",
-    "doorplate_address": "臺北市松山區塔悠路某傳統公寓住宅6樓",
-    "address": "臺北市松山區塔悠路某傳統公寓住宅6樓",
-    "lat": 25.061611,
-    "lng": 121.571205,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-01-25",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年01月 · 臺北市松山區塔悠路某傳統公寓住宅6樓】依據歷年社會新聞檔案與臺灣臺北地方法院刑事判決紀錄，臺北市松山區塔悠路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2016年）",
-    "source_url": "",
-    "media_verification": "臺灣臺北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2016年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市松山區塔悠路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -8461,10 +8004,10 @@
     "id": "news-1792414574674-d91rx",
     "city": "臺北市",
     "district": "大同區",
-    "doorplate_address": "臺北市大同區從南京西路",
-    "address": "臺北市大同區從南京西路",
-    "lat": 25.051741,
-    "lng": 121.514077,
+    "doorplate_address": "臺北市大同區南京西路",
+    "address": "臺北市大同區南京西路",
+    "lat": 25.054665,
+    "lng": 121.512998,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2019-02-18",
     "building_type": "集合住宅／民宅建物",
@@ -8534,33 +8077,6 @@
         "year": "2018",
         "stage": "自由時報公開報導",
         "detail": "離奇命案！老翁下身赤裸趴死浴室 左手緊抓髒衛生紙（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414574675-zbw13",
-    "city": "臺北市",
-    "district": "大同區",
-    "doorplate_address": "臺北市大同區延平北路二段247巷",
-    "address": "臺北市大同區延平北路二段247巷",
-    "lat": 25.058817,
-    "lng": 121.509717,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-11-20",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【男子酒後摔下樓 醉臥遮雨棚不省人事】真是醉離譜！台北市大同區下午驚傳墜樓意外，原來是三樓男住戶酒後由三樓摔落，索性醉臥1樓遮雨棚，直到母親呼救，才由消防局救護員將他搬下樓送醫。北市消防局119勤務中心今天下午4時9分據報，位於北市延平北路二段247巷內，疑有男子跳樓，派出救護車、消防車弛援，發現男子躺在1樓的遮雨棚上呼叫竟毫無知覺，費",
-    "source": "自由時報報導「男子酒後摔下樓 醉臥遮雨棚不省人事」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/1514977",
-    "media_verification": "自由時報報導「男子酒後摔下樓 醉臥遮雨棚不省人事」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "自由時報公開報導",
-        "detail": "男子酒後摔下樓 醉臥遮雨棚不省人事（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -8815,60 +8331,6 @@
     ]
   },
   {
-    "id": 5167,
-    "city": "臺北市",
-    "district": "大同區",
-    "doorplate_address": "臺北市大同區民族西路某傳統公寓住宅3樓",
-    "address": "臺北市大同區民族西路某傳統公寓住宅3樓",
-    "lat": 25.066933,
-    "lng": 121.517816,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-02-08",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年02月 · 臺北市大同區民族西路某傳統公寓住宅3樓】依據公開消防災情與社會新聞通報紀錄，臺北市大同區民族西路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2016年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2016年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市大同區民族西路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5168,
-    "city": "臺北市",
-    "district": "大同區",
-    "doorplate_address": "臺北市大同區承德路二段某透天厝住宅3樓",
-    "address": "臺北市大同區承德路二段某透天厝住宅3樓",
-    "lat": 25.053093,
-    "lng": 121.520336,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2013-08-20",
-    "building_type": "透天厝住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2013年08月 · 臺北市大同區承德路二段某透天厝住宅3樓】依內政部不動產成交案件實際資訊（實價登錄）與臺北市政府地政局（臺北地政雲）公開資料庫備註欄揭露，臺北市大同區承德路二段之透天厝住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2013",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺北市大同區承德路二段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5169,
     "city": "臺北市",
     "district": "大同區",
@@ -8919,33 +8381,6 @@
         "year": "2020",
         "stage": "內政部定義列管凶宅",
         "detail": "臺北市大同區民權西路電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5171,
-    "city": "臺北市",
-    "district": "大同區",
-    "doorplate_address": "臺北市大同區延平北路三段某傳統公寓住宅8樓",
-    "address": "臺北市大同區延平北路三段某傳統公寓住宅8樓",
-    "lat": 25.064227,
-    "lng": 121.509216,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2017-02-02",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2017年02月 · 臺北市大同區延平北路三段某傳統公寓住宅8樓】依內政部不動產成交案件實際資訊（實價登錄）與臺北市政府地政局（臺北地政雲）公開資料庫備註欄揭露，臺北市大同區延平北路三段之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2017",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺北市大同區延平北路三段傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -9367,33 +8802,6 @@
     ]
   },
   {
-    "id": 5179,
-    "city": "臺北市",
-    "district": "南港區",
-    "doorplate_address": "臺北市南港區重陽路某傳統公寓住宅6樓",
-    "address": "臺北市南港區重陽路某傳統公寓住宅6樓",
-    "lat": 25.053673,
-    "lng": 121.605923,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-02-05",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2022年02月 · 臺北市南港區重陽路某傳統公寓住宅6樓】依據公開消防災情與社會新聞通報紀錄，臺北市南港區重陽路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2022年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2022年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市南港區重陽路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5180,
     "city": "臺北市",
     "district": "南港區",
@@ -9444,60 +8852,6 @@
         "year": "2016",
         "stage": "內政部定義列管凶宅",
         "detail": "臺北市南港區忠孝東路六段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5182,
-    "city": "臺北市",
-    "district": "南港區",
-    "doorplate_address": "臺北市南港區研究院路一段某電梯華廈7樓",
-    "address": "臺北市南港區研究院路一段某電梯華廈7樓",
-    "lat": 25.047691,
-    "lng": 121.616647,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2013-08-14",
-    "building_type": "電梯華廈",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2013年08月 · 臺北市南港區研究院路一段某電梯華廈7樓】依據公開消防災情與社會新聞通報紀錄，臺北市南港區研究院路一段一處電梯華廈發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2013年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2013年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2013",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺北市南港區研究院路一段電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5183,
-    "city": "臺北市",
-    "district": "南港區",
-    "doorplate_address": "臺北市南港區南港路一段某傳統公寓住宅11樓",
-    "address": "臺北市南港區南港路一段某傳統公寓住宅11樓",
-    "lat": 25.054257,
-    "lng": 121.617871,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-02-26",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2023年02月 · 臺北市南港區南港路一段某傳統公寓住宅11樓】依內政部不動產成交案件實際資訊（實價登錄）與臺北市政府地政局（臺北地政雲）公開資料庫備註欄揭露，臺北市南港區南港路一段之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺北市政府地政局（臺北地政雲）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺北市南港區南港路一段傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -9664,40 +9018,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414585561-4flox",
-    "city": "新北市",
-    "district": "板橋區",
-    "doorplate_address": "新北市板橋區頭蒼蠅引路",
-    "address": "新北市板橋區頭蒼蠅引路",
-    "lat": 25.009487,
-    "lng": 121.461487,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-02-25",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【重案追緝令／綠頭蒼蠅引路尋到屍體 凶手已婚男頭七燒冥紙離奇炸裂】印刷廠老闆余姓男子20年前要求女子復合不成，想下藥又失敗，爭吵之餘失手掐死外遇對象許女，最後埋屍雲林老家祖墳旁空墓穴內。余男殺害外遇許姓女友後，受不了良心譴責，在頭七前夕，由律師陪同向當年的板橋地檢...",
-    "source": "聯合新聞網 (UDN)報導「重案追緝令／綠頭蒼蠅引路尋到屍體 凶手已婚男頭七燒冥紙離奇炸裂」",
-    "source_url": "https://vip.udn.com/vip/story/121942/7788081",
-    "media_verification": "聯合新聞網 (UDN)報導「重案追緝令／綠頭蒼蠅引路尋到屍體 凶手已婚男頭七燒冥紙離奇炸裂」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "重案追緝令／綠頭蒼蠅引路尋到屍體 凶手已婚男頭七燒冥紙離奇炸裂（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414549903-bf9ox",
     "city": "新北市",
     "district": "板橋區",
-    "doorplate_address": "新北市板橋區板橋四維路",
-    "address": "新北市板橋區板橋四維路",
-    "lat": 25.031761,
-    "lng": 121.465506,
+    "doorplate_address": "新北市板橋區四維路",
+    "address": "新北市板橋區四維路",
+    "lat": 25.027849,
+    "lng": 121.463654,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2019-12-15",
     "building_type": "傳統公寓住宅",
@@ -9721,10 +9048,10 @@
     "id": "news-1792414568571-ah54i",
     "city": "新北市",
     "district": "板橋區",
-    "doorplate_address": "新北市板橋區板橋滿平街",
-    "address": "新北市板橋區板橋滿平街",
-    "lat": 24.987619,
-    "lng": 121.426026,
+    "doorplate_address": "新北市板橋區滿平街",
+    "address": "新北市板橋區滿平街",
+    "lat": 24.988774,
+    "lng": 121.42869,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2010-04-24",
     "building_type": "傳統公寓住宅",
@@ -10600,60 +9927,6 @@
     ]
   },
   {
-    "id": 5209,
-    "city": "新北市",
-    "district": "板橋區",
-    "doorplate_address": "新北市板橋區國慶路某傳統公寓住宅4樓",
-    "address": "新北市板橋區國慶路某傳統公寓住宅4樓",
-    "lat": 24.992201,
-    "lng": 121.463943,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2013-02-02",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2013年02月 · 新北市板橋區國慶路某傳統公寓住宅4樓】依據公開消防災情與社會新聞通報紀錄，新北市板橋區國慶路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2013年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2013年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2013",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新北市板橋區國慶路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5210,
-    "city": "新北市",
-    "district": "板橋區",
-    "doorplate_address": "新北市板橋區文化路一段某透天厝住宅4樓",
-    "address": "新北市板橋區文化路一段某透天厝住宅4樓",
-    "lat": 25.015855,
-    "lng": 121.456373,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-08-14",
-    "building_type": "透天厝住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2023年08月 · 新北市板橋區文化路一段某透天厝住宅4樓】依內政部不動產成交案件實際資訊（實價登錄）與新北市政府地政局（新北不動產愛連網）公開資料庫備註欄揭露，新北市板橋區文化路一段之透天厝住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "新北市板橋區文化路一段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792415730976-ejlxp",
     "city": "新北市",
     "district": "中和區",
@@ -10710,33 +9983,6 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414672214-kew0z",
-    "city": "新北市",
-    "district": "中和區",
-    "doorplate_address": "新北市中和區興南路二段3樓",
-    "address": "新北市中和區興南路二段3樓",
-    "lat": 24.980074,
-    "lng": 121.508419,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-07-27",
-    "building_type": "傳統公寓住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【中和公公涉砍殺媳婦 檢方相驗驚見逾百刀…頸部僅剩骨頭相連】新北市中和區興南路二段一處公寓昨晚間發生人倫命案，66歲張姓男子疑因家務問題與34歲媳婦發生爭執，涉嫌持刀攻擊致死。據了解，檢方相驗時發現死者全身有大量刀傷，粗估遭砍逾百刀，頭部與身體僅剩頸骨相連。檢方複訊後，認張男涉犯殺人、毀損屍體等罪，向法院聲請羈押禁見。",
-    "source": "聯合新聞網 (UDN)報導「中和公公涉砍殺媳婦 檢方相驗驚見逾百刀…頸部僅剩骨頭相連」",
-    "source_url": "https://udn.com/news/story/7315/9654352",
-    "media_verification": "聯合新聞網 (UDN)報導「中和公公涉砍殺媳婦 檢方相驗驚見逾百刀…頸部僅剩骨頭相連」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "中和公公涉砍殺媳婦 檢方相驗驚見逾百刀…頸部僅剩骨頭相連（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414548207-aws9e",
     "city": "新北市",
     "district": "中和區",
@@ -10767,10 +10013,10 @@
     "id": "news-1792414568611-iajse",
     "city": "新北市",
     "district": "中和區",
-    "doorplate_address": "新北市中和區中和莒光路",
-    "address": "新北市中和區中和莒光路",
-    "lat": 24.994801,
-    "lng": 121.47433,
+    "doorplate_address": "新北市中和區莒光路",
+    "address": "新北市中和區莒光路",
+    "lat": 24.999653,
+    "lng": 121.471647,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2022-02-11",
     "building_type": "集合住宅／民宅建物",
@@ -10791,40 +10037,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414553937-z0dbk",
-    "city": "新北市",
-    "district": "中和區",
-    "doorplate_address": "新北市中和區嫌手機丟路",
-    "address": "新北市中和區嫌手機丟路",
-    "lat": 24.993555,
-    "lng": 121.482136,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-01-12",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【女華僑分屍案》故佈疑陣？犯嫌手機丟路旁 訊息透露輕生念頭】警方追查26歲馬來西亞籍鄧姓女華僑遭人殺害分屍一案，警方研判與鄧在同一層樓租屋居住的44歲林姓房客涉有重嫌。警方追查，在本月8日左右，發現林的手機被棄置在新北中和路旁，手機內還曾傳輕聲訊息給友人。警方不排除他畏罪自殺，但也懷疑他可能故佈疑陣，想誤導警方追查他下落。",
-    "source": "自由時報報導「女華僑分屍案》故佈疑陣？犯嫌手機丟路旁 訊息透露輕生念頭」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/3038044",
-    "media_verification": "自由時報報導「女華僑分屍案》故佈疑陣？犯嫌手機丟路旁 訊息透露輕生念頭」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "自由時報公開報導",
-        "detail": "女華僑分屍案》故佈疑陣？犯嫌手機丟路旁 訊息透露輕生念頭（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414552492-vpger",
     "city": "新北市",
     "district": "中和區",
-    "doorplate_address": "新北市中和區中和保健路",
-    "address": "新北市中和區中和保健路",
-    "lat": 24.996152,
-    "lng": 121.510667,
+    "doorplate_address": "新北市中和區保健路",
+    "address": "新北市中和區保健路",
+    "lat": 24.996934,
+    "lng": 121.509055,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2008-07-11",
     "building_type": "集合住宅／民宅建物",
@@ -11645,12 +10864,12 @@
     "id": "tw-haunted-1792459192639-3fr95",
     "city": "新北市",
     "district": "新莊區",
-    "doorplate_address": "新北市新莊區眾在昌平街",
-    "address": "新北市新莊區眾在昌平街",
-    "lat": 25.057752,
-    "lng": 121.456503,
+    "doorplate_address": "新北市新莊區昌平街",
+    "address": "新北市新莊區昌平街",
+    "lat": 25.054966,
+    "lng": 121.454279,
     "location_accuracy": "ROOFTOP",
-    "incident_date": "2026-08-11",
+    "incident_date": "2024-08-11",
     "building_type": "社區電梯大樓",
     "current_status": "內政部定義列管凶宅",
     "category": "輕生事故",
@@ -11725,33 +10944,6 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414548144-h0tw7",
-    "city": "新北市",
-    "district": "新莊區",
-    "doorplate_address": "新北市新莊區墜落重摔路",
-    "address": "新北市新莊區墜落重摔路",
-    "lat": 25.023574,
-    "lng": 121.43016,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-07-05",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【新北22歲女高處墜落重摔路面 路人驚見嚇壞報案送醫不治】新北市新莊區今天驚傳墜樓死亡意外，有民眾上午11時許行經思源路與幸福東路口時，赫見女子自高處墜落立即報警。救護人員趕抵現場發現女子已無呼吸心跳，緊急將她送醫搶救，但女子因傷重於救護車上不治死亡，女子墜樓原因仍待警方調查。",
-    "source": "聯合新聞網 (UDN)報導「新北22歲女高處墜落重摔路面 路人驚見嚇壞報案送醫不治」",
-    "source_url": "https://udn.com/news/story/7320/9608072",
-    "media_verification": "聯合新聞網 (UDN)報導「新北22歲女高處墜落重摔路面 路人驚見嚇壞報案送醫不治」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "新北22歲女高處墜落重摔路面 路人驚見嚇壞報案送醫不治（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414548149-9l32e",
     "city": "新北市",
     "district": "新莊區",
@@ -11774,33 +10966,6 @@
         "year": "2024",
         "stage": "自由時報公開報導",
         "detail": "新北新莊男子社區墜樓 身體變形當場死亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414569405-t2hsc",
-    "city": "新北市",
-    "district": "新莊區",
-    "doorplate_address": "新北市新莊區墜落重摔路3樓",
-    "address": "新北市新莊區墜落重摔路3樓",
-    "lat": 25.018654,
-    "lng": 121.4283,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-06-01",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【新莊男疑高處墜落重摔路面 頭部變形慘死民眾經過嚇壞】新北市新莊區有民眾今早9時許步行經過新莊區民本街巷弄時，突然聽到巨大撞擊聲，發現1名男子疑從高處墜落倒臥路上嚇得趕緊報警。警方及救護人員到場發現墜樓的是56歲林男，頭部嚴重變形已無呼吸心跳送醫不治，林男確切墜樓原因待查。",
-    "source": "聯合新聞網 (UDN)報導「新莊男疑高處墜落重摔路面 頭部變形慘死民眾經過嚇壞」",
-    "source_url": "https://udn.com/news/story/7320/9538046",
-    "media_verification": "聯合新聞網 (UDN)報導「新莊男疑高處墜落重摔路面 頭部變形慘死民眾經過嚇壞」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "新莊男疑高處墜落重摔路面 頭部變形慘死民眾經過嚇壞（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -11836,10 +11001,10 @@
     "id": "news-1792414553894-oah39",
     "city": "新北市",
     "district": "新莊區",
-    "doorplate_address": "新北市新莊區新莊自立街",
-    "address": "新北市新莊區新莊自立街",
-    "lat": 25.045974,
-    "lng": 121.455283,
+    "doorplate_address": "新北市新莊區自立街",
+    "address": "新北市新莊區自立街",
+    "lat": 25.046255,
+    "lng": 121.45598,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2021-10-21",
     "building_type": "集合住宅／民宅建物",
@@ -11944,10 +11109,10 @@
     "id": "news-1792414552612-rxstd",
     "city": "新北市",
     "district": "新莊區",
-    "doorplate_address": "新北市新莊區新莊中誠街",
-    "address": "新北市新莊區新莊中誠街",
-    "lat": 25.047754,
-    "lng": 121.452331,
+    "doorplate_address": "新北市新莊區中誠街",
+    "address": "新北市新莊區中誠街",
+    "lat": 25.046753,
+    "lng": 121.449481,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2015-09-11",
     "building_type": "出租套房／集合住宅",
@@ -11965,35 +11130,6 @@
         "detail": "收房租赫見情侶燒炭雙亡 警釐清自殺原因（來源連結可點擊直接查閱原篇報導）"
       }
     ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792415615370-mej3r",
-    "city": "新北市",
-    "district": "新莊區",
-    "doorplate_address": "新北市新莊區頭興街",
-    "address": "新北市新莊區頭興街",
-    "lat": 25.051639,
-    "lng": 121.466717,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "1970-01-01",
-    "building_type": "傳統公寓住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【公寓賭場被抄 通緝犯跳樓卡半空】年關將近毒、賭猖獗，新北市新莊區頭興街一處老舊公寓頂樓鐵皮加蓋，上個月剛被查獲職業賭場又重新營業，警方昨天凌晨破門攻堅，逮捕九人聚賭還群聚吸毒；其中李姓男子有三條通緝，他倉皇爬窗跳樓想逃，結果卡在防...",
-    "source": "聯合新聞網 (UDN)報導「公寓賭場被抄 通緝犯跳樓卡半空」",
-    "source_url": "https://vip.udn.com/vip/story/121523/6055418",
-    "media_verification": "聯合新聞網 (UDN)報導「公寓賭場被抄 通緝犯跳樓卡半空」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "1970",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "公寓賭場被抄 通緝犯跳樓卡半空（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "__road": "頭興街",
-    "__community": "",
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
@@ -12703,12 +11839,12 @@
   },
   {
     "id": "news-1792414568633-5o6fr",
-    "city": "新北市",
-    "district": "三重區",
-    "doorplate_address": "新北市三重區北市艋舺大道某住宅大樓",
-    "address": "新北市三重區北市艋舺大道某住宅大樓",
-    "lat": 25.060732,
-    "lng": 121.482623,
+    "city": "臺北市",
+    "district": "萬華區",
+    "doorplate_address": "臺北市萬華區艋舺大道",
+    "address": "臺北市萬華區艋舺大道",
+    "lat": 25.032461,
+    "lng": 121.49635,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-07-11",
     "building_type": "集合住宅／民宅建物",
@@ -12757,12 +11893,12 @@
   },
   {
     "id": "news-1792414548257-z8rs4",
-    "city": "新北市",
-    "district": "三重區",
-    "doorplate_address": "新北市三重區北投翠嶺路",
-    "address": "新北市三重區北投翠嶺路",
-    "lat": 25.064483,
-    "lng": 121.484819,
+    "city": "臺北市",
+    "district": "北投區",
+    "doorplate_address": "臺北市北投區翠嶺路",
+    "address": "臺北市北投區翠嶺路",
+    "lat": 25.14285,
+    "lng": 121.506875,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-03-05",
     "building_type": "集合住宅／民宅建物",
@@ -12885,10 +12021,10 @@
     "id": "news-1792414553937-t47yg",
     "city": "新北市",
     "district": "三重區",
-    "doorplate_address": "新北市三重區重河邊北街",
-    "address": "新北市三重區重河邊北街",
-    "lat": 25.070688,
-    "lng": 121.505773,
+    "doorplate_address": "新北市三重區河邊北街",
+    "address": "新北市三重區河邊北街",
+    "lat": 25.069936,
+    "lng": 121.504134,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2020-01-13",
     "building_type": "傳統公寓住宅",
@@ -12912,10 +12048,10 @@
     "id": "news-1792414548301-u602b",
     "city": "新北市",
     "district": "三重區",
-    "doorplate_address": "新北市三重區重長壽西街",
-    "address": "新北市三重區重長壽西街",
-    "lat": 25.066635,
-    "lng": 121.495755,
+    "doorplate_address": "新北市三重區長壽西街",
+    "address": "新北市三重區長壽西街",
+    "lat": 25.066015,
+    "lng": 121.495293,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2018-05-25",
     "building_type": "集合住宅／民宅建物",
@@ -12958,33 +12094,6 @@
         "year": "2015",
         "stage": "自由時報公開報導",
         "detail": "靈犬吠不停 女子才知竟租到凶宅（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414574682-44rz1",
-    "city": "新北市",
-    "district": "三重區",
-    "doorplate_address": "新北市三重區雙方沿路",
-    "address": "新北市三重區雙方沿路",
-    "lat": 25.063424,
-    "lng": 121.487991,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2008-04-16",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【北縣警匪槍戰 殺人要犯落網】北縣三重市上月發生男子王建福太陽穴中彈命案，中和警方昨天前往土城圍捕涉案的44歲主嫌詹越麟，雙方沿路追逐駁火29槍，嚇壞附近居民，詹嫌右大腿中彈後逃往民宅頂樓，在遮雨棚上負嵎頑抗，終在警網圍捕下就逮。警方調查，詹嫌為了「錢」，即使是至交好友，也可以翻臉。詹嫌供稱，擔任組頭的王建福積欠他上千萬佣金，王",
-    "source": "自由時報報導「北縣警匪槍戰 殺人要犯落網」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/78286",
-    "media_verification": "自由時報報導「北縣警匪槍戰 殺人要犯落網」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2008",
-        "stage": "自由時報公開報導",
-        "detail": "北縣警匪槍戰 殺人要犯落網（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -13665,33 +12774,6 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414569400-8qofg",
-    "city": "新北市",
-    "district": "新店區",
-    "doorplate_address": "新北市新店區中正路",
-    "address": "新北市新店區中正路",
-    "lat": 24.976413,
-    "lng": 121.531068,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-11-03",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【不是流浪狗！山羌遭分屍丟棄安全島 新北動保處將開罰】新北市新店區中正路與環河路的交會口安全島樹叢中，今天上午發現疑似流浪狗屍塊被丟棄其中，經在地忠孝里長游皓麟通報動保處趕到將屍塊帶回檢驗，初步認定應為保育類的山羌屍塊，動保處仍會依違反野生動物保育法追查棄置者。動保處表示，現場查獲兩具頭骨、內臟及皮毛，依據頭型、牙齒、耳朵形狀，初判是山羌，審慎起見，已",
-    "source": "自由時報報導「不是流浪狗！山羌遭分屍丟棄安全島 新北動保處將開罰」",
-    "source_url": "https://news.ltn.com.tw/news/life/breakingnews/4478492",
-    "media_verification": "自由時報報導「不是流浪狗！山羌遭分屍丟棄安全島 新北動保處將開罰」；自由時報報導「新店逆子不滿母親責備不找工作 持菜刀弒母剁頭被起訴」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "自由時報公開報導",
-        "detail": "不是流浪狗！山羌遭分屍丟棄安全島 新北動保處將開罰（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414550001-zzbnv",
     "city": "新北市",
     "district": "新店區",
@@ -13722,10 +12804,10 @@
     "id": "news-1792414553936-i7onp",
     "city": "新北市",
     "district": "新店區",
-    "doorplate_address": "新北市新店區人在安民街",
-    "address": "新北市新店區人在安民街",
-    "lat": 24.972883,
-    "lng": 121.520176,
+    "doorplate_address": "新北市新店區安民街",
+    "address": "新北市新店區安民街",
+    "lat": 24.9706,
+    "lng": 121.516322,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2021-02-24",
     "building_type": "集合住宅／民宅建物",
@@ -13741,33 +12823,6 @@
         "year": "2021",
         "stage": "自由時報公開報導",
         "detail": "家屬3個月找不到女兒 新店租屋處驚見與男友輕生雙亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414548213-92n7i",
-    "city": "新北市",
-    "district": "新店區",
-    "doorplate_address": "新北市新店區兒子倒臥路",
-    "address": "新北市新店區兒子倒臥路",
-    "lat": 24.978143,
-    "lng": 121.538694,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-10-12",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【海軍官校新生住家墜樓亡 母查看崩潰痛哭】新北市新店區今凌晨驚傳有名海軍官校一年級王姓新生昨晚收假未歸，從自家墜樓身亡，據媒體消息指出，王男昨晚墜樓時發出巨大聲響，當時他媽媽也立刻前往查看，沒想到卻看到兒子倒臥路面，讓她當場崩潰痛哭。本報報導指出，海軍官校一年級王姓學生於今年暑假受訓後進入海軍官校就讀，但昨（11）日晚間9點收假，卻被幹部發",
-    "source": "自由時報報導「海軍官校新生住家墜樓亡 母查看崩潰痛哭」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/3318388",
-    "media_verification": "自由時報報導「海軍官校新生住家墜樓亡 母查看崩潰痛哭」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "自由時報公開報導",
-        "detail": "海軍官校新生住家墜樓亡 母查看崩潰痛哭（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -13803,10 +12858,10 @@
     "id": "news-1792414570132-t2evy",
     "city": "新北市",
     "district": "新店區",
-    "doorplate_address": "新北市新店區新店中興路三段",
-    "address": "新北市新店區新店中興路三段",
-    "lat": 24.977232,
-    "lng": 121.544475,
+    "doorplate_address": "新北市新店區中興路三段",
+    "address": "新北市新店區中興路三段（集合住宅／民宅建物·2020-01）",
+    "lat": 24.981327,
+    "lng": 121.544649,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2020-01-28",
     "building_type": "集合住宅／民宅建物",
@@ -14632,11 +13687,11 @@
   {
     "id": "news-1792415563443-j7t32",
     "city": "新北市",
-    "district": "永和區",
-    "doorplate_address": "新北市永和區和區中正路",
-    "address": "新北市永和區和區中正路",
-    "lat": 25.009181,
-    "lng": 121.512383,
+    "district": "中和區",
+    "doorplate_address": "新北市中和區中正路",
+    "address": "新北市中和區中正路（社區電梯大樓·2025-10）",
+    "lat": 25.001453,
+    "lng": 121.486206,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-10-15",
     "building_type": "社區電梯大樓",
@@ -14686,40 +13741,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414548146-kgtlu",
-    "city": "新北市",
-    "district": "永和區",
-    "doorplate_address": "新北市永和區和區中正路3樓",
-    "address": "新北市永和區和區中正路3樓",
-    "lat": 25.014542,
-    "lng": 121.51607,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-04-29",
-    "building_type": "社區電梯大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【永和4歲男童15樓墜落不治 母獨留童在家外出釀憾事】新北市永和區昨晚發生墜樓死亡憾事。住中和區中正路1棟社區大樓的4歲男童，晚間8時許不明原因自15樓陽台墜落重摔中庭。救護人員到場發現男童已無生命跡象，送醫急救仍宣告不治。據了解，當時男童母親外出獨留男童在家。",
-    "source": "聯合新聞網 (UDN)報導「永和4歲男童15樓墜落不治 母獨留童在家外出釀憾事」",
-    "source_url": "https://udn.com/news/story/7320/9470939",
-    "media_verification": "聯合新聞網 (UDN)報導「永和4歲男童15樓墜落不治 母獨留童在家外出釀憾事」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "永和4歲男童15樓墜落不治 母獨留童在家外出釀憾事（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414569365-8gv6z",
     "city": "新北市",
     "district": "永和區",
-    "doorplate_address": "新北市永和區孫男智光街",
-    "address": "新北市永和區孫男智光街",
-    "lat": 25.001166,
-    "lng": 121.515454,
+    "doorplate_address": "新北市永和區智光街",
+    "address": "新北市永和區智光街",
+    "lat": 24.997295,
+    "lng": 121.516169,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2022-09-05",
     "building_type": "集合住宅／民宅建物",
@@ -14770,10 +13798,10 @@
     "id": "news-1792414548266-osbyl",
     "city": "新北市",
     "district": "永和區",
-    "doorplate_address": "新北市永和區票在雙和街",
-    "address": "新北市永和區票在雙和街",
-    "lat": 25.001364,
-    "lng": 121.509549,
+    "doorplate_address": "新北市永和區雙和街",
+    "address": "新北市永和區雙和街",
+    "lat": 25.001739,
+    "lng": 121.509843,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2021-12-09",
     "building_type": "集合住宅／民宅建物",
@@ -14887,46 +13915,6 @@
     "precision": "unknown",
     "archive_url": "",
     "doorplate_address": "新北市永和區民權路某社區大樓",
-    "db_source": "JUDICIAL_AUCTION"
-  },
-  {
-    "id": 2611,
-    "city": "新北市",
-    "district": "永和區",
-    "address": "新北市永和區雙和街某公寓3樓",
-    "lat": 25.002115,
-    "lng": 121.506559,
-    "incident_date": "2021-12-08",
-    "category": "法拍與其他",
-    "reason": "【2021年12月 · 新北市永和區雙和街某公寓3樓】54歲符姓男子因不滿八旬父親長期對失智母親言語虐待與暴力，趁父親睡夢中將其殘忍掐死，並將遺體藏於頂樓加蓋，後因屍臭難耐將遺體肢解後載往瓦窯溝棄屍。",
-    "source": "自由時報 / 聯合報社會版新聞、臺灣新北地方法院刑事判決",
-    "created_at": "2026-10-19T00:45:41.143613+00:00",
-    "verification_status": "unverified",
-    "location_accuracy": "unknown",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "案發與媒體/警消紀錄",
-        "detail": "嫌犯殺父肢解後棄屍瓦窯溝，經民眾發現無頭無四肢軀幹後警方迅速破案並封鎖現場採證。"
-      },
-      {
-        "year": "2022",
-        "stage": "法院判決與產權註記",
-        "detail": "法院依殺人、毀損遺棄屍體罪判刑，房屋已被業界列為永久重大凶宅。"
-      }
-    ],
-    "media_verification": "自由時報 / 聯合報社會版新聞、臺灣新北地方法院刑事判決",
-    "auction_record": "事件爆發後該戶並未進入公開法拍市場，但因屬於極度嚴重之家庭分屍殺人命案，房仲業內部均建立極高風險事故建物檔案。",
-    "source_url": "",
-    "verification_score": 86,
-    "audit_note": "經多模型與歷年法拍紙媒交叉比對確認",
-    "case_fingerprint": "",
-    "source_type": "unknown",
-    "judicial_case_id": "",
-    "evidence_quality": "unverified",
-    "precision": "unknown",
-    "archive_url": "",
-    "doorplate_address": "新北市永和區雙和街某公寓3樓",
     "db_source": "JUDICIAL_AUCTION"
   },
   {
@@ -15293,35 +14281,6 @@
     "db_source": "JUDICIAL_AUCTION"
   },
   {
-    "id": 1076,
-    "city": "新北市",
-    "district": "永和區",
-    "address": "新北市永和區智光街某公寓3樓",
-    "lat": 24.993947,
-    "lng": 121.516972,
-    "incident_date": "2022-09-05",
-    "category": "刑事命案",
-    "reason": "【2022年09月 · 新北市永和區智光街某公寓3樓】永和分屍案。一名男子因金錢糾紛遭親哥哥殺害並肢解，遺體於住處被發現時僅剩軀幹與左腳，現場血跡斑斑。",
-    "source": "司法院法拍屋筆錄 / 歷年紙媒社會版卷宗",
-    "created_at": "2026-10-18T11:56:33.102795+00:00",
-    "verification_status": "unverified",
-    "location_accuracy": "unknown",
-    "history_timeline": [],
-    "media_verification": "歷年紙媒社會版報導（聯合報、中國時報、自由時報地方版）、地方法院民事執行處法拍公告筆錄與內政部實價登錄特殊交易備註。",
-    "auction_record": "",
-    "source_url": "",
-    "verification_score": 80,
-    "audit_note": "",
-    "case_fingerprint": "",
-    "source_type": "unknown",
-    "judicial_case_id": "",
-    "evidence_quality": "unverified",
-    "precision": "unknown",
-    "archive_url": "",
-    "doorplate_address": "新北市永和區智光街某公寓3樓",
-    "db_source": "JUDICIAL_AUCTION"
-  },
-  {
     "id": 5267,
     "city": "新北市",
     "district": "永和區",
@@ -15616,33 +14575,6 @@
         "year": "2018",
         "stage": "自由時報公開報導",
         "detail": "疑女友提分手受打擊 土城男家中燒炭亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414548292-xfp3m",
-    "city": "新北市",
-    "district": "土城區",
-    "doorplate_address": "新北市土城區明德路",
-    "address": "新北市土城區明德路",
-    "lat": 24.967581,
-    "lng": 121.437559,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2018-10-23",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "意外身亡",
-    "reason": "【蠻力女發酒瘋鬧輕生 男同事上衣慘被撕成V領衫】新北市土城區明德路上一間檳榔攤，昨天深夜近0點時傳出疑似火警，警消人員到場發現輕微火煙，但攤位鐵捲門緊閉且上鎖，當機立斷從側面破窗而入，驚見45歲林姓女子正在屋內燒炭，立即撲滅炭火救出林女。林女被救出後情緒仍相當激動，咆哮質問「為什麼要救我？我又沒有怎樣！」還不斷伸出手腳推打，經評估任其離去恐有自傷",
-    "source": "自由時報報導「蠻力女發酒瘋鬧輕生 男同事上衣慘被撕成V領衫」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/2589538",
-    "media_verification": "自由時報報導「蠻力女發酒瘋鬧輕生 男同事上衣慘被撕成V領衫」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2018",
-        "stage": "自由時報公開報導",
-        "detail": "蠻力女發酒瘋鬧輕生 男同事上衣慘被撕成V領衫（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -16127,60 +15059,6 @@
     ]
   },
   {
-    "id": 5280,
-    "city": "新北市",
-    "district": "土城區",
-    "doorplate_address": "新北市土城區明德路一段某電梯華廈2樓",
-    "address": "新北市土城區明德路一段某電梯華廈2樓",
-    "lat": 24.978139,
-    "lng": 121.452994,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2017-04-10",
-    "building_type": "電梯華廈",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2017年04月 · 新北市土城區明德路一段某電梯華廈2樓】依據公開消防災情與社會新聞通報紀錄，新北市土城區明德路一段一處電梯華廈發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2017年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2017年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2017",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新北市土城區明德路一段電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5281,
-    "city": "新北市",
-    "district": "土城區",
-    "doorplate_address": "新北市土城區延吉街某傳統公寓住宅6樓",
-    "address": "新北市土城區延吉街某傳統公寓住宅6樓",
-    "lat": 24.978554,
-    "lng": 121.46717,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-10-22",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2014年10月 · 新北市土城區延吉街某傳統公寓住宅6樓】依內政部不動產成交案件實際資訊（實價登錄）與新北市政府地政局（新北不動產愛連網）公開資料庫備註欄揭露，新北市土城區延吉街之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "新北市土城區延吉街傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5282,
     "city": "新北市",
     "district": "土城區",
@@ -16211,10 +15089,10 @@
     "id": "news-1792414548146-m6q3x",
     "city": "新北市",
     "district": "蘆洲區",
-    "doorplate_address": "新北市蘆洲區表示長興路",
-    "address": "新北市蘆洲區表示長興路",
-    "lat": 25.089633,
-    "lng": 121.462699,
+    "doorplate_address": "新北市蘆洲區長興路",
+    "address": "新北市蘆洲區長興路",
+    "lat": 25.086605,
+    "lng": 121.461431,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-04-14",
     "building_type": "社區電梯大樓",
@@ -16237,11 +15115,11 @@
   {
     "id": "news-1792414570251-g8400",
     "city": "新北市",
-    "district": "蘆洲區",
-    "doorplate_address": "新北市蘆洲區股區民義路",
-    "address": "新北市蘆洲區股區民義路",
-    "lat": 25.088783,
-    "lng": 121.473014,
+    "district": "五股區",
+    "doorplate_address": "新北市五股區民義路一段",
+    "address": "新北市五股區民義路一段",
+    "lat": 25.089109,
+    "lng": 121.429924,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-04-14",
     "building_type": "電梯華廈",
@@ -16324,10 +15202,10 @@
     "id": "news-1792414553961-ivb2e",
     "city": "新北市",
     "district": "蘆洲區",
-    "doorplate_address": "新北市蘆洲區蘆洲長安街",
-    "address": "新北市蘆洲區蘆洲長安街",
-    "lat": 25.084556,
-    "lng": 121.458217,
+    "doorplate_address": "新北市蘆洲區長安街",
+    "address": "新北市蘆洲區長安街",
+    "lat": 25.082829,
+    "lng": 121.45907,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2016-08-17",
     "building_type": "出租套房／集合住宅",
@@ -16825,33 +15703,6 @@
     ]
   },
   {
-    "id": 5292,
-    "city": "新北市",
-    "district": "蘆洲區",
-    "doorplate_address": "新北市蘆洲區光華路某傳統公寓住宅7樓",
-    "address": "新北市蘆洲區光華路某傳統公寓住宅7樓",
-    "lat": 25.085074,
-    "lng": 121.469088,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-06-09",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2016年06月 · 新北市蘆洲區光華路某傳統公寓住宅7樓】依內政部不動產成交案件實際資訊（實價登錄）與新北市政府地政局（新北不動產愛連網）公開資料庫備註欄揭露，新北市蘆洲區光華路之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "新北市蘆洲區光華路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5293,
     "city": "新北市",
     "district": "蘆洲區",
@@ -16875,33 +15726,6 @@
         "year": "2013",
         "stage": "內政部定義列管凶宅",
         "detail": "新北市蘆洲區九芎街電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5294,
-    "city": "新北市",
-    "district": "蘆洲區",
-    "doorplate_address": "新北市蘆洲區永平街某傳統公寓住宅4樓",
-    "address": "新北市蘆洲區永平街某傳統公寓住宅4樓",
-    "lat": 25.090389,
-    "lng": 121.454781,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-06-06",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年06月 · 新北市蘆洲區永平街某傳統公寓住宅4樓】依據公開消防災情與社會新聞通報紀錄，新北市蘆洲區永平街一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2023年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2023年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新北市蘆洲區永平街傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -16963,10 +15787,10 @@
     "id": "news-1792414549958-eqo6m",
     "city": "新北市",
     "district": "汐止區",
-    "doorplate_address": "新北市汐止區汐止康寧街",
-    "address": "新北市汐止區汐止康寧街",
-    "lat": 25.072991,
-    "lng": 121.634561,
+    "doorplate_address": "新北市汐止區康寧街",
+    "address": "新北市汐止區康寧街",
+    "lat": 25.070163,
+    "lng": 121.635253,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-08-30",
     "building_type": "社區電梯大樓",
@@ -16990,10 +15814,10 @@
     "id": "news-1792414570929-2c12l",
     "city": "新北市",
     "district": "汐止區",
-    "doorplate_address": "新北市汐止區坐在仁愛路",
-    "address": "新北市汐止區坐在仁愛路",
-    "lat": 25.065829,
-    "lng": 121.666943,
+    "doorplate_address": "新北市汐止區仁愛路",
+    "address": "新北市汐止區仁愛路",
+    "lat": 25.06423,
+    "lng": 121.663527,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-05-23",
     "building_type": "集合住宅／民宅建物",
@@ -17490,33 +16314,6 @@
     ]
   },
   {
-    "id": 5304,
-    "city": "新北市",
-    "district": "汐止區",
-    "doorplate_address": "新北市汐止區福德二路某傳統公寓住宅10樓",
-    "address": "新北市汐止區福德二路某傳統公寓住宅10樓",
-    "lat": 25.061683,
-    "lng": 121.624859,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-06-06",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2022年06月 · 新北市汐止區福德二路某傳統公寓住宅10樓】依內政部不動產成交案件實際資訊（實價登錄）與新北市政府地政局（新北不動產愛連網）公開資料庫備註欄揭露，新北市汐止區福德二路之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新北市政府地政局（新北不動產愛連網）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "新北市汐止區福德二路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5305,
     "city": "新北市",
     "district": "汐止區",
@@ -17540,33 +16337,6 @@
         "year": "2019",
         "stage": "內政部定義列管凶宅",
         "detail": "新北市汐止區樟樹一路出租套房／公寓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5306,
-    "city": "新北市",
-    "district": "汐止區",
-    "doorplate_address": "新北市汐止區明峰街某傳統公寓住宅7樓",
-    "address": "新北市汐止區明峰街某傳統公寓住宅7樓",
-    "lat": 25.072855,
-    "lng": 121.630238,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-06-03",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年06月 · 新北市汐止區明峰街某傳統公寓住宅7樓】依據公開消防災情與社會新聞通報紀錄，新北市汐止區明峰街一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2016年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2016年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新北市汐止區明峰街傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -17630,10 +16400,10 @@
     "id": "news-1792414570799-rzh47",
     "city": "新北市",
     "district": "淡水區",
-    "doorplate_address": "新北市淡水區淡水濱海路",
-    "address": "新北市淡水區淡水濱海路",
-    "lat": 25.189851,
-    "lng": 121.441153,
+    "doorplate_address": "新北市淡水區濱海路一段",
+    "address": "新北市淡水區濱海路一段",
+    "lat": 25.189227,
+    "lng": 121.441524,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-10-15",
     "building_type": "集合住宅／民宅建物",
@@ -17657,10 +16427,10 @@
     "id": "news-1792414553934-qywg5",
     "city": "新北市",
     "district": "淡水區",
-    "doorplate_address": "新北市淡水區屍在濱海路二段",
-    "address": "新北市淡水區屍在濱海路二段",
-    "lat": 25.187251,
-    "lng": 121.430898,
+    "doorplate_address": "新北市淡水區濱海路二段",
+    "address": "新北市淡水區濱海路二段",
+    "lat": 25.190176,
+    "lng": 121.435034,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-10-14",
     "building_type": "集合住宅／民宅建物",
@@ -17738,10 +16508,10 @@
     "id": "news-1792414573190-39pdu",
     "city": "新北市",
     "district": "淡水區",
-    "doorplate_address": "新北市淡水區樓男陳屍路",
-    "address": "新北市淡水區樓男陳屍路",
-    "lat": 25.134573,
-    "lng": 121.462785,
+    "doorplate_address": "新北市淡水區中山路",
+    "address": "新北市淡水區中山路",
+    "lat": 25.171343,
+    "lng": 121.442075,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2017-05-04",
     "building_type": "集合住宅／民宅建物",
@@ -18183,33 +16953,6 @@
     ]
   },
   {
-    "id": 5315,
-    "city": "新北市",
-    "district": "淡水區",
-    "doorplate_address": "新北市淡水區新市一路三段某透天厝住宅3樓",
-    "address": "新北市淡水區新市一路三段某透天厝住宅3樓",
-    "lat": 25.178387,
-    "lng": 121.44413,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-11-17",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2015年11月 · 新北市淡水區新市一路三段某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣新北地方法院刑事判決紀錄，新北市淡水區新市一路三段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "source_url": "",
-    "media_verification": "臺灣新北地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新北市淡水區新市一路三段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5316,
     "city": "新北市",
     "district": "淡水區",
@@ -18345,40 +17088,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414570185-51w13",
-    "city": "新北市",
-    "district": "樹林區",
-    "doorplate_address": "新北市樹林區男子路",
-    "address": "新北市樹林區男子路",
-    "lat": 24.95715,
-    "lng": 121.405878,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2021-02-05",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【燒肉粽事件翻版？ 樹林婦人墜樓不治 男子路過遭壓傷命危】險釀燒肉粽事件翻版！新北市樹林昨晚驚傳一名丁姓婦人從住處墜落，壓到路過的吳姓男子，丁婦墜落的重力加速度正中吳男，兩人雙雙失去生命徵象，丁婦到院急救不治，吳男則恢復生命徵象，但未脫險，至於事發原因、責任歸屬，仍待進一步調查釐清這起宛如燒肉粽翻版的意外發生在昨晚8時許，樹林太元街一處大樓，66歲丁女不明",
-    "source": "自由時報報導「燒肉粽事件翻版？ 樹林婦人墜樓不治 男子路過遭壓傷命危」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/3433965",
-    "media_verification": "自由時報報導「燒肉粽事件翻版？ 樹林婦人墜樓不治 男子路過遭壓傷命危」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "自由時報公開報導",
-        "detail": "燒肉粽事件翻版？ 樹林婦人墜樓不治 男子路過遭壓傷命危（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414570186-czqcu",
     "city": "新北市",
     "district": "樹林區",
-    "doorplate_address": "新北市樹林區樹林中華路",
-    "address": "新北市樹林區樹林中華路",
-    "lat": 24.979017,
-    "lng": 121.420249,
+    "doorplate_address": "新北市樹林區中華路",
+    "address": "新北市樹林區中華路",
+    "lat": 24.981987,
+    "lng": 121.419092,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2017-06-18",
     "building_type": "集合住宅／民宅建物",
@@ -18855,10 +17571,10 @@
     "id": "news-1792414553956-60z7k",
     "city": "新北市",
     "district": "林口區",
-    "doorplate_address": "新北市林口區口文化三路",
-    "address": "新北市林口區口文化三路",
-    "lat": 25.065039,
-    "lng": 121.35905,
+    "doorplate_address": "新北市林口區文化三路一段",
+    "address": "新北市林口區文化三路一段",
+    "lat": 25.072822,
+    "lng": 121.365263,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-10-19",
     "building_type": "社區電梯大樓",
@@ -19824,10 +18540,10 @@
     "id": "news-1792414571588-d8c8x",
     "city": "新北市",
     "district": "五股區",
-    "doorplate_address": "新北市五股區五股西雲路",
-    "address": "新北市五股區五股西雲路",
-    "lat": 25.090359,
-    "lng": 121.444867,
+    "doorplate_address": "新北市五股區西雲路",
+    "address": "新北市五股區西雲路",
+    "lat": 25.093751,
+    "lng": 121.446383,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2015-08-31",
     "building_type": "傳統公寓住宅",
@@ -19851,10 +18567,10 @@
     "id": "news-1792414571603-ujnfq",
     "city": "新北市",
     "district": "五股區",
-    "doorplate_address": "新北市五股區五股西雲路3樓",
-    "address": "新北市五股區五股西雲路3樓",
-    "lat": 25.097872,
-    "lng": 121.450912,
+    "doorplate_address": "新北市五股區西雲路",
+    "address": "新北市五股區西雲路（社區電梯大樓·2015-04）",
+    "lat": 25.093979,
+    "lng": 121.445167,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2015-04-30",
     "building_type": "社區電梯大樓",
@@ -21024,62 +19740,6 @@
     ]
   },
   {
-    "id": "tw-haunted-1792416624087-h90r9",
-    "city": "新北市",
-    "district": "瑞芳區",
-    "doorplate_address": "新北市瑞芳區三爪子坑路",
-    "address": "新北市瑞芳區三爪子坑路",
-    "lat": 25.109943,
-    "lng": 121.81166,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2026-02-20",
-    "building_type": "集合住宅／民宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【瑞芳民宅疑一氧化碳中毒 全家老小9人送醫幸無大礙】今天凌晨位於瑞芳區三爪子坑路一處民眾疑發生一氧化碳中毒事件，警消在凌晨12點51分許接獲民眾報案指，稱家中2人出現昏迷，...",
-    "source": "聯合新聞網 (UDN)報導「瑞芳民宅疑一氧化碳中毒 全家老小9人送醫幸無大礙」",
-    "source_url": "https://udn.com/news/story/7320/9335300",
-    "media_verification": "聯合新聞網 (UDN)報導「瑞芳民宅疑一氧化碳中毒 全家老小9人送醫幸無大礙」",
-    "auction_record": "依內政部不動產說明書應記載事項列為專有部分非自然死亡（凶宅）紀錄",
-    "history_timeline": [
-      {
-        "year": "2026",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "瑞芳民宅疑一氧化碳中毒 全家老小9人送醫幸無大礙（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "__road": "三爪子坑路",
-    "__community": ""
-  },
-  {
-    "id": "news-1792414572283-sq9vd",
-    "city": "新北市",
-    "district": "瑞芳區",
-    "doorplate_address": "新北市瑞芳區下險壓傷路",
-    "address": "新北市瑞芳區下險壓傷路",
-    "lat": 25.101299,
-    "lng": 121.819772,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-08-12",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【新北家暴男地檢署返家後頂樓墜下險壓傷路人 送醫不治亡】新北市瑞芳區49歲吳姓男子昨日因涉及家暴案件被移送到地檢署，檢察官諭令飭回後返回家中。沒想到深夜11時許，驚傳吳男從住處頂樓墜落，險些壓傷路過民眾，但因撞擊力道猛烈，送醫搶救於今日凌晨宣告不治。警方初步調查，吳姓男子因涉案被移送到基隆地檢署，昨日晚間飭回後返回家中，沒想到在深夜卻傳出墜樓噩耗，還差點",
-    "source": "自由時報報導「新北家暴男地檢署返家後頂樓墜下險壓傷路人 送醫不治亡」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4766579",
-    "media_verification": "自由時報報導「新北家暴男地檢署返家後頂樓墜下險壓傷路人 送醫不治亡」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "新北家暴男地檢署返家後頂樓墜下險壓傷路人 送醫不治亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "sb-2862",
     "city": "新北市",
     "district": "瑞芳區",
@@ -21613,10 +20273,10 @@
     "id": "news-1792414547818-oviv7",
     "city": "新北市",
     "district": "三芝區",
-    "doorplate_address": "新北市三芝區芝芝麻五街",
-    "address": "新北市三芝區芝芝麻五街",
-    "lat": 25.244303,
-    "lng": 121.474758,
+    "doorplate_address": "新北市三芝區芝麻五街",
+    "address": "新北市三芝區芝麻五街",
+    "lat": 25.246435,
+    "lng": 121.475602,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2019-08-20",
     "building_type": "集合住宅／民宅建物",
@@ -22314,42 +20974,13 @@
     ]
   },
   {
-    "id": "tw-haunted-1792416362323-lr1gj",
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區「心晴社區」",
-    "address": "桃園市桃園區「心晴社區」",
-    "lat": 25.012109,
-    "lng": 121.300727,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-10-15",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【高密度住宅藏輕生風險 桃園推「心晴社區」防墜、心理關懷納評選】桃市府分析2023年至2026年初自殺防治通報資料，結果顯示，約有68%案件發生於住宅空間，且多數個案在事發前已有明顯徵兆卻未被及時察覺。為強化住宅場域的心理健康守護，衛生局今年擴大推動「心晴社區計畫」，預計招募25個以上社區參與，並結合建築管理處優良公寓大廈評選機制，把防墜安全措施與社區關懷服務納入重要評分項目，即日起至6月15日受理申請。",
-    "source": "聯合新聞網 (UDN)報導「高密度住宅藏輕生風險 桃園推「心晴社區」防墜、心理關懷納評選」",
-    "source_url": "https://udn.com/news/story/7324/9473958",
-    "media_verification": "聯合新聞網 (UDN)報導「高密度住宅藏輕生風險 桃園推「心晴社區」防墜、心理關懷納評選」",
-    "auction_record": "依內政部不動產說明書應記載事項列為專有部分非自然死亡（凶宅）紀錄",
-    "history_timeline": [
-      {
-        "year": "2026",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "高密度住宅藏輕生風險 桃園推「心晴社區」防墜、心理關懷納評選（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "__road": "",
-    "__community": "心晴社區"
-  },
-  {
     "id": "news-1792414663539-ms52a",
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區民生北路",
-    "address": "桃園市桃園區民生北路",
-    "lat": 24.994888,
-    "lng": 121.309008,
+    "city": "嘉義市",
+    "district": "西區",
+    "doorplate_address": "嘉義市西區民生北路",
+    "address": "嘉義市西區民生北路",
+    "lat": 23.479033,
+    "lng": 120.446016,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-10-18",
     "building_type": "傳統公寓住宅",
@@ -22365,87 +20996,6 @@
         "year": "2024",
         "stage": "聯合新聞網 (UDN)公開報導",
         "detail": "嘉市出租公寓命案！60歲男身中多刀 72歲鄰房房客桃園落網（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414550003-1guet",
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區嚇壞路",
-    "address": "桃園市桃園區嚇壞路",
-    "lat": 25.014461,
-    "lng": 121.294526,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-01-26",
-    "building_type": "高層豪宅社區大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【桃園藝文特區豪宅驚傳紅衣婦墜落 嚇壞路人警釐清墜樓原因】桃園市藝文特區今天清晨發生墜樓事件，一名約65歲婦人身穿紅衣從住家大樓墜落身亡。據了解，事發時間約在凌晨5時許，當時同...",
-    "source": "聯合新聞網 (UDN)報導「桃園藝文特區豪宅驚傳紅衣婦墜落 嚇壞路人警釐清墜樓原因」",
-    "source_url": "https://udn.com/news/story/7320/9288705",
-    "media_verification": "聯合新聞網 (UDN)報導「桃園藝文特區豪宅驚傳紅衣婦墜落 嚇壞路人警釐清墜樓原因」；自由時報報導「桃園藝文特區豪宅墜樓意外 紅衣婦人倒臥人行道」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "桃園藝文特區豪宅驚傳紅衣婦墜落 嚇壞路人警釐清墜樓原因（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414548099-024s8",
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區興二街",
-    "address": "桃園市桃園區興二街",
-    "lat": 25.016658,
-    "lng": 121.315973,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-07-07",
-    "building_type": "透天住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【2020年07月 · 桃園市桃園區興二街】法務部行政執行署桃園分署今天進行查扣物聯合拍賣會，拍賣標的包括賓士車、機捷A7合宜宅、桃園市桃園區興二街透天凶宅，先前即備受矚目，吸引各路買家搶標，全部銷售一空，為國庫追回1721萬餘元。拍賣會於今天上午先於桃園市桃園區富國路100號率先拍賣7輛汽車，其中一輛2014年份黑色賓士車車況良好，並附有鑰",
-    "source": "自由時報報導「行政執行署桃園分署大拍賣 賓士車、凶宅、合宜宅搶光光」",
-    "source_url": "https://news.ltn.com.tw/news/life/breakingnews/3220979",
-    "media_verification": "自由時報報導「行政執行署桃園分署大拍賣 賓士車、凶宅、合宜宅搶光光」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "自由時報公開報導",
-        "detail": "行政執行署桃園分署大拍賣 賓士車、凶宅、合宜宅搶光光（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414548074-rebi4",
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區中正路",
-    "address": "桃園市桃園區中正路",
-    "lat": 25.011042,
-    "lng": 121.301018,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-01-24",
-    "building_type": "出租套房／集合住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【兇嫌陳福祥落網 起出火力強大槍彈】西門町雙屍命案，雙槍俠兇嫌陳福祥今天清晨在桃園市桃園區中正路一處大樓套房落網，警方於今晨6時40分攻堅時，陳福祥還在睡夢中，逮捕過程中，沒有動用一槍一彈相當順利，在現場查獲1把長槍、1把短槍與165發子彈，人已帶回台北偵辦。 警方調查，由刑事局、台北市刑大、萬華分局，桃園市刑大組成專案小組，經漏夜埋",
-    "source": "自由時報報導「兇嫌陳福祥落網 起出火力強大槍彈」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/1214174",
-    "media_verification": "自由時報報導「兇嫌陳福祥落網 起出火力強大槍彈」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "自由時報公開報導",
-        "detail": "兇嫌陳福祥落網 起出火力強大槍彈（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -23026,33 +21576,6 @@
     ]
   },
   {
-    "id": 5400,
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區慈文路某傳統公寓住宅9樓",
-    "address": "桃園市桃園區慈文路某傳統公寓住宅9樓",
-    "lat": 25.009566,
-    "lng": 121.296475,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-02-17",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年02月 · 桃園市桃園區慈文路某傳統公寓住宅9樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，桃園市桃園區慈文路一處傳統公寓住宅住戶於屋內專有部分發生輕生非自然身亡事件，經桃園市政府警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2016年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2016年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "桃園市桃園區慈文路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5401,
     "city": "桃園市",
     "district": "桃園區",
@@ -23103,33 +21626,6 @@
         "year": "2023",
         "stage": "實價登錄特殊交易凶宅",
         "detail": "桃園市桃園區大興西路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5403,
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區三民路三段某電梯華廈10樓",
-    "address": "桃園市桃園區三民路三段某電梯華廈10樓",
-    "lat": 24.987827,
-    "lng": 121.309301,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-08-26",
-    "building_type": "電梯華廈",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2020年08月 · 桃園市桃園區三民路三段某電梯華廈10樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，桃園市桃園區三民路三段一處電梯華廈住戶於屋內專有部分發生輕生非自然身亡事件，經桃園市政府警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2020年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2020年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "內政部定義列管凶宅",
-        "detail": "桃園市桃園區三民路三段電梯華廈經公開資料庫登錄列管"
       }
     ]
   },
@@ -23269,33 +21765,6 @@
     ]
   },
   {
-    "id": 5409,
-    "city": "桃園市",
-    "district": "桃園區",
-    "doorplate_address": "桃園市桃園區復興路某出租套房／公寓12樓",
-    "address": "桃園市桃園區復興路某出租套房／公寓12樓",
-    "lat": 24.989433,
-    "lng": 121.312544,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-08-17",
-    "building_type": "出租套房／公寓",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2015年08月 · 桃園市桃園區復興路某出租套房／公寓12樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，桃園市桃園區復興路一處出租套房／公寓住戶於屋內專有部分發生輕生非自然身亡事件，經桃園市政府警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2015年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2015年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "內政部定義列管凶宅",
-        "detail": "桃園市桃園區復興路出租套房／公寓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5410,
     "city": "桃園市",
     "district": "桃園區",
@@ -23399,33 +21868,6 @@
         "year": "2021",
         "stage": "自由時報公開報導",
         "detail": "悲！疑一氧化碳中毒 中壢一家四口身亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414575425-4uhs9",
-    "city": "桃園市",
-    "district": "中壢區",
-    "doorplate_address": "桃園市中壢區中華路一段",
-    "address": "桃園市中壢區中華路一段",
-    "lat": 24.969578,
-    "lng": 121.254147,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-03-01",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【桃園母女割頸案嫌犯 自殺前落網】桃園市中壢區古姓母女遭割頸殺害，涉嫌的房客林千任，清晨5點多在新竹尖石徘徊打算自殺時，被鎖定他手機訊號在附近搜尋的員警發現，警方隨即撲上逮人，林千任坦承犯案，動機就是對方要求他退租的租屋糾紛。84歲古姓老婦居住在中華路一段巷內的房屋2樓，1樓出租給林千任（49歲），昨天晚間11點多，古姓老婦與她51",
-    "source": "自由時報報導「桃園母女割頸案嫌犯 自殺前落網」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/1617266",
-    "media_verification": "自由時報報導「桃園母女割頸案嫌犯 自殺前落網」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "自由時報公開報導",
-        "detail": "桃園母女割頸案嫌犯 自殺前落網（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -24524,33 +22966,6 @@
         "year": "2017",
         "stage": "自由時報公開報導",
         "detail": "兒出門幫老父買便當 返家這幕讓他淚崩…（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414575425-otr5p",
-    "city": "桃園市",
-    "district": "平鎮區",
-    "doorplate_address": "桃園市平鎮區快速路",
-    "address": "桃園市平鎮區快速路",
-    "lat": 24.931552,
-    "lng": 121.201879,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-02-10",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "意外身亡",
-    "reason": "【環保服務公司火警 70歲管理員燒死】桃園市平鎮區快速路上的享運環保服務股份有限公司，9日深夜11時半多發生火警，消防隊員控制火勢後，昨晨清查火場，發現公司70歲管理員余銘錦陳屍2樓平台，余銘錦女兒說，父親臨死前還盡忠職守，嘗試利用平台上水槍救火，才不幸命喪火窟。消防隊員派出人車緊急灌救，凌晨1時左右控制火勢，就派員進入火場搜索，凌晨4",
-    "source": "自由時報報導「環保服務公司火警 70歲管理員燒死」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/1229858",
-    "media_verification": "自由時報報導「環保服務公司火警 70歲管理員燒死」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "自由時報公開報導",
-        "detail": "環保服務公司火警 70歲管理員燒死（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -26534,33 +24949,6 @@
     ]
   },
   {
-    "id": "news-1792414549878-bl6sq",
-    "city": "桃園市",
-    "district": "蘆竹區",
-    "doorplate_address": "桃園市蘆竹區南崁路一段某住宅大樓",
-    "address": "桃園市蘆竹區南崁路一段某住宅大樓",
-    "lat": 25.052052,
-    "lng": 121.284803,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-05-17",
-    "building_type": "公有國宅／社會住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【桃園社宅「2天3幼貓墜樓亡」…破門見第4隻遺體 竟是租戶丟貓不管出國玩】桃園市蘆竹二號社宅近日傳3隻幼貓墜樓死亡，管理社宅的住都中心追查發現是租戶出國，放任貓咪在陽台活動但未做防護導致，決定中止租約，限住戶31日前搬離。據悉，蘆竹二號社宅前天晚間傳2幼貓死在住戶公共區域...",
-    "source": "聯合新聞網 (UDN)報導「桃園社宅「2天3幼貓墜樓亡」…破門見第4隻遺體 竟是租戶丟貓不管出國玩」",
-    "source_url": "https://pets.udn.com/pets/story/122674/8746376",
-    "media_verification": "聯合新聞網 (UDN)報導「桃園社宅「2天3幼貓墜樓亡」…破門見第4隻遺體 竟是租戶丟貓不管出國玩」；自由時報報導「桃市蘆竹2號社宅住戶出國 放任貓群自由活動致3幼貓墜亡」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "桃園社宅「2天3幼貓墜樓亡」…破門見第4隻遺體 竟是租戶丟貓不管出國玩（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414570798-a09qu",
     "city": "桃園市",
     "district": "蘆竹區",
@@ -27118,10 +25506,10 @@
     "id": "news-1792414549938-zjrcc",
     "city": "桃園市",
     "district": "楊梅區",
-    "doorplate_address": "桃園市楊梅區落在三民路",
-    "address": "桃園市楊梅區落在三民路",
-    "lat": 24.900912,
-    "lng": 121.168991,
+    "doorplate_address": "桃園市楊梅區三民路",
+    "address": "桃園市楊梅區三民路",
+    "lat": 24.901689,
+    "lng": 121.170301,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2023-10-18",
     "building_type": "集合住宅／民宅建物",
@@ -27996,33 +26384,6 @@
     ]
   },
   {
-    "id": 5488,
-    "city": "桃園市",
-    "district": "龍潭區",
-    "doorplate_address": "桃園市龍潭區大昌路二段某傳統公寓住宅11樓",
-    "address": "桃園市龍潭區大昌路二段某傳統公寓住宅11樓",
-    "lat": 24.865664,
-    "lng": 121.219998,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-01-04",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2020年01月 · 桃園市龍潭區大昌路二段某傳統公寓住宅11樓】依據歷年社會新聞檔案與臺灣桃園地方法院刑事判決紀錄，桃園市龍潭區大昌路二段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣桃園地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2020年）",
-    "source_url": "",
-    "media_verification": "臺灣桃園地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2020年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "內政部定義列管凶宅",
-        "detail": "桃園市龍潭區大昌路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 558,
     "city": "桃園市",
     "district": "大溪區",
@@ -28445,10 +26806,10 @@
     "id": "news-1792414576129-7eune",
     "city": "桃園市",
     "district": "大園區",
-    "doorplate_address": "桃園市大園區南市大興街",
-    "address": "桃園市大園區南市大興街",
-    "lat": 25.053089,
-    "lng": 121.191824,
+    "doorplate_address": "桃園市大園區大興街",
+    "address": "桃園市大園區大興街",
+    "lat": 25.049655,
+    "lng": 121.193682,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2012-10-16",
     "building_type": "高層豪宅社區大樓",
@@ -30226,33 +28587,6 @@
     ]
   },
   {
-    "id": 5523,
-    "city": "臺中市",
-    "district": "北屯區",
-    "doorplate_address": "臺中市北屯區熱河路二段某透天厝住宅3樓",
-    "address": "臺中市北屯區熱河路二段某透天厝住宅3樓",
-    "lat": 24.164225,
-    "lng": 120.687556,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-12-27",
-    "building_type": "透天厝住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2014年12月 · 臺中市北屯區熱河路二段某透天厝住宅3樓】依內政部不動產成交案件實際資訊（實價登錄）與臺中市政府地政局（158空間資訊網）公開資料庫備註欄揭露，臺中市北屯區熱河路二段之透天厝住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺中市政府地政局（158空間資訊網）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺中市政府地政局（158空間資訊網）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺中市北屯區熱河路二段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792414548173-3un63",
     "city": "臺中市",
     "district": "西屯區",
@@ -30302,33 +28636,6 @@
         "year": "2025",
         "stage": "自由時報公開報導",
         "detail": "逢甲商圈驚悚一幕！兒衝上頂樓找父親  低頭嚇見「倒臥2樓鄰居露台」身亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414555083-0l7y8",
-    "city": "臺中市",
-    "district": "西屯區",
-    "doorplate_address": "臺中市西屯區歲男掉落路",
-    "address": "臺中市西屯區歲男掉落路",
-    "lat": 24.179546,
-    "lng": 120.64095,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-10-24",
-    "building_type": "住商複合大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【台中西屯22樓商辦大樓驚傳墜樓 22歲男掉落路邊明顯死亡】台中市西屯區昨晚9點多驚傳有人墜樓，警方獲報漢口路1棟22樓商辦大樓有人墜落，經消防到場確認倒臥路邊的男子已經明顯死亡，...",
-    "source": "聯合新聞網 (UDN)報導「台中西屯22樓商辦大樓驚傳墜樓 22歲男掉落路邊明顯死亡」",
-    "source_url": "https://udn.com/news/story/7320/9093824",
-    "media_verification": "聯合新聞網 (UDN)報導「台中西屯22樓商辦大樓驚傳墜樓 22歲男掉落路邊明顯死亡」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "台中西屯22樓商辦大樓驚傳墜樓 22歲男掉落路邊明顯死亡（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -30445,10 +28752,10 @@
     "id": "news-1792414555084-x08t1",
     "city": "臺中市",
     "district": "西屯區",
-    "doorplate_address": "臺中市西屯區屯區臺灣大道某住宅大樓",
-    "address": "臺中市西屯區屯區臺灣大道某住宅大樓",
-    "lat": 24.181928,
-    "lng": 120.614864,
+    "doorplate_address": "臺中市西屯區臺灣大道三段",
+    "address": "臺中市西屯區臺灣大道三段（集合住宅／民宅建物·2024-10）",
+    "lat": 24.167849,
+    "lng": 120.641929,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-10-03",
     "building_type": "集合住宅／民宅建物",
@@ -30499,10 +28806,10 @@
     "id": "news-1792414555084-e37py",
     "city": "臺中市",
     "district": "西屯區",
-    "doorplate_address": "臺中市西屯區附近逢明街",
-    "address": "臺中市西屯區附近逢明街",
-    "lat": 24.174685,
-    "lng": 120.63824,
+    "doorplate_address": "臺中市西屯區逢明街",
+    "address": "臺中市西屯區逢明街",
+    "lat": 24.177066,
+    "lng": 120.639528,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-08-03",
     "building_type": "集合住宅／民宅建物",
@@ -31305,33 +29612,6 @@
         "year": "2025",
         "stage": "自由時報公開報導",
         "detail": "台中南屯六旬婦墜樓 倒臥車道送醫不治（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414577767-bvo29",
-    "city": "臺中市",
-    "district": "南屯區",
-    "doorplate_address": "臺中市南屯區情糾紛當街",
-    "address": "臺中市南屯區情糾紛當街",
-    "lat": 24.15122,
-    "lng": 120.607461,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-05-13",
-    "building_type": "社區電梯大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【鉛球冠軍「寵物鼠誘殺」18歲前女友狠刺3刀奪命！致命死因曝】台中24歲詹姓男子10日下午在南屯區一處社區大樓前，因感情糾紛當街持刀刺死18歲前女友，台中地檢署檢察官劉文賓今（13日）上午率法醫解剖，證實死者頸部一刀、左胸兩刀，其中一刀刺入心臟、另一刀穿透主動脈，是導致其當場死亡的致命傷，而這起案件震驚社會，檢警朝殺人罪偵辦。",
-    "source": "自由時報報導「鉛球冠軍「寵物鼠誘殺」18歲前女友狠刺3刀奪命！致命死因曝」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5041409",
-    "media_verification": "自由時報報導「鉛球冠軍「寵物鼠誘殺」18歲前女友狠刺3刀奪命！致命死因曝」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "鉛球冠軍「寵物鼠誘殺」18歲前女友狠刺3刀奪命！致命死因曝（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -32215,10 +30495,10 @@
     "id": "news-1792415621448-fvilf",
     "city": "臺中市",
     "district": "北區",
-    "doorplate_address": "臺中市北區掉落太原路",
-    "address": "臺中市北區掉落太原路",
-    "lat": 24.164259,
-    "lng": 120.676217,
+    "doorplate_address": "臺中市北區太原路一段",
+    "address": "臺中市北區太原路一段",
+    "lat": 24.16564,
+    "lng": 120.670306,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2026-02-07",
     "building_type": "集合住宅／民宅建物",
@@ -32290,33 +30570,6 @@
         "year": "2025",
         "stage": "自由時報公開報導",
         "detail": "台中命案不單純？飲酒醒來妹身亡兄獨活 警啟動調查（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414549967-ru7gz",
-    "city": "臺中市",
-    "district": "北區",
-    "doorplate_address": "臺中市北區子已倒臥路",
-    "address": "臺中市北區子已倒臥路",
-    "lat": 24.156069,
-    "lng": 120.681093,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-12-18",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【台中北區38歲男暗夜墜樓送醫不治】台中市北區一棟大樓17日晚間10點多驚傳巨響，台中市消防局獲報有人墜樓，立即派遣文昌分隊到場救援，發現一名男子已倒臥路面當場失去生命跡象，經緊急送中國附醫搶救後，仍因傷重宣告不治，現場未留下遺書。 經查，死者是住在該大樓的38歲男子，疑因長期飽受疾病困擾，昨晚爬上自家頂樓7樓後自該處墜落，經鑑識人員",
-    "source": "自由時報報導「台中北區38歲男暗夜墜樓送醫不治」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4896949",
-    "media_verification": "自由時報報導「台中北區38歲男暗夜墜樓送醫不治」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "台中北區38歲男暗夜墜樓送醫不治（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -32796,33 +31049,6 @@
     ]
   },
   {
-    "id": 5549,
-    "city": "臺中市",
-    "district": "北區",
-    "doorplate_address": "臺中市北區漢口路三段某傳統公寓住宅6樓",
-    "address": "臺中市北區漢口路三段某傳統公寓住宅6樓",
-    "lat": 24.164735,
-    "lng": 120.666764,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-05-26",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2015年05月 · 臺中市北區漢口路三段某傳統公寓住宅6樓】依據歷年社會新聞檔案與臺灣臺中地方法院刑事判決紀錄，臺中市北區漢口路三段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺中地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "source_url": "",
-    "media_verification": "臺灣臺中地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺中市北區漢口路三段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5550,
     "city": "臺中市",
     "district": "北區",
@@ -32873,33 +31099,6 @@
         "year": "2022",
         "stage": "法院裁判書認證凶宅",
         "detail": "臺中市北區學士路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5552,
-    "city": "臺中市",
-    "district": "北區",
-    "doorplate_address": "臺中市北區雙十路二段某透天厝住宅3樓",
-    "address": "臺中市北區雙十路二段某透天厝住宅3樓",
-    "lat": 24.148861,
-    "lng": 120.689367,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-11-08",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2019年11月 · 臺中市北區雙十路二段某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣臺中地方法院刑事判決紀錄，臺中市北區雙十路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺中地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "source_url": "",
-    "media_verification": "臺灣臺中地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺中市北區雙十路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -33044,10 +31243,10 @@
     "id": "news-1792414577752-pr5u9",
     "city": "臺中市",
     "district": "西區",
-    "doorplate_address": "臺中市西區走在忠明路",
-    "address": "臺中市西區走在忠明路",
-    "lat": 24.155009,
-    "lng": 120.660561,
+    "doorplate_address": "臺中市西區忠明路",
+    "address": "臺中市西區忠明路",
+    "lat": 24.159366,
+    "lng": 120.660037,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-03-27",
     "building_type": "集合住宅／民宅建物",
@@ -34367,10 +32566,10 @@
     "id": "news-1792414578358-fpkbl",
     "city": "臺中市",
     "district": "大里區",
-    "doorplate_address": "臺中市大里區大里美群路",
-    "address": "臺中市大里區大里美群路",
-    "lat": 24.099827,
-    "lng": 120.690667,
+    "doorplate_address": "臺中市大里區美群路",
+    "address": "臺中市大里區美群路",
+    "lat": 24.084167,
+    "lng": 120.708322,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2023-03-08",
     "building_type": "集合住宅／民宅建物",
@@ -34394,10 +32593,10 @@
     "id": "news-1792414578356-giqkb",
     "city": "臺中市",
     "district": "大里區",
-    "doorplate_address": "臺中市大里區婦撞路",
-    "address": "臺中市大里區婦撞路",
-    "lat": 24.103778,
-    "lng": 120.686576,
+    "doorplate_address": "臺中市大里區大智路",
+    "address": "臺中市大里區大智路",
+    "lat": 24.118934,
+    "lng": 120.688764,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2021-10-06",
     "building_type": "集合住宅／民宅建物",
@@ -35027,10 +33226,10 @@
     "id": "news-1792414549966-xkrof",
     "city": "臺中市",
     "district": "太平區",
-    "doorplate_address": "臺中市太平區太平樹孝路",
-    "address": "臺中市太平區太平樹孝路",
-    "lat": 24.152804,
-    "lng": 120.719207,
+    "doorplate_address": "臺中市太平區樹孝路",
+    "address": "臺中市太平區樹孝路",
+    "lat": 24.15466,
+    "lng": 120.718382,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-05-12",
     "building_type": "集合住宅／民宅建物",
@@ -37660,12 +35859,12 @@
   },
   {
     "id": "tw-haunted-1792416624093-j9d2b",
-    "city": "臺中市",
-    "district": "大雅區",
-    "doorplate_address": "臺中市大雅區嘉市大雅路",
-    "address": "臺中市大雅區嘉市大雅路",
-    "lat": 24.225505,
-    "lng": 120.650816,
+    "city": "嘉義市",
+    "district": "東區",
+    "doorplate_address": "嘉義市東區大雅路二段",
+    "address": "嘉義市東區大雅路二段",
+    "lat": 23.478127,
+    "lng": 120.471922,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-10-15",
     "building_type": "集合住宅／民宅",
@@ -37686,33 +35885,6 @@
     ],
     "__road": "嘉市大雅路",
     "__community": ""
-  },
-  {
-    "id": "news-1792414755290-mtgzw",
-    "city": "臺中市",
-    "district": "大雅區",
-    "doorplate_address": "臺中市大雅區義市大雅路",
-    "address": "臺中市大雅區義市大雅路",
-    "lat": 24.229184,
-    "lng": 120.644613,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-04-20",
-    "building_type": "透天住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "意外身亡",
-    "reason": "【嘉市民宅火警1家3人不治 24日解剖釐清死因】嘉義市大雅路2段1間透天厝昨天火警，翁姓夫婦及5歲女兒不治，檢警今天會同法醫相驗，由於夫婦疑曾有爭執，24日將解剖並找尋...",
-    "source": "聯合新聞網 (UDN)報導「嘉市民宅火警1家3人不治 24日解剖釐清死因」",
-    "source_url": "https://udn.com/news/story/7320/9453097",
-    "media_verification": "聯合新聞網 (UDN)報導「嘉市民宅火警1家3人不治 24日解剖釐清死因」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "嘉市民宅火警1家3人不治 24日解剖釐清死因（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
     "id": "sb-2753",
@@ -38118,33 +36290,6 @@
         "year": "2024",
         "stage": "聯合新聞網 (UDN)公開報導",
         "detail": "沙鹿深夜民宅火警 59歲男命喪火窟…鄰居曝：生前曾揚言縱火（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414569421-9jwgf",
-    "city": "臺中市",
-    "district": "沙鹿區",
-    "doorplate_address": "臺中市沙鹿區公明里明里忠貞路",
-    "address": "臺中市沙鹿區公明里明里忠貞路",
-    "lat": 24.240403,
-    "lng": 120.604765,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-02-28",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【揮別命案陰霾 沙鹿公明里櫻花綻放】時序入春，進入賞櫻時節，台中市沙鹿區公明里忠貞路樂群新莊旁的吉野櫻近期綻放，但花況僅2成左右，預估3月中上旬盛開，由於此處半年前發生命案，一名女大生慘死路邊，如今春暖花開，欣欣向榮，吸引遊客賞花。沙鹿區樂群新莊吉野櫻由里長蔡水松帶領社區居民共同維護及周邊企業的支持下栽植維護，近年來數十株櫻花樹抽長，",
-    "source": "自由時報報導「揮別命案陰霾 沙鹿公明里櫻花綻放」",
-    "source_url": "https://news.ltn.com.tw/news/life/breakingnews/5353870",
-    "media_verification": "自由時報報導「揮別命案陰霾 沙鹿公明里櫻花綻放」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "揮別命案陰霾 沙鹿公明里櫻花綻放（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -40014,60 +38159,6 @@
       {
         "year": "2023",
         "stage": "內政部定義列管凶宅",
-        "detail": "臺中市梧棲區臺灣大道八段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5695,
-    "city": "臺中市",
-    "district": "梧棲區",
-    "doorplate_address": "臺中市梧棲區中央路一段某傳統公寓住宅3樓",
-    "address": "臺中市梧棲區中央路一段某傳統公寓住宅3樓",
-    "lat": 24.227623,
-    "lng": 120.533,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-02-11",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2020年02月 · 臺中市梧棲區中央路一段某傳統公寓住宅3樓】依據公開消防災情與社會新聞通報紀錄，臺中市梧棲區中央路一段一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2020年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2020年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺中市梧棲區中央路一段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5696,
-    "city": "臺中市",
-    "district": "梧棲區",
-    "doorplate_address": "臺中市梧棲區臺灣大道八段某透天厝住宅4樓",
-    "address": "臺中市梧棲區臺灣大道八段某透天厝住宅4樓",
-    "lat": 24.245511,
-    "lng": 120.551727,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2017-08-23",
-    "building_type": "透天厝住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2017年08月 · 臺中市梧棲區臺灣大道八段某透天厝住宅4樓】依內政部不動產成交案件實際資訊（實價登錄）與臺中市政府地政局（158空間資訊網）公開資料庫備註欄揭露，臺中市梧棲區臺灣大道八段之透天厝住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺中市政府地政局（158空間資訊網）",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺中市政府地政局（158空間資訊網）",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2017",
-        "stage": "實價登錄特殊交易凶宅",
         "detail": "臺中市梧棲區臺灣大道八段透天厝住宅經公開資料庫登錄列管"
       }
     ]
@@ -43168,33 +41259,6 @@
     ]
   },
   {
-    "id": 5728,
-    "city": "臺南市",
-    "district": "東區",
-    "doorplate_address": "臺南市東區長榮路二段某傳統公寓住宅5樓",
-    "address": "臺南市東區長榮路二段某傳統公寓住宅5樓",
-    "lat": 22.986623,
-    "lng": 120.218665,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-01-25",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年01月 · 臺南市東區長榮路二段某傳統公寓住宅5樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市東區長榮路二段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市東區長榮路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5729,
     "city": "臺南市",
     "district": "東區",
@@ -43245,33 +41309,6 @@
         "year": "2017",
         "stage": "法院裁判書認證凶宅",
         "detail": "臺南市東區東寧路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5731,
-    "city": "臺南市",
-    "district": "東區",
-    "doorplate_address": "臺南市東區中華東路二段某透天厝住宅3樓",
-    "address": "臺南市東區中華東路二段某透天厝住宅3樓",
-    "lat": 22.991045,
-    "lng": 120.231413,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-07-07",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2014年07月 · 臺南市東區中華東路二段某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市東區中華東路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2014年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2014年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市東區中華東路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -43330,33 +41367,6 @@
     ]
   },
   {
-    "id": 5734,
-    "city": "臺南市",
-    "district": "東區",
-    "doorplate_address": "臺南市東區長榮路二段某傳統公寓住宅7樓",
-    "address": "臺南市東區長榮路二段某傳統公寓住宅7樓",
-    "lat": 22.994713,
-    "lng": 120.223528,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2018-01-16",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2018年01月 · 臺南市東區長榮路二段某傳統公寓住宅7樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市東區長榮路二段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2018年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2018年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2018",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市東區長榮路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5735,
     "city": "臺南市",
     "district": "東區",
@@ -43407,33 +41417,6 @@
         "year": "2012",
         "stage": "法院裁判書認證凶宅",
         "detail": "臺南市東區東寧路電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5737,
-    "city": "臺南市",
-    "district": "東區",
-    "doorplate_address": "臺南市東區中華東路二段某透天厝住宅4樓",
-    "address": "臺南市東區中華東路二段某透天厝住宅4樓",
-    "lat": 22.978432,
-    "lng": 120.229728,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-07-25",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2022年07月 · 臺南市東區中華東路二段某透天厝住宅4樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市東區中華東路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2022年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2022年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市東區中華東路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -43492,33 +41475,6 @@
     ]
   },
   {
-    "id": 5740,
-    "city": "臺南市",
-    "district": "東區",
-    "doorplate_address": "臺南市東區長榮路二段某傳統公寓住宅9樓",
-    "address": "臺南市東區長榮路二段某傳統公寓住宅9樓",
-    "lat": 22.98322,
-    "lng": 120.220214,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2013-01-07",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2013年01月 · 臺南市東區長榮路二段某傳統公寓住宅9樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市東區長榮路二段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2013年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2013年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2013",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市東區長榮路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5741,
     "city": "臺南市",
     "district": "東區",
@@ -43569,33 +41525,6 @@
         "year": "2020",
         "stage": "法院裁判書認證凶宅",
         "detail": "臺南市東區東寧路出租套房／公寓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5743,
-    "city": "臺南市",
-    "district": "東區",
-    "doorplate_address": "臺南市東區中華東路二段某透天厝住宅5樓",
-    "address": "臺南市東區中華東路二段某透天厝住宅5樓",
-    "lat": 22.99297,
-    "lng": 120.228456,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2017-07-16",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2017年07月 · 臺南市東區中華東路二段某透天厝住宅5樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市東區中華東路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2017年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2017年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2017",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市東區中華東路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -45094,10 +43023,10 @@
     "id": "news-1792414555095-ghmq7",
     "city": "臺南市",
     "district": "中西區",
-    "doorplate_address": "臺南市中西區南頂美三街",
-    "address": "臺南市中西區南頂美三街",
-    "lat": 23.002095,
-    "lng": 120.18353,
+    "doorplate_address": "臺南市中西區頂美三街",
+    "address": "臺南市中西區頂美三街",
+    "lat": 23.002621,
+    "lng": 120.187266,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2023-11-05",
     "building_type": "透天住宅",
@@ -45155,33 +43084,6 @@
     "precision": "unknown",
     "archive_url": "",
     "doorplate_address": "臺南市中西區五妃街「國立臺南大學」宿舍",
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414555497-lt3on",
-    "city": "臺南市",
-    "district": "中西區",
-    "doorplate_address": "臺南市中西區大樓南島路",
-    "address": "臺南市中西區大樓南島路",
-    "lat": 23.002294,
-    "lng": 120.188019,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-11-30",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【台南公務員墜樓身亡 教育局：他工作認真 與同事相處融洽】台南市府今（30）日驚傳憾事，教育局1名30歲江姓技士，上午9點左右被人發現倒在永華市政大樓南島路東哲廳後方廣場，疑似墜樓當場死亡，令同事們皆感震驚不捨。教育局表示，江員平日工作認真，與同事相處融洽，傳出不幸意外令人十分震驚惋惜，將會協助家屬料理善後。",
-    "source": "自由時報報導「台南公務員墜樓身亡 教育局：他工作認真 與同事相處融洽」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4140247",
-    "media_verification": "自由時報報導「台南公務員墜樓身亡 教育局：他工作認真 與同事相處融洽」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "自由時報公開報導",
-        "detail": "台南公務員墜樓身亡 教育局：他工作認真 與同事相處融洽（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
@@ -45681,33 +43583,6 @@
         "detail": "臺南市中西區永福路二段社區電梯大樓經公開資料庫登錄列管"
       }
     ]
-  },
-  {
-    "id": "news-1792414548109-nskrz",
-    "city": "臺南市",
-    "district": "南區",
-    "doorplate_address": "臺南市南區大林里務機關帶路",
-    "address": "臺南市南區大林里務機關帶路",
-    "lat": 22.954951,
-    "lng": 120.190942,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2017-10-23",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "進入法拍或產權移轉程序",
-    "category": "法拍與其他",
-    "reason": "【比膽大！公務機關帶路看凶宅 法拍首案高價賣出】凶宅人人望之卻步，買賣房屋通常都怕沾上邊，行政執行署台南分署卻打破成規，執行人員帶領欲購屋的民眾實地看凶宅，這間法拍屋位在台南市南區，順利在第一次拍賣就以203萬元高價賣出，底價是188萬5千元，得標價高於底價14萬5千元。這間某公司名下建築物位於南市南區大林里，由南區國稅局與台南市府稅務局聲請執行",
-    "source": "自由時報報導「比膽大！公務機關帶路看凶宅 法拍首案高價賣出」",
-    "source_url": "https://news.ltn.com.tw/news/life/breakingnews/2231224",
-    "media_verification": "自由時報報導「比膽大！公務機關帶路看凶宅 法拍首案高價賣出」",
-    "auction_record": "公開報導載明法拍／交易行情紀錄：底價14萬",
-    "history_timeline": [
-      {
-        "year": "2017",
-        "stage": "自由時報公開報導",
-        "detail": "比膽大！公務機關帶路看凶宅 法拍首案高價賣出（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "JUDICIAL_AUCTION"
   },
   {
     "id": 2538,
@@ -47239,33 +45114,6 @@
     ]
   },
   {
-    "id": 5824,
-    "city": "臺南市",
-    "district": "仁德區",
-    "doorplate_address": "臺南市仁德區中正路二段某傳統公寓住宅7樓",
-    "address": "臺南市仁德區中正路二段某傳統公寓住宅7樓",
-    "lat": 22.959703,
-    "lng": 120.257095,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-01-01",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2019年01月 · 臺南市仁德區中正路二段某傳統公寓住宅7樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市仁德區中正路二段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市仁德區中正路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5825,
     "city": "臺南市",
     "district": "仁德區",
@@ -47316,33 +45164,6 @@
         "year": "2013",
         "stage": "法院裁判書認證凶宅",
         "detail": "臺南市仁德區文賢路一段社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5827,
-    "city": "臺南市",
-    "district": "仁德區",
-    "doorplate_address": "臺南市仁德區中正路二段某透天厝住宅3樓",
-    "address": "臺南市仁德區中正路二段某透天厝住宅3樓",
-    "lat": 22.948863,
-    "lng": 120.256787,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-07-10",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年07月 · 臺南市仁德區中正路二段某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣臺南地方法院刑事判決紀錄，臺南市仁德區中正路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "source_url": "",
-    "media_verification": "臺灣臺南地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺南市仁德區中正路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -52132,12 +49953,12 @@
   },
   {
     "id": "news-1792415622735-hpxwc",
-    "city": "高雄市",
-    "district": "三民區",
-    "doorplate_address": "高雄市三民區竹市三民路",
-    "address": "高雄市三民區竹市三民路",
-    "lat": 22.649474,
-    "lng": 120.327016,
+    "city": "新竹市",
+    "district": "東區",
+    "doorplate_address": "新竹市東區三民路",
+    "address": "新竹市東區三民路",
+    "lat": 24.808274,
+    "lng": 120.975869,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-10-15",
     "building_type": "集合住宅／民宅建物",
@@ -52263,33 +50084,6 @@
         "year": "2024",
         "stage": "自由時報公開報導",
         "detail": "高雄三民26歲獨居女暗夜墜樓亡  家屬難接受質疑「不單純」（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414779992-wad0v",
-    "city": "高雄市",
-    "district": "三民區",
-    "doorplate_address": "高雄市三民區竹市三民路3樓",
-    "address": "高雄市三民區竹市三民路3樓",
-    "lat": 22.649282,
-    "lng": 120.331075,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-07-16",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【獨／陽明交大教授殺連襟 死者致命傷集中頸部疑大量失血致死】新竹市三民路音樂教室14日發生命案，48歲紀姓店長遭連襟、陽明交大林姓教授持刀砍殺身亡。據了解，死者致命傷集中在頸部，傷勢波及動脈及重要血管，初步研判因大量失血致死。新竹地檢署表示，法醫今天已完成解剖，解剖鑑定中，尚待解剖報告才能確認死因。",
-    "source": "聯合新聞網 (UDN)報導「獨／陽明交大教授殺連襟 死者致命傷集中頸部疑大量失血致死」",
-    "source_url": "https://udn.com/news/story/7315/9632241",
-    "media_verification": "聯合新聞網 (UDN)報導「獨／陽明交大教授殺連襟 死者致命傷集中頸部疑大量失血致死」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "獨／陽明交大教授殺連襟 死者致命傷集中頸部疑大量失血致死（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -53053,33 +50847,6 @@
     ]
   },
   {
-    "id": 5905,
-    "city": "高雄市",
-    "district": "三民區",
-    "doorplate_address": "高雄市三民區正忠路某傳統公寓住宅2樓",
-    "address": "高雄市三民區正忠路某傳統公寓住宅2樓",
-    "lat": 22.64248,
-    "lng": 120.334744,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-02-17",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年02月 · 高雄市三民區正忠路某傳統公寓住宅2樓】依據公開消防災情與社會新聞通報紀錄，高雄市三民區正忠路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2023年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2023年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市三民區正忠路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 50,
     "city": "高雄市",
     "district": "左營區",
@@ -53659,60 +51426,6 @@
     ]
   },
   {
-    "id": 5921,
-    "city": "高雄市",
-    "district": "左營區",
-    "doorplate_address": "高雄市左營區裕誠路某傳統公寓住宅8樓",
-    "address": "高雄市左營區裕誠路某傳統公寓住宅8樓",
-    "lat": 22.660599,
-    "lng": 120.306404,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2017-01-22",
-    "building_type": "傳統公寓住宅",
-    "current_status": "司法院法拍筆錄註記凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_AUCTION",
-    "reason": "【2017年01月 · 高雄市左營區裕誠路某傳統公寓住宅8樓】依臺灣高雄地方法院民事執行處公開法拍查封筆錄記載，位於高雄市左營區裕誠路之傳統公寓住宅標的，前債務人於屋內發生非自然死亡（燒炭輕生）事故，法院公告為點交／不點交之法定凶宅物件。",
-    "source": "臺灣高雄地方法院106年度司執字第44477號法拍屋公開公告筆錄",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院106年度司執字第44477號法拍屋公開公告筆錄",
-    "auction_record": "司法院法拍屋公開公告系統查封筆錄明確記載屋內曾發生非自然死亡事故（依市場行情約折價 65 折至 75 折拍定）",
-    "history_timeline": [
-      {
-        "year": "2017",
-        "stage": "司法院法拍筆錄註記凶宅",
-        "detail": "高雄市左營區裕誠路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5922,
-    "city": "高雄市",
-    "district": "左營區",
-    "doorplate_address": "高雄市左營區左營大路某透天厝住宅3樓",
-    "address": "高雄市左營區左營大路某透天厝住宅3樓",
-    "lat": 22.690583,
-    "lng": 120.293713,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-07-07",
-    "building_type": "透天厝住宅",
-    "current_status": "法院裁判書認證凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_JUDGMENT",
-    "reason": "【2014年07月 · 高雄市左營區左營大路某透天厝住宅3樓】依司法院法學資料檢索系統（臺灣高雄地方法院民事判決）記載，買方購入高雄市左營區左營大路之透天厝住宅後查悉前手屋內曾發生非自然身亡事件，向法院訴請物之瑕疵擔保減少價金或解除買賣契約獲判勝訴認證。",
-    "source": "司法院裁判書系統 · 臺灣高雄地方法院103年度訴字第1928號民事判決",
-    "source_url": "",
-    "media_verification": "司法院裁判書系統 · 臺灣高雄地方法院103年度訴字第1928號民事判決",
-    "auction_record": "司法院公開民事判決書認證屬內政部函釋定義之「專有部分發生非自然死亡」物之瑕疵（凶宅）標的",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "法院裁判書認證凶宅",
-        "detail": "高雄市左營區左營大路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5923,
     "city": "高雄市",
     "district": "左營區",
@@ -53767,33 +51480,6 @@
     ]
   },
   {
-    "id": 5925,
-    "city": "高雄市",
-    "district": "左營區",
-    "doorplate_address": "高雄市左營區富民路某出租套房／公寓2樓",
-    "address": "高雄市左營區富民路某出租套房／公寓2樓",
-    "lat": 22.662379,
-    "lng": 120.299348,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2018-01-16",
-    "building_type": "出租套房／公寓",
-    "current_status": "法院裁判書認證凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_JUDGMENT",
-    "reason": "【2018年01月 · 高雄市左營區富民路某出租套房／公寓2樓】依司法院法學資料檢索系統（臺灣高雄地方法院民事判決）記載，買方購入高雄市左營區富民路之出租套房／公寓後查悉前手屋內曾發生非自然身亡事件，向法院訴請物之瑕疵擔保減少價金或解除買賣契約獲判勝訴認證。",
-    "source": "司法院裁判書系統 · 臺灣高雄地方法院107年度訴字第1985號民事判決",
-    "source_url": "",
-    "media_verification": "司法院裁判書系統 · 臺灣高雄地方法院107年度訴字第1985號民事判決",
-    "auction_record": "司法院公開民事判決書認證屬內政部函釋定義之「專有部分發生非自然死亡」物之瑕疵（凶宅）標的",
-    "history_timeline": [
-      {
-        "year": "2018",
-        "stage": "法院裁判書認證凶宅",
-        "detail": "高雄市左營區富民路出租套房／公寓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5926,
     "city": "高雄市",
     "district": "左營區",
@@ -53817,60 +51503,6 @@
         "year": "2015",
         "stage": "內政部定義列管凶宅",
         "detail": "高雄市左營區博愛三路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5927,
-    "city": "高雄市",
-    "district": "左營區",
-    "doorplate_address": "高雄市左營區自由三路某透天厝住宅3樓",
-    "address": "高雄市左營區自由三路某透天厝住宅3樓",
-    "lat": 22.679025,
-    "lng": 120.31447,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-01-13",
-    "building_type": "透天厝住宅",
-    "current_status": "司法院法拍筆錄註記凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_AUCTION",
-    "reason": "【2012年01月 · 高雄市左營區自由三路某透天厝住宅3樓】依臺灣高雄地方法院民事執行處公開法拍查封筆錄記載，位於高雄市左營區自由三路之透天厝住宅標的，前債務人於屋內發生非自然死亡（燒炭輕生）事故，法院公告為點交／不點交之法定凶宅物件。",
-    "source": "臺灣高雄地方法院101年度司執字第44699號法拍屋公開公告筆錄",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院101年度司執字第44699號法拍屋公開公告筆錄",
-    "auction_record": "司法院法拍屋公開公告系統查封筆錄明確記載屋內曾發生非自然死亡事故（依市場行情約折價 65 折至 75 折拍定）",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "司法院法拍筆錄註記凶宅",
-        "detail": "高雄市左營區自由三路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5928,
-    "city": "高雄市",
-    "district": "左營區",
-    "doorplate_address": "高雄市左營區華夏路某傳統公寓住宅3樓",
-    "address": "高雄市左營區華夏路某傳統公寓住宅3樓",
-    "lat": 22.676981,
-    "lng": 120.30841,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-07-25",
-    "building_type": "傳統公寓住宅",
-    "current_status": "法院裁判書認證凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_JUDGMENT",
-    "reason": "【2022年07月 · 高雄市左營區華夏路某傳統公寓住宅3樓】依司法院法學資料檢索系統（臺灣高雄地方法院民事判決）記載，買方購入高雄市左營區華夏路之傳統公寓住宅後查悉前手屋內曾發生非自然身亡事件，向法院訴請物之瑕疵擔保減少價金或解除買賣契約獲判勝訴認證。",
-    "source": "司法院裁判書系統 · 臺灣高雄地方法院111年度訴字第2042號民事判決",
-    "source_url": "",
-    "media_verification": "司法院裁判書系統 · 臺灣高雄地方法院111年度訴字第2042號民事判決",
-    "auction_record": "司法院公開民事判決書認證屬內政部函釋定義之「專有部分發生非自然死亡」物之瑕疵（凶宅）標的",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "法院裁判書認證凶宅",
-        "detail": "高雄市左營區華夏路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -54643,33 +52275,6 @@
     ]
   },
   {
-    "id": 5941,
-    "city": "高雄市",
-    "district": "楠梓區",
-    "doorplate_address": "高雄市楠梓區後昌路某傳統公寓住宅9樓",
-    "address": "高雄市楠梓區後昌路某傳統公寓住宅9樓",
-    "lat": 22.71241,
-    "lng": 120.301024,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-01-22",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2015年01月 · 高雄市楠梓區後昌路某傳統公寓住宅9樓】依據歷年社會新聞檔案與臺灣高雄地方法院刑事判決紀錄，高雄市楠梓區後昌路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市楠梓區後昌路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5942,
     "city": "高雄市",
     "district": "楠梓區",
@@ -54751,40 +52356,13 @@
     "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
-    "id": "news-1792414557270-9bmv3",
-    "city": "高雄市",
-    "district": "前鎮區",
-    "doorplate_address": "高雄市前鎮區社區整條街",
-    "address": "高雄市前鎮區社區整條街",
-    "lat": 22.598542,
-    "lng": 120.313404,
-    "location_accuracy": "GEOMETRIC_CENTER",
-    "incident_date": "2025-02-16",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【高雄分屍案前鎮河尋獲水藍色衣服 與張介宗犯案穿著雷同】高雄分屍人魔張介宗涉嫌殺害3名女性，警方今（16）日在前鎮河打撈出10件可疑衣物，其中2件有燒灼痕跡，值得注意的是，其中一件水藍色衣服，與左營張婦進入張宅時，張嫌當時穿著雷同，引起警方高度關注，正待化驗釐清是否為凶衣。張介宗涉嫌從去年11月起至今年2月，將黃姓大嫂、楠梓林婦及左營張婦3人，騙進張在前",
-    "source": "自由時報報導「高雄分屍案前鎮河尋獲水藍色衣服 與張介宗犯案穿著雷同」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4953187",
-    "media_verification": "自由時報報導「高雄分屍案前鎮河尋獲水藍色衣服 與張介宗犯案穿著雷同」；自由時報報導「高雄搜尋分屍案遺骸傳靈異？ 橡皮艇故障、潛水教練一度失聯」；自由時報報導「高雄連環殺人魔讓居民嚇到不敢回家 命理師這樣說」；另見：自由時報報導「二度勘驗凶宅！高雄分屍案嫌犯張介宗首模擬 圍觀老婦斥「可惡」」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "高雄分屍案前鎮河尋獲水藍色衣服 與張介宗犯案穿著雷同（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414549958-h0sbi",
     "city": "高雄市",
     "district": "前鎮區",
-    "doorplate_address": "高雄市前鎮區歲翁倒臥路",
-    "address": "高雄市前鎮區歲翁倒臥路",
-    "lat": 22.601738,
-    "lng": 120.315293,
+    "doorplate_address": "高雄市前鎮區天倫街",
+    "address": "高雄市前鎮區天倫街",
+    "lat": 22.57401,
+    "lng": 120.32264,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-10-06",
     "building_type": "集合住宅／民宅建物",
@@ -55226,33 +52804,6 @@
     ]
   },
   {
-    "id": 5951,
-    "city": "高雄市",
-    "district": "前鎮區",
-    "doorplate_address": "高雄市前鎮區三多三路某透天厝住宅3樓",
-    "address": "高雄市前鎮區三多三路某透天厝住宅3樓",
-    "lat": 22.617936,
-    "lng": 120.309901,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2021-11-20",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2021年11月 · 高雄市前鎮區三多三路某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣高雄地方法院刑事判決紀錄，高雄市前鎮區三多三路某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2021年）",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2021年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市前鎮區三多三路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5952,
     "city": "高雄市",
     "district": "前鎮區",
@@ -55303,33 +52854,6 @@
         "year": "2015",
         "stage": "法院裁判書認證凶宅",
         "detail": "高雄市前鎮區凱旋四路電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 5954,
-    "city": "高雄市",
-    "district": "前鎮區",
-    "doorplate_address": "高雄市前鎮區民權二路某傳統公寓住宅3樓",
-    "address": "高雄市前鎮區民權二路某傳統公寓住宅3樓",
-    "lat": 22.611015,
-    "lng": 120.317844,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-05-02",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2012年05月 · 高雄市前鎮區民權二路某傳統公寓住宅3樓】依據歷年社會新聞檔案與臺灣高雄地方法院刑事判決紀錄，高雄市前鎮區民權二路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2012年）",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2012年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市前鎮區民權二路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -55388,33 +52912,6 @@
     ]
   },
   {
-    "id": 5957,
-    "city": "高雄市",
-    "district": "前鎮區",
-    "doorplate_address": "高雄市前鎮區三多三路某透天厝住宅4樓",
-    "address": "高雄市前鎮區三多三路某透天厝住宅4樓",
-    "lat": 22.617353,
-    "lng": 120.315675,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-11-11",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年11月 · 高雄市前鎮區三多三路某透天厝住宅4樓】依據歷年社會新聞檔案與臺灣高雄地方法院刑事判決紀錄，高雄市前鎮區三多三路某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2016年）",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2016年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市前鎮區三多三路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5958,
     "city": "高雄市",
     "district": "前鎮區",
@@ -55469,33 +52966,6 @@
     ]
   },
   {
-    "id": 5960,
-    "city": "高雄市",
-    "district": "前鎮區",
-    "doorplate_address": "高雄市前鎮區民權二路某傳統公寓住宅5樓",
-    "address": "高雄市前鎮區民權二路某傳統公寓住宅5樓",
-    "lat": 22.610123,
-    "lng": 120.309891,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-05-20",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2020年05月 · 高雄市前鎮區民權二路某傳統公寓住宅5樓】依據歷年社會新聞檔案與臺灣高雄地方法院刑事判決紀錄，高雄市前鎮區民權二路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2020年）",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2020年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市前鎮區民權二路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792414557233-q8nxq",
     "city": "高雄市",
     "district": "苓雅區",
@@ -55526,10 +52996,10 @@
     "id": "news-1792414548144-hhkzx",
     "city": "高雄市",
     "district": "苓雅區",
-    "doorplate_address": "高雄市苓雅區從三多四路",
-    "address": "高雄市苓雅區從三多四路",
-    "lat": 22.616409,
-    "lng": 120.297961,
+    "doorplate_address": "高雄市苓雅區三多四路",
+    "address": "高雄市苓雅區三多四路",
+    "lat": 22.61396,
+    "lng": 120.301022,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-06-19",
     "building_type": "社區電梯大樓",
@@ -55545,33 +53015,6 @@
         "year": "2024",
         "stage": "聯合新聞網 (UDN)公開報導",
         "detail": "曾反映噪音困擾 高雄46歲男墜樓掉人行道身亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414557225-jlx2q",
-    "city": "高雄市",
-    "district": "苓雅區",
-    "doorplate_address": "高雄市苓雅區三多四路",
-    "address": "高雄市苓雅區三多四路",
-    "lat": 22.613683,
-    "lng": 120.30142,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-06-19",
-    "building_type": "社區電梯大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【高雄大樓清晨傳巨響 男子墜落人行道到院前死亡】高雄市苓雅區三多四路某大樓，今（19）日清晨6點左右傳出巨響，大樓管理員前往查看，驚見社區人行道上1名男子倒臥，警消獲報到場男子生命垂危，緊急送醫仍於到院前死亡，警方將進一步釐清男子墜樓原因。 據了解，死者為46歲男性，獨自租屋於該棟大樓，與家人久未聯繫，今天一早不明原因自高樓租屋處墜落至人行道上，",
-    "source": "自由時報報導「高雄大樓清晨傳巨響 男子墜落人行道到院前死亡」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5477286",
-    "media_verification": "自由時報報導「高雄大樓清晨傳巨響 男子墜落人行道到院前死亡」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "自由時報公開報導",
-        "detail": "高雄大樓清晨傳巨響 男子墜落人行道到院前死亡（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -56872,33 +54315,6 @@
     ]
   },
   {
-    "id": 5988,
-    "city": "高雄市",
-    "district": "小港區",
-    "doorplate_address": "高雄市小港區山明路某出租套房／公寓12樓",
-    "address": "高雄市小港區山明路某出租套房／公寓12樓",
-    "lat": 22.561223,
-    "lng": 120.359508,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2021-01-04",
-    "building_type": "出租套房／公寓",
-    "current_status": "法院裁判書認證凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_JUDGMENT",
-    "reason": "【2021年01月 · 高雄市小港區山明路某出租套房／公寓12樓】依司法院法學資料檢索系統（臺灣高雄地方法院民事判決）記載，買方購入高雄市小港區山明路之出租套房／公寓後查悉前手屋內曾發生非自然身亡事件，向法院訴請物之瑕疵擔保減少價金或解除買賣契約獲判勝訴認證。",
-    "source": "司法院裁判書系統 · 臺灣高雄地方法院110年度訴字第3182號民事判決",
-    "source_url": "",
-    "media_verification": "司法院裁判書系統 · 臺灣高雄地方法院110年度訴字第3182號民事判決",
-    "auction_record": "司法院公開民事判決書認證屬內政部函釋定義之「專有部分發生非自然死亡」物之瑕疵（凶宅）標的",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "法院裁判書認證凶宅",
-        "detail": "高雄市小港區山明路出租套房／公寓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 5989,
     "city": "高雄市",
     "district": "小港區",
@@ -57448,33 +54864,6 @@
     ]
   },
   {
-    "id": 6001,
-    "city": "高雄市",
-    "district": "鼓山區",
-    "doorplate_address": "高雄市鼓山區裕誠路某傳統公寓住宅2樓",
-    "address": "高雄市鼓山區裕誠路某傳統公寓住宅2樓",
-    "lat": 22.665504,
-    "lng": 120.298455,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-01-07",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2019年01月 · 高雄市鼓山區裕誠路某傳統公寓住宅2樓】依據歷年社會新聞檔案與臺灣高雄地方法院刑事判決紀錄，高雄市鼓山區裕誠路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "source_url": "",
-    "media_verification": "臺灣高雄地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "內政部定義列管凶宅",
-        "detail": "高雄市鼓山區裕誠路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6002,
     "city": "高雄市",
     "district": "鼓山區",
@@ -57559,10 +54948,10 @@
     "id": "news-1792414557302-t92e4",
     "city": "高雄市",
     "district": "新興區",
-    "doorplate_address": "高雄市新興區屍在民主路",
-    "address": "高雄市新興區屍在民主路",
-    "lat": 22.637101,
-    "lng": 120.297401,
+    "doorplate_address": "高雄市新興區民主路",
+    "address": "高雄市新興區民主路",
+    "lat": 22.633449,
+    "lng": 120.299714,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2011-08-23",
     "building_type": "出租套房／集合住宅",
@@ -58993,33 +56382,6 @@
     ]
   },
   {
-    "id": "news-1792414557285-9yxh0",
-    "city": "高雄市",
-    "district": "大寮區",
-    "doorplate_address": "高雄市大寮區影七路",
-    "address": "高雄市大寮區影七路",
-    "lat": 22.583474,
-    "lng": 120.400743,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-03-06",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "意外身亡",
-    "reason": "【屋主抗議拆遷輕生 高市府今辦法會竟引發火警】高雄市大寮區今（6）日下午3時許發生一起火警，詭異的是，該民宅李姓屋主抗議拆遷去年在屋內輕生。高市地政局清理環境並舉辦法會，疑因燃放鞭炮引發火苗，消防人員花半小時撲滅火勢，未有人員傷亡。高市地政局去年10月15日辦理大寮區影七路老舊眷村地上物拆除作業，發現61歲李姓男屋主在屋內身亡，他留有遺書，房屋",
-    "source": "自由時報報導「屋主抗議拆遷輕生 高市府今辦法會竟引發火警」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/4971905",
-    "media_verification": "自由時報報導「屋主抗議拆遷輕生 高市府今辦法會竟引發火警」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "屋主抗議拆遷輕生 高市府今辦法會竟引發火警（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "sb-3888",
     "city": "高雄市",
     "district": "大寮區",
@@ -59480,33 +56842,6 @@
     ]
   },
   {
-    "id": "news-1792414557234-wjsny",
-    "city": "高雄市",
-    "district": "前金區",
-    "doorplate_address": "高雄市前金區中正四路「為該處一棟商業大樓」",
-    "address": "高雄市前金區中正四路「為該處一棟商業大樓」",
-    "lat": 22.62836,
-    "lng": 120.294876,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-08-06",
-    "building_type": "住商複合大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【高雄某商務大樓男員工墜人行道  送醫不治】高雄市前金區中正四路近新盛一街，今（6）日中午近1點發生一起墜樓事件，民眾突然聽到一聲強烈撞擊聲，驚見一名男子倒臥在某大樓前人行道上，警消獲報到場已無生命跡象，緊急送醫仍搶救不治。據了解，墜樓男子年約30多歲，為該處一棟商業大樓某公司員工，才剛到職不到一週，當時正值午休時間，男子不明原因從頂樓墜落到",
-    "source": "自由時報報導「高雄某商務大樓男員工墜人行道  送醫不治」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5134239",
-    "media_verification": "自由時報報導「高雄某商務大樓男員工墜人行道  送醫不治」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "高雄某商務大樓男員工墜人行道  送醫不治（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": "news-1792414557240-zh65g",
     "city": "高雄市",
     "district": "前金區",
@@ -59536,11 +56871,11 @@
   {
     "id": "news-1792414581313-b2gw9",
     "city": "高雄市",
-    "district": "前金區",
-    "doorplate_address": "高雄市前金區中華四路",
-    "address": "高雄市前金區中華四路",
-    "lat": 22.624507,
-    "lng": 120.301508,
+    "district": "苓雅區",
+    "doorplate_address": "高雄市苓雅區中華四路",
+    "address": "高雄市苓雅區中華四路",
+    "lat": 22.614735,
+    "lng": 120.301803,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-07-31",
     "building_type": "社區電梯大樓",
@@ -59926,10 +57261,10 @@
     "id": "news-1792414581908-n14ss",
     "city": "高雄市",
     "district": "林園區",
-    "doorplate_address": "高雄市林園區家住仁愛路四段",
-    "address": "高雄市林園區家住仁愛路四段",
-    "lat": 22.511574,
-    "lng": 120.389185,
+    "doorplate_address": "高雄市林園區仁愛路",
+    "address": "高雄市林園區仁愛路",
+    "lat": 22.508685,
+    "lng": 120.391308,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-08-31",
     "building_type": "集合住宅／民宅建物",
@@ -61836,33 +59171,6 @@
     ]
   },
   {
-    "id": "news-1792414552489-i8kp8",
-    "city": "高雄市",
-    "district": "大樹區",
-    "doorplate_address": "高雄市大樹區溪埔路",
-    "address": "高雄市大樹區溪埔路",
-    "lat": 22.724508,
-    "lng": 120.443715,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-11-30",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "意外身亡",
-    "reason": "【高雄大樹汽車保養廠凌晨失火 55歲婦人身亡】高雄市大樹區溪埔路一間汽車保養廠鐵皮屋今天（30日）凌晨2點25分發生火警，燃燒汽車材料及雜物，消防局出動25車59人前往搶救，3點36分撲滅火勢，在2樓搜索發現55歲李姓婦女疑似逃生不及，明顯死亡未送醫，家屬接獲通報到場，悲痛欲絕。據了解，火警發生後，傳出陣陣爆炸聲，驚動附近住戶報案，因汽車保養廠",
-    "source": "自由時報報導「高雄大樹汽車保養廠凌晨失火 55歲婦人身亡」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5262586",
-    "media_verification": "自由時報報導「高雄大樹汽車保養廠凌晨失火 55歲婦人身亡」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "高雄大樹汽車保養廠凌晨失火 55歲婦人身亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": 4665,
     "city": "高雄市",
     "district": "大樹區",
@@ -63326,33 +60634,6 @@
     ]
   },
   {
-    "id": "news-1792414573807-sbw1a",
-    "city": "基隆市",
-    "district": "信義區",
-    "doorplate_address": "基隆市信義區培德路",
-    "address": "基隆市信義區培德路",
-    "lat": 25.132748,
-    "lng": 121.775439,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-05-07",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【影／基隆熱炒店巧遇討債爆衝突 男討債反被酒瓶刺死行凶男送辦】基隆市信義區培德路一家熱炒店昨晚發生疑討債糾紛引發命案，兩男疑因工程債務糾紛發生肢體衝突，雙方一言不合後扭打成一團，過程被監視器拍下。討債的56歲李男，反遭58歲李嫌持破酒瓶刺中頸動脈，血流如注，送醫搶救不治。警方逮捕行凶58歲李嫌，今天將依傷害致死罪嫌移送檢方偵辦。",
-    "source": "聯合新聞網 (UDN)報導「影／基隆熱炒店巧遇討債爆衝突 男討債反被酒瓶刺死行凶男送辦」",
-    "source_url": "https://udn.com/news/story/7320/9487230",
-    "media_verification": "聯合新聞網 (UDN)報導「影／基隆熱炒店巧遇討債爆衝突 男討債反被酒瓶刺死行凶男送辦」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "影／基隆熱炒店巧遇討債爆衝突 男討債反被酒瓶刺死行凶男送辦（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
     "id": 2010,
     "city": "基隆市",
     "district": "信義區",
@@ -63688,10 +60969,10 @@
     "id": "news-1792414663523-4fb88",
     "city": "基隆市",
     "district": "仁愛區",
-    "doorplate_address": "基隆市仁愛區基隆中船路",
-    "address": "基隆市仁愛區基隆中船路",
-    "lat": 25.140797,
-    "lng": 121.747352,
+    "doorplate_address": "基隆市仁愛區中船路5巷",
+    "address": "基隆市仁愛區中船路5巷",
+    "lat": 25.138196,
+    "lng": 121.751051,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-09-25",
     "building_type": "傳統公寓住宅",
@@ -63796,10 +61077,10 @@
     "id": "news-1792414548209-t4h0x",
     "city": "基隆市",
     "district": "仁愛區",
-    "doorplate_address": "基隆市仁愛區落在東明路77巷",
-    "address": "基隆市仁愛區落在東明路77巷",
-    "lat": 25.12048,
-    "lng": 121.744003,
+    "doorplate_address": "基隆市仁愛區東明路77巷",
+    "address": "基隆市仁愛區東明路77巷",
+    "lat": 25.126787,
+    "lng": 121.761756,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2022-09-20",
     "building_type": "傳統公寓住宅",
@@ -63823,10 +61104,10 @@
     "id": "news-1792414549978-t40nl",
     "city": "基隆市",
     "district": "仁愛區",
-    "doorplate_address": "基隆市仁愛區樓時沒有路「點左右從光華國宅」",
-    "address": "基隆市仁愛區樓時沒有路「點左右從光華國宅」",
-    "lat": 25.125057,
-    "lng": 121.736711,
+    "doorplate_address": "基隆市仁愛區成功一路（光華國宅）",
+    "address": "基隆市仁愛區成功一路（光華國宅）",
+    "lat": 25.12709,
+    "lng": 121.738687,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2018-09-11",
     "building_type": "公有國宅／社會住宅",
@@ -64696,10 +61977,10 @@
     "id": "news-1792414560058-2xwil",
     "city": "基隆市",
     "district": "七堵區",
-    "doorplate_address": "基隆市七堵區基隆大德路",
-    "address": "基隆市七堵區基隆大德路",
-    "lat": 25.082972,
-    "lng": 121.69018,
+    "doorplate_address": "基隆市七堵區大德路",
+    "address": "基隆市七堵區大德路",
+    "lat": 25.081558,
+    "lng": 121.690302,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2023-01-24",
     "building_type": "集合住宅／民宅建物",
@@ -65568,33 +62849,6 @@
     ]
   },
   {
-    "id": 6124,
-    "city": "新竹市",
-    "district": "東區",
-    "doorplate_address": "新竹市東區光復路一段某傳統公寓住宅5樓",
-    "address": "新竹市東區光復路一段某傳統公寓住宅5樓",
-    "lat": 24.785686,
-    "lng": 121.011993,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2013-01-07",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2013年01月 · 新竹市東區光復路一段某傳統公寓住宅5樓】依據歷年社會新聞檔案與臺灣新竹地方法院刑事判決紀錄，新竹市東區光復路一段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2013年）",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2013年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2013",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹市東區光復路一段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6125,
     "city": "新竹市",
     "district": "東區",
@@ -65726,33 +62980,6 @@
         "year": "2024",
         "stage": "法院裁判書認證凶宅",
         "detail": "新竹市東區關新路電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6130,
-    "city": "新竹市",
-    "district": "東區",
-    "doorplate_address": "新竹市東區光復路一段某傳統公寓住宅7樓",
-    "address": "新竹市東區光復路一段某傳統公寓住宅7樓",
-    "lat": 24.789879,
-    "lng": 121.011496,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2021-01-25",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2021年01月 · 新竹市東區光復路一段某傳統公寓住宅7樓】依據歷年社會新聞檔案與臺灣新竹地方法院刑事判決紀錄，新竹市東區光復路一段某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2021年）",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2021年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2021",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹市東區光復路一段傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -66438,33 +63665,6 @@
     ]
   },
   {
-    "id": 6153,
-    "city": "新竹市",
-    "district": "北區",
-    "doorplate_address": "新竹市北區延平路一段某社區電梯大樓2樓",
-    "address": "新竹市北區延平路一段某社區電梯大樓2樓",
-    "lat": 24.799349,
-    "lng": 120.948271,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-11-11",
-    "building_type": "社區電梯大樓",
-    "current_status": "司法院法拍筆錄註記凶宅",
-    "category": "法拍與其他",
-    "db_source": "JUDICIAL_AUCTION",
-    "reason": "【2022年11月 · 新竹市北區延平路一段某社區電梯大樓2樓】依臺灣新竹地方法院民事執行處公開法拍查封筆錄記載，位於新竹市北區延平路一段之社區電梯大樓標的，前債務人於屋內發生非自然死亡（燒炭輕生）事故，法院公告為點交／不點交之法定凶宅物件。",
-    "source": "臺灣新竹地方法院111年度司執字第53061號法拍屋公開公告筆錄",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院111年度司執字第53061號法拍屋公開公告筆錄",
-    "auction_record": "司法院法拍屋公開公告系統查封筆錄明確記載屋內曾發生非自然死亡事故（依市場行情約折價 65 折至 75 折拍定）",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "司法院法拍筆錄註記凶宅",
-        "detail": "新竹市北區延平路一段社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6154,
     "city": "新竹市",
     "district": "北區",
@@ -66710,33 +63910,6 @@
     ]
   },
   {
-    "id": 6162,
-    "city": "新竹市",
-    "district": "香山區",
-    "doorplate_address": "新竹市香山區大庄路某傳統公寓住宅8樓",
-    "address": "新竹市香山區大庄路某傳統公寓住宅8樓",
-    "lat": 24.794373,
-    "lng": 120.924517,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-10-19",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年10月 · 新竹市香山區大庄路某傳統公寓住宅8樓】依據公開消防災情與社會新聞通報紀錄，新竹市香山區大庄路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2016年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2016年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹市香山區大庄路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6163,
     "city": "新竹市",
     "district": "香山區",
@@ -66816,33 +63989,6 @@
         "detail": "新竹市香山區大庄路電梯華廈經公開資料庫登錄列管"
       }
     ]
-  },
-  {
-    "id": "news-1792414552557-3hms6",
-    "city": "新竹縣",
-    "district": "竹北市",
-    "doorplate_address": "新竹縣竹北市連想繞路",
-    "address": "新竹縣竹北市連想繞路",
-    "lat": 24.831253,
-    "lng": 120.996353,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-09-25",
-    "building_type": "透天住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "法拍與其他",
-    "reason": "【買進竹北千萬透天厝才知是凶宅！法官認「情節重大」 賣家判賠157萬】新竹縣竹北市曾男以1050萬買進透天厝，才知原本是凶宅，賣方稱死亡地點是公共區域，但新竹地院法官調閱資料發現死者是死在大門口，連想繞路都沒辦法，「凶宅情節重大」，經鑑定屋況減損價值237萬，然因買方只求償157萬，法官如數照判。曾男說，看上竹縣竹北市某不動產房地，經過與賣方張男確認買賣條件後，於11",
-    "source": "自由時報報導「買進竹北千萬透天厝才知是凶宅！法官認「情節重大」 賣家判賠157萬」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/5190045",
-    "media_verification": "自由時報報導「買進竹北千萬透天厝才知是凶宅！法官認「情節重大」 賣家判賠157萬」",
-    "auction_record": "經地方法院民事瑕疵擔保／凶宅爭訟判決紀錄在案",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "自由時報公開報導",
-        "detail": "買進竹北千萬透天厝才知是凶宅！法官認「情節重大」 賣家判賠157萬（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "JUDICIAL_JUDGMENT"
   },
   {
     "id": 2551,
@@ -67252,33 +64398,6 @@
     ]
   },
   {
-    "id": 6173,
-    "city": "新竹縣",
-    "district": "竹北市",
-    "doorplate_address": "新竹縣竹北市自強南路某傳統公寓住宅8樓",
-    "address": "新竹縣竹北市自強南路某傳統公寓住宅8樓",
-    "lat": 24.810287,
-    "lng": 121.022213,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-05-05",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2015年05月 · 新竹縣竹北市自強南路某傳統公寓住宅8樓】依據歷年社會新聞檔案與臺灣新竹地方法院刑事判決紀錄，新竹縣竹北市自強南路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹縣竹北市自強南路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6174,
     "city": "新竹縣",
     "district": "竹北市",
@@ -67329,33 +64448,6 @@
         "year": "2022",
         "stage": "法院裁判書認證凶宅",
         "detail": "新竹縣竹北市縣政二路出租套房／公寓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6176,
-    "city": "新竹縣",
-    "district": "竹北市",
-    "doorplate_address": "新竹縣竹北市中正西路某透天厝住宅3樓",
-    "address": "新竹縣竹北市中正西路某透天厝住宅3樓",
-    "lat": 24.843208,
-    "lng": 120.972544,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-11-14",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2019年11月 · 新竹縣竹北市中正西路某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣新竹地方法院刑事判決紀錄，新竹縣竹北市中正西路某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2019年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹縣竹北市中正西路透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -67414,33 +64506,6 @@
     ]
   },
   {
-    "id": 6179,
-    "city": "新竹縣",
-    "district": "竹北市",
-    "doorplate_address": "新竹縣竹北市自強南路某傳統公寓住宅10樓",
-    "address": "新竹縣竹北市自強南路某傳統公寓住宅10樓",
-    "lat": 24.810121,
-    "lng": 121.023383,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-05-23",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年05月 · 新竹縣竹北市自強南路某傳統公寓住宅10樓】依據歷年社會新聞檔案與臺灣新竹地方法院刑事判決紀錄，新竹縣竹北市自強南路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹縣竹北市自強南路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6180,
     "city": "新竹縣",
     "district": "竹北市",
@@ -67491,33 +64556,6 @@
         "year": "2017",
         "stage": "法院裁判書認證凶宅",
         "detail": "新竹縣竹北市縣政二路社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6182,
-    "city": "新竹縣",
-    "district": "竹北市",
-    "doorplate_address": "新竹縣竹北市中正西路某透天厝住宅4樓",
-    "address": "新竹縣竹北市中正西路某透天厝住宅4樓",
-    "lat": 24.835545,
-    "lng": 120.975695,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-11-05",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2014年11月 · 新竹縣竹北市中正西路某透天厝住宅4樓】依據歷年社會新聞檔案與臺灣新竹地方法院刑事判決紀錄，新竹縣竹北市中正西路某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2014年）",
-    "source_url": "",
-    "media_verification": "臺灣新竹地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2014年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "內政部定義列管凶宅",
-        "detail": "新竹縣竹北市中正西路透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -68836,33 +65874,6 @@
     ]
   },
   {
-    "id": 6207,
-    "city": "新竹縣",
-    "district": "新豐鄉",
-    "doorplate_address": "新竹縣新豐鄉道化街某傳統公寓住宅10樓",
-    "address": "新竹縣新豐鄉道化街某傳統公寓住宅10樓",
-    "lat": 24.868328,
-    "lng": 120.994254,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-06-27",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2016年06月 · 新竹縣新豐鄉道化街某傳統公寓住宅10樓】依內政部不動產成交案件實際資訊（實價登錄）與新竹縣政府地政處公開資料庫備註欄揭露，新竹縣新豐鄉道化街之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新竹縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 新竹縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "新竹縣新豐鄉道化街傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6208,
     "city": "新竹縣",
     "district": "新豐鄉",
@@ -70080,33 +67091,6 @@
     ]
   },
   {
-    "id": 6236,
-    "city": "苗栗縣",
-    "district": "頭份市",
-    "doorplate_address": "苗栗縣頭份市中正路某社區電梯大樓7樓",
-    "address": "苗栗縣頭份市中正路某社區電梯大樓7樓",
-    "lat": 24.692628,
-    "lng": 120.910653,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-04-04",
-    "building_type": "社區電梯大樓",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2012年04月 · 苗栗縣頭份市中正路某社區電梯大樓7樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，苗栗縣頭份市中正路一處社區電梯大樓住戶於屋內專有部分發生輕生非自然身亡事件，經苗栗縣警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2012年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2012年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "內政部定義列管凶宅",
-        "detail": "苗栗縣頭份市中正路社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6237,
     "city": "苗栗縣",
     "district": "頭份市",
@@ -70157,33 +67141,6 @@
         "year": "2019",
         "stage": "實價登錄特殊交易凶宅",
         "detail": "苗栗縣頭份市建國路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6239,
-    "city": "苗栗縣",
-    "district": "頭份市",
-    "doorplate_address": "苗栗縣頭份市仁愛路某傳統公寓住宅8樓",
-    "address": "苗栗縣頭份市仁愛路某傳統公寓住宅8樓",
-    "lat": 24.683222,
-    "lng": 120.902863,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-10-13",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2016年10月 · 苗栗縣頭份市仁愛路某傳統公寓住宅8樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，苗栗縣頭份市仁愛路一處傳統公寓住宅住戶於屋內專有部分發生輕生非自然身亡事件，經苗栗縣警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2016年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2016年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "內政部定義列管凶宅",
-        "detail": "苗栗縣頭份市仁愛路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -72027,12 +68984,12 @@
   },
   {
     "id": "news-1792414566848-dd2oe",
-    "city": "苗栗縣",
-    "district": "公館鄉",
-    "doorplate_address": "苗栗縣公館鄉東市公興路",
-    "address": "苗栗縣公館鄉東市公興路",
-    "lat": 24.509143,
-    "lng": 120.822685,
+    "city": "屏東縣",
+    "district": "屏東市",
+    "doorplate_address": "屏東縣屏東市公興路",
+    "address": "屏東縣屏東市公興路",
+    "lat": 22.636612,
+    "lng": 120.47456,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-07-25",
     "building_type": "集合住宅／民宅建物",
@@ -72585,10 +69542,10 @@
     "id": "news-1792414822166-fwpi5",
     "city": "彰化縣",
     "district": "彰化市",
-    "doorplate_address": "彰化縣彰化市鬧區永樂街",
-    "address": "彰化縣彰化市鬧區永樂街",
-    "lat": 24.076104,
-    "lng": 120.539538,
+    "doorplate_address": "彰化縣彰化市永樂街",
+    "address": "彰化縣彰化市永樂街",
+    "lat": 24.077024,
+    "lng": 120.541542,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-07-18",
     "building_type": "集合住宅／民宅建物",
@@ -73119,33 +70076,6 @@
     ]
   },
   {
-    "id": 6274,
-    "city": "彰化縣",
-    "district": "彰化市",
-    "doorplate_address": "彰化縣彰化市中山路二段某透天厝住宅3樓",
-    "address": "彰化縣彰化市中山路二段某透天厝住宅3樓",
-    "lat": 24.070524,
-    "lng": 120.544034,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-07-10",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年07月 · 彰化縣彰化市中山路二段某透天厝住宅3樓】依據歷年社會新聞檔案與臺灣彰化地方法院刑事判決紀錄，彰化縣彰化市中山路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "source_url": "",
-    "media_verification": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2023年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "彰化縣彰化市中山路二段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6275,
     "city": "彰化縣",
     "district": "彰化市",
@@ -73196,33 +70126,6 @@
         "year": "2017",
         "stage": "法院裁判書認證凶宅",
         "detail": "彰化縣彰化市辭修路社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6277,
-    "city": "彰化縣",
-    "district": "彰化市",
-    "doorplate_address": "彰化縣彰化市三民路某傳統公寓住宅5樓",
-    "address": "彰化縣彰化市三民路某傳統公寓住宅5樓",
-    "lat": 24.085664,
-    "lng": 120.547325,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-01-19",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2014年01月 · 彰化縣彰化市三民路某傳統公寓住宅5樓】依據歷年社會新聞檔案與臺灣彰化地方法院刑事判決紀錄，彰化縣彰化市三民路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2014年）",
-    "source_url": "",
-    "media_verification": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2014年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "內政部定義列管凶宅",
-        "detail": "彰化縣彰化市三民路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -73281,40 +70184,13 @@
     ]
   },
   {
-    "id": 6280,
-    "city": "彰化縣",
-    "district": "彰化市",
-    "doorplate_address": "彰化縣彰化市中山路二段某透天厝住宅4樓",
-    "address": "彰化縣彰化市中山路二段某透天厝住宅4樓",
-    "lat": 24.076621,
-    "lng": 120.540004,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2018-07-01",
-    "building_type": "透天厝住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2018年07月 · 彰化縣彰化市中山路二段某透天厝住宅4樓】依據歷年社會新聞檔案與臺灣彰化地方法院刑事判決紀錄，彰化縣彰化市中山路二段某透天厝住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2018年）",
-    "source_url": "",
-    "media_verification": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2018年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2018",
-        "stage": "內政部定義列管凶宅",
-        "detail": "彰化縣彰化市中山路二段透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792414547809-10qkd",
     "city": "彰化縣",
     "district": "員林市",
-    "doorplate_address": "彰化縣員林市冷氣短路",
-    "address": "彰化縣員林市冷氣短路",
-    "lat": 23.96059,
-    "lng": 120.588791,
+    "doorplate_address": "彰化縣員林市南潭路",
+    "address": "彰化縣員林市南潭路",
+    "lat": 23.961853,
+    "lng": 120.555193,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2023-04-15",
     "building_type": "透天住宅",
@@ -74446,33 +71322,6 @@
         "year": "2015",
         "stage": "法院裁判書認證凶宅",
         "detail": "彰化縣鹿港鎮民權路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6304,
-    "city": "彰化縣",
-    "district": "鹿港鎮",
-    "doorplate_address": "彰化縣鹿港鎮復興路某傳統公寓住宅6樓",
-    "address": "彰化縣鹿港鎮復興路某傳統公寓住宅6樓",
-    "lat": 24.050251,
-    "lng": 120.441422,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-01-16",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2012年01月 · 彰化縣鹿港鎮復興路某傳統公寓住宅6樓】依據歷年社會新聞檔案與臺灣彰化地方法院刑事判決紀錄，彰化縣鹿港鎮復興路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2012年）",
-    "source_url": "",
-    "media_verification": "臺灣彰化地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2012年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "內政部定義列管凶宅",
-        "detail": "彰化縣鹿港鎮復興路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -80379,33 +77228,6 @@
     ]
   },
   {
-    "id": 6385,
-    "city": "雲林縣",
-    "district": "斗六市",
-    "doorplate_address": "雲林縣斗六市文化路某社區電梯大樓4樓",
-    "address": "雲林縣斗六市文化路某社區電梯大樓4樓",
-    "lat": 23.706954,
-    "lng": 120.557333,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2018-06-24",
-    "building_type": "社區電梯大樓",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2018年06月 · 雲林縣斗六市文化路某社區電梯大樓4樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，雲林縣斗六市文化路一處社區電梯大樓住戶於屋內專有部分發生輕生非自然身亡事件，經雲林縣警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2018年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2018年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2018",
-        "stage": "內政部定義列管凶宅",
-        "detail": "雲林縣斗六市文化路社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6386,
     "city": "雲林縣",
     "district": "斗六市",
@@ -80456,33 +77278,6 @@
         "year": "2012",
         "stage": "實價登錄特殊交易凶宅",
         "detail": "雲林縣斗六市成功路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6388,
-    "city": "雲林縣",
-    "district": "斗六市",
-    "doorplate_address": "雲林縣斗六市西平路某傳統公寓住宅5樓",
-    "address": "雲林縣斗六市西平路某傳統公寓住宅5樓",
-    "lat": 23.716219,
-    "lng": 120.533233,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2022-12-06",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "輕生事故",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2022年12月 · 雲林縣斗六市西平路某傳統公寓住宅5樓】依據公開地方社會新聞與台灣凶宅網歷史檔案核對，雲林縣斗六市西平路一處傳統公寓住宅住戶於屋內專有部分發生輕生非自然身亡事件，經雲林縣警察局鑑識與檢察官相驗確認，符合內政部不動產說明書應記載之凶宅定義。",
-    "source": "台灣凶宅網公開檔案庫 / 2022年地方社會版新聞與警消通報紀錄",
-    "source_url": "",
-    "media_verification": "台灣凶宅網公開檔案庫 / 2022年地方社會版新聞與警消通報紀錄",
-    "auction_record": "依內政部不動產說明書應記載及不得記載事項列為建物專有部分非自然死亡（輕生事故）紀錄",
-    "history_timeline": [
-      {
-        "year": "2022",
-        "stage": "內政部定義列管凶宅",
-        "detail": "雲林縣斗六市西平路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -83614,33 +80409,6 @@
     ]
   },
   {
-    "id": 6421,
-    "city": "嘉義市",
-    "district": "西區",
-    "doorplate_address": "嘉義市西區世賢路二段某傳統公寓住宅5樓",
-    "address": "嘉義市西區世賢路二段某傳統公寓住宅5樓",
-    "lat": 23.47325,
-    "lng": 120.418968,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-10-07",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2012年10月 · 嘉義市西區世賢路二段某傳統公寓住宅5樓】依內政部不動產成交案件實際資訊（實價登錄）與嘉義市政府地政處公開資料庫備註欄揭露，嘉義市西區世賢路二段之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 嘉義市政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 嘉義市政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "嘉義市西區世賢路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6422,
     "city": "嘉義市",
     "district": "西區",
@@ -83772,33 +80540,6 @@
         "year": "2023",
         "stage": "內政部定義列管凶宅",
         "detail": "嘉義市西區新民路電梯華廈經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6427,
-    "city": "嘉義市",
-    "district": "西區",
-    "doorplate_address": "嘉義市西區世賢路二段某傳統公寓住宅7樓",
-    "address": "嘉義市西區世賢路二段某傳統公寓住宅7樓",
-    "lat": 23.47617,
-    "lng": 120.426307,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-10-25",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2020年10月 · 嘉義市西區世賢路二段某傳統公寓住宅7樓】依內政部不動產成交案件實際資訊（實價登錄）與嘉義市政府地政處公開資料庫備註欄揭露，嘉義市西區世賢路二段之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 嘉義市政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 嘉義市政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "嘉義市西區世賢路二段傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -83938,40 +80679,13 @@
     ]
   },
   {
-    "id": 6433,
-    "city": "嘉義市",
-    "district": "西區",
-    "doorplate_address": "嘉義市西區世賢路二段某傳統公寓住宅9樓",
-    "address": "嘉義市西區世賢路二段某傳統公寓住宅9樓",
-    "lat": 23.472486,
-    "lng": 120.429269,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-10-16",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2015年10月 · 嘉義市西區世賢路二段某傳統公寓住宅9樓】依內政部不動產成交案件實際資訊（實價登錄）與嘉義市政府地政處公開資料庫備註欄揭露，嘉義市西區世賢路二段之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 嘉義市政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 嘉義市政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "嘉義市西區世賢路二段傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": "news-1792414565183-l7z35",
     "city": "嘉義市",
     "district": "東區",
-    "doorplate_address": "嘉義市東區指吳鳳南路",
-    "address": "嘉義市東區指吳鳳南路",
-    "lat": 23.46509,
-    "lng": 120.452365,
+    "doorplate_address": "嘉義市東區吳鳳南路",
+    "address": "嘉義市東區吳鳳南路",
+    "lat": 23.464926,
+    "lng": 120.455593,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2024-02-18",
     "building_type": "集合住宅／民宅建物",
@@ -84022,10 +80736,10 @@
     "id": "news-1792414547820-yhysw",
     "city": "嘉義市",
     "district": "東區",
-    "doorplate_address": "嘉義市東區現在文雅街",
-    "address": "嘉義市東區現在文雅街",
-    "lat": 23.485127,
-    "lng": 120.483506,
+    "doorplate_address": "嘉義市東區文雅街",
+    "address": "嘉義市東區文雅街",
+    "lat": 23.481651,
+    "lng": 120.484874,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2017-12-06",
     "building_type": "集合住宅／民宅建物",
@@ -84041,33 +80755,6 @@
         "year": "2017",
         "stage": "自由時報公開報導",
         "detail": "嘉市知名滷味加盟體系老闆 疑欠債上吊身亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414565195-45fqw",
-    "city": "嘉義市",
-    "district": "東區",
-    "doorplate_address": "嘉義市東區小貓躺在路",
-    "address": "嘉義市東區小貓躺在路",
-    "lat": 23.484947,
-    "lng": 120.474893,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-12-21",
-    "building_type": "社區電梯大樓",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【貓咪自高樓墜落 動保團體質疑受虐】嘉義市東區一棟16層社區大樓，今下午2點左右驚傳一隻混種3歲大母貓墜樓死亡，嘉義市動物守護協會獲報趕抵，見小貓躺在路中間、死不瞑目，一旁江姓一樓住戶表示洗車時，聽到「碰！」聲響，仰頭一看一隻貓成自由落體、掉在路中間，懷疑遭人惡意丟下，連忙通報警方到場採證，嘉義市政府農林畜牧科現請大樓管理委員會協助調",
-    "source": "自由時報報導「貓咪自高樓墜落 動保團體質疑受虐」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/1547134",
-    "media_verification": "自由時報報導「貓咪自高樓墜落 動保團體質疑受虐」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "自由時報公開報導",
-        "detail": "貓咪自高樓墜落 動保團體質疑受虐（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -86221,33 +82908,6 @@
     ]
   },
   {
-    "id": 6485,
-    "city": "嘉義縣",
-    "district": "中埔鄉",
-    "doorplate_address": "嘉義縣中埔鄉大義路某傳統公寓住宅9樓",
-    "address": "嘉義縣中埔鄉大義路某傳統公寓住宅9樓",
-    "lat": 23.457282,
-    "lng": 120.470428,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-05-08",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2015年05月 · 嘉義縣中埔鄉大義路某傳統公寓住宅9樓】依據歷年社會新聞檔案與臺灣嘉義地方法院刑事判決紀錄，嘉義縣中埔鄉大義路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣嘉義地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "source_url": "",
-    "media_verification": "臺灣嘉義地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2015年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "內政部定義列管凶宅",
-        "detail": "嘉義縣中埔鄉大義路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6486,
     "city": "嘉義縣",
     "district": "大林鎮",
@@ -88336,33 +84996,6 @@
     ]
   },
   {
-    "id": 6521,
-    "city": "屏東縣",
-    "district": "潮州鎮",
-    "doorplate_address": "屏東縣潮州鎮四維路某傳統公寓住宅7樓",
-    "address": "屏東縣潮州鎮四維路某傳統公寓住宅7樓",
-    "lat": 22.560659,
-    "lng": 120.550976,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-05-26",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "刑事命案",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2020年05月 · 屏東縣潮州鎮四維路某傳統公寓住宅7樓】依據歷年社會新聞檔案與臺灣屏東地方法院刑事判決紀錄，屏東縣潮州鎮四維路某傳統公寓住宅屋內因感情或財務糾紛發生持械行兇命案，被害人於專有部分屋內傷重不治，為司法與公開媒體記載之法定凶宅。",
-    "source": "臺灣屏東地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2020年）",
-    "source_url": "",
-    "media_verification": "臺灣屏東地方法院刑事判決紀錄 / 歷年重大社會新聞檔案庫（2020年）",
-    "auction_record": "依內政部函釋（97年7月24日內授中辦地字第0970048190號）屬專有部分發生兇殺死亡之法定凶宅",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "內政部定義列管凶宅",
-        "detail": "屏東縣潮州鎮四維路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6522,
     "city": "屏東縣",
     "district": "潮州鎮",
@@ -89988,62 +86621,6 @@
         "detail": "屏東縣枋寮鄉中興路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
-  },
-  {
-    "id": "news-1792415623059-hr133",
-    "city": "屏東縣",
-    "district": "里港鄉",
-    "doorplate_address": "屏東縣里港鄉小時蹺家路",
-    "address": "屏東縣里港鄉小時蹺家路",
-    "lat": 22.795302,
-    "lng": 120.517681,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2025-12-04",
-    "building_type": "集合住宅／民宅建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "輕生事故",
-    "reason": "【影／車手頭見警上門...竟循小時蹺家路線跳樓逃 毫髮無傷仍遭逮】真是驚險！屏東縣里港警分局查緝詐欺集團擔任車手頭30多歲張姓男子，見警方上門，竟然從後方跳樓逃竄，張男先從三樓陽台爬出後...",
-    "source": "聯合新聞網 (UDN)報導「影／車手頭見警上門...竟循小時蹺家路線跳樓逃 毫髮無傷仍遭逮」",
-    "source_url": "https://udn.com/news/story/7315/9181085",
-    "media_verification": "聯合新聞網 (UDN)報導「影／車手頭見警上門...竟循小時蹺家路線跳樓逃 毫髮無傷仍遭逮」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2025",
-        "stage": "聯合新聞網 (UDN)公開報導",
-        "detail": "影／車手頭見警上門...竟循小時蹺家路線跳樓逃 毫髮無傷仍遭逮（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "__road": "小時蹺家路",
-    "__community": "",
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414549925-hw10z",
-    "city": "屏東縣",
-    "district": "里港鄉",
-    "doorplate_address": "屏東縣里港鄉死者住處路",
-    "address": "屏東縣里港鄉死者住處路",
-    "lat": 22.800843,
-    "lng": 120.517629,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2012-06-28",
-    "building_type": "平房／農舍建物",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【里港砂石富商槍擊命案　找到兇槍】里港砂石富商林榮健槍擊命案今天宣佈偵破，兇手狙殺後，將槍身、槍管拆卸，扔棄歸來農舍廢水池和殺蛇河溪，警方在撈獲槍身送驗確定兇槍，今天上午宣佈破案。警方表示，5月14日槍擊命案發生後，調閱死者住處路口監視畫面，發現兇嫌徐維駿嫌騎乘懸掛已註銷號牌的白色光陽重機車，另一嫌陳陳嘉和駕駛變造車牌的轎車，埋伏屏",
-    "source": "自由時報報導「里港砂石富商槍擊命案　找到兇槍」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/659503",
-    "media_verification": "自由時報報導「里港砂石富商槍擊命案　找到兇槍」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2012",
-        "stage": "自由時報公開報導",
-        "detail": "里港砂石富商槍擊命案　找到兇槍（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
   },
   {
     "id": 4855,
@@ -94398,33 +90975,6 @@
     ]
   },
   {
-    "id": 6600,
-    "city": "花蓮縣",
-    "district": "花蓮市",
-    "doorplate_address": "花蓮縣花蓮市建國路某傳統公寓住宅4樓",
-    "address": "花蓮縣花蓮市建國路某傳統公寓住宅4樓",
-    "lat": 23.985295,
-    "lng": 121.605093,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-06-06",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2020年06月 · 花蓮縣花蓮市建國路某傳統公寓住宅4樓】依內政部不動產成交案件實際資訊（實價登錄）與花蓮縣政府地政處公開資料庫備註欄揭露，花蓮縣花蓮市建國路之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 花蓮縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 花蓮縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "花蓮縣花蓮市建國路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6601,
     "city": "花蓮縣",
     "district": "花蓮市",
@@ -94448,33 +90998,6 @@
         "year": "2017",
         "stage": "內政部定義列管凶宅",
         "detail": "花蓮縣花蓮市自由街社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6602,
-    "city": "花蓮縣",
-    "district": "花蓮市",
-    "doorplate_address": "花蓮縣花蓮市中美路某傳統公寓住宅12樓",
-    "address": "花蓮縣花蓮市中美路某傳統公寓住宅12樓",
-    "lat": 23.987393,
-    "lng": 121.623478,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2014-06-03",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2014年06月 · 花蓮縣花蓮市中美路某傳統公寓住宅12樓】依據公開消防災情與社會新聞通報紀錄，花蓮縣花蓮市中美路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2014年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2014年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2014",
-        "stage": "內政部定義列管凶宅",
-        "detail": "花蓮縣花蓮市中美路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -95751,12 +92274,12 @@
   },
   {
     "id": "news-1792414549963-evz9e",
-    "city": "花蓮縣",
-    "district": "光復鄉",
-    "doorplate_address": "花蓮縣光復鄉北市錦州街",
-    "address": "花蓮縣光復鄉北市錦州街",
-    "lat": 23.631719,
-    "lng": 121.423472,
+    "city": "臺北市",
+    "district": "中山區",
+    "doorplate_address": "臺北市中山區錦州街",
+    "address": "臺北市中山區錦州街（集合住宅／民宅建物·2025-11）",
+    "lat": 25.061085,
+    "lng": 121.534256,
     "location_accuracy": "ROOFTOP",
     "incident_date": "2025-11-03",
     "building_type": "集合住宅／民宅建物",
@@ -95772,33 +92295,6 @@
         "year": "2025",
         "stage": "自由時報公開報導",
         "detail": "上月才去花蓮當鏟子超人 退伍軍人持刀挾持前女友姊妹拒捕墜樓亡（來源連結可點擊直接查閱原篇報導）"
-      }
-    ],
-    "db_source": "NEWS_PUBLIC_ARCHIVE"
-  },
-  {
-    "id": "news-1792414548377-hsj1p",
-    "city": "花蓮縣",
-    "district": "光復鄉",
-    "doorplate_address": "花蓮縣光復鄉中市光復路",
-    "address": "花蓮縣光復鄉中市光復路",
-    "lat": 23.670468,
-    "lng": 121.420121,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-11-08",
-    "building_type": "出租套房／集合住宅",
-    "current_status": "依轄區警消與實價登錄現況列管",
-    "category": "刑事命案",
-    "reason": "【台中母子3屍案 29歲未婚媽媽經濟拮据 獨力養雙胞胎】昨晚在台中市光復路傳出的母子3屍命案，清晨已有家屬趕赴認屍，確認死者是陳姓29歲未婚媽媽，獨力撫養一對雙胞胎兒子，經濟相當拮据，上午將由中檢派檢察官前往台中市生命禮儀管理所相驗，釐清3人的死因。據悉，3人陳屍在出租套房內，身體是以涼被覆蓋及包裹著，死亡時間在3天以上，已出現屍斑，家屬來自彰化縣認出死",
-    "source": "自由時報報導「台中母子3屍案 29歲未婚媽媽經濟拮据 獨力養雙胞胎」",
-    "source_url": "https://news.ltn.com.tw/news/society/breakingnews/2971234",
-    "media_verification": "自由時報報導「台中母子3屍案 29歲未婚媽媽經濟拮据 獨力養雙胞胎」",
-    "auction_record": "依司法院法拍屋公告或實價登錄特殊交易備註為準",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "自由時報公開報導",
-        "detail": "台中母子3屍案 29歲未婚媽媽經濟拮据 獨力養雙胞胎（來源連結可點擊直接查閱原篇報導）"
       }
     ],
     "db_source": "NEWS_PUBLIC_ARCHIVE"
@@ -96247,33 +92743,6 @@
     ]
   },
   {
-    "id": 6637,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市傳廣路某傳統公寓住宅4樓",
-    "address": "臺東縣臺東市傳廣路某傳統公寓住宅4樓",
-    "lat": 22.764159,
-    "lng": 121.139487,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2016-10-07",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2016年10月 · 臺東縣臺東市傳廣路某傳統公寓住宅4樓】依內政部不動產成交案件實際資訊（實價登錄）與臺東縣政府地政處公開資料庫備註欄揭露，臺東縣臺東市傳廣路之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2016",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺東縣臺東市傳廣路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6638,
     "city": "臺東縣",
     "district": "臺東市",
@@ -96297,60 +92766,6 @@
         "year": "2013",
         "stage": "內政部定義列管凶宅",
         "detail": "臺東縣臺東市博愛路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6639,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市福建路某傳統公寓住宅12樓",
-    "address": "臺東縣臺東市福建路某傳統公寓住宅12樓",
-    "lat": 22.750863,
-    "lng": 121.155115,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2023-10-04",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2023年10月 · 臺東縣臺東市福建路某傳統公寓住宅12樓】依據公開消防災情與社會新聞通報紀錄，臺東縣臺東市福建路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2023年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2023年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2023",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺東縣臺東市福建路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6640,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市四維路二段某透天厝住宅3樓",
-    "address": "臺東縣臺東市四維路二段某透天厝住宅3樓",
-    "lat": 22.762604,
-    "lng": 121.149926,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2020-04-16",
-    "building_type": "透天厝住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2020年04月 · 臺東縣臺東市四維路二段某透天厝住宅3樓】依內政部不動產成交案件實際資訊（實價登錄）與臺東縣政府地政處公開資料庫備註欄揭露，臺東縣臺東市四維路二段之透天厝住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2020",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺東縣臺東市四維路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -96409,33 +92824,6 @@
     ]
   },
   {
-    "id": 6643,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市傳廣路某傳統公寓住宅6樓",
-    "address": "臺東縣臺東市傳廣路某傳統公寓住宅6樓",
-    "lat": 22.759816,
-    "lng": 121.145268,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2024-10-25",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2024年10月 · 臺東縣臺東市傳廣路某傳統公寓住宅6樓】依內政部不動產成交案件實際資訊（實價登錄）與臺東縣政府地政處公開資料庫備註欄揭露，臺東縣臺東市傳廣路之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2024",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺東縣臺東市傳廣路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6644,
     "city": "臺東縣",
     "district": "臺東市",
@@ -96459,60 +92847,6 @@
         "year": "2021",
         "stage": "內政部定義列管凶宅",
         "detail": "臺東縣臺東市博愛路透天厝住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6645,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市福建路某傳統公寓住宅3樓",
-    "address": "臺東縣臺東市福建路某傳統公寓住宅3樓",
-    "lat": 22.750169,
-    "lng": 121.158373,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2018-10-22",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2018年10月 · 臺東縣臺東市福建路某傳統公寓住宅3樓】依據公開消防災情與社會新聞通報紀錄，臺東縣臺東市福建路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2018年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2018年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2018",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺東縣臺東市福建路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6646,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市四維路二段某透天厝住宅4樓",
-    "address": "臺東縣臺東市四維路二段某透天厝住宅4樓",
-    "lat": 22.766418,
-    "lng": 121.151073,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2015-04-07",
-    "building_type": "透天厝住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2015年04月 · 臺東縣臺東市四維路二段某透天厝住宅4樓】依內政部不動產成交案件實際資訊（實價登錄）與臺東縣政府地政處公開資料庫備註欄揭露，臺東縣臺東市四維路二段之透天厝住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2015",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺東縣臺東市四維路二段透天厝住宅經公開資料庫登錄列管"
       }
     ]
   },
@@ -96571,33 +92905,6 @@
     ]
   },
   {
-    "id": 6649,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市傳廣路某傳統公寓住宅8樓",
-    "address": "臺東縣臺東市傳廣路某傳統公寓住宅8樓",
-    "lat": 22.758262,
-    "lng": 121.143816,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2019-10-16",
-    "building_type": "傳統公寓住宅",
-    "current_status": "實價登錄特殊交易凶宅",
-    "category": "法拍與其他",
-    "db_source": "MOI_OPEN_DATA",
-    "reason": "【2019年10月 · 臺東縣臺東市傳廣路某傳統公寓住宅8樓】依內政部不動產成交案件實際資訊（實價登錄）與臺東縣政府地政處公開資料庫備註欄揭露，臺東縣臺東市傳廣路之傳統公寓住宅專有部分曾發生非自然身亡事故，屬法定應記載之事故屋特殊交易案件。",
-    "source": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "source_url": "",
-    "media_verification": "內政部不動產實價登錄公開資料庫（特殊交易備註案件）· 臺東縣政府地政處",
-    "auction_record": "內政部實價登錄備註欄註記：「本標的專有部分曾發生非自然死亡（凶宅）特殊交易，成交價低於周邊正常行情」",
-    "history_timeline": [
-      {
-        "year": "2019",
-        "stage": "實價登錄特殊交易凶宅",
-        "detail": "臺東縣臺東市傳廣路傳統公寓住宅經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
     "id": 6650,
     "city": "臺東縣",
     "district": "臺東市",
@@ -96621,33 +92928,6 @@
         "year": "2016",
         "stage": "內政部定義列管凶宅",
         "detail": "臺東縣臺東市博愛路社區電梯大樓經公開資料庫登錄列管"
-      }
-    ]
-  },
-  {
-    "id": 6651,
-    "city": "臺東縣",
-    "district": "臺東市",
-    "doorplate_address": "臺東縣臺東市福建路某傳統公寓住宅5樓",
-    "address": "臺東縣臺東市福建路某傳統公寓住宅5樓",
-    "lat": 22.755102,
-    "lng": 121.146005,
-    "location_accuracy": "ROOFTOP",
-    "incident_date": "2013-10-13",
-    "building_type": "傳統公寓住宅",
-    "current_status": "內政部定義列管凶宅",
-    "category": "意外身亡",
-    "db_source": "NEWS_PUBLIC_ARCHIVE",
-    "reason": "【2013年10月 · 臺東縣臺東市福建路某傳統公寓住宅5樓】依據公開消防災情與社會新聞通報紀錄，臺東縣臺東市福建路一處傳統公寓住宅發生住宅室內一氧化碳中毒／惡火奪命事故，造成住戶於屋內專有部分不治身亡，經實務見解與公開檔案列為事故住宅。",
-    "source": "公開消防災情通報與地方社會新聞歷史卷宗（2013年）",
-    "source_url": "",
-    "media_verification": "公開消防災情通報與地方社會新聞歷史卷宗（2013年）",
-    "auction_record": "依不動產交易實務與法院見解列為室內非自然意外事故身亡之應揭露標的",
-    "history_timeline": [
-      {
-        "year": "2013",
-        "stage": "內政部定義列管凶宅",
-        "detail": "臺東縣臺東市福建路傳統公寓住宅經公開資料庫登錄列管"
       }
     ]
   },

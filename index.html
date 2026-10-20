@@ -3358,34 +3358,15 @@
       // Static Hosting / GitHub Pages Fallback (if /api/records is not available)
       if (!loadedFromApi || allRecords.length === 0) {
         let fallbackRecords = [];
-        const archiveUrl = getArchiveJsonUrl();
-        
-        try {
-          const staticRes = await fetch(archiveUrl);
-          if (staticRes.ok) {
-            const staticList = await staticRes.json();
-            if (Array.isArray(staticList)) {
-              fallbackRecords = staticList;
-            }
-          } else {
-            // Secondary attempt with plain relative path
-            const altRes = await fetch("./calibrated_archive.json");
-            if (altRes.ok) {
-              const altList = await altRes.json();
-              if (Array.isArray(altList)) {
-                fallbackRecords = altList;
-              }
-            }
-          }
-        } catch (e) {
-          console.warn("Could not load local calibrated archive:", e);
-        }
+        const seenIds = new Set();
+        const seenAddrs = new Set();
+        const seenReasons = new Set();
 
-        // Fetch all pages of statutory haunted house records directly from Supabase (bypassing 1,000-row cap)
+        // 1. First fetch all pages of statutory haunted house records directly from Supabase (live source of truth)
         try {
           let supaList = [];
           for (let offset = 0; offset < 5000; offset += 1000) {
-            const supaRes = await fetch(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.desc`, {
+            const supaRes = await fetch(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.asc`, {
               headers: {
                 apikey: SUPABASE_PUB_KEY,
                 Authorization: `Bearer ${SUPABASE_PUB_KEY}`,
@@ -3399,66 +3380,71 @@
             if (pageRows.length < 1000) break;
           }
 
-          if (supaList.length > 0) {
-            const seenIds = new Set(fallbackRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : "")));
-            const seenAddrs = new Set(fallbackRecords.map(r => `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${(r.doorplate_address || r.address || "").replace(/台/g, "臺").replace(/\s+/g, "").replace(/（.*）/, "").replace(/\(.*\)/, "")}`));
-            const seenReasons = new Set(fallbackRecords.map(r => {
-              const p = (r.reason || "").replace(/\s+/g, "").slice(0, 25);
-              return p.length >= 10 ? `${(r.city || "").replace(/台/g, "臺")}_${r.district || ""}_${p}` : "";
-            }).filter(Boolean));
+          for (const item of supaList) {
+            if (!item || !item.address) continue;
+            if (item.id === 1712 || (item.address && item.address.includes("自由三路157號"))) continue;
+            if (item.district === "茂林區" && (item.address || "").includes("茂林巷")) continue;
 
-            for (const item of supaList) {
-              if (!item || !item.address) continue;
-              if (item.id === 1712 || (item.address && item.address.includes("自由三路157號"))) continue;
-              if (item.district === "茂林區" && (item.address || "").includes("茂林巷")) continue;
-
-              const full = `${item.address || ""} ${item.reason || ""} ${item.category || ""} ${item.source || ""} ${item.auction_record || ""}`;
-              if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死/.test(full)) {
-                continue;
-              }
-              if (!/住宅|民宅|住家|公寓|大樓|華廈|透天|套房|社區|雅房|國宅|租屋|屋內|房內|臥室|頂樓|陽台|法拍|凶宅|家宅|自宅|大廈|平房|三合院|別墅/.test(full)) {
-                continue;
-              }
-              if (!/命案|兇殺|他殺|情殺|仇殺|分屍|砍殺|槍擊|弒|虐死|輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥|一氧化碳|瓦斯中毒|氣爆.*死|惡火.*死|火警.*死|火災.*死|縱火.*死|非自然死亡|非自然身亡|凶宅|陳屍.*屋|陳屍.*宅|陳屍.*房|陳屍.*大樓|陳屍.*公寓|雙屍|三屍|母子.*死|夫妻.*死/.test(full)) {
-                continue;
-              }
-
-              const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
-              const city = (item.city || "").replace(/台/g, "臺");
-              const dist = item.district || "";
-              let cleanDoor = (item.doorplate_address || item.address || "").replace(/台/g, "臺").trim();
-              cleanDoor = cleanDoor.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
-              if (!item.source_url || !String(item.source_url).startsWith("http") || Number(item.id) >= 4110) {
-                cleanDoor = cleanDoor.replace(/([路街段巷弄])\d+(?:之\d+)?號/g, "$1");
-              }
-
-              const cleanAddr = cleanDoor
-                .replace(/\s+/g, "")
-                .replace(/（.*）/, "")
-                .replace(/\(.*\)/, "");
-              const addrKey = `${city}_${dist}_${cleanAddr}`;
-              const reasonPrefix = (item.reason || "").replace(/\s+/g, "").slice(0, 25);
-              const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
-
-              if (idKey && seenIds.has(idKey)) continue;
-              if (seenAddrs.has(addrKey)) continue;
-              if (reasonKey && seenReasons.has(reasonKey)) continue;
-
-              if (idKey) seenIds.add(idKey);
-              seenAddrs.add(addrKey);
-              if (reasonKey) seenReasons.add(reasonKey);
-
-              fallbackRecords.push({
-                ...item,
-                city,
-                address: cleanDoor,
-                doorplate_address: cleanDoor.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
-                location_accuracy: item.location_accuracy || "ROOFTOP"
-              });
+            const full = `${item.address || ""} ${item.reason || ""} ${item.category || ""} ${item.source || ""} ${item.auction_record || ""}`.replace(/非自然死亡|非自然身亡/g, "凶宅事故");
+            if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死|幸無大礙|無人傷亡/.test(full)) {
+              continue;
             }
+
+            const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
+            const city = (item.city || "").replace(/台/g, "臺");
+            const dist = item.district || "";
+            let cleanDoor = (item.doorplate_address || item.address || "").replace(/台/g, "臺").trim();
+            cleanDoor = cleanDoor.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
+
+            const cleanAddr = cleanDoor
+              .replace(/\s+/g, "")
+              .replace(/（.*）/, "")
+              .replace(/\(.*\)/, "");
+            const addrKey = `${city}_${dist}_${cleanAddr}`;
+            const reasonPrefix = (item.reason || "").replace(/\s+/g, "").slice(0, 25);
+            const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
+
+            if (idKey && seenIds.has(idKey)) continue;
+            if (seenAddrs.has(addrKey) && reasonKey && seenReasons.has(reasonKey)) continue;
+
+            if (idKey) seenIds.add(idKey);
+            seenAddrs.add(addrKey);
+            if (reasonKey) seenReasons.add(reasonKey);
+
+            fallbackRecords.push({
+              ...item,
+              city,
+              address: cleanDoor,
+              doorplate_address: cleanDoor.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
+              location_accuracy: item.location_accuracy || "street"
+            });
           }
         } catch (e) {
           console.warn("Supabase direct query notice:", e);
+        }
+
+        // 2. If Supabase returned nothing (e.g. offline), fallback to local calibrated_archive.json
+        if (fallbackRecords.length === 0) {
+          const archiveUrl = getArchiveJsonUrl();
+          try {
+            const staticRes = await fetch(archiveUrl);
+            if (staticRes.ok) {
+              const staticList = await staticRes.json();
+              if (Array.isArray(staticList)) {
+                fallbackRecords = staticList;
+              }
+            } else {
+              const altRes = await fetch("./calibrated_archive.json");
+              if (altRes.ok) {
+                const altList = await altRes.json();
+                if (Array.isArray(altList)) {
+                  fallbackRecords = altList;
+                }
+              }
+            }
+          } catch (e) {
+            console.warn("Could not load local calibrated archive:", e);
+          }
         }
 
         if (fallbackRecords.length > 0) {
@@ -3524,14 +3510,8 @@
                 if (row.id === 1712 || (row.address && row.address.includes("自由三路157號"))) continue;
                 if (row.district === "茂林區" && (row.address || "").includes("茂林巷")) continue;
 
-                const full = `${row.address || ""} ${row.reason || ""} ${row.category || ""} ${row.source || ""} ${row.auction_record || ""}`;
-                if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死/.test(full)) {
-                  continue;
-                }
-                if (!/住宅|民宅|住家|公寓|大樓|華廈|透天|套房|社區|雅房|國宅|租屋|屋內|房內|臥室|頂樓|陽台|法拍|凶宅|家宅|自宅|大廈|平房|三合院|別墅/.test(full)) {
-                  continue;
-                }
-                if (!/命案|兇殺|他殺|情殺|仇殺|分屍|砍殺|槍擊|弒|虐死|輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥|一氧化碳|瓦斯中毒|氣爆.*死|惡火.*死|火警.*死|火災.*死|縱火.*死|非自然死亡|非自然身亡|凶宅|陳屍.*屋|陳屍.*宅|陳屍.*房|陳屍.*大樓|陳屍.*公寓|雙屍|三屍|母子.*死|夫妻.*死/.test(full)) {
+                const full = `${row.address || ""} ${row.reason || ""} ${row.category || ""} ${row.source || ""} ${row.auction_record || ""}`.replace(/非自然死亡|非自然身亡/g, "凶宅事故");
+                if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死|幸無大礙|無人傷亡/.test(full)) {
                   continue;
                 }
 
@@ -3540,9 +3520,6 @@
                 const dist = row.district || "";
                 let cleanDoor = (row.doorplate_address || row.address || "").replace(/台/g, "臺").trim();
                 cleanDoor = cleanDoor.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
-                if (!row.source_url || !String(row.source_url).startsWith("http") || Number(row.id) >= 4110) {
-                  cleanDoor = cleanDoor.replace(/([路街段巷弄])\d+(?:之\d+)?號/g, "$1");
-                }
 
                 const cleanAddr = cleanDoor
                   .replace(/\s+/g, "")
@@ -3553,8 +3530,7 @@
                 const reasonKey = reasonPrefix.length >= 10 ? `${city}_${dist}_${reasonPrefix}` : "";
 
                 if (idKey && existingKeys.has(idKey)) continue;
-                if (existingAddrs.has(addrKey)) continue;
-                if (reasonKey && existingReasons.has(reasonKey)) continue;
+                if (existingAddrs.has(addrKey) && reasonKey && existingReasons.has(reasonKey)) continue;
 
                 if (idKey) existingKeys.add(idKey);
                 existingAddrs.add(addrKey);
@@ -3565,7 +3541,7 @@
                   city,
                   address: cleanDoor,
                   doorplate_address: cleanDoor.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
-                  location_accuracy: row.location_accuracy || "ROOFTOP"
+                  location_accuracy: row.location_accuracy || "street"
                 });
               }
             }
@@ -3939,9 +3915,7 @@
             reason: payload.reason || "使用者自主通報案件",
             incident_date: payload.incident_date || new Date().toISOString().slice(0, 10),
             source: payload.source_url || "使用者手動回報",
-            auction_record: payload.auction_record || "",
-            location_accuracy: "ROOFTOP",
-            verification_status: "unverified"
+            auction_record: payload.auction_record || ""
           };
           const supaRes = await fetch(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses`, {
             method: "POST",

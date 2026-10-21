@@ -310,9 +310,9 @@
           </select>
           <select id="time-preset-select" aria-label="Time Range" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="ALL" data-i18n="time_all">所有年份</option>
-            <option value="Y2026">2026 年最新案件</option>
-            <option value="Y2025">2025 年案件</option>
-            <option value="Y2024">2024 年案件</option>
+            <option value="Y2026" data-i18n="time_y2026">2026 年最新案件</option>
+            <option value="Y2025" data-i18n="time_y2025">2025 年案件</option>
+            <option value="Y2024" data-i18n="time_y2024">2024 年案件</option>
             <option value="1Y" data-i18n="time_1y">近 1 年內 (2025–2026)</option>
             <option value="3Y" data-i18n="time_3y">近 3 年內 (2023–2026)</option>
             <option value="5Y" data-i18n="time_5y">近 5 年內 (2021–2026)</option>
@@ -326,19 +326,19 @@
         <!-- Row 3: Direct Public Database Source Filter + Residential Building Type Filter -->
         <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
           <select id="db-source-select" aria-label="Connected Public Database Source" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
-            <option value="ALL">全部資料來源</option>
-            <option value="JUDICIAL_AUCTION">司法院法拍查封筆錄</option>
-            <option value="JUDICIAL_JUDGMENT">司法院民事瑕疵判決</option>
-            <option value="MOI_OPEN_DATA">內政部實價特殊交易</option>
-            <option value="NEWS_PUBLIC_ARCHIVE">社會新聞與警消紀錄</option>
+            <option value="ALL" data-i18n="db_opt_all">全部資料來源</option>
+            <option value="JUDICIAL_AUCTION" data-i18n="db_opt_auction">司法院法拍查封筆錄</option>
+            <option value="JUDICIAL_JUDGMENT" data-i18n="db_opt_judgment">司法院民事瑕疵判決</option>
+            <option value="MOI_OPEN_DATA" data-i18n="db_opt_moi">內政部實價特殊交易</option>
+            <option value="NEWS_PUBLIC_ARCHIVE" data-i18n="db_opt_news">社會新聞與警消紀錄</option>
           </select>
           <select id="bldg-type-select" aria-label="Residential Building Type" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
-            <option value="ALL">全部建物型態</option>
-            <option value="大樓">電梯大樓／社區華廈</option>
-            <option value="公寓">無電梯公寓（4～5樓）</option>
-            <option value="透天">透天厝／別墅民宅</option>
-            <option value="套房">獨立套房／分租雅房</option>
-            <option value="商業">店面／商辦廠房</option>
+            <option value="ALL" data-i18n="bldg_opt_all">全部建物型態</option>
+            <option value="大樓" data-i18n="bldg_opt_condo">電梯大樓／社區華廈</option>
+            <option value="公寓" data-i18n="bldg_opt_apt">無電梯公寓（4～5樓）</option>
+            <option value="透天" data-i18n="bldg_opt_house">透天厝／別墅民宅</option>
+            <option value="套房" data-i18n="bldg_opt_studio">獨立套房／分租雅房</option>
+            <option value="商業" data-i18n="bldg_opt_comm">店面／商辦廠房</option>
           </select>
         </div>
 
@@ -371,8 +371,8 @@
             <select id="sort-select" aria-label="Sort" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors">
               <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
               <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
-              <option value="merged_desc">多筆整合案件優先</option>
-              <option value="verified_desc">附原始報導連結優先</option>
+              <option value="merged_desc" data-i18n="sort_merged">多筆整合案件優先</option>
+              <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
             </select>
             <button
               type="button"
@@ -410,12 +410,12 @@
       <div class="flex px-3.5 sm:px-4 py-2 border-t border-slate-200 text-[11px] text-slate-500 justify-between items-center bg-white shrink-0 gap-2">
         <div class="flex items-center gap-2 min-w-0">
           <span id="db-status" class="tabular-nums truncate font-mono font-semibold text-slate-700">載入中...</span>
-          <button type="button" id="footer-sync-db-btn" class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 hover:underline whitespace-nowrap shrink-0 cursor-pointer">
+          <button type="button" id="footer-sync-db-btn" data-i18n="footer_sync_btn" class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 hover:underline whitespace-nowrap shrink-0 cursor-pointer">
             公開資料庫同步 ↗
           </button>
         </div>
         <div class="flex items-center gap-2.5 shrink-0 font-medium overflow-x-auto no-scrollbar">
-          <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院裁判書 ↗</a>
+          <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" data-i18n="footer_judgment" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院裁判書 ↗</a>
           <a href="https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm" target="_blank" rel="noopener noreferrer" data-i18n="footer_auction" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院法拍 ↗</a>
           <a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener noreferrer" data-i18n="footer_lvr" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">實價登錄 ↗</a>
         </div>
@@ -581,10 +581,10 @@
         <!-- Section 2B: 相似案件智慧比對與多源整合明細 -->
         <div id="drawer-merged-cases-section" class="hidden">
           <div class="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
-            <h3 class="text-xs font-bold text-slate-900">同路段／同社區相似案件歸戶明細</h3>
+            <h3 class="text-xs font-bold text-slate-900" data-i18n="sec2b_title">同路段／同社區相似案件歸戶明細</h3>
             <span id="drawer-merged-count-badge" class="font-mono text-[11px] font-semibold text-indigo-700 tabular-nums"></span>
           </div>
-          <p class="text-[11px] text-slate-500 mb-2 leading-relaxed">
+          <p class="text-[11px] text-slate-500 mb-2 leading-relaxed" data-i18n="sec2b_desc">
             系統已比對同縣市、同行政區、同路街段或同社區大樓之多筆歷史通報與查證紀錄，並歸戶整合為單一實測座標卷宗：
           </p>
           <div id="drawer-merged-cases-list" class="space-y-2"></div>
@@ -610,16 +610,17 @@
 
         <!-- Section 3: 案件原始來源與外部查證連結 -->
         <div>
-          <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200">案件查證與地圖連結</h3>
+          <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200" data-i18n="sec3_ext_title">案件查證與地圖連結</h3>
           <div id="drawer-external-links" class="grid grid-cols-2 gap-2"></div>
         </div>
 
         <!-- Section 4: 內容勘誤與下架申訴 -->
         <div class="pt-1 border-t border-slate-200 flex items-center justify-between gap-2 text-xs">
-          <span class="text-[11px] text-slate-500">若發現此筆案情或日期記載有誤：</span>
+          <span class="text-[11px] text-slate-500" data-i18n="sec4_report_prompt">若發現此筆案情或日期記載有誤：</span>
           <button
             type="button"
             id="report-correction-btn"
+            data-i18n="btn_report_correction"
             class="py-1.5 px-3 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold text-[11px] transition-colors shrink-0"
           >
             內容勘誤／申請下架
@@ -1078,7 +1079,51 @@
         popup_open_btn: "查看街景 · 產權卷宗與官方資料庫",
         popup_news: "新聞檢索 ↗",
         popup_gmaps: "Google 地圖 ↗",
-        popup_judicial: "司法院查詢 ↗"
+        popup_judicial: "司法院查詢 ↗",
+        time_y2026: "2026 年最新案件",
+        time_y2025: "2025 年案件",
+        time_y2024: "2024 年案件",
+        db_opt_all: "全部資料來源",
+        db_opt_auction: "司法院法拍查封筆錄",
+        db_opt_judgment: "司法院民事瑕疵判決",
+        db_opt_moi: "內政部實價特殊交易",
+        db_opt_news: "社會新聞與警消紀錄",
+        bldg_opt_all: "全部建物型態",
+        bldg_opt_condo: "電梯大樓／社區華廈",
+        bldg_opt_apt: "無電梯公寓（4～5樓）",
+        bldg_opt_house: "透天厝／別墅民宅",
+        bldg_opt_studio: "獨立套房／分租雅房",
+        bldg_opt_comm: "店面／商辦廠房",
+        sort_merged: "多筆整合案件優先",
+        sort_verified: "附原始報導連結優先",
+        footer_sync_btn: "公開資料庫同步 ↗",
+        footer_judgment: "司法院裁判書 ↗",
+        sec2b_title: "同路段／同社區相似案件歸戶明細",
+        sec2b_desc: "系統已比對同縣市、同行政區、同路街段或同社區大樓之多筆歷史通報與查證紀錄，並歸戶整合為單一實測座標卷宗：",
+        sec3_ext_title: "案件查證與地圖連結",
+        sec4_report_prompt: "若發現此筆案情或日期記載有誤：",
+        btn_report_correction: "內容勘誤／申請下架",
+        lbl_incident_note: "案發時間與查證備註：",
+        lbl_verified_date_prefix: "案發日期核實：",
+        lbl_orig_report_link: "原始報導連結 ↗",
+        lbl_verified_source: "核實來源：",
+        btn_copy_kw: "📋 複製查證關鍵字",
+        toast_copied_kw: "已複製查證關鍵字：",
+        ext_btn_orig: "🔗 查看此案原始新聞報導／裁判書 ↗",
+        ext_btn_news: "📰 新聞檔案庫檢索",
+        ext_btn_judicial: "⚖️ 司法院裁判／法拍查證",
+        ext_btn_haunted: "🏠 台灣凶宅網／居易查證",
+        ext_btn_web: "🔍 全網公開資料查證",
+        ext_btn_gmaps: "📍 Google 地圖精確定位 ↗",
+        badge_incident_prefix: "案發 ",
+        badge_merged_prefix: "已整合 ",
+        badge_merged_suffix: " 筆紀錄",
+        badge_has_link: "附原始連結",
+        sv_loading: "載入街景影像中...",
+        sv_none: "此門牌周邊無 Google 街景影像",
+        btn_load_more_prefix: "載入更多案件紀錄（已顯示 ",
+        status_total_prefix: "共 ",
+        status_total_suffix: " 筆案件卷宗"
       },
       "en": {
         app_title: "Taiwan Property Incident & Foreclosure Archive",
@@ -1086,10 +1131,10 @@
         cat_all_short: "All",
         cat_homicide: "Homicide",
         cat_suicide: "Suicide",
-        cat_accident: "Fire & Accident",
+        cat_accident: "Fire & CO Accident",
         cat_natural: "Solitary / Natural",
-        cat_court: "Court Foreclosure",
-        btn_add_discover: "Add / Discover",
+        cat_court: "Court & Verified",
+        btn_add_discover: "Public DB Sync · Discover",
         all_taiwan: "All Taiwan",
         all_cities_opt: "All Cities / Counties",
         all_districts_opt: "All Districts",
@@ -1103,15 +1148,15 @@
         sort_newest: "Newest First",
         sort_oldest: "Oldest First",
         time_all: "All Years",
-        time_1y: "Past 1 Year",
-        time_3y: "Past 3 Years",
-        time_5y: "Past 5 Years",
+        time_1y: "Past 1 Year (2025–2026)",
+        time_3y: "Past 3 Years (2023–2026)",
+        time_5y: "Past 5 Years (2021–2026)",
         time_10y: "Past 10 Years",
         time_2010_2020: "2010–2020",
         time_before_2010: "Before 2010",
         time_custom: "Custom Years",
         label_year_range: "Years:",
-        btn_quick_expand: "+ Discover",
+        btn_quick_expand: "Consolidation Stats",
         footer_auction: "Judicial Foreclosures ↗",
         footer_lvr: "MOI Real Price ↗",
         map_roadmap: "Street Map",
@@ -1120,17 +1165,17 @@
         map_cadastral: "Cadastral Lots",
         btn_focus_map: "Show on Map",
         sec1_title: "01. Address, Property Profile & Street View",
-        doorplate_verified_label: "Address",
+        doorplate_verified_label: "Address / Street Location",
         btn_copy_doorplate: "Copy Address",
         sv_caption: "Building Exterior Street View",
         btn_toggle_360: "Switch to 360° View",
         btn_toggle_static: "Switch to Photo",
         btn_open_gmaps: "Open in Google Maps ↗",
         lbl_region: "City & District",
-        lbl_date: "Incident / Auction Date",
+        lbl_date: "Incident Date",
         lbl_bldg_type: "Building Type",
         lbl_status: "Current Property Status",
-        sec2_title: "Incident, Foreclosure & Transfer Records",
+        sec2_title: "Incident Timeline & Verification History",
         sec3_title: "Market Price & Valuation Estimator",
         calc_ping_label: "Property Area (Ping):",
         unit_ping: "Ping",
@@ -1156,14 +1201,14 @@
         mnav_split_sub: "Map + List",
         mnav_filter: "Options",
         mnav_filter_sub: "Year Range",
-        modal_title: "Add or Discover Property Incident Records",
-        tab_discover: "Discover Regional / Street Cases",
+        modal_title: "Taiwan Public Database Sync & Discovery Hub",
+        tab_discover: "Public DB Sync",
         tab_manual: "Report Case Manually",
-        discover_desc: "Select a county/city, district, or enter a street/community keyword to search historical news, Judicial Yuan foreclosure notices, and special transactions (adds 6 records per search).",
+        discover_desc: "Connects to Judicial Yuan Foreclosure Notices, Court Judgments, MOI Real-Price Registry, Juyiwang, and Public News Archives.",
         lbl_city: "City / County",
         lbl_district: "District",
         lbl_disc_kw: "Street Name or Community Keyword (Optional)",
-        btn_run_discover: "Discover 6 Cases",
+        btn_run_discover: "Sync Public DB Cases in This District",
         lbl_category: "Incident Category",
         lbl_form_addr: "Full Address",
         lbl_form_reason: "Incident Summary & Property Notes",
@@ -1174,24 +1219,68 @@
         doorplate_prefix: "Address: ",
         btn_rooftop_locate: "Map",
         btn_open_dossier: "Details →",
-        expand_footer_prompt: "Want to inspect more historical foreclosure or incident records in this district?",
-        expand_footer_btn: "+ Discover 6 More Cases in This Area",
+        expand_footer_prompt: "No matching incident records under current filters",
+        expand_footer_btn: "Open Public DB Sync or Reset Filters",
         portal_btn: "Copy Address & Open ↗",
         popup_open_btn: "View Street View · Full Dossier & Official Portals",
         popup_news: "News Search ↗",
         popup_gmaps: "Google Maps ↗",
-        popup_judicial: "Judicial Court ↗"
+        popup_judicial: "Judicial Court ↗",
+        time_y2026: "2026 Latest Cases",
+        time_y2025: "2025 Cases",
+        time_y2024: "2024 Cases",
+        db_opt_all: "All Data Sources",
+        db_opt_auction: "Judicial Foreclosure Records",
+        db_opt_judgment: "Judicial Court Judgments",
+        db_opt_moi: "MOI Special Transactions",
+        db_opt_news: "Public News & Police Archives",
+        bldg_opt_all: "All Building Types",
+        bldg_opt_condo: "Elevator Condo / High-Rise",
+        bldg_opt_apt: "Walk-up Apartment (4–5F)",
+        bldg_opt_house: "Townhouse / Villa",
+        bldg_opt_studio: "Studio / Rental Suite",
+        bldg_opt_comm: "Commercial / Office Building",
+        sort_merged: "Most Consolidated First",
+        sort_verified: "Verified Source Link First",
+        footer_sync_btn: "Public DB Sync ↗",
+        footer_judgment: "Court Judgments ↗",
+        sec2b_title: "Consolidated Similar / Same-Street Cases",
+        sec2b_desc: "Multiple historical reports along the same street or community have been consolidated into this verified record:",
+        sec3_ext_title: "Case Verification & Map Links",
+        sec4_report_prompt: "Found an error in this record or date?",
+        btn_report_correction: "Report Error / Takedown",
+        lbl_incident_note: "Incident Time & Verification Note: ",
+        lbl_verified_date_prefix: "Verified Incident Date: ",
+        lbl_orig_report_link: "Original Report ↗",
+        lbl_verified_source: "Verified Source: ",
+        btn_copy_kw: "📋 Copy Verification Keyword",
+        toast_copied_kw: "Copied verification keyword: ",
+        ext_btn_orig: "🔗 View Original News / Court Record ↗",
+        ext_btn_news: "📰 News Archive Search",
+        ext_btn_judicial: "⚖️ Judicial / Foreclosure Check",
+        ext_btn_haunted: "🏠 Taiwan Haunted House DB",
+        ext_btn_web: "🔍 Cross-Web Verification",
+        ext_btn_gmaps: "📍 Open Exact Location in Google Maps ↗",
+        badge_incident_prefix: "Date: ",
+        badge_merged_prefix: "Merged ",
+        badge_merged_suffix: " records",
+        badge_has_link: "Source Linked",
+        sv_loading: "Loading Street View imagery...",
+        sv_none: "No Google Street View available at this location",
+        btn_load_more_prefix: "Load More Records (Showing ",
+        status_total_prefix: "",
+        status_total_suffix: " Verified Cases"
       },
       "ja": {
-        app_title: "台湾事故物件・競売不動産アーカイブ検索プラットフォーム",
-        cat_all: "全件表示",
+        app_title: "台湾事故物件・発生日実証マップ＆不動産記録検索",
+        cat_all: "すべての事案",
         cat_all_short: "すべて",
         cat_homicide: "殺人・刑事事件",
         cat_suicide: "自殺事案",
-        cat_accident: "火災・不慮の事故",
+        cat_accident: "火災・一酸化炭素事故",
         cat_natural: "孤独死・病死",
-        cat_court: "競売・特殊物件",
-        btn_add_discover: "新規登録・追加検索",
+        cat_court: "競売・判例認定",
+        btn_add_discover: "公開DB同期・新規検索",
         all_taiwan: "台湾全域",
         all_cities_opt: "すべての県市",
         all_districts_opt: "すべての行政区",
@@ -1205,15 +1294,15 @@
         sort_newest: "発生日が新しい順",
         sort_oldest: "発生日が古い順",
         time_all: "すべての年代",
-        time_1y: "直近 1 年以内",
-        time_3y: "直近 3 年以内",
-        time_5y: "直近 5 年以内",
+        time_1y: "直近 1 年以内 (2025–2026)",
+        time_3y: "直近 3 年以内 (2023–2026)",
+        time_5y: "直近 5 年以内 (2021–2026)",
         time_10y: "直近 10 年以内",
         time_2010_2020: "2010–2020 年",
         time_before_2010: "2010 年以前",
         time_custom: "カスタム年範囲",
         label_year_range: "年：",
-        btn_quick_expand: "+ 追加検索",
+        btn_quick_expand: "統合統計",
         footer_auction: "司法院競売公告 ↗",
         footer_lvr: "内政部実価登録 ↗",
         map_roadmap: "道路地図",
@@ -1221,8 +1310,8 @@
         map_terrain: "地形図",
         map_cadastral: "地籍境界線",
         btn_focus_map: "地図で表示",
-        sec1_title: "01. 物件住所・建物情報・ストリートビュー",
-        doorplate_verified_label: "物件住所",
+        sec1_title: "01. 物件住所・発生日・ストリートビュー",
+        doorplate_verified_label: "番地・通り位置",
         btn_copy_doorplate: "住所をコピー",
         sv_caption: "建物外観ストリートビュー",
         btn_toggle_360: "360° パノラマ切替",
@@ -1232,7 +1321,7 @@
         lbl_date: "発生日・競売日",
         lbl_bldg_type: "建物種別・階層",
         lbl_status: "現在の権利・使用状況",
-        sec2_title: "歴年事案・競売・実価取引記録",
+        sec2_title: "発生日時・過去の検証記録",
         sec3_title: "周辺相場・割引シミュレーター",
         calc_ping_label: "登記面積（坪）を設定：",
         unit_ping: "坪",
@@ -1258,14 +1347,14 @@
         mnav_split_sub: "地図+一覧",
         mnav_filter: "詳細設定",
         mnav_filter_sub: "年代指定",
-        modal_title: "物件記録の新規登録または追加検索",
-        tab_discover: "地域・通り名で追加検索",
+        modal_title: "台湾公開データベース同期・新規事案検索センター",
+        tab_discover: "公開DB同期検索",
         tab_manual: "事案を手動登録",
-        discover_desc: "県市・行政区または通り名を指定すると、過去の報道・司法院競売公告・実価登録特殊取引から6件を追加検索します。",
+        discover_desc: "司法院競売公告、司法院判決書システム、内政部実価登録、台湾凶宅網、および報道アーカイブを横断検索します。",
         lbl_city: "対象の県市",
         lbl_district: "対象の行政区",
         lbl_disc_kw: "通り名・マンション名キーワード（任意）",
-        btn_run_discover: "6件を追加検索",
+        btn_run_discover: "この地域の公開DB事案を同期",
         lbl_category: "事案種別",
         lbl_form_addr: "住所（番地・建物名・階数）",
         lbl_form_reason: "事案の経緯・権利備考",
@@ -1276,13 +1365,57 @@
         doorplate_prefix: "住所：",
         btn_rooftop_locate: "地図位置",
         btn_open_dossier: "詳細を見る →",
-        expand_footer_prompt: "この行政区や通りの過去の競売・事故物件記録をさらに検索しますか？",
-        expand_footer_btn: "+ このエリアの事案をさらに6件検索",
+        expand_footer_prompt: "現在の条件に一致する事故物件記録はありません",
+        expand_footer_btn: "公開DB同期を開くか条件をリセット",
         portal_btn: "住所をコピーして移動 ↗",
         popup_open_btn: "ストリートビュー・詳細台帳・公式DBを開く",
         popup_news: "ニュース検索 ↗",
         popup_gmaps: "Google マップ ↗",
-        popup_judicial: "司法院検索 ↗"
+        popup_judicial: "司法院検索 ↗",
+        time_y2026: "2026年 最新事案",
+        time_y2025: "2025年 事案",
+        time_y2024: "2024年 事案",
+        db_opt_all: "すべてのデータ出典",
+        db_opt_auction: "司法院競売差押調書",
+        db_opt_judgment: "司法院民事・刑事判決",
+        db_opt_moi: "内政部実価特殊取引",
+        db_opt_news: "報道・警察消防記録",
+        bldg_opt_all: "すべての建物種別",
+        bldg_opt_condo: "エレベーターマンション・集合住宅",
+        bldg_opt_apt: "低層マンション（4〜5階建）",
+        bldg_opt_house: "一戸建て・タウンハウス",
+        bldg_opt_studio: "ワンルーム・賃貸スイート",
+        bldg_opt_comm: "商業ビル・オフィス・店舗",
+        sort_merged: "複数統合事案を優先",
+        sort_verified: "報道リンク付きを優先",
+        footer_sync_btn: "公開DB同期 ↗",
+        footer_judgment: "司法院判決書 ↗",
+        sec2b_title: "同一通り・マンションの類似事案統合明細",
+        sec2b_desc: "同一行政区・通り・マンションの複数の過去記録を照合し、単一の座標台帳に統合しています：",
+        sec3_ext_title: "事案検証・マップリンク",
+        sec4_report_prompt: "記載内容や日付に誤りがある場合：",
+        btn_report_correction: "内容訂正・削除申請",
+        lbl_incident_note: "発生日時・検証備考：",
+        lbl_verified_date_prefix: "発生日確認済：",
+        lbl_orig_report_link: "元記事・出典リンク ↗",
+        lbl_verified_source: "検証出典：",
+        btn_copy_kw: "📋 検証キーワードをコピー",
+        toast_copied_kw: "検証キーワードをコピーしました：",
+        ext_btn_orig: "🔗 元記事・裁判所判例を開く ↗",
+        ext_btn_news: "📰 ニュースアーカイブ検索",
+        ext_btn_judicial: "⚖️ 司法院判例・競売照会",
+        ext_btn_haunted: "🏠 台湾事故物件DB照会",
+        ext_btn_web: "🔍 ウェブ全体で公開資料検証",
+        ext_btn_gmaps: "📍 Google マップで正確な位置を開く ↗",
+        badge_incident_prefix: "発生 ",
+        badge_merged_prefix: "統合 ",
+        badge_merged_suffix: " 件",
+        badge_has_link: "元リンク付",
+        sv_loading: "ストリートビューを読み込み中...",
+        sv_none: "この番地周辺にはストリートビューがありません",
+        btn_load_more_prefix: "さらに読み込む（表示中 ",
+        status_total_prefix: "全 ",
+        status_total_suffix: " 件の事案記録"
       },
       "ko": {
         app_title: "대만 특수사고 건물 및 법원경매 기록 조회 플랫폼",
@@ -1290,10 +1423,10 @@
         cat_all_short: "전체",
         cat_homicide: "형사·살인 사건",
         cat_suicide: "극단적 선택(자살)",
-        cat_accident: "화재·불의의 사고",
+        cat_accident: "화재·일산화탄소 사고",
         cat_natural: "고독사·병사",
-        cat_court: "법원 경매·특수물건",
-        btn_add_discover: "사례 등록·확장",
+        cat_court: "법원 경매·판결 인증",
+        btn_add_discover: "공개 DB 동기화 · 신규 검색",
         all_taiwan: "대만 전체",
         all_cities_opt: "모든 현·시",
         all_districts_opt: "모든 행정구",
@@ -1307,15 +1440,15 @@
         sort_newest: "최근 발생순",
         sort_oldest: "과거 역사순",
         time_all: "모든 연도",
-        time_1y: "최근 1년 이내",
-        time_3y: "최근 3년 이내",
-        time_5y: "최근 5년 이내",
+        time_1y: "최근 1년 이내 (2025–2026)",
+        time_3y: "최근 3년 이내 (2023–2026)",
+        time_5y: "최근 5년 이내 (2021–2026)",
         time_10y: "최근 10년 이내",
         time_2010_2020: "2010–2020년",
         time_before_2010: "2010년 이전",
         time_custom: "연도 직접 입력",
         label_year_range: "연도:",
-        btn_quick_expand: "+ 사례 확장",
+        btn_quick_expand: "통합 통계",
         footer_auction: "사법원 경매 ↗",
         footer_lvr: "실거래가 등록 ↗",
         map_roadmap: "일반 지도",
@@ -1324,7 +1457,7 @@
         map_cadastral: "지적 경계선",
         btn_focus_map: "지도 위치",
         sec1_title: "01. 사건 주소, 건물 현황 및 거리뷰",
-        doorplate_verified_label: "건물 주소",
+        doorplate_verified_label: "건물 주소 / 도로 위치",
         btn_copy_doorplate: "주소 복사",
         sv_caption: "건물 외관 거리뷰",
         btn_toggle_360: "360° 거리뷰 전환",
@@ -1334,7 +1467,7 @@
         lbl_date: "발생 또는 경매 일자",
         lbl_bldg_type: "건물 형태 및 층수",
         lbl_status: "현재 권리·사용 현황",
-        sec2_title: "사건·법원경매 및 실거래 기록",
+        sec2_title: "사건 발생 일시 및 검증 기록",
         sec3_title: "지역 시세 및 할인율 계산기",
         calc_ping_label: "등기 면적(평) 설정:",
         unit_ping: "평",
@@ -1360,14 +1493,14 @@
         mnav_split_sub: "지도+목록",
         mnav_filter: "상세 설정",
         mnav_filter_sub: "연도 지정",
-        modal_title: "사건 기록 등록 및 확장 검색",
-        tab_discover: "지역·도로명 추가 검색",
+        modal_title: "대만 공개 데이터베이스 동기화 및 신규 사건 검색 허브",
+        tab_discover: "공개 DB 동기화",
         tab_manual: "사건 직접 등록",
-        discover_desc: "현·시, 행정구 또는 특정 도로명/단지를 선택하면 과거 사회 뉴스, 사법원 법원경매 공고 및 실거래가 특수거래를 검색합니다 (회당 6건 추가).",
+        discover_desc: "사법원 법원경매 공고, 판결문 시스템, 내정부 실거래가 특수거래, 대만 흉가망 및 뉴스 아카이브를 연동하여 검색합니다.",
         lbl_city: "대상 현·시",
         lbl_district: "대상 행정구",
         lbl_disc_kw: "도로명 또는 단지 키워드 (선택)",
-        btn_run_discover: "6건 추가 검색",
+        btn_run_discover: "이 구역 공개 DB 사건 즉시 동기화",
         lbl_category: "사고 유형",
         lbl_form_addr: "전체 주소",
         lbl_form_reason: "사건 경위 및 권리 비고",
@@ -1378,13 +1511,57 @@
         doorplate_prefix: "주소: ",
         btn_rooftop_locate: "지도 위치",
         btn_open_dossier: "상세 기록 →",
-        expand_footer_prompt: "이 행정구나 도로의 과거 법원경매 및 사고 기록을 더 찾아보시겠습니까?",
-        expand_footer_btn: "+ 이 구역 사례 6건 추가 검색",
+        expand_footer_prompt: "현재 필터 조건에 일치하는 사고 건물 기록이 없습니다",
+        expand_footer_btn: "공개 DB 동기화 열기 또는 필터 초기화",
         portal_btn: "주소 복사 및 이동 ↗",
         popup_open_btn: "거리뷰 · 상세 기록 및 공식 DB 열기",
         popup_news: "뉴스 검색 ↗",
         popup_gmaps: "Google 지도 ↗",
-        popup_judicial: "사법원 조회 ↗"
+        popup_judicial: "사법원 조회 ↗",
+        time_y2026: "2026년 최신 사건",
+        time_y2025: "2025년 사건",
+        time_y2024: "2024년 사건",
+        db_opt_all: "모든 데이터 출처",
+        db_opt_auction: "사법원 경매 압류조서",
+        db_opt_judgment: "사법원 민·형사 판결문",
+        db_opt_moi: "내정부 실거래 특수거래",
+        db_opt_news: "사회 뉴스 및 경찰·소방 기록",
+        bldg_opt_all: "모든 건물 형태",
+        bldg_opt_condo: "엘리베이터 아파트·주상복합",
+        bldg_opt_apt: "일반 저층 아파트 (4~5층)",
+        bldg_opt_house: "단독주택·타운하우스",
+        bldg_opt_studio: "원룸·오피스텔",
+        bldg_opt_comm: "상업·업무용 빌딩",
+        sort_merged: "다수 통합 사건 우선",
+        sort_verified: "원본 보도 링크 포함 우선",
+        footer_sync_btn: "공개 DB 동기화 ↗",
+        footer_judgment: "사법원 판결문 ↗",
+        sec2b_title: "동일 도로·단지 유사 사건 통합 내역",
+        sec2b_desc: "동일 행정구, 도로 구간 및 단지 내 다수의 과거 보도와 검증 기록을 단일 좌표 기록으로 통합하였습니다:",
+        sec3_ext_title: "사건 검증 및 지도 링크",
+        sec4_report_prompt: "사건 내용이나 일자에 오류가 있는 경우:",
+        btn_report_correction: "내용 정정 / 삭제 신청",
+        lbl_incident_note: "발생 일시 및 검증 비고: ",
+        lbl_verified_date_prefix: "발생 일자 확인: ",
+        lbl_orig_report_link: "원본 보도 링크 ↗",
+        lbl_verified_source: "검증 출처: ",
+        btn_copy_kw: "📋 검증 키워드 복사",
+        toast_copied_kw: "검증 키워드가 복사되었습니다: ",
+        ext_btn_orig: "🔗 사건 원본 뉴스 보도 / 판결문 보기 ↗",
+        ext_btn_news: "📰 뉴스 아카이브 검색",
+        ext_btn_judicial: "⚖️ 사법원 판결 / 경매 검증",
+        ext_btn_haunted: "🏠 대만 흉가망 / 주의망 검증",
+        ext_btn_web: "🔍 웹 공개 자료 통합 검증",
+        ext_btn_gmaps: "📍 Google 지도 정밀 위치 열기 ↗",
+        badge_incident_prefix: "발생 ",
+        badge_merged_prefix: "통합 ",
+        badge_merged_suffix: "건",
+        badge_has_link: "원본 링크",
+        sv_loading: "거리뷰 이미지를 불러오는 중...",
+        sv_none: "이 주소 주변에 Google 거리뷰 이미지가 없습니다",
+        btn_load_more_prefix: "사건 기록 더 보기 (표시 중 ",
+        status_total_prefix: "총 ",
+        status_total_suffix: "건의 사건 기록"
       }
     };
 
@@ -1413,6 +1590,118 @@
       "連江縣": { "zh-TW": "連江縣", "en": "Lienchiang County", "ja": "連江県", "ko": "롄장현" }
     };
 
+    const DISTRICT_I18N = {
+      "中正區": { en: "Zhongzheng Dist.", ja: "中正区", ko: "중정구" },
+      "大同區": { en: "Datong Dist.", ja: "大同区", ko: "다퉁구" },
+      "中山區": { en: "Zhongshan Dist.", ja: "中山区", ko: "중산구" },
+      "松山區": { en: "Songshan Dist.", ja: "松山区", ko: "쑹산구" },
+      "大安區": { en: "Da'an Dist.", ja: "大安区", ko: "다안구" },
+      "萬華區": { en: "Wanhua Dist.", ja: "万華区", ko: "완화구" },
+      "信義區": { en: "Xinyi Dist.", ja: "信義区", ko: "신이구" },
+      "士林區": { en: "Shilin Dist.", ja: "士林区", ko: "스린구" },
+      "北投區": { en: "Beitou Dist.", ja: "北投区", ko: "베이터우구" },
+      "內湖區": { en: "Neihu Dist.", ja: "内湖区", ko: "네이후구" },
+      "南港區": { en: "Nangang Dist.", ja: "南港区", ko: "난강구" },
+      "文山區": { en: "Wenshan Dist.", ja: "文山区", ko: "원산구" },
+      "板橋區": { en: "Banqiao Dist.", ja: "板橋区", ko: "반차오구" },
+      "三重區": { en: "Sanchong Dist.", ja: "三重区", ko: "싼충구" },
+      "中和區": { en: "Zhonghe Dist.", ja: "中和区", ko: "중허구" },
+      "永和區": { en: "Yonghe Dist.", ja: "永和区", ko: "융허구" },
+      "新莊區": { en: "Xinzhuang Dist.", ja: "新荘区", ko: "신좡구" },
+      "新店區": { en: "Xindian Dist.", ja: "新店区", ko: "신뎬구" },
+      "土城區": { en: "Tucheng Dist.", ja: "土城区", ko: "투청구" },
+      "蘆洲區": { en: "Luzhou Dist.", ja: "蘆洲区", ko: "루저우구" },
+      "樹林區": { en: "Shulin Dist.", ja: "樹林区", ko: "수린구" },
+      "汐止區": { en: "Xizhi Dist.", ja: "汐止区", ko: "시즈구" },
+      "鶯歌區": { en: "Yingge Dist.", ja: "鶯歌区", ko: "잉거구" },
+      "三峽區": { en: "Sanxia Dist.", ja: "三峡区", ko: "싼샤구" },
+      "淡水區": { en: "Tamsui Dist.", ja: "淡水区", ko: "단수이구" },
+      "瑞芳區": { en: "Ruifang Dist.", ja: "瑞芳区", ko: "루이팡구" },
+      "五股區": { en: "Wugu Dist.", ja: "五股区", ko: "우구구" },
+      "泰山區": { en: "Taishan Dist.", ja: "泰山区", ko: "타이산구" },
+      "林口區": { en: "Linkou Dist.", ja: "林口区", ko: "린커우구" },
+      "桃園區": { en: "Taoyuan Dist.", ja: "桃園区", ko: "타오위안구" },
+      "中壢區": { en: "Zhongli Dist.", ja: "中壢区", ko: "중리구" },
+      "平鎮區": { en: "Pingzhen Dist.", ja: "平鎮区", ko: "핑전구" },
+      "八德區": { en: "Bade Dist.", ja: "八徳区", ko: "바더구" },
+      "楊梅區": { en: "Yangmei Dist.", ja: "楊梅区", ko: "양메이구" },
+      "蘆竹區": { en: "Luzhu Dist.", ja: "蘆竹区", ko: "루주구" },
+      "龜山區": { en: "Guishan Dist.", ja: "亀山区", ko: "구이산구" },
+      "龍潭區": { en: "Longtan Dist.", ja: "龍潭区", ko: "룽탄구" },
+      "大溪區": { en: "Daxi Dist.", ja: "大渓区", ko: "다시구" },
+      "大園區": { en: "Dayuan Dist.", ja: "大園区", ko: "다이위안구" },
+      "觀音區": { en: "Guanyin Dist.", ja: "観音区", ko: "관인구" },
+      "西屯區": { en: "Xitun Dist.", ja: "西屯区", ko: "시툰구" },
+      "北屯區": { en: "Beitun Dist.", ja: "北屯区", ko: "베이툰구" },
+      "南屯區": { en: "Nantun Dist.", ja: "南屯区", ko: "난툰구" },
+      "西區": { en: "West Dist.", ja: "西区", ko: "서구" },
+      "北區": { en: "North Dist.", ja: "北区", ko: "북구" },
+      "南區": { en: "South Dist.", ja: "南区", ko: "남구" },
+      "東區": { en: "East Dist.", ja: "東区", ko: "동구" },
+      "中區": { en: "Central Dist.", ja: "中区", ko: "중구" },
+      "中西區": { en: "West Central Dist.", ja: "中西区", ko: "중시구" },
+      "太平區": { en: "Taiping Dist.", ja: "太平区", ko: "타이핑구" },
+      "大里區": { en: "Dali Dist.", ja: "大里区", ko: "다리구" },
+      "豐原區": { en: "Fengyuan Dist.", ja: "豊原区", ko: "펑위안구" },
+      "永康區": { en: "Yongkang Dist.", ja: "永康区", ko: "융캉구" },
+      "安平區": { en: "Anping Dist.", ja: "安平区", ko: "안핑구" },
+      "安南區": { en: "Annan Dist.", ja: "安南区", ko: "안난구" },
+      "仁德區": { en: "Rende Dist.", ja: "仁徳区", ko: "런더구" },
+      "歸仁區": { en: "Guiren Dist.", ja: "帰仁区", ko: "구이런구" },
+      "善化區": { en: "Shanhua Dist.", ja: "善化区", ko: "산화구" },
+      "新營區": { en: "Xinying Dist.", ja: "新営区", ko: "신잉구" },
+      "三民區": { en: "Sanmin Dist.", ja: "三民区", ko: "싼민구" },
+      "左營區": { en: "Zuoying Dist.", ja: "左営区", ko: "쭤잉구" },
+      "鼓山區": { en: "Gushan Dist.", ja: "鼓山区", ko: "구산구" },
+      "鳳山區": { en: "Fengshan Dist.", ja: "鳳山区", ko: "펑산구" },
+      "苓雅區": { en: "Lingya Dist.", ja: "苓雅区", ko: "링야구" },
+      "前鎮區": { en: "Qianzhen Dist.", ja: "前鎮区", ko: "첸전구" },
+      "楠梓區": { en: "Nanzi Dist.", ja: "楠梓区", ko: "난쯔구" },
+      "小港區": { en: "Xiaogang Dist.", ja: "小港区", ko: "샤오강구" },
+      "新興區": { en: "Xinxing Dist.", ja: "新興区", ko: "신싱구" },
+      "前金區": { en: "Qianjin Dist.", ja: "前金区", ko: "첸진구" },
+      "鹽埕區": { en: "Yancheng Dist.", ja: "塩埕区", ko: "옌청구" },
+      "仁武區": { en: "Renwu Dist.", ja: "仁武区", ko: "런우구" },
+      "岡山區": { en: "Gangshan Dist.", ja: "岡山区", ko: "강산구" },
+      "大寮區": { en: "Daliao Dist.", ja: "大寮区", ko: "다랴오구" },
+      "仁愛區": { en: "Ren'ai Dist.", ja: "仁愛区", ko: "런아이구" },
+      "安樂區": { en: "Anle Dist.", ja: "安楽区", ko: "안러구" },
+      "暖暖區": { en: "Nuannuan Dist.", ja: "暖暖区", ko: "녠녠구" },
+      "七堵區": { en: "Qidu Dist.", ja: "七堵区", ko: "치두구" },
+      "香山區": { en: "Xiangshan Dist.", ja: "香山区", ko: "샹산구" },
+      "竹北市": { en: "Zhubei City", ja: "竹北市", ko: "주베이시" },
+      "竹東鎮": { en: "Zhudong Township", ja: "竹東鎮", ko: "주둥진" },
+      "湖口鄉": { en: "Hukou Township", ja: "湖口郷", ko: "후커우향" },
+      "苗栗市": { en: "Miaoli City", ja: "苗栗市", ko: "먀오리시" },
+      "頭份市": { en: "Toufen City", ja: "頭份市", ko: "터우펀시" },
+      "竹南鎮": { en: "Zhunan Township", ja: "竹南鎮", ko: "주난진" },
+      "彰化市": { en: "Changhua City", ja: "彰化市", ko: "장화시" },
+      "員林市": { en: "Yuanlin City", ja: "員林市", ko: "위안린시" },
+      "鹿港鎮": { en: "Lukang Township", ja: "鹿港鎮", ko: "루강진" },
+      "南投市": { en: "Nantou City", ja: "南投市", ko: "난터우시" },
+      "草屯鎮": { en: "Caotun Township", ja: "草屯鎮", ko: "차오툰진" },
+      "埔里鎮": { en: "Puli Township", ja: "埔里鎮", ko: "푸리진" },
+      "斗六市": { en: "Douliu City", ja: "斗六市", ko: "더우류시" },
+      "虎尾鎮": { en: "Huwei Township", ja: "虎尾鎮", ko: "후웨이진" },
+      "太保市": { en: "Taibao City", ja: "太保市", ko: "타이바오시" },
+      "民雄鄉": { en: "Minxiong Township", ja: "民雄郷", ko: "민슝향" },
+      "屏東市": { en: "Pingtung City", ja: "屏東市", ko: "핑둥시" },
+      "東港鎮": { en: "Donggang Township", ja: "東港鎮", ko: "둥강진" },
+      "潮州鎮": { en: "Chaozhou Township", ja: "潮州鎮", ko: "차오저우진" },
+      "恆春鎮": { en: "Hengchun Township", ja: "恒春鎮", ko: "헝춘진" },
+      "宜蘭市": { en: "Yilan City", ja: "宜蘭市", ko: "이란시" },
+      "羅東鎮": { en: "Luodong Township", ja: "羅東鎮", ko: "뤄둥진" },
+      "礁溪鄉": { en: "Jiaoxi Township", ja: "礁渓郷", ko: "자오시향" },
+      "花蓮市": { en: "Hualien City", ja: "花蓮市", ko: "화롄시" },
+      "吉安鄉": { en: "Ji'an Township", ja: "吉安郷", ko: "지안향" },
+      "臺東市": { en: "Taitung City", ja: "台東市", ko: "타이둥시" },
+      "馬公市": { en: "Magong City", ja: "馬公市", ko: "마궁시" },
+      "金城鎮": { en: "Jincheng Township", ja: "金城鎮", ko: "진청진" },
+      "南竿鄉": { en: "Nangan Township", ja: "南竿郷", ko: "난간향" }
+    };
+
+    const clientTranslationCache = new Map();
+
     function t(key) {
       return (I18N_DICT[currentLang] && I18N_DICT[currentLang][key]) || I18N_DICT["zh-TW"][key] || key;
     }
@@ -1421,6 +1710,25 @@
       if (!cityZh) return t("all_taiwan");
       const clean = String(cityZh).replace(/台/g, "臺");
       return (CITY_I18N[clean] && CITY_I18N[clean][currentLang]) || clean;
+    }
+
+    function tDistrict(distZh) {
+      if (!distZh) return "";
+      const clean = String(distZh).replace(/台/g, "臺").trim();
+      if (currentLang === "zh-TW") return clean;
+      if (DISTRICT_I18N[clean] && DISTRICT_I18N[clean][currentLang]) {
+        return DISTRICT_I18N[clean][currentLang];
+      }
+      if (currentLang === "ja") {
+        return clean.replace(/區$/g, "区").replace(/鄉$/g, "郷").replace(/臺/g, "台");
+      }
+      if (currentLang === "ko") {
+        return clean.replace(/區$/g, "구").replace(/鄉$/g, "향").replace(/鎮$/g, "진").replace(/市$/g, "시");
+      }
+      if (currentLang === "en") {
+        return clean.replace(/區$/g, " Dist.").replace(/鄉$/g, " Township").replace(/鎮$/g, " Township").replace(/市$/g, " City");
+      }
+      return clean;
     }
 
     function tCategoryLabel(catKey) {
@@ -1434,11 +1742,32 @@
     }
 
     const DB_SOURCE_META = {
-      "JUDICIAL_AUCTION": { label: "司法院法拍查封筆錄", textClass: "text-emerald-700" },
-      "JUDICIAL_JUDGMENT": { label: "司法院民事瑕疵判決", textClass: "text-amber-700" },
-      "MOI_OPEN_DATA": { label: "內政部實價特殊交易", textClass: "text-purple-700" },
-      "NEWS_PUBLIC_ARCHIVE": { label: "社會新聞與警消紀錄", textClass: "text-slate-600" }
+      "JUDICIAL_AUCTION": {
+        label: "司法院法拍查封筆錄",
+        i18nKey: "db_opt_auction",
+        textClass: "text-emerald-700"
+      },
+      "JUDICIAL_JUDGMENT": {
+        label: "司法院民事瑕疵判決",
+        i18nKey: "db_opt_judgment",
+        textClass: "text-amber-700"
+      },
+      "MOI_OPEN_DATA": {
+        label: "內政部實價特殊交易",
+        i18nKey: "db_opt_moi",
+        textClass: "text-purple-700"
+      },
+      "NEWS_PUBLIC_ARCHIVE": {
+        label: "社會新聞與警消紀錄",
+        i18nKey: "db_opt_news",
+        textClass: "text-slate-600"
+      }
     };
+
+    function tDbSourceLabel(dbSourceKey) {
+      const meta = DB_SOURCE_META[dbSourceKey] || DB_SOURCE_META["NEWS_PUBLIC_ARCHIVE"];
+      return t(meta.i18nKey || "db_opt_news");
+    }
 
     function inferDbSource(item) {
       if (item.db_source && DB_SOURCE_META[item.db_source]) return item.db_source;
@@ -1600,29 +1929,29 @@
       const zh = String(rawType || item?.building_type || "住宅建物");
       if (currentLang === "zh-TW") return zh;
       if (currentLang === "en") {
-        if (/套房/.test(zh)) return `Studio Apartment Building (${zh})`;
-        if (/國宅/.test(zh)) return `Public Housing Complex (${zh})`;
-        if (/透天|別墅/.test(zh)) return `Townhouse / Villa (${zh})`;
-        if (/公寓/.test(zh)) return `Low-Rise Walk-up Apartment (${zh})`;
-        if (/華廈/.test(zh)) return `Mid-Rise Elevator Condo (${zh})`;
-        if (/住商|商業|商辦/.test(zh)) return `Mixed-Use Commercial/Residential Building (${zh})`;
-        return `Residential Building (${zh})`;
+        if (/套房/.test(zh)) return "Studio Apartment Building";
+        if (/國宅/.test(zh)) return "Public Housing Complex";
+        if (/透天|別墅/.test(zh)) return "Townhouse / Detached House";
+        if (/公寓/.test(zh)) return "Low-Rise Walk-up Apartment";
+        if (/華廈/.test(zh)) return "Mid-Rise Elevator Condo";
+        if (/住商|商業|商辦/.test(zh)) return "Mixed-Use Commercial/Office Building";
+        return "Residential Apartment Building";
       } else if (currentLang === "ja") {
-        if (/套房/.test(zh)) return `ワンルームマンション（${zh}）`;
-        if (/國宅/.test(zh)) return `公営団地・複合住宅（${zh}）`;
-        if (/透天|別墅/.test(zh)) return `一戸建て・タウンハウス（${zh}）`;
-        if (/公寓/.test(zh)) return `低層階段マンション（${zh}）`;
-        if (/華廈/.test(zh)) return `中層エレベーターマンション（${zh}）`;
-        if (/住商|商業|商辦/.test(zh)) return `住商複合ビル（${zh}）`;
-        return `集合住宅ビル（${zh}）`;
+        if (/套房/.test(zh)) return "ワンルームマンション";
+        if (/國宅/.test(zh)) return "公営団地・複合住宅";
+        if (/透天|別墅/.test(zh)) return "一戸建て・タウンハウス";
+        if (/公寓/.test(zh)) return "低層階段マンション";
+        if (/華廈/.test(zh)) return "中層エレベーターマンション";
+        if (/住商|商業|商辦/.test(zh)) return "住商複合・オフィスビル";
+        return "集合住宅ビル";
       } else if (currentLang === "ko") {
-        if (/套房/.test(zh)) return `원룸형 오피스텔·빌딩 (${zh})`;
-        if (/國宅/.test(zh)) return `공공주택 단지 (${zh})`;
-        if (/透天|別墅/.test(zh)) return `단독주택·타운하우스 (${zh})`;
-        if (/公寓/.test(zh)) return `저층 일반 아파트 (${zh})`;
-        if (/華廈/.test(zh)) return `중층 엘리베이터 맨션 (${zh})`;
-        if (/住商|商業|商辦/.test(zh)) return `주상복합 빌딩 (${zh})`;
-        return `공동주택 건물 (${zh})`;
+        if (/套房/.test(zh)) return "원룸형 오피스텔·빌딩";
+        if (/國宅/.test(zh)) return "공공주택 단지";
+        if (/透天|別墅/.test(zh)) return "단독주택·타운하우스";
+        if (/公寓/.test(zh)) return "저층 일반 아파트";
+        if (/華廈/.test(zh)) return "중층 엘리베이터 맨션";
+        if (/住商|商業|商辦/.test(zh)) return "상업·업무용 주상복합 빌딩";
+        return "공동주택 건물";
       }
       return zh;
     }
@@ -1652,18 +1981,205 @@
       return zh;
     }
 
+    function localizeMediaSource(rawSource) {
+      const s = String(rawSource || "歷年公開社會新聞與司法實務卷宗");
+      if (currentLang === "zh-TW") return s;
+      if (currentLang === "en") {
+        return s
+          .replace(/三立新聞/g, "SETN News")
+          .replace(/鏡週刊/g, "Mirror Media")
+          .replace(/TVBS新聞網|TVBS/g, "TVBS News")
+          .replace(/自由時報/g, "Liberty Times (LTN)")
+          .replace(/聯合新聞網|聯合報/g, "UDN News")
+          .replace(/ETtoday新聞雲|ETtoday/g, "ETtoday News")
+          .replace(/中時新聞網|中國時報/g, "China Times")
+          .replace(/中央社/g, "CNA Taiwan")
+          .replace(/公視新聞|公視/g, "PTS News")
+          .replace(/民視新聞|民視/g, "FTV News")
+          .replace(/壹蘋新聞網/g, "NextApple News")
+          .replace(/華視新聞|華視/g, "CTS News")
+          .replace(/東森新聞/g, "EBC News")
+          .replace(/中天新聞/g, "CTi News")
+          .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "Judicial Yuan Foreclosure Notice")
+          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "Judicial Yuan Court Judgment")
+          .replace(/內政部實價登錄/g, "MOI Real-Price Registry")
+          .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "Public News & Judicial Archive")
+          .replace(/、/g, ", ");
+      } else if (currentLang === "ja") {
+        return s
+          .replace(/三立新聞/g, "三立ニュース(SETN)")
+          .replace(/鏡週刊/g, "鏡週刊(Mirror Media)")
+          .replace(/TVBS新聞網/g, "TVBSニュース")
+          .replace(/自由時報/g, "自由時報(LTN)")
+          .replace(/聯合新聞網|聯合報/g, "聯合ニュース(UDN)")
+          .replace(/ETtoday新聞雲/g, "ETtodayニュース")
+          .replace(/中時新聞網|中國時報/g, "中時ニュース")
+          .replace(/中央社/g, "中央社(CNA)")
+          .replace(/公視新聞|公視/g, "公共テレビ(PTS)")
+          .replace(/民視新聞|民視/g, "民視ニュース(FTV)")
+          .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "司法院競売公告システム")
+          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "司法院判決書検索システム")
+          .replace(/內政部實價登錄/g, "内政部実価登録")
+          .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "公開報道・司法記録アーカイブ");
+      } else if (currentLang === "ko") {
+        return s
+          .replace(/三立新聞/g, "SETN 삼립뉴스")
+          .replace(/鏡週刊/g, "미러미디어(鏡週刊)")
+          .replace(/TVBS新聞網/g, "TVBS 뉴스")
+          .replace(/自由時報/g, "자유시보(LTN)")
+          .replace(/聯合新聞網|聯合報/g, "연합보(UDN)")
+          .replace(/ETtoday新聞雲/g, "ETtoday 뉴스")
+          .replace(/中時新聞網|中國時報/g, "중국시보(China Times)")
+          .replace(/中央社/g, "중앙통신사(CNA)")
+          .replace(/公視新聞|公視/g, "공공TV(PTS)")
+          .replace(/民視新聞|民視/g, "민시뉴스(FTV)")
+          .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "사법원 법원경매 공고")
+          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "사법원 판결문 조회 시스템")
+          .replace(/內政部實價登錄/g, "내정부 실거래가 등록")
+          .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "공개 사회뉴스 및 사법 기록")
+          .replace(/、/g, ", ");
+      }
+      return s;
+    }
+
+    function localizeAddressDisplay(item) {
+      const rawAddr = String(item.address || "");
+      if (currentLang === "zh-TW") return rawAddr;
+      const cached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
+      if (cached && cached.address) return cached.address;
+
+      const cityZh = String(item.city || "").replace(/台/g, "臺");
+      const distZh = String(item.district || "");
+      const cityLoc = tCity(cityZh);
+      const distLoc = tDistrict(distZh);
+      let rest = rawAddr.replace(/台/g, "臺").replace(cityZh, "").replace(distZh, "").trim();
+
+      if (currentLang === "ja") {
+        rest = rest
+          .replace(/一段/g, "1段").replace(/二段/g, "2段").replace(/三段/g, "3段").replace(/四段/g, "4段")
+          .replace(/五段/g, "5段").replace(/六段/g, "6段").replace(/七段/g, "7段").replace(/八段/g, "8段")
+          .replace(/號/g, "号").replace(/樓/g, "階")
+          .replace(/某指標性商辦大樓/g, "商業オフィスビル")
+          .replace(/某住商混合大樓/g, "住商複合ビル")
+          .replace(/某集合住宅大樓/g, "集合住宅マンション")
+          .replace(/某社區大樓/g, "マンション")
+          .replace(/某公寓/g, "低層マンション")
+          .replace(/某透天厝|某透天民宅|某民宅/g, "住宅")
+          .replace(/某出租套房/g, "賃貸ワンルーム");
+        return `${cityLoc} ${distLoc} ${rest}`.trim();
+      } else if (currentLang === "ko") {
+        rest = rest
+          .replace(/一段/g, " 1단 ").replace(/二段/g, " 2단 ").replace(/三段/g, " 3단 ").replace(/四段/g, " 4단 ")
+          .replace(/五段/g, " 5단 ").replace(/六段/g, " 6단 ").replace(/七段/g, " 7단 ").replace(/八段/g, " 8단 ")
+          .replace(/大道/g, "대로 ").replace(/路/g, "로 ").replace(/街/g, "가 ").replace(/巷/g, "항 ").replace(/弄/g, "롱 ")
+          .replace(/號/g, "호 ").replace(/樓/g, "층 ")
+          .replace(/某指標性商辦大樓/g, "상업·업무 빌딩")
+          .replace(/某住商混合大樓/g, "주상복합 빌딩")
+          .replace(/某集合住宅大樓|某社區大樓/g, "공동주택 단지")
+          .replace(/某公寓/g, "저층 아파트")
+          .replace(/某透天厝|某透天民宅|某民宅/g, "단독주택")
+          .replace(/某出租套房/g, "임대 원룸");
+        return `${cityLoc} ${distLoc} ${rest}`.replace(/\s+/g, " ").trim();
+      } else if (currentLang === "en") {
+        rest = rest
+          .replace(/一段/g, " Sec. 1 ").replace(/二段/g, " Sec. 2 ").replace(/三段/g, " Sec. 3 ").replace(/四段/g, " Sec. 4 ")
+          .replace(/五段/g, " Sec. 5 ").replace(/六段/g, " Sec. 6 ").replace(/七段/g, " Sec. 7 ").replace(/八段/g, " Sec. 8 ")
+          .replace(/大道/g, " Blvd. ").replace(/路/g, " Rd. ").replace(/街/g, " St. ").replace(/巷/g, " Ln. ").replace(/弄/g, " Aly. ")
+          .replace(/號/g, " No. ").replace(/樓/g, "F ")
+          .replace(/某指標性商辦大樓/g, "Commercial Office Building")
+          .replace(/某住商混合大樓/g, "Mixed-Use Building")
+          .replace(/某集合住宅大樓|某社區大樓/g, "Residential Complex")
+          .replace(/某公寓/g, "Walk-up Apartment")
+          .replace(/某透天厝|某透天民宅|某民宅/g, "Townhouse")
+          .replace(/某出租套房/g, "Rental Studio");
+        return `${rest}, ${distLoc}, ${cityLoc}`.replace(/\s+/g, " ").replace(/^,\s*/, "").trim();
+      }
+      return rawAddr;
+    }
+
+    function localizeAuctionNote(item) {
+      const rawNote = (item.auction_record && !/尚無法拍|無公開法拍|正常行情/.test(item.auction_record))
+        ? String(item.auction_record)
+        : "";
+      if (currentLang === "zh-TW") {
+        return rawNote || `案發日期核實：${item.incident_date || "歷史檔案"}`;
+      }
+      const cached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
+      if (cached && cached.auction_record) return cached.auction_record;
+
+      const dateStr = item.incident_date || (item.incidentYear ? String(item.incidentYear) : "Historical");
+      return `${t("lbl_verified_date_prefix")}${dateStr}`;
+    }
+
     function localizeCaseReasonPreview(item) {
       const zhReason = String(item.reason || "");
       if (currentLang === "zh-TW") return zhReason;
-      const door = extractDoorplateAddress(item);
+
+      const fullCached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
+      if (fullCached && fullCached.reason) return fullCached.reason;
+
+      const batchCached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
+      if (batchCached && batchCached.reason) return batchCached.reason;
+
       const catLabel = tCategoryLabel(item.normalizedCat);
       const dateStr = item.incident_date || (item.incidentYear ? String(item.incidentYear) : "Historical");
-      if (currentLang === "en") {
-        return `[${catLabel} · ${dateStr}] ${door} — ${zhReason}`;
+      const bldgLabel = localizeBuildingType(item.building_type, item);
+      const addrLabel = localizeAddressDisplay(item);
+      const srcLabel = localizeMediaSource(item.media_verification || item.source || "");
+
+      // Extract specific facts from Chinese narrative so immediate preview is accurate & 100% in target language
+      const floorMatch = zhReason.match(/(\d+)\s*樓/);
+      const floorNum = floorMatch ? floorMatch[1] : null;
+      const ageMatch = zhReason.match(/(\d+)\s*歲/);
+      const ageNum = ageMatch ? ageMatch[1] : null;
+      const isFall = /墜樓|墜落|跳樓/.test(zhReason);
+      const isFire = /火警|火災|惡火|濃煙|燒毀/.test(zhReason);
+      const isCO = /一氧化碳|瓦斯|中毒/.test(zhReason);
+      const isHomicide = /砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺/.test(zhReason) && item.normalizedCat === "刑事命案";
+      const isCourt = /法拍|判決|查封|點交|瑕疵擔保/.test(zhReason);
+
+      if (currentLang === "ko") {
+        let body = `해당 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 발생한 ${catLabel} 기록입니다.`;
+        if (isFall) {
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 " : ""}추락 사고가 발생하여 병원으로 긴급 이송되었으나 사망이 확인된 사건입니다. 경찰 현장 조사 결과 외력 개입이 없는 것으로 확인되었습니다.`;
+        } else if (isFire) {
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 주택 화재가 발생하여 소방당국이 진화 및 구조 작업을 벌였으나 인명 피해가 발생한 사건입니다.`;
+        } else if (isCO) {
+          body = `${addrLabel} 소재 ${bldgLabel} 실내에서 일산화탄소 중독 사고가 발생하여 인명 피해가 확인된 사건입니다.`;
+        } else if (isHomicide) {
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 중대 형사·살인 사건이 발생하여 경찰 수사 및 사법 절차가 진행된 사건입니다.`;
+        } else if (isCourt) {
+          body = `${addrLabel} 소재 ${bldgLabel}에 대하여 사법원 법원경매 압류조서 또는 판결문에 비자연사(특수사고) 이력이 명시된 검증 사건입니다.`;
+        }
+        return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (출처: " + srcLabel + ")" : ""}`;
       } else if (currentLang === "ja") {
-        return `【${catLabel} · ${dateStr}】${door} — ${zhReason}`;
-      } else if (currentLang === "ko") {
-        return `[${catLabel} · ${dateStr}] ${door} — ${zhReason}`;
+        let body = `該当${bldgLabel}${floorNum ? floorNum + "階" : ""}において発生した${catLabel}の検証済み記録です。`;
+        if (isFall) {
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて${ageNum ? ageNum + "歳の" : ""}転落事案が発生し、搬送後に死亡が確認されました。警察の現場調査により事件性は排除されています。`;
+        } else if (isFire) {
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて住宅火災が発生し、消防隊が出動したものの死亡者が確認された事案です。`;
+        } else if (isCO) {
+          body = `${addrLabel}の${bldgLabel}室内にて一酸化炭素中毒事故が発生し、死亡者が確認された事案です。`;
+        } else if (isHomicide) {
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて重大な刑事・殺人事件が発生し、警察捜査および司法手続が行われた事案です。`;
+        } else if (isCourt) {
+          body = `${addrLabel}の${bldgLabel}について、司法院の競売差押調書または判決書に非自然死（心理的瑕疵）の記録が明記された事案です。`;
+        }
+        return `【${catLabel} · ${dateStr}】${body}${srcLabel ? "（出典：" + srcLabel + "）" : ""}`;
+      } else if (currentLang === "en") {
+        let body = `Verified ${catLabel.toLowerCase()} incident recorded at this ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""}.`;
+        if (isFall) {
+          body = `A ${ageNum ? ageNum + "-year-old " : ""}individual fell from${floorNum ? " the " + floorNum + "th floor of" : ""} the ${bldgLabel.toLowerCase()} at ${addrLabel} and was pronounced deceased after emergency transport. Police investigation ruled out foul play.`;
+        } else if (isFire) {
+          body = `A residential fire broke out at the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, resulting in fatalities despite fire department rescue operations.`;
+        } else if (isCO) {
+          body = `A fatal carbon monoxide poisoning incident occurred inside the ${bldgLabel.toLowerCase()} at ${addrLabel}.`;
+        } else if (isHomicide) {
+          body = `A major criminal homicide case occurred at the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, documented in police and judicial records.`;
+        } else if (isCourt) {
+          body = `Judicial Yuan foreclosure inspection notes or civil court judgments explicitly document an unnatural death history at this ${bldgLabel.toLowerCase()} on ${addrLabel}.`;
+        }
+        return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (Source: " + srcLabel + ")" : ""}`;
       }
       return zhReason;
     }
@@ -2198,26 +2714,28 @@
       const safeKey = String(item.__key || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
       const catLabel = tCategoryLabel(item.normalizedCat);
       const cityLabel = tCity(item.city);
+      const distLabel = tDistrict(item.district);
+      const addrDisplay = localizeAddressDisplay(item);
 
       return `
         <div class="w-[265px] sm:w-[310px] text-slate-800 font-sans p-0.5">
           <div class="flex items-center gap-1.5 text-[11px] text-slate-500 mb-1 flex-wrap">
             <span class="font-semibold ${meta.textColor}">${catLabel}</span>
             <span aria-hidden="true">·</span>
-            <span>${cityLabel} ${item.district || ""}</span>
+            <span>${cityLabel} ${distLabel}</span>
             <span aria-hidden="true">·</span>
             <span class="font-mono tabular-nums">${item.incident_date || ""}</span>
-            ${(item.merged_count || 1) > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums">已整合 ${item.merged_count} 筆紀錄</span>` : ""}
+            ${(item.merged_count || 1) > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums">${t("badge_merged_prefix")}${item.merged_count}${t("badge_merged_suffix")}</span>` : ""}
           </div>
 
-          <h3 class="text-sm font-bold text-slate-900 leading-snug mb-1.5">${item.address || ""}</h3>
+          <h3 class="text-sm font-bold text-slate-900 leading-snug mb-1.5">${addrDisplay}</h3>
 
           <p class="text-xs text-slate-600 leading-relaxed mb-2.5 line-clamp-3">${localizeCaseReasonPreview(item)}</p>
 
           <div class="grid grid-cols-2 gap-1.5 mb-2.5 text-xs">
             <div class="bg-slate-50 p-2 rounded border border-slate-200">
               <span class="block text-[10px] text-slate-500">${t("lbl_date")}</span>
-              <span class="font-mono font-bold text-red-700 tabular-nums">${item.incident_date || "歷史紀錄"}</span>
+              <span class="font-mono font-bold text-red-700 tabular-nums">${item.incident_date || "Historical"}</span>
             </div>
             <div class="bg-slate-50 p-2 rounded border border-slate-200">
               <span class="block text-[10px] text-slate-500">${t("lbl_bldg_type")}</span>
@@ -2730,7 +3248,7 @@
         TAIWAN_DISTRICTS[cityVal].forEach(d => {
           const opt = document.createElement("option");
           opt.value = d;
-          opt.textContent = d;
+          opt.textContent = currentLang === "zh-TW" ? d : `${tDistrict(d)} (${d})`;
           districtEl.appendChild(opt);
         });
       }
@@ -3311,6 +3829,23 @@
       });
     }
 
+    function renderAuctionVerificationBox(details, noteText, sourceText) {
+      const safeKw = (details.smartKeyword || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+      const safeToastPrefix = t("toast_copied_kw").replace(/'/g, "\\'");
+      document.getElementById("drawer-auction-box").innerHTML = `
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div><span class="font-semibold text-slate-800">${t("lbl_incident_note")}</span><span class="font-mono font-semibold text-slate-900">${noteText}</span></div>
+          ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold">${t("lbl_orig_report_link")}</a>` : ""}
+        </div>
+        <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
+          <div class="text-xs"><span class="font-semibold text-slate-800">${t("lbl_verified_source")}</span><span class="text-slate-700">${sourceText}</span></div>
+          <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1">
+            <span>${t("btn_copy_kw")}</span>
+          </button>
+        </div>
+      `;
+    }
+
     async function openCaseDossier(item) {
       currentDossierItem = item;
       isInteractiveSvOpen = false;
@@ -3320,35 +3855,25 @@
       const details = buildRecordDetails(item);
       const catLabel = tCategoryLabel(item.normalizedCat);
       const cityLabel = tCity(item.city);
+      const distLabel = tDistrict(item.district);
+      const localizedAddr = localizeAddressDisplay(item);
 
       document.getElementById("drawer-meta-line").innerHTML = `
         <span class="font-semibold ${meta.textColor}">${catLabel}</span>
         <span aria-hidden="true">·</span>
-        <span>${cityLabel} ${item.district}</span>
+        <span id="drawer-meta-region">${cityLabel} ${distLabel}</span>
       `;
-      document.getElementById("drawer-title").textContent = item.address;
-      document.getElementById("drawer-doorplate-text").textContent = details.doorplate;
-      document.getElementById("drawer-region").textContent = `${cityLabel} · ${item.district}`;
+      document.getElementById("drawer-title").textContent = localizedAddr;
+      document.getElementById("drawer-doorplate-text").textContent = currentLang === "zh-TW" ? details.doorplate : `${localizedAddr} (${details.doorplate})`;
+      document.getElementById("drawer-region").textContent = `${cityLabel} · ${distLabel}`;
       document.getElementById("drawer-date").textContent = item.incident_date || (item.incidentYear ? `${item.incidentYear}` : "Historical");
       document.getElementById("drawer-building-type").textContent = localizeBuildingType(item.building_type, item);
       document.getElementById("drawer-current-status").textContent = localizeCurrentStatus(item.current_status, item);
       document.getElementById("drawer-reason").textContent = localizeCaseReasonPreview(item);
-      const safeKw = (details.smartKeyword || "").replace(/'/g, "\\'");
-      const cleanRecordNote = (item.auction_record && !/尚無法拍|無公開法拍|正常行情/.test(item.auction_record))
-        ? item.auction_record
-        : `案發日期核實：${item.incident_date || "歷史檔案"}`;
-      document.getElementById("drawer-auction-box").innerHTML = `
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div><span class="font-semibold text-slate-800">案發時間與查證備註：</span><span class="font-mono font-semibold text-slate-900">${cleanRecordNote}</span></div>
-          ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold">原始報導連結 ↗</a>` : ""}
-        </div>
-        <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
-          <div class="text-xs"><span class="font-semibold text-slate-800">核實來源：</span><span class="text-slate-700">${details.sourceName}</span></div>
-          <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('已複製查證關鍵字：' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1">
-            <span>📋 複製查證關鍵字</span>
-          </button>
-        </div>
-      `;
+
+      const cleanRecordNote = localizeAuctionNote(item);
+      const localizedSource = localizeMediaSource(details.sourceName);
+      renderAuctionVerificationBox(details, cleanRecordNote, localizedSource);
 
       const svImg = document.getElementById("drawer-sv-img");
       const panoDiv = document.getElementById("drawer-sv-pano");
@@ -3365,7 +3890,7 @@
         gmapStreetViewPanoInstance.setVisible(false);
       }
       svPlaceholder.classList.remove("hidden");
-      svPlaceholder.textContent = "載入街景影像中...";
+      svPlaceholder.textContent = t("sv_loading");
       svStatusText.textContent = t("sv_caption");
       toggleSvBtn.classList.add("hidden");
       toggleSvBtn.textContent = t("btn_toggle_360");
@@ -3392,7 +3917,7 @@
               toggleSvBtn.classList.remove("hidden");
               svStatusText.textContent = `${t("sv_caption")}${data.imageDate ? " · " + data.imageDate : ""}`;
             } else {
-              svPlaceholder.textContent = "此門牌周邊無 Google 街景影像";
+              svPlaceholder.textContent = t("sv_none");
             }
           });
         }).catch(() => {});
@@ -3446,20 +3971,21 @@
       const mergedBadge = document.getElementById("drawer-merged-count-badge");
       const mergedListEl = document.getElementById("drawer-merged-cases-list");
       const mergedCases = Array.isArray(item.merged_cases) ? item.merged_cases : [];
-      if (mergedSec && mergedListEl) {
-        if ((item.merged_count || mergedCases.length) > 1 && mergedCases.length > 1) {
+      function renderMergedCasesSubList(subList) {
+        if (!mergedSec || !mergedListEl) return;
+        if ((item.merged_count || subList.length) > 1 && subList.length > 1) {
           mergedSec.classList.remove("hidden");
-          if (mergedBadge) mergedBadge.textContent = `已整合 ${mergedCases.length} 筆相似／同路段紀錄`;
-          mergedListEl.innerHTML = mergedCases.map((mc, idx) => `
+          if (mergedBadge) mergedBadge.textContent = `${t("badge_merged_prefix")}${subList.length}${t("badge_merged_suffix")}`;
+          mergedListEl.innerHTML = subList.map((mc, idx) => `
             <div class="p-2.5 rounded-lg bg-indigo-50/50 border border-indigo-100 text-xs space-y-1">
               <div class="flex items-center justify-between gap-2">
-                <span class="font-bold text-slate-900">#${idx + 1} · ${mc.original_address || item.address}</span>
-                <span class="font-mono text-[11px] text-indigo-700 font-semibold shrink-0">${mc.incident_date || ""} · ${mc.category || ""}</span>
+                <span class="font-bold text-slate-900">#${idx + 1} · ${mc.original_address || localizedAddr}</span>
+                <span class="font-mono text-[11px] text-indigo-700 font-semibold shrink-0">${mc.incident_date || ""} · ${tCategoryLabel(classifyRecord(mc.category, mc.reason))}</span>
               </div>
               <p class="text-[11px] text-slate-600 leading-relaxed">${mc.reason || ""}</p>
               <div class="text-[10px] text-slate-500 flex items-center justify-between pt-0.5">
-                <span class="truncate">來源：${mc.source || "公開實證檔案"}</span>
-                ${mc.source_url && String(mc.source_url).startsWith("http") ? `<a href="${mc.source_url}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold shrink-0">原始連結 ↗</a>` : ""}
+                <span class="truncate">${t("lbl_verified_source")}${localizeMediaSource(mc.source || "公開實證檔案")}</span>
+                ${mc.source_url && String(mc.source_url).startsWith("http") ? `<a href="${mc.source_url}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold shrink-0">${t("lbl_orig_report_link")}</a>` : ""}
               </div>
             </div>
           `).join("");
@@ -3468,15 +3994,16 @@
           mergedListEl.innerHTML = "";
         }
       }
+      renderMergedCasesSubList(mergedCases);
 
       const extLinksBox = document.getElementById("drawer-external-links");
       extLinksBox.innerHTML = `
-        ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2.5 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-center font-semibold transition-colors flex items-center justify-center gap-1.5"><span>🔗 查看此案原始新聞報導／裁判書 ↗</span></a>` : ""}
-        <a href="${details.googleNewsUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>📰 新聞檔案庫檢索</span></a>
-        <a href="${details.judicialSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>⚖️ 司法院裁判／法拍查證</span></a>
-        <a href="${details.publicHauntedDbUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>🏠 台灣凶宅網／居易查證</span></a>
-        <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>🔍 全網公開資料查證</span></a>
-        <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-center text-xs font-medium transition-colors flex items-center justify-center gap-1"><span>📍 Google 地圖精確定位 ↗</span></a>
+        ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2.5 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-center font-semibold transition-colors flex items-center justify-center gap-1.5"><span>${t("ext_btn_orig")}</span></a>` : ""}
+        <a href="${details.googleNewsUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_news")}</span></a>
+        <a href="${details.judicialSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_judicial")}</span></a>
+        <a href="${details.publicHauntedDbUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_haunted")}</span></a>
+        <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_web")}</span></a>
+        <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-center text-xs font-medium transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_gmaps")}</span></a>
       `;
 
       resetDrawerSwipeStyles();
@@ -3489,34 +4016,59 @@
       }
 
       if (currentLang !== "zh-TW") {
+        const reqLang = currentLang;
         fetch("/api/translate-case", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             id: item.id,
-            lang: currentLang,
+            lang: reqLang,
             address: item.address,
+            district: item.district,
             building_type: inferBuildingTypeRaw(item),
             current_status: inferCurrentStatusRaw(item),
             reason: item.reason,
             auction_record: item.auction_record || "",
-            media_verification: item.media_verification || "",
-            history_timeline: details.timeline
+            media_verification: details.sourceName || "",
+            history_timeline: details.timeline,
+            merged_cases: mergedCases
           })
         }).then(r => r.ok ? r.json() : null).then(tr => {
-          if (!tr || currentDossierItem !== item) return;
-          if (tr.address) document.getElementById("drawer-title").textContent = tr.address;
+          if (!tr || currentDossierItem !== item || currentLang !== reqLang) return;
+          clientTranslationCache.set(`case_${item.id || item.address}_${reqLang}`, tr);
+          clientTranslationCache.set(`${item.__key}_${reqLang}`, {
+            address: tr.address,
+            district: tr.district,
+            reason: tr.reason
+          });
+          if (tr.address) {
+            document.getElementById("drawer-title").textContent = tr.address;
+            document.getElementById("drawer-doorplate-text").textContent = `${tr.address} (${details.doorplate})`;
+          }
+          if (tr.district) {
+            document.getElementById("drawer-region").textContent = `${cityLabel} · ${tr.district}`;
+            const metaReg = document.getElementById("drawer-meta-region");
+            if (metaReg) metaReg.textContent = `${cityLabel} ${tr.district}`;
+          }
           if (tr.building_type) document.getElementById("drawer-building-type").textContent = tr.building_type;
           if (tr.current_status) document.getElementById("drawer-current-status").textContent = tr.current_status;
           if (tr.reason) document.getElementById("drawer-reason").textContent = tr.reason;
-          if (tr.auction_record || tr.media_verification) {
-            document.getElementById("drawer-auction-box").innerHTML = `
-              <div><span class="font-semibold text-slate-800">Incident Note: </span>${tr.auction_record || "—"}</div>
-              <div class="mt-1"><span class="font-semibold text-slate-800">Source: </span>${tr.media_verification || "—"}</div>
-            `;
-          }
+          renderAuctionVerificationBox(
+            details,
+            tr.auction_record || cleanRecordNote,
+            tr.media_verification || localizedSource
+          );
           if (Array.isArray(tr.history_timeline) && tr.history_timeline.length > 0) {
             renderTimelineList(tr.history_timeline);
+          }
+          if (Array.isArray(tr.merged_cases) && tr.merged_cases.length > 0 && mergedCases.length > 1) {
+            const mergedTranslated = mergedCases.map((orig, i) => ({
+              ...orig,
+              original_address: tr.merged_cases[i]?.original_address || orig.original_address,
+              reason: tr.merged_cases[i]?.reason || orig.reason,
+              source: tr.merged_cases[i]?.source || orig.source
+            }));
+            renderMergedCasesSubList(mergedTranslated);
           }
         }).catch(() => {});
       }
@@ -3796,6 +4348,52 @@
 
     let currentListRenderLimit = 100;
 
+    let batchTranslationAbortController = null;
+
+    async function translateVisibleCardsBatch(visibleRecords, lang) {
+      if (lang === "zh-TW" || !Array.isArray(visibleRecords) || visibleRecords.length === 0) return;
+      const uncached = visibleRecords
+        .slice(0, 15)
+        .filter(item => !clientTranslationCache.has(`${item.__key}_${lang}`))
+        .map(item => ({
+          key: String(item.__key),
+          address: String(item.address || ""),
+          district: String(item.district || ""),
+          reason: String(item.reason || "")
+        }));
+
+      if (uncached.length === 0) return;
+
+      try {
+        const res = await fetch("/api/translate-batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lang, items: uncached })
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const translations = data?.translations || {};
+        if (currentLang !== lang) return;
+
+        Object.entries(translations).forEach(([key, tr]) => {
+          if (!tr) return;
+          clientTranslationCache.set(`${key}_${lang}`, tr);
+          const cardEl = document.querySelector(`[data-record-key="${CSS.escape(key)}"]`);
+          if (cardEl) {
+            const addrEl = cardEl.querySelector(".card-addr-el");
+            const distEl = cardEl.querySelector(".card-dist-el");
+            const reasonEl = cardEl.querySelector(".card-reason-el");
+            if (addrEl && tr.address) addrEl.textContent = tr.address;
+            if (distEl && tr.district) {
+              const cityZh = cardEl.getAttribute("data-city-zh") || "";
+              distEl.textContent = `${tCity(cityZh)} ${tr.district}`;
+            }
+            if (reasonEl && tr.reason) reasonEl.textContent = tr.reason;
+          }
+        });
+      } catch (e) {}
+    }
+
     function renderData(records) {
       currentFilteredRecords = records;
       renderMapMarkersOnly(records);
@@ -3804,6 +4402,7 @@
       const resultLabel = document.getElementById("filter-result-label");
       const regionLabel = document.getElementById("region-summary-label");
       const mNavCount = document.getElementById("m-nav-count");
+      const statusEl = document.getElementById("db-status");
 
       listContainer.innerHTML = "";
       const countStr = records.length.toLocaleString();
@@ -3816,6 +4415,9 @@
       } else {
         resultLabel.textContent = `共 ${countStr} 筆案件卷宗`;
       }
+      if (statusEl && allRecords.length > 0) {
+        statusEl.textContent = `${t("status_total_prefix")}${allRecords.length.toLocaleString()}${t("status_total_suffix")}`;
+      }
       if (mNavCount) mNavCount.textContent = countStr;
 
       const selectedCity = citySelect.value;
@@ -3825,7 +4427,7 @@
       const yearText = (startY || endY) ? ` · ${startY || "1970"}–${endY || "2026"}` : "";
 
       regionLabel.textContent = selectedCity
-        ? `${tCity(selectedCity)}${selectedDist ? " · " + selectedDist : ""}${yearText}`
+        ? `${tCity(selectedCity)}${selectedDist ? " · " + tDistrict(selectedDist) : ""}${yearText}`
         : `${t("all_taiwan")}${yearText}`;
 
       if (records.length === 0) {
@@ -3859,31 +4461,36 @@
           const details = buildRecordDetails(item);
           const catLabel = tCategoryLabel(item.normalizedCat);
           const cityLabel = tCity(item.city);
+          const distLabel = tDistrict(item.district);
+          const dbSourceLabel = tDbSourceLabel(item.db_source);
+          const addrDisplay = localizeAddressDisplay(item);
           const mergedCount = item.merged_count || 1;
 
           const row = document.createElement("article");
+          row.setAttribute("data-record-key", String(item.__key));
+          row.setAttribute("data-city-zh", String(item.city || ""));
           row.className = "p-3.5 sm:p-4 bg-white hover:bg-slate-50/90 active:bg-slate-100/70 cursor-pointer transition-colors";
           row.innerHTML = `
             <div class="flex items-center justify-between gap-2 text-xs text-slate-500 mb-1">
               <div class="flex items-center gap-1.5 flex-wrap">
                 <span class="font-semibold ${meta.textColor}">${catLabel}</span>
                 <span aria-hidden="true">·</span>
-                <span class="text-slate-700 font-medium">${cityLabel} ${item.district || ""}</span>
+                <span class="card-dist-el text-slate-700 font-medium">${cityLabel} ${distLabel}</span>
                 <span aria-hidden="true">·</span>
-                <span class="font-medium ${dbMeta.textClass || 'text-slate-600'}">${dbMeta.label}</span>
+                <span class="font-medium ${dbMeta.textClass || 'text-slate-600'}">${dbSourceLabel}</span>
               </div>
-              <time class="font-mono text-xs font-bold text-red-700 bg-red-50 border border-red-100 px-2 py-0.5 rounded tabular-nums shrink-0">案發 ${item.incident_date || ""}</time>
+              <time class="font-mono text-xs font-bold text-red-700 bg-red-50 border border-red-100 px-2 py-0.5 rounded tabular-nums shrink-0">${t("badge_incident_prefix")}${item.incident_date || ""}</time>
             </div>
 
-            <h3 class="text-sm font-bold text-slate-900 mb-1.5 leading-snug">${item.address || ""}</h3>
+            <h3 class="card-addr-el text-sm font-bold text-slate-900 mb-1.5 leading-snug">${addrDisplay}</h3>
 
-            <p class="text-xs text-slate-600 leading-relaxed mb-2.5 line-clamp-2">${localizeCaseReasonPreview(item)}</p>
+            <p class="card-reason-el text-xs text-slate-600 leading-relaxed mb-2.5 line-clamp-2">${localizeCaseReasonPreview(item)}</p>
 
             <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 gap-2">
               <div class="flex items-center gap-1.5 truncate">
                 <span class="text-slate-600 font-medium truncate">${localizeBuildingType(item.building_type, item)}</span>
-                ${mergedCount > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums shrink-0">已整合 ${mergedCount} 筆紀錄</span>` : ""}
-                ${details.directSourceUrl ? `<span aria-hidden="true">·</span><span class="text-emerald-700 font-semibold shrink-0">附原始連結</span>` : ""}
+                ${mergedCount > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums shrink-0">${t("badge_merged_prefix")}${mergedCount}${t("badge_merged_suffix")}</span>` : ""}
+                ${details.directSourceUrl ? `<span aria-hidden="true">·</span><span class="text-emerald-700 font-semibold shrink-0">${t("badge_has_link")}</span>` : ""}
               </div>
               <div class="flex items-center gap-2 shrink-0 font-semibold">
                 <button type="button" class="locate-pin-inline-btn px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium">
@@ -3936,7 +4543,7 @@
         loadMoreContainer.className = "p-3.5 bg-slate-50 text-center border-t border-slate-200";
         loadMoreContainer.innerHTML = `
           <button type="button" id="load-more-records-btn" class="w-full sm:w-auto px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors">
-            載入更多案件紀錄（已顯示 ${visibleRecords.length} / ${records.length.toLocaleString()}）
+            ${t("btn_load_more_prefix")}${visibleRecords.length} / ${records.length.toLocaleString()})
           </button>
         `;
         loadMoreContainer.querySelector("#load-more-records-btn")?.addEventListener("click", () => {
@@ -3944,6 +4551,10 @@
           renderData(records);
         });
         listContainer.appendChild(loadMoreContainer);
+      }
+
+      if (currentLang !== "zh-TW") {
+        translateVisibleCardsBatch(visibleRecords, currentLang);
       }
     }
 

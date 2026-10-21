@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel, Type } from "@google/genai";
 import * as factCrawler from "./fact_crawler.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -514,15 +514,30 @@ app.get("/api/records/live-sync", async (req, res) => {
 
 // POST /api/translate-case - Translates case dossier narrative into English (en), Japanese (ja), or Korean (ko)
 app.post("/api/translate-case", async (req, res) => {
-  const { id = "", lang = "zh-TW", address = "", building_type = "", current_status = "", reason = "", auction_record = "", media_verification = "", history_timeline = [] } = req.body || {};
+  const {
+    id = "",
+    lang = "zh-TW",
+    address = "",
+    district = "",
+    building_type = "",
+    current_status = "",
+    reason = "",
+    auction_record = "",
+    media_verification = "",
+    history_timeline = [],
+    merged_cases = []
+  } = req.body || {};
 
   if (lang === "zh-TW" || !["en", "ja", "ko"].includes(lang)) {
-    return res.json({ address, building_type, current_status, reason, auction_record, media_verification, history_timeline });
+    return res.json({ address, district, building_type, current_status, reason, auction_record, media_verification, history_timeline, merged_cases });
   }
 
-  const cacheKey = `${id || address}_${lang}`;
+  const cacheKey = `case_v2_${id || address}_${lang}`;
   if (caseTranslationCache.has(cacheKey)) {
-    return res.json(caseTranslationCache.get(cacheKey));
+    const cached = caseTranslationCache.get(cacheKey);
+    if (cached && cached.reason) {
+      return res.json(cached);
+    }
   }
 
   if (!process.env.GEMINI_API_KEY) {
@@ -541,22 +556,41 @@ app.post("/api/translate-case", async (req, res) => {
       httpOptions: { headers: { "User-Agent": "aistudio-build" } }
     });
 
+    const safeTimeline = Array.isArray(history_timeline)
+      ? history_timeline.slice(0, 6).map(t => ({
+          year: String(t?.year || ""),
+          stage: String(t?.stage || ""),
+          detail: String(t?.detail || "")
+        }))
+      : [];
+    const safeMerged = Array.isArray(merged_cases)
+      ? merged_cases.slice(0, 6).map(m => ({
+          original_address: String(m?.original_address || ""),
+          reason: String(m?.reason || ""),
+          source: String(m?.source || "")
+        }))
+      : [];
+
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: `Translate the following Taiwan property incident / court foreclosure record into natural, professional ${langNames[lang]} for real estate due diligence. Keep the original Chinese doorplate in parentheses next to the translated address so users can reference both:
+      model: "gemini-3.8-flash",
+      contents: `Translate the following Taiwan property incident record completely into natural, accurate ${langNames[lang]}. Do not leave Chinese text untranslated; translate all road names, districts, building types, media names, and case narratives into ${langNames[lang]}:
 - address: ${address}
+- district: ${district}
 - building_type: ${building_type}
 - current_status: ${current_status}
 - reason: ${reason}
 - auction_record: ${auction_record}
 - media_verification: ${media_verification}
-- history_timeline: ${JSON.stringify(history_timeline)}`,
+- history_timeline: ${JSON.stringify(safeTimeline)}
+- merged_cases: ${JSON.stringify(safeMerged)}`,
       config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
           properties: {
             address: { type: Type.STRING },
+            district: { type: Type.STRING },
             building_type: { type: Type.STRING },
             current_status: { type: Type.STRING },
             reason: { type: Type.STRING },
@@ -573,9 +607,21 @@ app.post("/api/translate-case", async (req, res) => {
                 },
                 required: ["year", "stage", "detail"]
               }
+            },
+            merged_cases: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  original_address: { type: Type.STRING },
+                  reason: { type: Type.STRING },
+                  source: { type: Type.STRING }
+                },
+                required: ["original_address", "reason", "source"]
+              }
             }
           },
-          required: ["address", "building_type", "current_status", "reason", "auction_record", "media_verification", "history_timeline"]
+          required: ["address", "district", "building_type", "current_status", "reason", "auction_record", "media_verification", "history_timeline", "merged_cases"]
         }
       }
     });
@@ -584,7 +630,86 @@ app.post("/api/translate-case", async (req, res) => {
     caseTranslationCache.set(cacheKey, translated);
     return res.json(translated);
   } catch (err) {
+    console.error("translate-case error:", err.message);
     return res.status(500).json({ error: "Translation failed" });
+  }
+});
+
+// POST /api/translate-batch - Translates a batch of visible list cards into en, ja, or ko
+app.post("/api/translate-batch", async (req, res) => {
+  const { lang = "zh-TW", items = [] } = req.body || {};
+  if (lang === "zh-TW" || !["en", "ja", "ko"].includes(lang) || !Array.isArray(items) || items.length === 0) {
+    return res.json({ translations: {} });
+  }
+
+  const result = {};
+  const toTranslate = [];
+  for (const it of items.slice(0, 20)) {
+    if (!it || !it.key) continue;
+    const cKey = `batch_v2_${it.key}_${lang}`;
+    if (caseTranslationCache.has(cKey)) {
+      result[it.key] = caseTranslationCache.get(cKey);
+    } else {
+      toTranslate.push({
+        key: String(it.key),
+        address: String(it.address || ""),
+        district: String(it.district || ""),
+        reason: String(it.reason || "").slice(0, 240)
+      });
+    }
+  }
+
+  if (toTranslate.length === 0 || !process.env.GEMINI_API_KEY) {
+    return res.json({ translations: result });
+  }
+
+  const langNames = {
+    en: "English",
+    ja: "Japanese (日本語)",
+    ko: "Korean (한국어)"
+  };
+
+  try {
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+      httpOptions: { headers: { "User-Agent": "aistudio-build" } }
+    });
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.8-flash",
+      contents: `Translate each Taiwan property incident item below into concise, natural ${langNames[lang]}. Translate the address, district, and reason completely into ${langNames[lang]} without leaving Chinese sentences:\n${JSON.stringify(toTranslate)}`,
+      config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              key: { type: Type.STRING },
+              address: { type: Type.STRING },
+              district: { type: Type.STRING },
+              reason: { type: Type.STRING }
+            },
+            required: ["key", "address", "district", "reason"]
+          }
+        }
+      }
+    });
+
+    const arr = JSON.parse(response.text || "[]");
+    if (Array.isArray(arr)) {
+      for (const tr of arr) {
+        if (tr && tr.key) {
+          caseTranslationCache.set(`batch_v2_${tr.key}_${lang}`, tr);
+          result[tr.key] = tr;
+        }
+      }
+    }
+    return res.json({ translations: result });
+  } catch (err) {
+    console.error("translate-batch error:", err.message);
+    return res.json({ translations: result });
   }
 });
 
@@ -722,9 +847,10 @@ app.post("/api/search-grounding", async (req, res) => {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       contents: langPromptMap[lang] || langPromptMap["zh-TW"],
       config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
         tools: [{ googleSearch: {} }]
       }
     });

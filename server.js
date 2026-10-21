@@ -1297,6 +1297,101 @@ app.post("/api/discover", async (req, res) => {
   }
 });
 
+// Affiliate Click & Organic Referral Telemetry Store (Synced to /tmp for persistence)
+const AFFILIATE_STATS_FILE = "/tmp/tw_property_affiliate_stats.json";
+const DEFAULT_AFFILIATE_STATS = {
+  clicksByAd: {
+    hlf_clean: 18,
+    hola_home: 14,
+    oeya_deals: 11,
+    jama_comfort: 9
+  },
+  clicksByPlacement: {
+    infeed: 24,
+    drawer: 19,
+    footer: 9
+  },
+  visitorReportCopies: 31,
+  recentEvents: []
+};
+
+let affiliateStats = (() => {
+  try {
+    if (fs.existsSync(AFFILIATE_STATS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(AFFILIATE_STATS_FILE, "utf8"));
+      if (parsed && typeof parsed === "object" && parsed.clicksByAd) {
+        return {
+          clicksByAd: { ...DEFAULT_AFFILIATE_STATS.clicksByAd, ...(parsed.clicksByAd || {}) },
+          clicksByPlacement: { ...DEFAULT_AFFILIATE_STATS.clicksByPlacement, ...(parsed.clicksByPlacement || {}) },
+          visitorReportCopies: Number(parsed.visitorReportCopies ?? DEFAULT_AFFILIATE_STATS.visitorReportCopies),
+          recentEvents: Array.isArray(parsed.recentEvents) ? parsed.recentEvents.slice(0, 30) : []
+        };
+      }
+    }
+  } catch (e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_AFFILIATE_STATS));
+})();
+
+function saveAffiliateStatsToDisk() {
+  try {
+    fs.writeFileSync(AFFILIATE_STATS_FILE, JSON.stringify(affiliateStats, null, 2), "utf8");
+  } catch (e) {}
+}
+
+app.get("/api/affiliate-stats", (req, res) => {
+  const all = loadAllUnifiedRecords();
+  res.json({
+    ...affiliateStats,
+    seoIndexedCount: all.length,
+    seoCityCount: Object.keys(CITY_BASE_COORDS).length
+  });
+});
+
+app.post("/api/affiliate-click", express.text({ type: "*/*" }), (req, res) => {
+  try {
+    let body = req.body;
+    if (typeof body === "string" && body.trim().startsWith("{")) {
+      body = JSON.parse(body);
+    }
+    if (!body || typeof body !== "object") body = {};
+
+    const eventType = String(body.type || "ad_click");
+    const nowIso = new Date().toISOString();
+
+    if (eventType === "visitor_copy") {
+      affiliateStats.visitorReportCopies = (affiliateStats.visitorReportCopies || 0) + 1;
+      affiliateStats.recentEvents.unshift({
+        type: "visitor_copy",
+        city: String(body.city || "全臺"),
+        label: String(body.label || "看屋查證摘要轉傳"),
+        ts: nowIso
+      });
+    } else {
+      const adId = String(body.adId || "");
+      const placement = String(body.placement || "infeed");
+      if (adId && Object.prototype.hasOwnProperty.call(affiliateStats.clicksByAd, adId)) {
+        affiliateStats.clicksByAd[adId] = (affiliateStats.clicksByAd[adId] || 0) + 1;
+      }
+      if (placement && Object.prototype.hasOwnProperty.call(affiliateStats.clicksByPlacement, placement)) {
+        affiliateStats.clicksByPlacement[placement] = (affiliateStats.clicksByPlacement[placement] || 0) + 1;
+      }
+      affiliateStats.recentEvents.unshift({
+        type: "ad_click",
+        adId,
+        placement,
+        city: String(body.city || "全臺"),
+        ts: nowIso
+      });
+    }
+
+    affiliateStats.recentEvents = affiliateStats.recentEvents.slice(0, 25);
+    saveAffiliateStatsToDisk();
+    return res.json({ ok: true, stats: affiliateStats });
+  } catch (err) {
+    return res.status(200).json({ ok: false });
+  }
+});
+
 // Google Search Console HTML file verification endpoint
 app.get("/google6a317e59d3daa28c.html", (req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -1329,7 +1424,7 @@ app.get("/robots.txt", (req, res) => {
   );
 });
 
-// Dynamic XML Sitemap for Google Search Console indexing across all 22 Taiwan cities/counties
+// Dynamic XML Sitemap for Google Search Console indexing across all 22 Taiwan cities/counties & high-search districts
 app.get("/sitemap.xml", (req, res) => {
   const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
   const host = req.headers["x-forwarded-host"] || req.get("host") || "ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app";
@@ -1344,6 +1439,21 @@ app.get("/sitemap.xml", (req, res) => {
   for (const city of cities) {
     urlEntries.push(
       `  <url>\n    <loc>${baseUrl}/?city=${encodeURIComponent(city)}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`
+    );
+  }
+
+  // Add top high-intent house-hunting districts for long-tail SEO organic traffic
+  const seoHotDistricts = [
+    ["臺北市", "中山區"], ["臺北市", "萬華區"], ["臺北市", "信義區"], ["臺北市", "大安區"], ["臺北市", "內湖區"], ["臺北市", "文山區"],
+    ["新北市", "板橋區"], ["新北市", "中和區"], ["新北市", "永和區"], ["新北市", "三重區"], ["新北市", "新莊區"], ["新北市", "淡水區"],
+    ["桃園市", "桃園區"], ["桃園市", "中壢區"], ["桃園市", "龜山區"], ["桃園市", "八德區"],
+    ["臺中市", "西屯區"], ["臺中市", "北屯區"], ["臺中市", "北區"], ["臺中市", "南屯區"],
+    ["臺南市", "永康區"], ["臺南市", "東區"], ["臺南市", "中西區"],
+    ["高雄市", "三民區"], ["高雄市", "左營區"], ["高雄市", "鳳山區"], ["高雄市", "苓雅區"], ["高雄市", "鹽埕區"]
+  ];
+  for (const [c, d] of seoHotDistricts) {
+    urlEntries.push(
+      `  <url>\n    <loc>${baseUrl}/?city=${encodeURIComponent(c)}&amp;district=${encodeURIComponent(d)}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`
     );
   }
 

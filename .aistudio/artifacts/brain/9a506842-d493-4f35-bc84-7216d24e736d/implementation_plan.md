@@ -1,90 +1,107 @@
-# 臺灣特殊事故建物查詢與產權紀錄系統 — 開發伺服器啟動修復與介面設計升級計畫
+# 聯盟推廣變現分析與社群導流分享系統（iChannels 買房／租屋搬家族群專項）
 
-本計畫第一要務為**立即修復開發伺服器無法啟動的問題**（因原始專案僅有靜態 `index.html` 與獨立 Python 腳本，缺少 `package.json` 與監聽 `0.0.0.0:3000` 的 Web 伺服器入口），並同步移除所有生硬的「交叉比對、智慧稽核引擎、可信度百分比」等機械感字眼，升級為乾淨、具現代設計感的不動產事故與產權查詢介面。
+為協助平台透過 **iChannels（通路王）** 穩定創造導購分潤收益，本計畫在不破壞現有「高可信度地理資訊與產權查證」版面整潔度的前提下，新增 **「一鍵產生社群與論壇（PTT / Dcard / LINE / Threads）分享文案」** 與 **「推廣連結點擊次數統計與熱度分析中心」**，精準鎖定看屋、買房、租屋與搬家入厝族群進行導流與轉換追蹤。
 
 ## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> **請點擊計畫卡片上的「Proceed（繼續／開始實作）」按鈕**，系統即可解除規劃模式限制，立即為您建立伺服器設定並啟動預覽畫面：
+> 以下為根據您的選擇所確立的核心功能與設計決策，請確認後點擊「Proceed」開始建置：
 
-- **Confirmed Decision 1 — 立即修復 Port 3000 開發伺服器啟動**：建立標準 Node.js + Express 伺服器並設定 `npm run dev` 監聽 `0.0.0.0:3000`，同時清理會干擾建置流程的多餘腳本，讓開發預覽伺服器立即正常運作。
-- **Confirmed Decision 2 — 徹底刪除「交叉比對」等 AI 機械式字眼**：全面移除「多方交叉比對 · 智慧稽核引擎」、「多維度稽核中」、「可信度 XX%」、「雲端資料庫同步中」閃爍綠燈等字眼，改為自然、專業的不動產實務用語（如「地段門牌明確」、「附新聞報導連結」、「法拍與歷年轉手紀錄」）。
-- **Confirmed Decision 3 — 現代編輯感介面與雙重資料保障**：採用清爽的雙欄研究介面與無膠囊標籤（Zero-Pill）排版，保留既有 Supabase 雲端連線，並內建臺灣各縣市代表性歷史事故與法拍備援資料，確保任何網路環境下地圖與列表皆能豐富呈現。
+- **Confirmed Decision 1（核心推廣工具）**：實作「**一鍵產生社群與論壇分享文案按鈕**」與「**推廣連結點擊次數統計與熱度分析**」兩大模組。
+- **Confirmed Decision 2（受眾與廣告品類定位）**：鎖定 **買房看屋與租屋搬家族群（居家清潔、家電、家具家飾、舒適居家選品）**，將現有 4 組 iChannels 推廣連結依看屋／交屋情境做精準點擊追蹤與成效排序。
+- **Recommended Default（隱私與版面整潔原則）**：一般訪客僅會看到自然的「分享案件／複製論壇文案」按鈕與清爽的原生推薦卡片；「推廣點擊統計與導流中心」則收納於左下角「居家服務推薦 ▴」面板及頂部推廣分析視窗中，保持主畫面零干擾。
 
 ---
 
 ## 1. Overview & Core Concept
 
-- **What It Does**：在 Port 3000 提供穩定運行的全臺 22 縣市、368 鄉鎮市區特殊事故建物與法拍點交紀錄地圖查詢系統。
-- **Target Audience / Persona**：購屋族、租屋族、房仲從業人員與不動產研究人員，能以直覺、無干擾的介面查閱各行政區歷史事故建物位置、案情摘要與周邊行情比較。
-- **Key Value**：解決目前無法啟動預覽伺服器的問題，並將生硬的工程樣板轉化為真正以人為本、好讀好查的不動產資訊平台。
+- **What It Does**：
+  1. **一鍵社群與論壇導流文案產生器（Social & Forum Share Engine）**：
+     - 在「案件詳情抽屜（Case Dossier Drawer）」與「左側區域篩選摘要列」新增 **「📤 分享查證結果／複製論壇文案」** 按鈕。
+     - 支援三種高轉換社群格式一鍵複製：
+       - **Dcard 購屋／租屋板 & PTT home-sale 格式**：自動帶入該案件之「行政區、路段門牌、案發日期、建物型態、座向風水方位」與「全臺公開資料庫查證網址（含該案或該行政區直連參數）」，方便在網友詢問看屋避雷時直接回文導流。
+       - **LINE 看房群組／親友分享精簡格式**：適合一鍵轉傳至 LINE 買房群組或家庭群組。
+       - **Threads / Facebook 房產討論串格式**：重點摘要該區段歷年統計筆數與查詢連結。
+  2. **推廣連結點擊統計與熱度分析中心（Affiliate Click & Conversion Heat Analytics）**：
+     - 自動攔截並記錄全站三大版位（`列表原生卡片 In-Feed`、`案件詳情抽屜 Drawer`、`左下角快捷列 Footer`）對 4 組 iChannels 推廣連結（宏立發專業清潔、HOLA 和樂家居、居家好物嚴選、JamaLady 舒適居家）的每一次點擊。
+     - 同步儲存於後端 API（`/api/affiliate-stats`）與瀏覽器本地端，提供即時的 **各品牌總點擊數、各版位點擊佔比（哪個版位最容易被點）、今日／累計點擊熱度排行**，以及 **全站導流文案複製次數統計**。
+- **Target Audience / Persona**：
+  - **網站經營者（您）**：需要快速產出專業的看屋查證回文發佈至 Dcard、PTT、LINE 群組引流，並即時查看哪一個通路王廣告連結與哪一個版位帶來最多有效點擊。
+  - **進站訪客（買房看屋、租屋族、法拍投資客）**：查完目標房屋有無事故紀錄後，透過分享按鈕將資訊轉傳給親友，並在準備交屋或搬家時點擊冷氣／水塔清洗、HOLA 軟裝寢具與家電優惠。
+- **Key Value**：將「免費公開查證工具的高自然流量」順暢轉化為「社群口碑二次傳播（帶來更多新訪客）」與「高單價居家服務 CPS 分潤點擊」。
 
 ---
 
 ## 2. User Experience & Visual Design
 
-### Key User Flows
-1. **伺服器啟動與首頁載入**：啟動後即刻呈現清晰的頂部導覽列、左側案件查詢面板與右側臺灣全區互動地圖（支援國土測繪中心街道圖、衛星航照圖與開放街圖）。
-2. **直覺篩選與周邊定位**：
-   - 支援縣市、行政區連動篩選、都會區快速切換與路名／社區關鍵字即時搜尋。
-   - 點擊「定位周邊」即可自動飛移至目前所在地並標示周邊範圍。
-3. **乾淨的案件脈絡檢視**：
-   - 點擊列表項目或地圖標記時，流暢聚焦街廓並展開結構化詳情卡，呈現「事故摘要」、「歷年法拍與產權時間軸」、「同區段行情參考」以及外部查證連結（Google 新聞、Google 地圖、司法院裁判書查詢）。
-4. **新增與地區資料補充**：提供簡潔的「新增／回報紀錄」視窗，支援手動新增案例或由後端輔助檢索地區歷史案件。
-
-### Visual Identity & Theme
-- **Aesthetic Direction**：現代編輯與專業不動產實務風格（Editorial Real Estate Platform），去除多餘邊框與刺眼標籤，強調留白與字體層級。
-- **Color Palette & Mood（60-30-10 原則）**：
-  - **60% 主畫布**：清爽淺石板白（`#F8FAFC` / `#FFFFFF`）。
-  - **30% 結構表面**：細緻 1px 分隔線（`#E2E8F0`）與高對比深石板文字（`#0F172A`、次要文字 `#475569`）。
-  - **10% 語意強調色**：僅用於五大事故類別識別與地圖圖釘（刑事命案 `#DC2626`、輕生事故 `#D97706`、意外火警 `#7C3AED`、自然或孤獨死 `#2563EB`、法拍特殊註記 `#059669`）。
-- **Typography & Hierarchy**：
-  - 採用 `Plus Jakarta Sans` 搭配 `Noto Sans TC` 作為標題與內文字體；所有日期、統計筆數與單價皆使用 `JetBrains Mono`（`tabular-nums`）等寬數字對齊。
-  - **Zero-Pill 靜態資訊紀律**：移除卡片上雜亂的彩色膠囊框與「可信度 %」標籤，改以簡潔文字與中點分隔符呈現（例如：`臺北市 · 中山區 · 2022-11-08 · 具備明確路名`）。
+- **Key User Flows**：
+  1. **單一案件／區域論壇導流流程**：
+     - 使用者開啟任一案件詳情抽屜 → 點擊標題列或門牌列旁的 **「📤 分享／論壇文案」** → 彈出輕量切換選單（`Dcard / PTT 看屋討論格式`、`LINE 群組轉傳格式`、`複製此案直連網址`） → 點擊後自動複製完整排版文案並顯示 Toast 提示，同時將該次分享計入導流統計。
+  2. **推廣連結點擊自動追蹤與熱度排序**：
+     - 當訪客點擊任一推廣卡片（不論位於列表第 3 筆下方、詳情抽屜或底部面板），系統立即透過 `navigator.sendBeacon` / 非阻塞 `fetch` 將 `{ adId, placement, city, lang }` 寫入統計引擎，完全不影響外連開啟速度。
+  3. **開啟「推廣成效與導流分析中心」**：
+     - 點擊左下角「居家服務推薦 ▴」面板內的 **「📊 推廣點擊統計與導流文案」** 按鈕，即可開啟乾淨的表格式數據面板，檢視 4 組推廣連結的點擊次數、熱度百分比條（Progress Bar）、版位表現（列表 vs. 詳情抽屜 vs. 底部列），並提供「全站區域看屋懶人包文案」一鍵複製功能。
+- **Visual Identity & Theme**：
+  - *Aesthetic Direction*：延續平台既有的「瑞士網格公部門實證檔案館（Civic-Tech & Editorial Precision）」風格，採用單層邊框（`1px solid #E2E8F0`）與高對比冷灰白底色，絕不使用俗豔紅黃促銷橫幅。
+  - *Color Palette & Mood*：背景 `#FFFFFF` / `#F8FAFC`，主文字 `#0F172A`，數據指標與熱度條採用沉穩靛藍（`#4F46E5`）與翡翠綠（`#059669`）。
+  - *Typography & Hierarchy*：標題與內文使用 `Plus Jakarta Sans` 與 `Noto Sans TC / JP / KR`；所有點擊計數、轉換率百分比與時間戳記嚴格套用 `JetBrains Mono` 等寬字體與 `tabular-nums` 對齊。
+- **Interactive Feedback & Motion**：
+  - 點擊任一推廣連結時，左下角面板與分析中心的計數器即時 `+1` 並更新熱度排名；點擊複製論壇文案時，按鈕顯示微互動勾選狀態與 Toast 通知。
 
 ---
 
 ## 3. Key Product Decisions & Trade-Offs
 
-- **Decision 1：建立 Node.js + Express 單一入口伺服器（`0.0.0.0:3000`）**
-  - *Chosen Approach*：新增 `package.json` 與 `server.js`，配置 `"dev": "node server.js"` 監聽 Port 3000，提供前端頁面與後端 `/api/*` 路由，並依據環境遷移規範清理不再使用的獨立 Python 腳本設定。
-  - *Why*：這是解決「The dev server didn't start」最直接且穩定的方式，確保容器啟動時能立即在 Port 3000 響應請求。
-- **Decision 2：以「地址明確度」取代虛構的「交叉比對可信度分數」**
-  - *Chosen Approach*：移除人為湊數的百分比計算，改為實務上真正有用的「具備明確路名／社區」篩選與標示。
-  - *Why*：消除「看起來像 AI 做出來的」虛假數據感，提升專業度與真實性。
+- **Decision 1：非阻塞式點擊追蹤（Zero-Latency Affiliate Outbound Clicks）**
+  - *Chosen Approach*：保留原生 `<a href="https://..." target="_blank" rel="noopener noreferrer sponsored">` 標籤，確保瀏覽器與 iChannels 追蹤 Cookie 100% 正常寫入、絕不被彈窗阻擋器攔截；同時透過全域點擊委派（Event Delegation）與 `navigator.sendBeacon("/api/affiliate-click")` 在背景記錄點擊。
+  - *Why*：若改用 JS `window.open` 或中轉頁，容易被手機瀏覽器攔截或影響 iChannels GID 歸因；原生 `<a>` 搭配背景 Beacon 兼顧 100% 分潤歸因成功率與精準統計。
+- **Decision 2：針對買房／租屋搬家族群的情境化標籤強化**
+  - *Chosen Approach*：在 4 組推廣卡片上加入符合買房／租屋痛點的精準行動標籤（例如：`交屋入厝必備`、`新居軟裝推薦`、`租屋家電優惠`、`居家舒適選品`），並支援四國語言（繁中 / EN / 日本語 / 한국어）同步顯示。
+  - *Why*：提高看屋與搬家族群的點擊意願（CTR），同時維持卡片與案件列表一致的極簡專業質感。
 
 ---
 
-## 4. Technical Architecture & Data Strategy
+## 4. Technical Architecture & Data Strategy *(Technical Reference)*
 
-### Architecture & Component Diagram
-
+- **Architecture & Component Diagram**：
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                     Browser Client (Port 3000 UI)                       │
-│                                                                         │
+│                   Client UI (index.html - 4 Languages)                  │
+├───────────────────────────────────┬─────────────────────────────────────┤
+│  Social & Forum Copy Generator    │   Native Affiliate Placements (x3)  │
+│  ┌─────────────────────────────┐  │  ┌───────────────────────────────┐  │
+│  │ • Case Dossier Share Button │  │  │ 1. In-Feed List Card (#3)     │  │
+│  │ • Dcard/PTT/LINE Templates  │  │  │ 2. Case Dossier Section 3B    │  │
+│  │ • Deep-Link URL (?case=ID)  │  │  │ 3. Sidebar Footer Strip       │  │
+│  └──────────────┬──────────────┘  └──┴───────────────┬───────────────┘  │
+│                 │                                    │                  │
+│                 ▼                                    ▼                  │
 │  ┌───────────────────────────────────────────────────────────────────┐  │
-│  │ Top Bar: 品牌標題 │ 五大事故類型篩選器 │ [+ 新增/回報紀錄]        │  │
-│  └───────────────────────────────────────────────────────────────────┘  │
-│  ┌──────────────────────────────┬────────────────────────────────────┐  │
-│  │ Left Panel: 案件查詢列表     │ Right Viewport: 互動式街廓地圖     │  │
-│  │  • 縣市 / 行政區 / 排序選單  │  • Leaflet + MarkerCluster         │  │
-│  │  • 關鍵字即時搜尋 & 定位周邊 │  • 圖層切換 (國土測繪/衛星/OSM)    │  │
-│  │  • 僅顯示明確路名或社區開關  │  • 分類彩色圖釘與周邊定位圈        │  │
-│  │  • 去膠囊化高可讀性案件卡片  │  • 結構化詳情彈窗 (時間軸/行情表)  │  │
-│  └──────────────────────────────┴────────────────────────────────────┘  │
-└───────────────────┬─────────────────────────────────┬───────────────────┘
-                    │ Supabase JS Client              │ REST API (/api/*)
-                    ▼                                 ▼
-      ┌───────────────────────────┐     ┌───────────────────────────┐
-      │  Supabase Cloud Database  │     │  Node.js Express Server   │
-      │  (haunted_houses table)   │◄───►│  (0.0.0.0:3000)           │
-      └───────────────────────────┘     │  • 靜態頁面與資源服務     │
-                                        │  • GET / POST /api/cases  │
-                                        │  • 內建全臺備援資料集     │
-                                        └───────────────────────────┘
+│  │       Affiliate Click & Share Telemetry Tracker (sendBeacon)      │  │
+│  │     • Tracks { adId, placement, city, timestamp } + LocalCache    │  │
+│  └──────────────────────────────┬────────────────────────────────────┘  │
+│                                 │                                       │
+│                                 ▼                                       │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │        Promotion & Click Analytics Modal (#promo-analytics)       │  │
+│  │     • Click Leaderboard & Heat Bars by Brand (HLF/HOLA/OEYA/JAMA) │  │
+│  │     • Placement Attribution Breakdown (In-Feed vs Drawer vs Bar)  │  │
+│  │     • Ready-to-Post Forum Copy Templates (PTT / Dcard / LINE)     │  │
+│  └──────────────────────────────┬────────────────────────────────────┘  │
+└─────────────────────────────────┼───────────────────────────────────────┘
+                                  │ POST /api/affiliate-click
+                                  │ GET  /api/affiliate-stats
+                                  ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     Express Backend (server.js)                         │
+│  • Persistent in-memory + disk-synced click & share counters            │
+│  • Aggregates clicks by adId, placement, and city for heat analysis     │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Data Model & State
-- **案件資料欄位**：涵蓋 `city`（縣市）、`district`（行政區）、`address`（路段與建物描述）、`lat` / `lng`（座標）、`incident_date`（發生或拍賣日期）、`category`（五大分類）、`reason`（案情與拍賣摘要）、`history_timeline`（歷年事件時間軸）與 `source_url`（新聞或公告來源）。
-- **狀態管理與互動**：所有下拉選單、分類按鈕、搜尋框、地圖圖層切換與新增案件視窗皆綁定完整事件處理器，確保零無效點擊。
+- **Data Model & State**：
+  - `AFFILIATE_PARTNERS`：定義 4 組買房／租屋搬家推廣項目（`hlf_clean` 宏立發清潔、`hola_home` HOLA 和樂家居、`oeya_deals` 居家好物嚴選、`jama_comfort` JamaLady 舒適內著），包含網址、四語標題、四語描述與受眾情境標籤。
+  - `affiliateStats`：記錄各 `adId` 的總點擊數（`clicksByAd`）、各版位點擊數（`clicksByPlacement`: `infeed` / `drawer` / `footer`）、社群分享複製次數（`shareCopies`），以及最近點擊時間。
+- **Interactive Component & State Mapping**：
+  - **案件直連網址解析（Deep-Link URL Routing）**：當外部網友從 Dcard / PTT / LINE 點擊您分享的網址（如 `?city=臺北市&district=中正區` 或 `?case=ID`）進站時，系統在 `loadAllData()` 完成後自動篩選該區或直接展開該筆案件詳情抽屜與推廣服務區塊，完成「論壇貼文 → 精準落地 → 點擊推廣連結」的閉環。
+  - **一鍵分享與論壇文案切換器**：點擊案件詳情中的「分享查證結果」按鈕，可選擇複製「論壇回文版（Dcard / PTT）」、「LINE 看房群組版」或「區域統計版」，一鍵寫入剪貼簿並觸發 `/api/affiliate-click`（`type: "share"`）統計。

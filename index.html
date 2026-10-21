@@ -200,7 +200,7 @@
   <header class="bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 z-30 shrink-0">
     <!-- Zone 1: Brand Title -->
     <a href="#" id="brand-reset-link" class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-slate-900 truncate min-w-0">
-      臺灣歷年事故建物與案發日期實證地圖
+      台灣凶宅地圖
     </a>
 
     <!-- Zone 2: Statutory Haunted House Category Navigation Links (Desktop xl+) -->
@@ -241,8 +241,11 @@
         <option value="ko">한국어</option>
       </select>
 
-      <button type="button" id="open-modal-btn" data-i18n="btn_add_discover" class="min-h-[36px] sm:min-h-[38px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 active:scale-[0.98] transition-all whitespace-nowrap shrink-0">
-        連結公開資料庫 · 搜尋新案
+      <button type="button" id="open-disclaimer-btn" data-i18n="disclaimer_btn" class="min-h-[36px] sm:min-h-[38px] px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer">
+        網站參考說明
+      </button>
+      <button type="button" id="open-modal-btn" data-i18n="btn_add_discover" class="min-h-[36px] sm:min-h-[38px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer">
+        手動通報案件
       </button>
     </div>
   </header>
@@ -391,17 +394,8 @@
             <select id="sort-select" aria-label="Sort" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors">
               <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
               <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
-              <option value="merged_desc" data-i18n="sort_merged">多筆整合案件優先</option>
               <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
             </select>
-            <button
-              type="button"
-              id="quick-expand-cases-btn"
-              data-i18n="btn_quick_expand"
-              class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold shrink-0 transition-colors"
-            >
-              相似整合統計
-            </button>
           </div>
         </div>
       </div>
@@ -426,42 +420,12 @@
         </div>
       </div>
 
-      <!-- Collapsible Clean Partner & Home Services Bar (Toggled from Footer) -->
-      <div id="sidebar-partner-strip" class="hidden px-3.5 sm:px-4 py-2.5 bg-slate-50/95 border-t border-slate-200 text-xs shrink-0">
-        <div class="flex items-center justify-between gap-2 mb-1.5">
-          <span class="text-[11px] font-bold text-slate-700" data-i18n="ad_sec_title">看屋與交屋實用服務 · 合作推薦</span>
-          <span class="text-[10px] font-mono text-slate-400 border border-slate-200 bg-white px-1.5 py-0.5 rounded" data-i18n="ad_badge_label">贊助資訊</span>
-        </div>
-        <div class="grid grid-cols-2 gap-1.5">
-          <a href="https://buyforfun.biz/3UADb" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
-            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_hlf_title">宏立發專業清潔 ↗</span>
-            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_hlf_desc">交屋冷氣・洗衣機・水塔清洗</span>
-          </a>
-          <a href="https://ibestfun.net/3UAEY" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
-            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_hola_title">HOLA 和樂家居 ↗</span>
-            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_hola_desc">新居入厝軟裝・寢具收納選品</span>
-          </a>
-          <a href="https://www1.oeya.com.tw/3UAEV" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
-            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_oeya_title">居家好物嚴選專案 ↗</span>
-            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_oeya_desc">入住必備家電・生活日用優惠</span>
-          </a>
-          <a href="https://ibestfun.net/3UAGa" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
-            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_jama_title">JamaLady 佳瑪舒適內著 ↗</span>
-            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_jama_desc">舒適包覆・無鋼圈與居家內衣選品</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Clean Footer with Official & Public Database Links + Partner Toggle -->
+      <!-- Clean Footer with Official & Public Database Links -->
       <div class="flex px-3.5 sm:px-4 py-2 border-t border-slate-200 text-[11px] text-slate-500 justify-between items-center bg-white shrink-0 gap-2">
         <div class="flex items-center gap-2 min-w-0">
           <span id="db-status" class="tabular-nums truncate font-mono font-semibold text-slate-700">載入中...</span>
-          <button type="button" id="footer-sync-db-btn" data-i18n="footer_sync_btn" class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 hover:underline whitespace-nowrap shrink-0 cursor-pointer">
-            公開資料庫同步 ↗
-          </button>
         </div>
         <div class="flex items-center gap-2.5 shrink-0 font-medium overflow-x-auto no-scrollbar">
-          <button type="button" id="toggle-partner-strip-btn" data-i18n="footer_partner_btn" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap cursor-pointer">居家服務推薦 ▴</button>
           <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" data-i18n="footer_judgment" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院裁判書 ↗</a>
           <a href="https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm" target="_blank" rel="noopener noreferrer" data-i18n="footer_auction" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院法拍 ↗</a>
           <a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener noreferrer" data-i18n="footer_lvr" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">實價登錄 ↗</a>
@@ -543,7 +507,7 @@
 
           <!-- Clean Address Copy Bar -->
           <div class="mb-3 p-3 rounded-lg bg-slate-900 text-white flex items-center justify-between gap-2">
-            <div class="min-w-0">
+            <div class="min-w-0 flex-1">
               <div class="text-[10px] text-slate-400" data-i18n="doorplate_verified_label">門牌地址</div>
               <div id="drawer-doorplate-text" class="text-xs sm:text-sm font-bold tracking-tight truncate mt-0.5"></div>
             </div>
@@ -551,7 +515,7 @@
               type="button"
               id="copy-address-btn"
               data-i18n="btn_copy_doorplate"
-              class="px-2.5 py-1.5 rounded bg-white/15 hover:bg-white/25 text-white text-[11px] font-semibold transition-colors shrink-0"
+              class="px-2.5 py-1.5 rounded bg-white/15 hover:bg-white/25 text-white text-[11px] font-semibold transition-colors shrink-0 cursor-pointer"
             >
               複製地址
             </button>
@@ -671,20 +635,20 @@
             <h3 class="text-[11px] font-bold text-slate-700" data-i18n="ad_sec_title">看屋與交屋實用服務 · 合作推薦</h3>
             <span class="text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-1.5 py-0.5 rounded" data-i18n="ad_badge_label">贊助資訊</span>
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <a href="https://buyforfun.biz/3UADb" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+          <div id="drawer-partner-grid" class="grid grid-cols-2 gap-2">
+            <a href="https://buyforfun.biz/3UADb" data-ad-id="hlf_clean" data-ad-placement="drawer" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
               <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_hlf_title">宏立發專業清潔 ↗</div>
               <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_hlf_desc">交屋冷氣・洗衣機・水塔清洗</div>
             </a>
-            <a href="https://ibestfun.net/3UAEY" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+            <a href="https://ibestfun.net/3UAEY" data-ad-id="hola_home" data-ad-placement="drawer" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
               <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_hola_title">HOLA 和樂家居 ↗</div>
               <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_hola_desc">新居入厝軟裝・寢具收納選品</div>
             </a>
-            <a href="https://www1.oeya.com.tw/3UAEV" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+            <a href="https://www1.oeya.com.tw/3UAEV" data-ad-id="oeya_deals" data-ad-placement="drawer" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
               <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_oeya_title">居家好物嚴選專案 ↗</div>
               <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_oeya_desc">入住必備家電・生活日用優惠</div>
             </a>
-            <a href="https://ibestfun.net/3UAGa" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+            <a href="https://ibestfun.net/3UAGa" data-ad-id="jama_comfort" data-ad-placement="drawer" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
               <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_jama_title">JamaLady 佳瑪舒適內著 ↗</div>
               <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_jama_desc">舒適包覆・無鋼圈與居家內衣選品</div>
             </a>
@@ -752,182 +716,35 @@
     </button>
   </nav>
 
-  <!-- Modal: 即時爬蟲搜尋新案 / 相似案件比對整合 / 手動通報凶宅 -->
+  <!-- Modal: 手動通報案件 -->
   <div id="record-modal" class="hidden fixed inset-0 z-[600] bg-slate-900/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white border border-slate-200 rounded-t-2xl sm:rounded-xl shadow-xl w-full max-w-xl max-h-[90dvh] flex flex-col overflow-hidden">
       <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0">
-        <h2 class="text-base font-bold text-slate-900" data-i18n="modal_title">全臺公開資料庫連線同步 · 新案檢索中樞</h2>
-        <button type="button" id="close-modal-btn" data-i18n="btn_close" class="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200">
+        <h2 class="text-base font-bold text-slate-900" data-i18n="modal_title">手動通報案件</h2>
+        <button type="button" id="close-modal-btn" data-i18n="btn_close" class="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer">
           關閉
         </button>
       </div>
 
-      <div class="px-5 sm:px-6 pt-3.5 shrink-0">
-        <div class="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-lg text-xs font-semibold">
-          <button type="button" id="tab-discover-btn" data-i18n="tab_discover" class="py-2 rounded-md bg-white text-slate-900 shadow-xs transition-colors">
-            公開資料庫同步
-          </button>
-          <button type="button" id="tab-consolidate-btn" class="py-2 rounded-md text-slate-600 hover:text-slate-900 transition-colors">
-            相似案件比對整合
-          </button>
-          <button type="button" id="tab-manual-btn" data-i18n="tab_manual" class="py-2 rounded-md text-slate-600 hover:text-slate-900 transition-colors">
-            手動通報案件
-          </button>
+      <!-- Hidden legacy elements kept for DOM compatibility -->
+      <div class="hidden" aria-hidden="true">
+        <button type="button" id="tab-discover-btn"></button>
+        <button type="button" id="tab-consolidate-btn"></button>
+        <button type="button" id="tab-manual-btn"></button>
+        <div id="discover-panel">
+          <span id="crawler-total-badge"></span>
+          <select id="disc-city"></select>
+          <select id="disc-district"></select>
+          <input type="text" id="disc-keyword" />
+          <div id="discover-status"></div>
+          <button type="button" id="run-discover-btn"></button>
+          <button type="button" id="run-wide-crawler-btn"></button>
         </div>
+        <div id="consolidate-panel"></div>
       </div>
 
-      <!-- Tab 1: Active Multi-Source New-Case Crawler & Public DB Hub -->
-      <div id="discover-panel" class="p-5 sm:p-6 space-y-4 text-xs overflow-y-auto flex-1">
-        <!-- Live Crawler Status Banner -->
-        <div class="p-3.5 rounded-xl bg-slate-900 text-white space-y-2">
-          <div class="flex items-center justify-between gap-2">
-            <div class="font-bold text-xs">
-              <span>全臺六大公開實證資料庫串聯引擎（即時檢索新案＋座標驗證）</span>
-            </div>
-            <span id="crawler-total-badge" class="font-mono text-[11px] text-slate-300 font-semibold tabular-nums shrink-0">
-              載入中...
-            </span>
-          </div>
-          <p class="text-[11px] text-slate-300 leading-relaxed">
-            本系統已串聯<strong>司法院裁判書系統、司法院法拍屋公告、內政部實價登錄特殊交易、台灣凶宅網／居易網公開索引、Google 新聞全臺檔案庫與各大媒體歷年社會資料庫</strong>，支援即時跨庫檢索新案件並自動透過 Google Maps 驗證門牌座標。
-          </p>
-        </div>
-
-        <!-- Section A: Active Crawler to Discover NEW Unindexed Cases -->
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-          <div class="flex items-center justify-between gap-2 flex-wrap">
-            <div>
-              <div class="font-bold text-slate-900 text-xs">跨公開資料庫即時同步檢索「尚未收錄之新案件」</div>
-              <div class="text-[11px] text-slate-600 mt-0.5">針對指定縣市／行政區或全臺範圍，即時同步各大公開新聞、裁判與法拍紀錄</div>
-            </div>
-            <button type="button" id="run-wide-crawler-btn" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-semibold transition-colors shrink-0 cursor-pointer">
-              🔄 全臺公開資料庫廣域同步
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2.5">
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_city">目標縣市</label>
-              <select id="disc-city" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800"></select>
-            </div>
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_district">目標行政區</label>
-              <select id="disc-district" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800"></select>
-            </div>
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_disc_kw">指定路名、街段或社區關鍵字（選填）</label>
-            <input type="text" id="disc-keyword" placeholder="例如：林森北路、永忠街、中正路、某社區..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
-          </div>
-          <div id="discover-status" class="hidden p-3 rounded-lg bg-white border border-slate-300 text-slate-800 leading-relaxed"></div>
-          <div class="flex justify-end gap-2">
-            <button type="button" id="run-discover-btn" data-i18n="btn_run_discover" class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer">
-              立即同步此區公開資料庫案件
-            </button>
-          </div>
-        </div>
-
-        <!-- Section B: 4 Connected Public Databases Quick Filter -->
-        <div class="space-y-2 pt-1">
-          <div class="font-bold text-slate-900 flex items-center justify-between">
-            <span>依已收錄之四大公開資料來源篩選：</span>
-            <button type="button" data-quick-db="ALL" class="quick-db-filter-btn text-[11px] text-sky-700 hover:underline font-semibold">顯示全部來源</button>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button type="button" data-quick-db="JUDICIAL_AUCTION" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-900">司法院法拍查封筆錄</span>
-                <span id="db-count-JUDICIAL_AUCTION" class="font-mono text-xs font-bold text-emerald-700 tabular-nums">0</span>
-              </div>
-              <p class="text-[11px] text-slate-500 leading-snug">查封筆錄載明「非自然死亡、輕生、命案」之法拍案件。</p>
-            </button>
-
-            <button type="button" data-quick-db="JUDICIAL_JUDGMENT" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-900">司法院民事／刑事判決</span>
-                <span id="db-count-JUDICIAL_JUDGMENT" class="font-mono text-xs font-bold text-amber-700 tabular-nums">0</span>
-              </div>
-              <p class="text-[11px] text-slate-500 leading-snug">民事「隱瞞凶宅物之瑕疵擔保」與住宅刑事命案判決。</p>
-            </button>
-
-            <button type="button" data-quick-db="MOI_OPEN_DATA" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-900">內政部實價特殊交易</span>
-                <span id="db-count-MOI_OPEN_DATA" class="font-mono text-xs font-bold text-purple-700 tabular-nums">0</span>
-              </div>
-              <p class="text-[11px] text-slate-500 leading-snug">不動產實價登錄特殊交易備註與事故揭露紀錄。</p>
-            </button>
-
-            <button type="button" data-quick-db="NEWS_PUBLIC_ARCHIVE" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-900">社會新聞與警消紀錄</span>
-                <span id="db-count-NEWS_PUBLIC_ARCHIVE" class="font-mono text-xs font-bold text-red-700 tabular-nums">0</span>
-              </div>
-              <p class="text-[11px] text-slate-500 leading-snug">歷年各大媒體社會版與警消公開通報之住宅非自然死亡案件。</p>
-            </button>
-          </div>
-        </div>
-
-        <!-- Section C: Direct Official & Public Database Portals -->
-        <div class="space-y-2 pt-1 border-t border-slate-200">
-          <div class="font-bold text-slate-900">外部官方與民間公開資料庫直連入口：</div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">⚖️ 司法院裁判書查詢 ↗</a>
-            <a href="https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">🏛️ 司法院法拍屋公告 ↗</a>
-            <a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">📋 內政部實價登錄 ↗</a>
-            <a href="https://www.google.com/search?q=%22%E5%8F%B0%E7%81%A3%E5%87%B6%E5%AE%85%E7%B6%B2%22+OR+%22%E5%B1%85%E6%98%93%E7%B6%B2%22+%E5%87%B6%E5%AE%85" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">🏠 台灣凶宅網／居易網 ↗</a>
-            <a href="https://data.gov.tw/datasets/search?p=1&size=10&s=_score_desc&rft=%E4%B8%8D%E5%8B%95%E7%94%A2" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">📂 政府資料開放平臺 ↗</a>
-            <a href="https://news.google.com/search?q=%E5%8F%B0%E7%81%A3+%E4%BD%8F%E5%AE%85+%E5%91%BD%E6%A1%88+OR+%E5%87%B6%E5%AE%85&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">📰 Google 新聞檔案庫 ↗</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab 2: Smart Similar Case Comparison & Consolidation Engine (相似案件比對與整合) -->
-      <div id="consolidate-panel" class="hidden p-5 sm:p-6 space-y-4 text-xs overflow-y-auto flex-1">
-        <div class="p-3.5 rounded-xl bg-slate-900 text-white space-y-2">
-          <div class="flex items-center justify-between gap-2">
-            <div class="font-bold text-xs">相似案件智慧比對與同路段／社區自動歸戶引擎</div>
-            <span class="font-mono text-[10px] text-slate-300">Google Maps Route Anchored</span>
-          </div>
-          <p class="text-[11px] text-slate-300 leading-relaxed">
-            針對同縣市、同行政區、同路街段或同社區大樓之多筆歷史通報（例如：同路段不同年份之法拍與新聞紀錄），系統自動比對語意與 Google Maps 實際道路門牌座標並<strong>歸戶整合為單一精準點位與綜合卷宗</strong>，完整保留各次歷史時間軸。
-          </p>
-        </div>
-
-        <div class="grid grid-cols-3 gap-2 text-center">
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <div class="text-[10px] text-slate-500">原始多源收錄總數</div>
-            <div id="cons-stat-raw" class="font-mono text-sm font-bold text-slate-900 mt-0.5 tabular-nums">0</div>
-          </div>
-          <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200">
-            <div class="text-[10px] text-indigo-700 font-semibold">已整合相似案件組數</div>
-            <div id="cons-stat-groups" class="font-mono text-sm font-bold text-indigo-700 mt-0.5 tabular-nums">0</div>
-          </div>
-          <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
-            <div class="text-[10px] text-emerald-800 font-semibold">整合後獨立定位點位</div>
-            <div id="cons-stat-final" class="font-mono text-sm font-bold text-emerald-700 mt-0.5 tabular-nums">0</div>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between gap-2">
-          <button type="button" id="filter-only-merged-btn" class="px-3 py-2 rounded-lg border border-indigo-300 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-semibold transition-colors cursor-pointer">
-            在列表中篩選「已整合多筆紀錄」案件
-          </button>
-          <button type="button" id="run-consolidate-now-btn" class="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold transition-colors cursor-pointer">
-            重新掃描並整合全庫相似案件
-          </button>
-        </div>
-        <div id="consolidate-status-msg" class="hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 font-medium"></div>
-
-        <div class="space-y-2 pt-1">
-          <div class="font-bold text-slate-900">代表性已整合之同路段／同社區案件（點擊可直接檢視整合詳情）：</div>
-          <div id="consolidated-groups-preview" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-        </div>
-      </div>
-
-      <!-- Tab 2: Manual Case Submission Form -->
-      <form id="manual-form" class="hidden p-5 sm:p-6 space-y-3.5 text-xs overflow-y-auto flex-1">
+      <!-- Manual Case Submission Form -->
+      <form id="manual-form" class="p-5 sm:p-6 space-y-3.5 text-xs overflow-y-auto flex-1">
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_city">縣市</label>
@@ -989,12 +806,20 @@
           </div>
         </div>
 
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-2 text-[11px] text-slate-600 leading-relaxed">
+          <p data-i18n="form_disclaimer_text">本網站所載資訊均整理自公開新聞、法拍紀錄與使用者通報，僅供看屋與資訊參考，不具法律證明效力；實際產權與物況請以《不動產說明書》及官方登記為準。請確認通報內容具公開事實依據，切勿虛構造謠。</p>
+          <label class="flex items-start gap-2 pt-1 font-semibold text-slate-800 cursor-pointer select-none">
+            <input type="checkbox" id="form-agree-checkbox" required class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0" />
+            <span data-i18n="form_agree_label">我已閱讀並同意上述說明（確認網站資訊僅供參考，且通報內容屬實）</span>
+          </label>
+        </div>
+
         <div class="pt-2 flex justify-end gap-2">
-          <button type="button" id="cancel-form-btn" data-i18n="btn_cancel" class="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold">
+          <button type="button" id="cancel-form-btn" data-i18n="btn_cancel" class="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold cursor-pointer">
             取消
           </button>
-          <button type="submit" id="submit-form-btn" data-i18n="btn_submit_form" class="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold">
-            儲存案件
+          <button type="submit" id="submit-form-btn" data-i18n="btn_submit_form" class="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer">
+            同意並儲存案件
           </button>
         </div>
       </form>
@@ -1050,6 +875,32 @@
     </div>
   </div>
 
+  <!-- Modal: 網站參考說明與免責聲明 (Reference Disclaimer & Agreement) -->
+  <div id="disclaimer-modal" class="hidden fixed inset-0 z-[650] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col overflow-hidden">
+      <div class="px-5 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+        <h2 class="text-base font-bold text-slate-900" data-i18n="disclaimer_title">網站資訊僅供參考 · 使用說明</h2>
+      </div>
+      <div class="p-5 sm:p-6 space-y-3.5 text-xs text-slate-700 leading-relaxed overflow-y-auto max-h-[70dvh]">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <p class="font-semibold text-slate-900" data-i18n="disclaimer_lead">歡迎使用「台灣凶宅地圖」。使用本網站前，請詳閱以下說明：</p>
+          <p data-i18n="disclaimer_body_1">1. 網站資料僅供參考：本網站所收錄之歷年事故建物位置、發生日期、案情摘要與座向方位等資訊，均彙整自公開社會新聞、司法院裁判書、法拍公告及熱心網友通報，僅供看屋、租屋與資訊檢索之初步參考，不構成任何法律證明、估價依據或交易保證。</p>
+          <p data-i18n="disclaimer_body_2">2. 實際物況以官方與現場查證為準：歷史新聞或通報地址可能僅載明路段、社區或因門牌整編而與實際座標有所誤差。進行不動產買賣或租賃簽約前，請務必查閱《不動產說明書》、調閱地政謄本並向大樓管委會或當地里長實地查證。</p>
+          <p data-i18n="disclaimer_body_3">3. 內容勘誤與移除：若您發現任何案件記載有誤或與事實不符，可隨時點擊案件內之「內容勘誤／申請下架」，系統將立即隱藏處理。</p>
+        </div>
+        <label class="flex items-center gap-2 pt-1 font-semibold text-slate-900 cursor-pointer select-none">
+          <input type="checkbox" id="disclaimer-agree-chk" checked class="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-0" />
+          <span data-i18n="disclaimer_chk_label">我已閱讀並了解本網站所有資訊僅供參考</span>
+        </label>
+      </div>
+      <div class="px-5 sm:px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex justify-end">
+        <button type="button" id="agree-disclaimer-btn" data-i18n="disclaimer_agree_btn" class="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors cursor-pointer">
+          我已了解並同意
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const GMP_ATTRIBUTION_ID = "gmp_mcp_codeassist_v1_aistudio";
     let currentLang = localStorage.getItem("tw_archive_lang") || "zh-TW";
@@ -1058,14 +909,14 @@
     // Clean, Concise 4-Language Dictionary (繁體中文 / English / 日本語 / 한국어)
     const I18N_DICT = {
       "zh-TW": {
-        app_title: "臺灣歷年事故建物與案發日期實證地圖",
+        app_title: "台灣凶宅地圖",
         cat_all: "全部事故案件",
         cat_all_short: "全部案件",
         cat_homicide: "刑事兇殺命案",
         cat_suicide: "屋內輕生事故",
         cat_accident: "火警與一氧化碳",
         cat_court: "司法與實價認證",
-        btn_add_discover: "連結公開資料庫 · 搜尋新案",
+        btn_add_discover: "手動通報案件",
         all_taiwan: "全臺灣",
         all_cities_opt: "全部縣市",
         all_districts_opt: "全部行政區",
@@ -1132,10 +983,10 @@
         mnav_split_sub: "地圖+列表",
         mnav_filter: "進階設定",
         mnav_filter_sub: "自訂年份",
-        modal_title: "全臺公開資料庫連線同步 · 新案檢索中樞",
+        modal_title: "手動通報案件",
         tab_discover: "公開資料庫同步",
         tab_manual: "手動通報案件",
-        discover_desc: "連線司法院法拍屋公告資料庫、司法院裁判書系統、內政部實價登錄特殊交易、台灣凶宅網／居易網與公開新聞資料庫，依縣市與路名即時檢索並歸戶整合。",
+        discover_desc: "",
         lbl_city: "目標縣市",
         lbl_district: "目標行政區",
         lbl_disc_kw: "指定路名、街段或社區關鍵字（選填）",
@@ -1146,12 +997,12 @@
         lbl_form_auction: "法拍底價或折價紀錄 (選填)",
         lbl_form_url: "相關新聞或裁判書網址 (選填)",
         btn_cancel: "取消",
-        btn_submit_form: "儲存案件",
+        btn_submit_form: "同意並儲存案件",
         doorplate_prefix: "地址：",
         btn_rooftop_locate: "地圖位置",
         btn_open_dossier: "詳細卷宗 →",
         expand_footer_prompt: "目前篩選條件下無相符之事故建物紀錄",
-        expand_footer_btn: "開啟新案爬蟲或調整篩選條件",
+        expand_footer_btn: "手動通報案件",
         portal_btn: "複製地址並前往 ↗",
         popup_open_btn: "查看街景 · 產權卷宗與官方資料庫",
         popup_news: "新聞檢索 ↗",
@@ -1214,10 +1065,20 @@
         ad_oeya_desc: "入住必備家電・生活日用優惠",
         ad_jama_title: "JamaLady 佳瑪舒適內著 ↗",
         ad_jama_desc: "舒適包覆・無鋼圈與居家內衣選品",
-        lbl_orientation: "房屋座向與風水方位"
+        lbl_orientation: "房屋座向與風水方位",
+        disclaimer_btn: "網站參考說明",
+        disclaimer_title: "網站資訊僅供參考 · 使用說明",
+        disclaimer_lead: "歡迎使用「台灣凶宅地圖」。使用本網站前，請詳閱以下說明：",
+        disclaimer_body_1: "1. 網站資料僅供參考：本網站所收錄之歷年事故建物位置、發生日期、案情摘要與座向方位等資訊，均彙整自公開社會新聞、司法院裁判書、法拍公告及熱心網友通報，僅供看屋、租屋與資訊檢索之初步參考，不構成任何法律證明、估價依據或交易保證。",
+        disclaimer_body_2: "2. 實際物況以官方與現場查證為準：歷史新聞或通報地址可能僅載明路段、社區或因門牌整編而與實際座標有所誤差。進行不動產買賣或租賃簽約前，請務必查閱《不動產說明書》、調閱地政謄本並向大樓管委會或當地里長實地查證。",
+        disclaimer_body_3: "3. 內容勘誤與移除：若您發現任何案件記載有誤或與事實不符，可隨時點擊案件內之「內容勘誤／申請下架」，系統將立即隱藏處理。",
+        disclaimer_chk_label: "我已閱讀並了解本網站所有資訊僅供參考",
+        disclaimer_agree_btn: "我已了解並同意",
+        form_disclaimer_text: "本網站所載資訊均整理自公開新聞、法拍紀錄與使用者通報，僅供看屋與資訊參考，不具法律證明效力；實際產權與物況請以《不動產說明書》及官方登記為準。請確認通報內容具公開事實依據，切勿虛構造謠。",
+        form_agree_label: "我已閱讀並同意上述說明（確認網站資訊僅供參考，且通報內容屬實）"
       },
       "en": {
-        app_title: "Taiwan Property Incident & Foreclosure Archive",
+        app_title: "Taiwan Incident Map",
         cat_all: "All Records",
         cat_all_short: "All",
         cat_homicide: "Homicide",
@@ -1225,7 +1086,7 @@
         cat_accident: "Fire & CO Accident",
         cat_natural: "Solitary / Natural",
         cat_court: "Court & Verified",
-        btn_add_discover: "Public DB Sync · Discover",
+        btn_add_discover: "Report Case",
         all_taiwan: "All Taiwan",
         all_cities_opt: "All Cities / Counties",
         all_districts_opt: "All Districts",
@@ -1292,10 +1153,10 @@
         mnav_split_sub: "Map + List",
         mnav_filter: "Options",
         mnav_filter_sub: "Year Range",
-        modal_title: "Taiwan Public Database Sync & Discovery Hub",
+        modal_title: "Report Case",
         tab_discover: "Public DB Sync",
-        tab_manual: "Report Case Manually",
-        discover_desc: "Connects to Judicial Yuan Foreclosure Notices, Court Judgments, MOI Real-Price Registry, Juyiwang, and Public News Archives.",
+        tab_manual: "Report Case",
+        discover_desc: "",
         lbl_city: "City / County",
         lbl_district: "District",
         lbl_disc_kw: "Street Name or Community Keyword (Optional)",
@@ -1306,12 +1167,12 @@
         lbl_form_auction: "Foreclosure Reserve Price / Discount Note (Optional)",
         lbl_form_url: "Source News / Court URL (Optional)",
         btn_cancel: "Cancel",
-        btn_submit_form: "Save Case",
+        btn_submit_form: "Agree & Save Case",
         doorplate_prefix: "Address: ",
         btn_rooftop_locate: "Map",
         btn_open_dossier: "Details →",
         expand_footer_prompt: "No matching incident records under current filters",
-        expand_footer_btn: "Open Public DB Sync or Reset Filters",
+        expand_footer_btn: "Report Case",
         portal_btn: "Copy Address & Open ↗",
         popup_open_btn: "View Street View · Full Dossier & Official Portals",
         popup_news: "News Search ↗",
@@ -1374,10 +1235,20 @@
         ad_oeya_desc: "Home Appliances & Daily Living Offers",
         ad_jama_title: "JamaLady Comfort Wear ↗",
         ad_jama_desc: "Wireless Lounge & Full-Support Intimates",
-        lbl_orientation: "House Orientation & Feng Shui"
+        lbl_orientation: "House Orientation & Feng Shui",
+        disclaimer_btn: "Disclaimer",
+        disclaimer_title: "For Reference Only · User Notice",
+        disclaimer_lead: "Welcome to Taiwan Incident Map. Please read before using:",
+        disclaimer_body_1: "1. For Reference Only: All property incident locations, dates, summaries, and orientation data on this website are compiled from public news, judicial records, foreclosure notices, and user submissions for preliminary reference only, and do not constitute legal or transaction guarantees.",
+        disclaimer_body_2: "2. Verify with Official Records: Historical reports may only indicate street sections or communities. Before purchasing or leasing any property, always verify the official Property Disclosure Statement, land transcripts, and on-site management.",
+        disclaimer_body_3: "3. Error Reporting & Takedown: If you find any inaccuracy in a record, click 'Report Error / Takedown' inside the case drawer for immediate removal.",
+        disclaimer_chk_label: "I understand and agree that all information on this site is for reference only",
+        disclaimer_agree_btn: "I Understand & Agree",
+        form_disclaimer_text: "All information on this website is for reference only and has no legal binding effect. Please ensure your report is based on factual public sources.",
+        form_agree_label: "I have read and agree to the above notice (information is for reference only)"
       },
       "ja": {
-        app_title: "台湾事故物件・発生日実証マップ＆不動産記録検索",
+        app_title: "台湾事故物件マップ",
         cat_all: "すべての事案",
         cat_all_short: "すべて",
         cat_homicide: "殺人・刑事事件",
@@ -1385,7 +1256,7 @@
         cat_accident: "火災・一酸化炭素事故",
         cat_natural: "孤独死・病死",
         cat_court: "競売・判例認定",
-        btn_add_discover: "公開DB同期・新規検索",
+        btn_add_discover: "事案を登録",
         all_taiwan: "台湾全域",
         all_cities_opt: "すべての県市",
         all_districts_opt: "すべての行政区",
@@ -1452,10 +1323,10 @@
         mnav_split_sub: "地図+一覧",
         mnav_filter: "詳細設定",
         mnav_filter_sub: "年代指定",
-        modal_title: "台湾公開データベース同期・新規事案検索センター",
+        modal_title: "事案を手動登録",
         tab_discover: "公開DB同期検索",
         tab_manual: "事案を手動登録",
-        discover_desc: "司法院競売公告、司法院判決書システム、内政部実価登録、台湾凶宅網、および報道アーカイブを横断検索します。",
+        discover_desc: "",
         lbl_city: "対象の県市",
         lbl_district: "対象の行政区",
         lbl_disc_kw: "通り名・マンション名キーワード（任意）",
@@ -1466,12 +1337,12 @@
         lbl_form_auction: "競売最低価格・割引記録 (任意)",
         lbl_form_url: "関連ニュース・公告URL (任意)",
         btn_cancel: "キャンセル",
-        btn_submit_form: "保存する",
+        btn_submit_form: "同意して保存",
         doorplate_prefix: "住所：",
         btn_rooftop_locate: "地図位置",
         btn_open_dossier: "詳細を見る →",
         expand_footer_prompt: "現在の条件に一致する事故物件記録はありません",
-        expand_footer_btn: "公開DB同期を開くか条件をリセット",
+        expand_footer_btn: "事案を手動登録",
         portal_btn: "住所をコピーして移動 ↗",
         popup_open_btn: "ストリートビュー・詳細台帳・公式DBを開く",
         popup_news: "ニュース検索 ↗",
@@ -1534,10 +1405,20 @@
         ad_oeya_desc: "新生活の家電・日用品キャンペーン",
         ad_jama_title: "JamaLady 快適ルームウェア ↗",
         ad_jama_desc: "ノンワイヤー・快適サポートインナー選品",
-        lbl_orientation: "建物の向き・風水方位"
+        lbl_orientation: "建物の向き・風水方位",
+        disclaimer_btn: "免責事項",
+        disclaimer_title: "当サイトの情報は参考用です · ご利用案内",
+        disclaimer_lead: "「台湾事故物件マップ」をご利用いただく前に、以下の説明をご確認ください：",
+        disclaimer_body_1: "1. 情報はすべて参考用：当サイトに掲載されている物件位置、発生日、概要、方位などの情報は、公開報道、裁判記録、競売公告およびユーザー投稿を整理したものであり、あくまで参考情報です。法的証明や取引保証にはなりません。",
+        disclaimer_body_2: "2. 公式書類および現地確認を優先：過去の報道や投稿は通り名や建物名のみの場合があります。不動産の売買・賃貸契約前には必ず『不動産説明書』や登記謄本、管理委員会にて現地確認を行ってください。",
+        disclaimer_body_3: "3. 訂正および削除申請：記載内容に誤りがある場合は、詳細パネル内の「内容訂正・削除申請」よりいつでも即時非表示の手続きが可能です。",
+        disclaimer_chk_label: "当サイトのすべての情報が参考用であることを理解し同意します",
+        disclaimer_agree_btn: "理解して同意する",
+        form_disclaimer_text: "当サイトの情報はすべて参考用であり、法的効力はありません。公開事実に基づいた正確な情報のみを登録してください。",
+        form_agree_label: "上記の説明を読み同意します（サイトの情報は参考用であり、登録内容は事実に基づいています）"
       },
       "ko": {
-        app_title: "대만 특수사고 건물 및 법원경매 기록 조회 플랫폼",
+        app_title: "대만 사고건물 지도",
         cat_all: "전체 기록",
         cat_all_short: "전체",
         cat_homicide: "형사·살인 사건",
@@ -1545,7 +1426,7 @@
         cat_accident: "화재·일산화탄소 사고",
         cat_natural: "고독사·병사",
         cat_court: "법원 경매·판결 인증",
-        btn_add_discover: "공개 DB 동기화 · 신규 검색",
+        btn_add_discover: "사건 제보",
         all_taiwan: "대만 전체",
         all_cities_opt: "모든 현·시",
         all_districts_opt: "모든 행정구",
@@ -1612,10 +1493,10 @@
         mnav_split_sub: "지도+목록",
         mnav_filter: "상세 설정",
         mnav_filter_sub: "연도 지정",
-        modal_title: "대만 공개 데이터베이스 동기화 및 신규 사건 검색 허브",
+        modal_title: "사건 직접 등록",
         tab_discover: "공개 DB 동기화",
         tab_manual: "사건 직접 등록",
-        discover_desc: "사법원 법원경매 공고, 판결문 시스템, 내정부 실거래가 특수거래, 대만 흉가망 및 뉴스 아카이브를 연동하여 검색합니다.",
+        discover_desc: "",
         lbl_city: "대상 현·시",
         lbl_district: "대상 행정구",
         lbl_disc_kw: "도로명 또는 단지 키워드 (선택)",
@@ -1626,12 +1507,12 @@
         lbl_form_auction: "경매 최저가 또는 할인 기록 (선택)",
         lbl_form_url: "관련 뉴스 또는 공고 URL (선택)",
         btn_cancel: "취소",
-        btn_submit_form: "저장하기",
+        btn_submit_form: "동의 및 저장",
         doorplate_prefix: "주소: ",
         btn_rooftop_locate: "지도 위치",
         btn_open_dossier: "상세 기록 →",
         expand_footer_prompt: "현재 필터 조건에 일치하는 사고 건물 기록이 없습니다",
-        expand_footer_btn: "공개 DB 동기화 열기 또는 필터 초기화",
+        expand_footer_btn: "사건 직접 등록",
         portal_btn: "주소 복사 및 이동 ↗",
         popup_open_btn: "거리뷰 · 상세 기록 및 공식 DB 열기",
         popup_news: "뉴스 검색 ↗",
@@ -1694,7 +1575,17 @@
         ad_oeya_desc: "입주 필수 가전 및 생활용품 프로모션",
         ad_jama_title: "JamaLady 편안한 홈웨어 ↗",
         ad_jama_desc: "노와이어 · 체형 맞춤 편안한 이너웨어",
-        lbl_orientation: "건물 좌향 및 풍수 방위"
+        lbl_orientation: "건물 좌향 및 풍수 방위",
+        disclaimer_btn: "참고 안내",
+        disclaimer_title: "사이트 정보 참고용 안내 · 면책 공고",
+        disclaimer_lead: "'대만 사고건물 지도'를 이용하시기 전에 아래 안내를 확인해 주세요:",
+        disclaimer_body_1: "1. 모든 정보는 참고용입니다: 본 사이트에 수록된 사고 건물 위치, 발생 일자, 사건 요약 및 좌향 방위 등의 정보는 공개 뉴스, 법원 판결문, 경매 공고 및 이용자 제보를 바탕으로 정리된 참고 자료이며 법적 증명이나 거래 보증을 구성하지 않습니다.",
+        disclaimer_body_2: "2. 공식 문서 및 현장 실사 우선: 과거 보도나 제보 주소는 도로 구간이나 단지명만 표기된 경우가 있습니다. 부동산 매매나 임대차 계약 전 반드시 《부동산설명서》, 등기부등본 및 관리사무소를 통해 직접 확인하시기 바랍니다.",
+        disclaimer_body_3: "3. 정정 및 삭제 신청: 기록에 오류가 있는 경우 사건 상세 패널의 '내용 정정 / 삭제 신청'을 클릭하면 즉시 비공개 처리됩니다.",
+        disclaimer_chk_label: "본 사이트의 모든 정보가 단순 참고용임을 이해하고 동의합니다",
+        disclaimer_agree_btn: "이해 및 동의",
+        form_disclaimer_text: "본 사이트의 정보는 단순 참고용이며 법적 효력이 없습니다. 공개된 사실에 근거한 내용만 제보해 주시기 바랍니다.",
+        form_agree_label: "위 안내 사항을 읽었으며 이에 동의합니다 (참고용 정보 확인 및 사실 기반 제보)"
       }
     };
 
@@ -2858,7 +2749,6 @@
             <span>${cityLabel} ${distLabel}</span>
             <span aria-hidden="true">·</span>
             <span class="font-mono tabular-nums">${item.incident_date || ""}</span>
-            ${(item.merged_count || 1) > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums">${t("badge_merged_prefix")}${item.merged_count}${t("badge_merged_suffix")}</span>` : ""}
           </div>
 
           <h3 class="text-sm font-bold text-slate-900 leading-snug mb-1.5">${addrDisplay}</h3>
@@ -3414,7 +3304,6 @@
       currentLang = lang;
       localStorage.setItem("tw_archive_lang", lang);
       document.documentElement.lang = lang;
-      document.title = t("app_title");
       document.getElementById("brand-reset-link").textContent = t("app_title");
       document.getElementById("search-input").placeholder = t("search_placeholder");
 
@@ -3445,6 +3334,8 @@
       }
 
       applyFilters(false);
+      if (typeof refreshStaticPartnerGrids === "function") refreshStaticPartnerGrids();
+      if (typeof renderPromoAnalyticsModal === "function") renderPromoAnalyticsModal();
       if (currentDossierItem && !document.getElementById("case-dossier-drawer").classList.contains("hidden")) {
         openCaseDossier(currentDossierItem);
       }
@@ -4259,35 +4150,15 @@
       }
       renderTimelineList(details.timeline);
 
-      // Render Consolidated Similar Cases Section (Section 2B)
+      // Keep consolidated section permanently hidden per user preference
       const mergedSec = document.getElementById("drawer-merged-cases-section");
-      const mergedBadge = document.getElementById("drawer-merged-count-badge");
       const mergedListEl = document.getElementById("drawer-merged-cases-list");
-      const mergedCases = Array.isArray(item.merged_cases) ? item.merged_cases : [];
-      function renderMergedCasesSubList(subList) {
-        if (!mergedSec || !mergedListEl) return;
-        if ((item.merged_count || subList.length) > 1 && subList.length > 1) {
-          mergedSec.classList.remove("hidden");
-          if (mergedBadge) mergedBadge.textContent = `${t("badge_merged_prefix")}${subList.length}${t("badge_merged_suffix")}`;
-          mergedListEl.innerHTML = subList.map((mc, idx) => `
-            <div class="p-2.5 rounded-lg bg-indigo-50/50 border border-indigo-100 text-xs space-y-1">
-              <div class="flex items-center justify-between gap-2">
-                <span class="font-bold text-slate-900">#${idx + 1} · ${mc.original_address || localizedAddr}</span>
-                <span class="font-mono text-[11px] text-indigo-700 font-semibold shrink-0">${mc.incident_date || ""} · ${tCategoryLabel(classifyRecord(mc.category, mc.reason))}</span>
-              </div>
-              <p class="text-[11px] text-slate-600 leading-relaxed">${mc.reason || ""}</p>
-              <div class="text-[10px] text-slate-500 flex items-center justify-between pt-0.5">
-                <span class="truncate">${t("lbl_verified_source")}${localizeMediaSource(mc.source || "公開實證檔案")}</span>
-                ${mc.source_url && String(mc.source_url).startsWith("http") ? `<a href="${mc.source_url}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold shrink-0">${t("lbl_orig_report_link")}</a>` : ""}
-              </div>
-            </div>
-          `).join("");
-        } else {
-          mergedSec.classList.add("hidden");
-          mergedListEl.innerHTML = "";
-        }
+      const mergedCases = [];
+      function renderMergedCasesSubList() {
+        if (mergedSec) mergedSec.classList.add("hidden");
+        if (mergedListEl) mergedListEl.innerHTML = "";
       }
-      renderMergedCasesSubList(mergedCases);
+      renderMergedCasesSubList();
 
       const extLinksBox = document.getElementById("drawer-external-links");
       extLinksBox.innerHTML = `
@@ -4746,6 +4617,7 @@
         const adCard = document.createElement("aside");
         adCard.setAttribute("aria-label", t("ad_badge_label"));
         adCard.className = "p-3.5 sm:p-4 bg-slate-50/75 hover:bg-slate-50 transition-colors";
+        const orderedAds = getOrderedAffiliatePartners();
         adCard.innerHTML = `
           <div class="flex items-center justify-between gap-2 text-xs text-slate-500 mb-2">
             <div class="flex items-center gap-1.5 flex-wrap">
@@ -4756,22 +4628,12 @@
             <span class="font-mono text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-1.5 py-0.5 rounded shrink-0">${t("ad_badge_label")}</span>
           </div>
           <div class="grid grid-cols-2 gap-1.5">
-            <a href="https://buyforfun.biz/3UADb" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
-              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_hlf_title")}</span>
-              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_hlf_desc")}</span>
-            </a>
-            <a href="https://ibestfun.net/3UAEY" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
-              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_hola_title")}</span>
-              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_hola_desc")}</span>
-            </a>
-            <a href="https://www1.oeya.com.tw/3UAEV" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
-              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_oeya_title")}</span>
-              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_oeya_desc")}</span>
-            </a>
-            <a href="https://ibestfun.net/3UAGa" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
-              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_jama_title")}</span>
-              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_jama_desc")}</span>
-            </a>
+            ${orderedAds.map((ad) => `
+              <a href="${ad.url}" data-ad-id="${ad.id}" data-ad-placement="infeed" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+                <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t(ad.titleKey)}</span>
+                <span class="text-[11px] text-slate-500 truncate mt-0.5">${t(ad.descKey)}</span>
+              </a>
+            `).join("")}
           </div>
         `;
         return adCard;
@@ -4817,7 +4679,6 @@
             <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 gap-2">
               <div class="flex items-center gap-1.5 truncate">
                 <span class="text-slate-600 font-medium truncate">${localizeBuildingType(item.building_type, item)}</span>
-                ${mergedCount > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums shrink-0">${t("badge_merged_prefix")}${mergedCount}${t("badge_merged_suffix")}</span>` : ""}
                 ${details.directSourceUrl ? `<span aria-hidden="true">·</span><span class="text-emerald-700 font-semibold shrink-0">${t("badge_has_link")}</span>` : ""}
               </div>
               <div class="flex items-center gap-2 shrink-0 font-semibold">
@@ -4974,97 +4835,35 @@
     }
 
     async function triggerInlineRegionalDiscovery() {
-      refreshCrawlerStatsUI();
-      recordModal.classList.remove("hidden");
-      tabDiscoverBtn.click();
+      openPublicDbModal();
     }
-
-    document.getElementById("quick-expand-cases-btn").addEventListener("click", triggerInlineRegionalDiscovery);
 
     const recordModal = document.getElementById("record-modal");
     const openModalBtn = document.getElementById("open-modal-btn");
     const closeModalBtn = document.getElementById("close-modal-btn");
     const cancelFormBtn = document.getElementById("cancel-form-btn");
-    const tabManualBtn = document.getElementById("tab-manual-btn");
-    const tabDiscoverBtn = document.getElementById("tab-discover-btn");
-    const tabConsolidateBtn = document.getElementById("tab-consolidate-btn");
     const manualForm = document.getElementById("manual-form");
-    const discoverPanel = document.getElementById("discover-panel");
-    const consolidatePanel = document.getElementById("consolidate-panel");
 
     function closeModal() {
       recordModal.classList.add("hidden");
     }
 
-    function switchModalTab(tabName) {
-      const activeCls = "py-2 rounded-md bg-white text-slate-900 shadow-xs transition-colors font-semibold";
-      const inactiveCls = "py-2 rounded-md text-slate-600 hover:text-slate-900 transition-colors";
-      tabDiscoverBtn.className = tabName === "discover" ? activeCls : inactiveCls;
-      if (tabConsolidateBtn) tabConsolidateBtn.className = tabName === "consolidate" ? activeCls : inactiveCls;
-      tabManualBtn.className = tabName === "manual" ? activeCls : inactiveCls;
-
-      discoverPanel.classList.toggle("hidden", tabName !== "discover");
-      if (consolidatePanel) consolidatePanel.classList.toggle("hidden", tabName !== "consolidate");
-      manualForm.classList.toggle("hidden", tabName !== "manual");
-
-      if (tabName === "consolidate") {
-        renderConsolidationStatsPanel();
-      }
-    }
-
-    function renderConsolidationStatsPanel() {
-      const mergedGroups = allRecords.filter(r => (r.merged_count || 1) > 1);
-      const rawTotal = allRecords.reduce((acc, r) => acc + (r.merged_count || 1), 0);
-      const statRawEl = document.getElementById("cons-stat-raw");
-      const statGroupsEl = document.getElementById("cons-stat-groups");
-      const statFinalEl = document.getElementById("cons-stat-final");
-      if (statRawEl) statRawEl.textContent = rawTotal.toLocaleString();
-      if (statGroupsEl) statGroupsEl.textContent = mergedGroups.length.toLocaleString();
-      if (statFinalEl) statFinalEl.textContent = allRecords.length.toLocaleString();
-
-      const previewBox = document.getElementById("consolidated-groups-preview");
-      if (previewBox) {
-        previewBox.innerHTML = mergedGroups.slice(0, 20).map(g => `
-          <div class="p-2.5 rounded-lg bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 transition-colors cursor-pointer flex items-center justify-between gap-2" onclick="window.__openDossierFromConsolidate('${String(g.__key).replace(/'/g, "\\'")}')">
-            <div class="min-w-0">
-              <div class="font-bold text-slate-900 truncate">${g.address}</div>
-              <div class="text-[11px] text-slate-500 truncate mt-0.5">${g.city} ${g.district} · 已整合 ${g.merged_count} 筆同路段／社區紀錄</div>
-            </div>
-            <span class="px-2 py-1 rounded bg-indigo-100 text-indigo-800 font-mono text-[11px] font-bold shrink-0">🔗 ${g.merged_count} 筆整合 →</span>
-          </div>
-        `).join("");
-      }
-    }
-
-    window.__openDossierFromConsolidate = function(recordKey) {
-      closeModal();
-      window.__openDossierById(recordKey);
-    };
-
     function openPublicDbModal() {
       document.getElementById("form-date").value = new Date().toISOString().slice(0, 10);
       if (citySelect.value) {
-        discCity.value = citySelect.value;
-        populateDistrictDropdown(citySelect.value, discDistrict, false);
-        if (districtSelect.value) discDistrict.value = districtSelect.value;
+        formCity.value = citySelect.value;
+        populateDistrictDropdown(citySelect.value, formDistrict, false);
+        if (districtSelect.value) formDistrict.value = districtSelect.value;
       }
-      document.getElementById("disc-keyword").value = searchInput.value.trim();
-      renderConsolidationStatsPanel();
-      refreshCrawlerStatsUI();
       recordModal.classList.remove("hidden");
     }
 
     openModalBtn.addEventListener("click", openPublicDbModal);
-    document.getElementById("footer-sync-db-btn")?.addEventListener("click", openPublicDbModal);
     closeModalBtn.addEventListener("click", closeModal);
     cancelFormBtn.addEventListener("click", closeModal);
     recordModal.addEventListener("click", (e) => {
       if (e.target === recordModal) closeModal();
     });
-
-    tabDiscoverBtn.addEventListener("click", () => switchModalTab("discover"));
-    tabConsolidateBtn?.addEventListener("click", () => switchModalTab("consolidate"));
-    tabManualBtn.addEventListener("click", () => switchModalTab("manual"));
 
     document.getElementById("filter-only-merged-btn")?.addEventListener("click", () => {
       closeModal();
@@ -5340,15 +5139,79 @@
       showToast("✅ 已受理勘誤申訴！該爭議紀錄已先行自系統隱藏下架，絕不容許不實謠言。");
     });
 
-    const togglePartnerStripBtn = document.getElementById("toggle-partner-strip-btn");
-    const sidebarPartnerStrip = document.getElementById("sidebar-partner-strip");
-    togglePartnerStripBtn?.addEventListener("click", () => {
-      if (!sidebarPartnerStrip) return;
-      const isHidden = sidebarPartnerStrip.classList.toggle("hidden");
-      const baseText = t("footer_partner_btn").replace(/\s*[▴▾]$/, "");
-      togglePartnerStripBtn.textContent = `${baseText} ${isHidden ? "▴" : "▾"}`;
-    });
+    const AFFILIATE_PARTNERS = [
+      {
+        id: "hlf_clean",
+        url: "https://buyforfun.biz/3UADb",
+        titleKey: "ad_hlf_title",
+        descKey: "ad_hlf_desc"
+      },
+      {
+        id: "hola_home",
+        url: "https://ibestfun.net/3UAEY",
+        titleKey: "ad_hola_title",
+        descKey: "ad_hola_desc"
+      },
+      {
+        id: "oeya_deals",
+        url: "https://www1.oeya.com.tw/3UAEV",
+        titleKey: "ad_oeya_title",
+        descKey: "ad_oeya_desc"
+      },
+      {
+        id: "jama_comfort",
+        url: "https://ibestfun.net/3UAGa",
+        titleKey: "ad_jama_title",
+        descKey: "ad_jama_desc"
+      }
+    ];
 
+    function getOrderedAffiliatePartners() {
+      return AFFILIATE_PARTNERS;
+    }
+
+    function refreshStaticPartnerGrids() {
+      const drawerGrid = document.getElementById("drawer-partner-grid");
+      if (drawerGrid) {
+        drawerGrid.innerHTML = AFFILIATE_PARTNERS.map((ad) => `
+          <a href="${ad.url}" data-ad-id="${ad.id}" data-ad-placement="drawer" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+            <div class="font-bold text-slate-900 text-xs group-hover:underline truncate">${t(ad.titleKey)}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5 leading-snug truncate">${t(ad.descKey)}</div>
+          </a>
+        `).join("");
+      }
+    }
+
+    // Disclaimer & Reference Agreement Modal Logic
+    const disclaimerModal = document.getElementById("disclaimer-modal");
+    const openDisclaimerBtn = document.getElementById("open-disclaimer-btn");
+    const agreeDisclaimerBtn = document.getElementById("agree-disclaimer-btn");
+    const disclaimerAgreeChk = document.getElementById("disclaimer-agree-chk");
+
+    function openDisclaimerModal() {
+      disclaimerModal?.classList.remove("hidden");
+    }
+
+    function acceptDisclaimerAndClose() {
+      if (disclaimerAgreeChk && !disclaimerAgreeChk.checked) {
+        disclaimerAgreeChk.checked = true;
+      }
+      try {
+        localStorage.setItem("tw_map_disclaimer_agreed_v1", "1");
+      } catch (e) {}
+      disclaimerModal?.classList.add("hidden");
+    }
+
+    openDisclaimerBtn?.addEventListener("click", openDisclaimerModal);
+    agreeDisclaimerBtn?.addEventListener("click", acceptDisclaimerAndClose);
+
+    try {
+      if (!localStorage.getItem("tw_map_disclaimer_agreed_v1")) {
+        openDisclaimerModal();
+      }
+    } catch (e) {}
+
+    refreshStaticPartnerGrids();
     loadAllData();
   </script>
 

@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /google6a317e59d3daa28c.html
+Allow: /sitemap.xml
+Allow: /calibrated_archive.json
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Site-Verification
+Allow: /
+
+Sitemap: https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/sitemap.xml

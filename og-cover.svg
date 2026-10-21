@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g stroke="#334155" stroke-width="1" opacity="0.35">
+    <line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="0" y1="360" x2="1200" y2="360"/>
+    <line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="240" y1="0" x2="240" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/>
+    <line x1="720" y1="0" x2="720" y2="630"/>
+    <line x1="960" y1="0" x2="960" y2="630"/>
+  </g>
+  <rect x="72" y="72" width="220" height="44" rx="22" fill="#dc2626"/>
+  <text x="182" y="101" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="700">全臺 22 縣市免費查詢</text>
+  <text x="72" y="210" fill="#ffffff" font-family="sans-serif" font-size="64" font-weight="800">台灣凶宅查詢地圖 · 事故屋名單</text>
+  <text x="72" y="290" fill="#94a3b8" font-family="sans-serif" font-size="34" font-weight="600">歷年案發日期實證 · 司法院法拍與判決 · 360° 建物外觀實景照片</text>
+  <g transform="translate(72, 370)">
+    <rect x="0" y="0" width="190" height="54" rx="12" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+    <text x="95" y="35" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="22" font-weight="700">🔥 跳樓墜樓查詢</text>
+    <rect x="210" y="0" width="190" height="54" rx="12" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+    <text x="305" y="35" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="22" font-weight="700">🏠 屋內燒炭輕生</text>
+    <rect x="420" y="0" width="190" height="54" rx="12" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+    <text x="515" y="35" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="22" font-weight="700">⚖️ 凶宅法拍判決</text>
+    <rect x="630" y="0" width="190" height="54" rx="12" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+    <text x="725" y="35" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="22" font-weight="700">📷 360° 街景實景</text>
+    <rect x="840" y="0" width="210" height="54" rx="12" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+    <text x="945" y="35" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="22" font-weight="700">🛡️ 買房租屋避雷</text>
+  </g>
+  <text x="72" y="545" fill="#cbd5e1" font-family="sans-serif" font-size="24" font-weight="500">臺灣歷年事故建物與案發日期實證地圖 · 串聯司法院、內政部實價登錄、台灣凶宅網與新聞檔案庫</text>
+</svg>

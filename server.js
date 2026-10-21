@@ -1171,8 +1171,64 @@ app.post("/api/discover", async (req, res) => {
   }
 });
 
+// Google Search Console HTML file verification endpoint
+app.get("/google6a317e59d3daa28c.html", (req, res) => {
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache");
+  res.status(200).send("google-site-verification: google6a317e59d3daa28c.html");
+});
+
+// Dynamic robots.txt for Googlebot & Search Console
+app.get("/robots.txt", (req, res) => {
+  const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
+  const host = req.headers["x-forwarded-host"] || req.get("host") || "ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app";
+  const baseUrl = (process.env.APP_URL || `${proto}://${host}`).replace(/\/$/, "");
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.status(200).send(
+    [
+      "User-agent: *",
+      "Allow: /",
+      "Allow: /google6a317e59d3daa28c.html",
+      "Allow: /sitemap.xml",
+      "Allow: /calibrated_archive.json",
+      "",
+      "User-agent: Googlebot",
+      "Allow: /",
+      "",
+      "User-agent: Google-Site-Verification",
+      "Allow: /",
+      "",
+      `Sitemap: ${baseUrl}/sitemap.xml`
+    ].join("\n")
+  );
+});
+
+// Dynamic XML Sitemap for Google Search Console indexing across all 22 Taiwan cities/counties
+app.get("/sitemap.xml", (req, res) => {
+  const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
+  const host = req.headers["x-forwarded-host"] || req.get("host") || "ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app";
+  const baseUrl = (process.env.APP_URL || `${proto}://${host}`).replace(/\/$/, "");
+  const today = new Date().toISOString().slice(0, 10);
+  const cities = Object.keys(CITY_BASE_COORDS);
+
+  const urlEntries = [
+    `  <url>\n    <loc>${baseUrl}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>`
+  ];
+
+  for (const city of cities) {
+    urlEntries.push(
+      `  <url>\n    <loc>${baseUrl}/?city=${encodeURIComponent(city)}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`
+    );
+  }
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries.join("\n")}\n</urlset>`;
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.status(200).send(xml);
+});
+
 // Serve static assets
 app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
@@ -1182,3 +1238,4 @@ app.listen(PORT, "0.0.0.0", () => {
   loadAllUnifiedRecords();
   console.log(`Server listening on http://0.0.0.0:${PORT}`);
 });
+

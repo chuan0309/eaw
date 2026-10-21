@@ -40,6 +40,10 @@ export const CITY_BASE_COORDS = {
 export const CRAWL_TOPIC_DIMENSIONS = [
   "命案 住宅",
   "凶宅 法拍",
+  "司法院 法拍 非自然死亡",
+  "法院 判決 隱瞞凶宅 判賠",
+  "台灣凶宅網 事故屋 命案",
+  "實價登錄 特殊交易 凶宅",
   "透天 火警 身亡",
   "公寓 墜樓 身亡",
   "出租套房 陳屍",
@@ -50,17 +54,14 @@ export const CRAWL_TOPIC_DIMENSIONS = [
   "砍殺 民宅 身亡",
   "燒炭 輕生 屋內",
   "一氧化碳中毒 住宅 身亡",
-  "孤獨死 陳屍 異味",
   "雙屍 住宅 命案",
   "氣爆 民宅 身亡",
   "隱瞞凶宅 判賠 法院",
   "地方法院 法拍 凶宅",
   "行政執行署 法拍 透天",
-  "工安 墜樓 建案 身亡",
   "弒母 弒父 弒親 住宅",
   "情殺 租屋 套房",
   "債務 輕生 法拍",
-  "汽車旅館 摩鐵 陳屍",
   "大樓 火警 嗆傷 不治",
   "凶宅 實價登錄 折價",
   "桶屍 棄屍 民宅",
@@ -251,6 +252,50 @@ export async function fetchBingNewsRss(keyword) {
         if (!isNaN(parsed.getTime())) date = parsed.toISOString().slice(0, 10);
       }
       const media = sMatch ? sMatch[1].trim() : "臺灣綜合新聞";
+      if (link.startsWith("http")) {
+        out.push({ title, link, date, snippet, media });
+      }
+    }
+    return out;
+  } catch (e) {
+    return [];
+  }
+}
+
+// 5. Fetch from Google News Taiwan Public Archive RSS (Aggregates CNA 中央社, PTS 公視, TVBS, 三立, 中時, 民視, 東森, 鏡週刊, 台灣凶宅網與司法院判決報導)
+export async function fetchGoogleNewsRss(keyword) {
+  const url = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6500);
+    const r = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" },
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (!r.ok) return [];
+    const xml = await r.text();
+    const items = xml.match(/<item>[\s\S]*?<\/item>/g) || [];
+    const out = [];
+    for (const raw of items) {
+      const tMatch = raw.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/);
+      const lMatch = raw.match(/<link>([\s\S]*?)<\/link>/);
+      const dMatch = raw.match(/<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/);
+      const pMatch = raw.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
+      const sMatch = raw.match(/<source[^>]*>([\s\S]*?)<\/source>/i);
+      if (!tMatch || !lMatch) continue;
+      const link = lMatch[1].trim();
+      const rawTitle = tMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&").trim();
+      const title = rawTitle.replace(/\s*-\s*[^-]+$/, "").trim() || rawTitle;
+      const snippet = dMatch
+        ? dMatch[1].replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim()
+        : "";
+      let date = new Date().toISOString().slice(0, 10);
+      if (pMatch) {
+        const parsed = new Date(pMatch[1].trim());
+        if (!isNaN(parsed.getTime())) date = parsed.toISOString().slice(0, 10);
+      }
+      const media = sMatch ? sMatch[1].replace(/<[^>]+>/g, "").trim() : "Google 新聞公開檔案庫";
       if (link.startsWith("http")) {
         out.push({ title, link, date, snippet, media });
       }

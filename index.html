@@ -147,7 +147,7 @@
       </select>
 
       <button type="button" id="open-modal-btn" data-i18n="btn_add_discover" class="min-h-[36px] sm:min-h-[38px] px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 active:scale-[0.98] transition-all whitespace-nowrap shrink-0">
-        搜尋新案 · 相似案件整合
+        連結公開資料庫 · 搜尋新案
       </button>
     </div>
   </header>
@@ -331,12 +331,16 @@
         </div>
       </div>
 
-      <!-- Clean Footer with Official Links -->
-      <div class="hidden sm:flex px-4 py-2 border-t border-slate-200 text-[11px] text-slate-500 justify-between items-center bg-white shrink-0">
-        <div class="flex items-center gap-2 truncate">
-          <span id="db-status" class="tabular-nums truncate font-mono text-slate-600">臺灣歷史案件與法拍資料庫</span>
+      <!-- Clean Footer with Official & Public Database Links -->
+      <div class="flex px-3.5 sm:px-4 py-2 border-t border-slate-200 text-[11px] text-slate-500 justify-between items-center bg-white shrink-0 gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span id="db-status" class="tabular-nums truncate font-mono font-semibold text-slate-700">載入中...</span>
+          <button type="button" id="footer-sync-db-btn" class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 hover:underline whitespace-nowrap shrink-0 cursor-pointer">
+            公開資料庫同步 ↗
+          </button>
         </div>
-        <div class="flex items-center gap-3 shrink-0 ml-2 font-medium">
+        <div class="flex items-center gap-2.5 shrink-0 font-medium overflow-x-auto no-scrollbar">
+          <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院裁判書 ↗</a>
           <a href="https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm" target="_blank" rel="noopener noreferrer" data-i18n="footer_auction" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院法拍 ↗</a>
           <a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener noreferrer" data-i18n="footer_lvr" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">實價登錄 ↗</a>
         </div>
@@ -357,10 +361,6 @@
         </button>
         <button type="button" id="btn-map-terrain" data-i18n="map_terrain" class="px-2.5 py-1.5 rounded-md text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors whitespace-nowrap shrink-0">
           地形圖
-        </button>
-        <span class="text-slate-300 px-0.5 shrink-0">|</span>
-        <button type="button" id="btn-toggle-cadastral" data-i18n="map_cadastral" class="px-2.5 py-1.5 rounded-md text-xs font-medium text-slate-700 hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0">
-          地段界線
         </button>
       </div>
 
@@ -498,7 +498,7 @@
         </div>
 
         <!-- Section 2: 案發時間與歷史查證紀錄 -->
-        <div>
+        <div id="drawer-timeline-section">
           <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200" data-i18n="sec2_title">案發時間與歷史查證紀錄</h3>
           <div id="drawer-timeline" class="space-y-2.5 pl-1"></div>
         </div>
@@ -515,124 +515,40 @@
           <div id="drawer-merged-cases-list" class="space-y-2"></div>
         </div>
 
-
-        <!-- Section 3: Hidden legacy valuation container (kept for DOM compatibility, hidden to keep focus on incident date & facts) -->
-        <div class="hidden">
-          <div class="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
-            <h3 class="text-xs font-bold text-slate-900" data-i18n="sec3_title">區域行情比對與折讓試算</h3>
-            <span id="drawer-discount-label" class="font-mono text-[11px] text-slate-500 tabular-nums"></span>
-          </div>
-
-          <div class="space-y-3 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
-            <div class="flex items-center justify-between">
-              <label for="calc-ping-range" class="font-semibold text-slate-700" data-i18n="calc_ping_label">設定權狀坪數試算：</label>
-              <span class="font-mono font-bold text-slate-900 tabular-nums"><span id="calc-ping-val">30</span> <span data-i18n="unit_ping">坪</span></span>
-            </div>
-            <input
-              id="calc-ping-range"
-              type="range"
-              min="10"
-              max="80"
-              step="5"
-              value="30"
-              class="w-full accent-slate-900 cursor-pointer h-6"
-            />
-            <div class="grid grid-cols-3 gap-2 pt-1 text-center">
-              <div class="bg-white p-2.5 rounded border border-slate-200">
-                <span class="block text-[10px] text-slate-400" data-i18n="calc_normal_lbl">同區正常均價</span>
-                <span id="calc-normal-total" class="font-mono font-bold text-slate-800 text-xs tabular-nums"></span>
-                <span id="calc-normal-unit" class="block font-mono text-[10px] text-slate-400 tabular-nums mt-0.5"></span>
-              </div>
-              <div class="bg-white p-2.5 rounded border border-slate-200">
-                <span class="block text-[10px] text-slate-400" data-i18n="calc_est_lbl">特殊物況評估總價</span>
-                <span id="calc-est-total" class="font-mono font-bold text-red-600 text-xs tabular-nums"></span>
-                <span id="calc-est-unit" class="block font-mono text-[10px] text-slate-400 tabular-nums mt-0.5"></span>
-              </div>
-              <div class="bg-white p-2.5 rounded border border-slate-200">
-                <span class="block text-[10px] text-slate-400" data-i18n="calc_diff_lbl">預估折讓空間</span>
-                <span id="calc-diff-total" class="font-mono font-bold text-emerald-700 text-xs tabular-nums"></span>
-                <span class="block text-[10px] text-slate-400 mt-0.5" data-i18n="calc_diff_note">依樓層屋況浮動</span>
-              </div>
-            </div>
-            <p class="text-[11px] text-slate-500 leading-relaxed pt-1" data-i18n="calc_bank_note">
-              實務提醒：銀行針對曾發生非自然死亡之標的，多數採取成數調降（約 5～6 成）或需專案核貸；法拍投標前請務必確認得標後尾款自備比例。
-            </p>
-          </div>
+        <!-- Hidden legacy containers kept only for DOM compatibility -->
+        <div class="hidden" aria-hidden="true">
+          <span id="drawer-discount-label"></span>
+          <span id="calc-ping-val">30</span>
+          <input id="calc-ping-range" type="range" min="10" max="80" step="5" value="30" />
+          <span id="calc-normal-total"></span>
+          <span id="calc-normal-unit"></span>
+          <span id="calc-est-total"></span>
+          <span id="calc-est-unit"></span>
+          <span id="calc-diff-total"></span>
+          <span id="drawer-court-badge"></span>
+          <div id="drawer-official-portals"></div>
+          <div id="drawer-nearby-places"></div>
+          <button type="button" id="run-google-search-grounding-btn"></button>
+          <div id="drawer-search-grounding-box"></div>
+          <div id="drawer-live-news"></div>
         </div>
 
-        <!-- Section 4: 臺灣官方資料庫與政府公開系統串接 -->
+        <!-- Section 3: 案件原始來源與外部查證連結 -->
         <div>
-          <div class="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
-            <h3 class="text-xs font-bold text-slate-900" data-i18n="sec4_title">官方資料庫查核</h3>
-            <span id="drawer-court-badge" class="text-[11px] text-slate-500"></span>
-          </div>
-          <p class="text-[11px] text-slate-500 mb-2.5 leading-relaxed" data-i18n="sec4_desc">
-            點擊下方官方系統連結時，系統會自動複製該案門牌關鍵字，方便直接貼上檢索：
-          </p>
-          <div id="drawer-official-portals" class="divide-y divide-slate-200 border border-slate-200 rounded-lg bg-white"></div>
-        </div>
-
-        <!-- Section 5: 周邊管區派出所、醫療與地標 -->
-        <div>
-          <div class="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
-            <h3 class="text-xs font-bold text-slate-900" data-i18n="sec5_title">周邊機構與生活圈</h3>
-            <span class="text-[11px] text-slate-400" data-i18n="sec5_radius">半徑 1.2 公里內</span>
-          </div>
-          <div id="drawer-nearby-places" class="space-y-2"></div>
-        </div>
-
-        <!-- Section 6: 深度查證與新聞檢索 -->
-        <div>
-          <div class="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
-            <h3 class="text-xs font-bold text-slate-900" data-i18n="sec6_title">新聞與司法查證</h3>
-            <button
-              type="button"
-              id="run-google-search-grounding-btn"
-              data-i18n="btn_run_gsearch"
-              class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-semibold transition-colors"
-            >
-              即時查證新聞與判決
-            </button>
-          </div>
-          <div id="drawer-search-grounding-box" class="hidden mb-3 p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-2"></div>
-          <div id="drawer-live-news" class="space-y-2 mb-3"></div>
+          <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200">案件查證與地圖連結</h3>
           <div id="drawer-external-links" class="grid grid-cols-2 gap-2"></div>
         </div>
 
-        <!-- Section 7: 看屋與產權查核實務清單 -->
-        <div>
-          <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200" data-i18n="sec7_title">實地查訪檢核表</h3>
-          <ul class="space-y-2.5 text-slate-600 leading-relaxed">
-            <li class="flex items-start gap-2.5">
-              <input type="checkbox" class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 shrink-0" />
-              <span data-i18n="chk_item_1">索取並核對《不動產說明書》內「本建物（專有部分）於產權持有期間是否曾發生兇殺、自殺、一氧化碳中毒或其他非自然死亡」勾選欄。</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <input type="checkbox" class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 shrink-0" />
-              <span data-i18n="chk_item_2">調閱第二類土地及建物登記謄本，確認歷次所有權移轉原因（是否曾有「拍賣」、「繼承」後短期內異常轉手）。</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <input type="checkbox" class="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 shrink-0" />
-              <span data-i18n="chk_item_3">實地走訪大樓管理委員會、鄰近里長辦公室或上方所列管區派出所，詢問該門牌樓層歷史住戶狀況。</span>
-            </li>
-          </ul>
-        <!-- Section 8: 事實依據法律聲明與權利人勘誤下架申訴 -->
-        <div class="p-3.5 rounded-lg bg-amber-50/80 border border-amber-200 text-amber-900 text-xs space-y-2">
-          <div class="flex items-center gap-1.5 font-bold text-amber-950">
-            <span>實務考證與公開資料聲明</span>
-          </div>
-          <p class="text-[11px] leading-relaxed text-amber-800">
-            本平台所載資訊均源自司法院裁判書、法拍查封筆錄、實價登錄特殊交易與公信新聞之公開歷史紀錄。若您發現任何案件記載有誤、地址登載不實或需補充更正，請點擊下方按鈕通報，查證小組將先行隱藏該案並進行事實複核。
-          </p>
-          <div class="pt-1">
-            <button
-              type="button"
-              id="report-correction-btn"
-              class="w-full py-2 px-3 rounded-md bg-white hover:bg-amber-100 border border-amber-300 text-amber-950 font-semibold text-xs text-center transition-colors shadow-xs"
-            >
-              內容勘誤／申請複核下架
-            </button>
-          </div>
+        <!-- Section 4: 內容勘誤與下架申訴 -->
+        <div class="pt-1 border-t border-slate-200 flex items-center justify-between gap-2 text-xs">
+          <span class="text-[11px] text-slate-500">若發現此筆案情或日期記載有誤：</span>
+          <button
+            type="button"
+            id="report-correction-btn"
+            class="py-1.5 px-3 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold text-[11px] transition-colors shrink-0"
+          >
+            內容勘誤／申請下架
+          </button>
         </div>
 
       </div>
@@ -687,7 +603,7 @@
   <div id="record-modal" class="hidden fixed inset-0 z-[600] bg-slate-900/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white border border-slate-200 rounded-t-2xl sm:rounded-xl shadow-xl w-full max-w-xl max-h-[90dvh] flex flex-col overflow-hidden">
       <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0">
-        <h2 class="text-base font-bold text-slate-900" data-i18n="modal_title">新案爬蟲檢索 · 相似案件歸戶整合中樞</h2>
+        <h2 class="text-base font-bold text-slate-900" data-i18n="modal_title">全臺公開資料庫連線同步 · 新案檢索中樞</h2>
         <button type="button" id="close-modal-btn" data-i18n="btn_close" class="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200">
           關閉
         </button>
@@ -696,7 +612,7 @@
       <div class="px-5 sm:px-6 pt-3.5 shrink-0">
         <div class="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-lg text-xs font-semibold">
           <button type="button" id="tab-discover-btn" data-i18n="tab_discover" class="py-2 rounded-md bg-white text-slate-900 shadow-xs transition-colors">
-            即時爬蟲抓新案
+            公開資料庫同步
           </button>
           <button type="button" id="tab-consolidate-btn" class="py-2 rounded-md text-slate-600 hover:text-slate-900 transition-colors">
             相似案件比對整合
@@ -713,14 +629,14 @@
         <div class="p-3.5 rounded-xl bg-slate-900 text-white space-y-2">
           <div class="flex items-center justify-between gap-2">
             <div class="font-bold text-xs">
-              <span>多源實證新聞與法拍即時爬蟲引擎（主動發掘新資料＋門牌座標驗證）</span>
+              <span>全臺六大公開實證資料庫串聯引擎（即時檢索新案＋座標驗證）</span>
             </div>
             <span id="crawler-total-badge" class="font-mono text-[11px] text-slate-300 font-semibold tabular-nums shrink-0">
               載入中...
             </span>
           </div>
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            本系統同時支援<strong>「搜尋新資料（連線自由時報、聯合新聞網、ETtoday、Bing 新聞與司法院法拍筆錄抓取尚未收錄之新案件，並經 Google Maps 門牌屋頂座標驗證）」</strong>與<strong>「相似案件比對整合（自動歸戶同路段／同大樓多筆紀錄）」</strong>。
+            本系統已串聯<strong>司法院裁判書系統、司法院法拍屋公告、內政部實價登錄特殊交易、台灣凶宅網／居易網公開索引、Google 新聞全臺檔案庫與各大媒體歷年社會資料庫</strong>，支援即時跨庫檢索新案件並自動透過 Google Maps 驗證門牌座標。
           </p>
         </div>
 
@@ -728,11 +644,11 @@
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
           <div class="flex items-center justify-between gap-2 flex-wrap">
             <div>
-              <div class="font-bold text-slate-900 text-xs">步驟一：啟動即時爬蟲搜尋「尚未收錄之新案件」</div>
-              <div class="text-[11px] text-slate-600 mt-0.5">針對指定縣市／行政區或全臺都會區，即時檢索新聞與法拍公告並自動過濾已存在之舊案件</div>
+              <div class="font-bold text-slate-900 text-xs">跨公開資料庫即時同步檢索「尚未收錄之新案件」</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">針對指定縣市／行政區或全臺範圍，即時同步各大公開新聞、裁判與法拍紀錄</div>
             </div>
             <button type="button" id="run-wide-crawler-btn" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-semibold transition-colors shrink-0 cursor-pointer">
-              全臺廣域爬蟲抓新案
+              🔄 全臺公開資料庫廣域同步
             </button>
           </div>
 
@@ -748,12 +664,12 @@
           </div>
           <div>
             <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_disc_kw">指定路名、街段或社區關鍵字（選填）</label>
-            <input type="text" id="disc-keyword" placeholder="例如：林森北路、博愛二路、金城路三段、某社區..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
+            <input type="text" id="disc-keyword" placeholder="例如：林森北路、永忠街、中正路、某社區..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
           </div>
           <div id="discover-status" class="hidden p-3 rounded-lg bg-white border border-slate-300 text-slate-800 leading-relaxed"></div>
           <div class="flex justify-end gap-2">
             <button type="button" id="run-discover-btn" data-i18n="btn_run_discover" class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer">
-              立即搜尋此區新案件並整合
+              立即同步此區公開資料庫案件
             </button>
           </div>
         </div>
@@ -761,7 +677,7 @@
         <!-- Section B: 4 Connected Public Databases Quick Filter -->
         <div class="space-y-2 pt-1">
           <div class="font-bold text-slate-900 flex items-center justify-between">
-            <span>依四大公開資料來源快速篩選：</span>
+            <span>依已收錄之四大公開資料來源篩選：</span>
             <button type="button" data-quick-db="ALL" class="quick-db-filter-btn text-[11px] text-sky-700 hover:underline font-semibold">顯示全部來源</button>
           </div>
 
@@ -776,10 +692,10 @@
 
             <button type="button" data-quick-db="JUDICIAL_JUDGMENT" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
               <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-900">司法院民事瑕疵判決</span>
+                <span class="font-bold text-slate-900">司法院民事／刑事判決</span>
                 <span id="db-count-JUDICIAL_JUDGMENT" class="font-mono text-xs font-bold text-amber-700 tabular-nums">0</span>
               </div>
-              <p class="text-[11px] text-slate-500 leading-snug">民事「物之瑕疵擔保減少價金」與住宅刑事命案判決。</p>
+              <p class="text-[11px] text-slate-500 leading-snug">民事「隱瞞凶宅物之瑕疵擔保」與住宅刑事命案判決。</p>
             </button>
 
             <button type="button" data-quick-db="MOI_OPEN_DATA" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
@@ -787,7 +703,7 @@
                 <span class="font-bold text-slate-900">內政部實價特殊交易</span>
                 <span id="db-count-MOI_OPEN_DATA" class="font-mono text-xs font-bold text-purple-700 tabular-nums">0</span>
               </div>
-              <p class="text-[11px] text-slate-500 leading-snug">不動產實價登錄特殊交易備註欄異常折價與事故註記住宅。</p>
+              <p class="text-[11px] text-slate-500 leading-snug">不動產實價登錄特殊交易備註與事故揭露紀錄。</p>
             </button>
 
             <button type="button" data-quick-db="NEWS_PUBLIC_ARCHIVE" class="quick-db-filter-btn text-left p-2.5 rounded-xl border border-slate-200 hover:border-slate-900 bg-slate-50 hover:bg-white transition-all space-y-1">
@@ -795,8 +711,21 @@
                 <span class="font-bold text-slate-900">社會新聞與警消紀錄</span>
                 <span id="db-count-NEWS_PUBLIC_ARCHIVE" class="font-mono text-xs font-bold text-red-700 tabular-nums">0</span>
               </div>
-              <p class="text-[11px] text-slate-500 leading-snug">歷年各大媒體社會版與警消公開通報紀錄，鎖定屋內非自然死亡案件。</p>
+              <p class="text-[11px] text-slate-500 leading-snug">歷年各大媒體社會版與警消公開通報之住宅非自然死亡案件。</p>
             </button>
+          </div>
+        </div>
+
+        <!-- Section C: Direct Official & Public Database Portals -->
+        <div class="space-y-2 pt-1 border-t border-slate-200">
+          <div class="font-bold text-slate-900">外部官方與民間公開資料庫直連入口：</div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">⚖️ 司法院裁判書查詢 ↗</a>
+            <a href="https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">🏛️ 司法院法拍屋公告 ↗</a>
+            <a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">📋 內政部實價登錄 ↗</a>
+            <a href="https://www.google.com/search?q=%22%E5%8F%B0%E7%81%A3%E5%87%B6%E5%AE%85%E7%B6%B2%22+OR+%22%E5%B1%85%E6%98%93%E7%B6%B2%22+%E5%87%B6%E5%AE%85" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">🏠 台灣凶宅網／居易網 ↗</a>
+            <a href="https://data.gov.tw/datasets/search?p=1&size=10&s=_score_desc&rft=%E4%B8%8D%E5%8B%95%E7%94%A2" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">📂 政府資料開放平臺 ↗</a>
+            <a href="https://news.google.com/search?q=%E5%8F%B0%E7%81%A3+%E4%BD%8F%E5%AE%85+%E5%91%BD%E6%A1%88+OR+%E5%87%B6%E5%AE%85&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-center transition-colors">📰 Google 新聞檔案庫 ↗</a>
           </div>
         </div>
       </div>
@@ -983,7 +912,7 @@
         cat_suicide: "屋內輕生事故",
         cat_accident: "火警與一氧化碳",
         cat_court: "司法與實價認證",
-        btn_add_discover: "搜尋新案 · 相似案件整合",
+        btn_add_discover: "連結公開資料庫 · 搜尋新案",
         all_taiwan: "全臺灣",
         all_cities_opt: "全部縣市",
         all_districts_opt: "全部行政區",
@@ -1006,7 +935,7 @@
         time_custom: "自訂年份區間",
         label_year_range: "年份：",
         btn_quick_expand: "相似整合統計",
-        footer_auction: "司法院查詢 ↗",
+        footer_auction: "司法院法拍 ↗",
         footer_lvr: "實價登錄 ↗",
         map_roadmap: "街道地圖",
         map_hybrid: "衛星街廓圖",
@@ -1050,14 +979,14 @@
         mnav_split_sub: "地圖+列表",
         mnav_filter: "進階設定",
         mnav_filter_sub: "自訂年份",
-        modal_title: "新案爬蟲檢索 · 相似案件歸戶整合中樞",
-        tab_discover: "即時爬蟲抓新案",
+        modal_title: "全臺公開資料庫連線同步 · 新案檢索中樞",
+        tab_discover: "公開資料庫同步",
         tab_manual: "手動通報案件",
-        discover_desc: "連線司法院法拍屋公告資料庫、司法院裁判書系統、內政部實價登錄特殊交易與公開新聞資料庫，依縣市與路名即時檢索並歸戶整合。",
+        discover_desc: "連線司法院法拍屋公告資料庫、司法院裁判書系統、內政部實價登錄特殊交易、台灣凶宅網／居易網與公開新聞資料庫，依縣市與路名即時檢索並歸戶整合。",
         lbl_city: "目標縣市",
         lbl_district: "目標行政區",
         lbl_disc_kw: "指定路名、街段或社區關鍵字（選填）",
-        btn_run_discover: "立即搜尋此區新案件並整合",
+        btn_run_discover: "立即同步此區公開資料庫案件",
         lbl_category: "事故法定成因類型",
         lbl_form_addr: "完整門牌地址",
         lbl_form_reason: "事故經過與法拍／判決備註",
@@ -1860,28 +1789,51 @@
       const city = String(item.city || "臺北市").replace(/台/g, "臺");
       const dist = String(item.district || "");
       const fullAddr = String(item.doorplate_address || item.address || "");
-      
-      // Extract street or road name (e.g. 杞林路, 新生北路二段, 民族路)
+      const reason = String(item.reason || "");
+      const source = String(item.source || "");
+
+      // 1. If source contains an exact news article title 「...」, use that exact headline for verification
+      const titleInSource = source.match(/「([^」]{6,40})」/);
+      if (titleInSource && titleInSource[1]) {
+        const cleanTitle = titleInSource[1].trim();
+        return {
+          road: "",
+          newsQuery: cleanTitle,
+          webQuery: cleanTitle,
+          queryTerm: cleanTitle
+        };
+      }
+
+      // 2. If reason starts with 【...】 that is an actual news headline (not a generic 【案發日期：...】 tag)
+      const bracketMatch = reason.match(/^【([^】]{6,42})】/);
+      if (bracketMatch && bracketMatch[1] && !/案發日期|^20\d{2}年|^19\d{2}年/.test(bracketMatch[1])) {
+        const cleanHeadline = bracketMatch[1].trim();
+        return {
+          road: "",
+          newsQuery: cleanHeadline,
+          webQuery: cleanHeadline,
+          queryTerm: cleanHeadline
+        };
+      }
+
+      // 3. Otherwise extract street/road name + specific incident clue
       const roadMatch = fullAddr.match(/([^\d縣市區鄉鎮]+?(?:路|街|巷|大道|段))/);
       const road = roadMatch ? roadMatch[1].replace(/^[^\w\u4e00-\u9fa5]+/, "").slice(-8) : "";
-      
+
       const cat = String(item.category || item.normalizedCat || "");
       let incidentTag = "命案";
-      if (cat.includes("輕生")) incidentTag = "輕生 OR 自殺";
-      else if (cat.includes("意外")) incidentTag = "意外 OR 墜樓 OR 火警";
-      else if (cat.includes("孤獨") || cat.includes("自然")) incidentTag = "陳屍 OR 孤獨死";
-      else if (cat.includes("法拍")) incidentTag = "法拍屋 OR 事故";
+      if (cat.includes("輕生")) incidentTag = "輕生 OR 墜樓";
+      else if (cat.includes("意外")) incidentTag = "火警 OR 一氧化碳";
+      else if (cat.includes("法拍")) incidentTag = "凶宅 OR 命案";
 
-      // Extract high-value keyword from reason if present
-      const reason = String(item.reason || "");
       let clue = "";
-      const clueMatch = reason.match(/(槍擊|分屍|情殺|砍殺|燒炭|上吊|氣爆|火警|中毒|墜樓|跳樓|大樓|社區)/);
+      const clueMatch = reason.match(/(槍擊|分屍|情殺|砍殺|燒炭|上吊|氣爆|火警|中毒|墜樓|跳樓|雙屍|滅門|弒母|弒父)/);
       if (clueMatch) clue = clueMatch[1];
 
       const shortCity = city.replace(/[市縣]/g, "");
       const newsQuery = `${shortCity} ${dist} ${road} ${clue || incidentTag}`.replace(/\s+/g, " ").trim();
       const webQuery = `${city} ${dist} ${road} ${clue || incidentTag}`.replace(/\s+/g, " ").trim();
-      
+
       return { road, newsQuery, webQuery, queryTerm: `${city} ${dist} ${road} ${clue || incidentTag}`.replace(/\s+/g, " ").trim() };
     }
 
@@ -1915,6 +1867,8 @@
       const smart = extractSmartVerificationKeywords(item);
       const googleNewsUrl = `https://news.google.com/search?q=${encodeURIComponent(smart.newsQuery)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
       const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(smart.webQuery)}`;
+      const judicialSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`(site:judicial.gov.tw OR "地方法院" OR "判決" OR "法拍") ${item.city || ""} ${item.district || ""} ${smart.queryTerm}`)}`;
+      const publicHauntedDbUrl = `https://www.google.com/search?q=${encodeURIComponent(`("台灣凶宅網" OR "居易網" OR "事故屋" OR "凶宅") ${item.city || ""} ${item.district || ""} ${smart.queryTerm}`)}`;
       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(doorplate || item.address)}`;
       const judicialUrl = `https://judgment.judicial.gov.tw/FJUD/default.aspx`;
       const srcUrl = String(item.source_url || "").trim();
@@ -1935,6 +1889,8 @@
         sourceName,
         googleNewsUrl,
         googleSearchUrl,
+        judicialSearchUrl,
+        publicHauntedDbUrl,
         googleMapsUrl,
         judicialUrl
       };
@@ -2401,24 +2357,10 @@
     document.getElementById("btn-map-hybrid").addEventListener("click", () => switchGoogleMapType("hybrid"));
     document.getElementById("btn-map-terrain").addEventListener("click", () => switchGoogleMapType("terrain"));
 
-    document.getElementById("btn-toggle-cadastral").addEventListener("click", () => {
+    document.getElementById("btn-toggle-cadastral")?.addEventListener("click", () => {
       const btn = document.getElementById("btn-toggle-cadastral");
+      if (!btn) return;
       cadastralActive = !cadastralActive;
-      if (cadastralActive) {
-        if (usingNativeGoogleMap && gmap && gmapCadastralOverlay) {
-          gmap.overlayMapTypes.push(gmapCadastralOverlay);
-        } else if (fallbackMap && fallbackCadastralLayer) {
-          fallbackCadastralLayer.addTo(fallbackMap);
-        }
-        btn.className = "px-2.5 py-1.5 rounded-md text-xs font-semibold bg-emerald-700 text-white transition-colors whitespace-nowrap shrink-0";
-      } else {
-        if (usingNativeGoogleMap && gmap) {
-          gmap.overlayMapTypes.clear();
-        } else if (fallbackMap && fallbackCadastralLayer) {
-          fallbackMap.removeLayer(fallbackCadastralLayer);
-        }
-        btn.className = "px-2.5 py-1.5 rounded-md text-xs font-medium text-slate-700 hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0";
-      }
     });
 
     // Responsive Mobile View Switcher ("list" | "map" | "split")
@@ -3398,7 +3340,20 @@
       searchGroundingBox.innerHTML = "";
 
       function renderTimelineList(tlArray) {
-        document.getElementById("drawer-timeline").innerHTML = (tlArray || []).map(tl => `
+        const timelineSec = document.getElementById("drawer-timeline-section");
+        const timelineEl = document.getElementById("drawer-timeline");
+        const list = Array.isArray(tlArray) ? tlArray : [];
+        // Hide timeline section if it only has 1 entry that duplicates item.reason
+        if (
+          list.length === 0 ||
+          (list.length === 1 && String(list[0].detail || "").trim().slice(0, 40) === String(item.reason || "").trim().slice(0, 40))
+        ) {
+          if (timelineSec) timelineSec.classList.add("hidden");
+          if (timelineEl) timelineEl.innerHTML = "";
+          return;
+        }
+        if (timelineSec) timelineSec.classList.remove("hidden");
+        timelineEl.innerHTML = list.map(tl => `
           <div class="relative pl-4 pb-3 border-l border-slate-200 last:pb-0">
             <div class="absolute -left-[4.5px] top-1.5 w-2 h-2 rounded-full bg-slate-800"></div>
             <div class="flex items-center justify-between text-xs font-semibold text-slate-900">
@@ -3439,74 +3394,13 @@
         }
       }
 
-      updateValuationCalculator(item);
-
-      const portalsBox = document.getElementById("drawer-official-portals");
-      const nearbyPlacesBox = document.getElementById("drawer-nearby-places");
-      const liveNewsBox = document.getElementById("drawer-live-news");
       const extLinksBox = document.getElementById("drawer-external-links");
-
-      const localOfficial = buildClientOfficialPortals(item);
-      document.getElementById("drawer-court-badge").textContent = localOfficial.jurisdiction.courtName;
-      renderOfficialPortalsList(portalsBox, localOfficial.officialPortals);
-
-      // Section 5: Instant fallback nearby facilities without endless spinners
-      const qBase = `${item.city || ""}${item.district || ""}`;
-      const cleanDoor = details.doorplate || item.address;
-      nearbyPlacesBox.innerHTML = `
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <a href="https://www.google.com/maps/search/${encodeURIComponent(qBase + ' 派出所')}" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-between">
-            <span class="font-semibold text-slate-800">轄區派出所 ↗</span>
-            <span class="text-[11px] text-slate-500">警政</span>
-          </a>
-          <a href="https://www.google.com/maps/search/${encodeURIComponent(qBase + ' 醫院 急診')}" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-between">
-            <span class="font-semibold text-slate-800">周邊責任醫院 ↗</span>
-            <span class="text-[11px] text-slate-500">醫療</span>
-          </a>
-          <a href="https://www.google.com/maps/search/${encodeURIComponent(cleanDoor + ' 捷運 公車站')}" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-between">
-            <span class="font-semibold text-slate-800">大眾交通站點 ↗</span>
-            <span class="text-[11px] text-slate-500">交通</span>
-          </a>
-          <a href="https://www.google.com/maps/search/${encodeURIComponent(cleanDoor + ' 國小 國中')}" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-between">
-            <span class="font-semibold text-slate-800">周邊學區設施 ↗</span>
-            <span class="text-[11px] text-slate-500">文教</span>
-          </a>
-        </div>
-      `;
-
-      // Section 6: Instant verified news & court verification links without endless spinners
-      const cleanNewsQuery = details.smartNewsQuery || details.smartKeyword;
-      const cleanWebQuery = details.smartWebQuery || details.smartKeyword;
-      liveNewsBox.innerHTML = `
-        <div class="space-y-1.5">
-          <a href="${details.googleNewsUrl}" target="_blank" rel="noopener noreferrer" class="block p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-slate-900 leading-snug">Google 新聞公開報導檢索 ↗</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold">即時新聞</span>
-            </div>
-            <div class="text-[11px] text-slate-500 mt-1 truncate">檢索關鍵字：${cleanNewsQuery}</div>
-          </a>
-          <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="block p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-slate-900 leading-snug">全網社會版與歷史文獻搜尋 ↗</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-semibold">歷史網檔</span>
-            </div>
-            <div class="text-[11px] text-slate-500 mt-1 truncate">檢索關鍵字：${cleanWebQuery}</div>
-          </a>
-          <a href="${details.judicialUrl}" target="_blank" rel="noopener noreferrer" class="block p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-slate-900 leading-snug">司法院法學裁判書查詢系統 ↗</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">裁判卷宗</span>
-            </div>
-            <div class="text-[11px] text-slate-500 mt-1">管轄：${localOfficial.jurisdiction.courtName} · 以路段與當事人查詢</div>
-          </a>
-        </div>
-      `;
-
       extLinksBox.innerHTML = `
-        ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2.5 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-center font-semibold transition-colors flex items-center justify-center gap-1.5"><span>🔗 原始報導／裁判連結 ↗</span></a>` : ""}
-        <a href="${details.googleNewsUrl}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>📰 新聞檢索</span></a>
-        <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>🔍 全網查證</span></a>
+        ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2.5 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-center font-semibold transition-colors flex items-center justify-center gap-1.5"><span>🔗 查看此案原始新聞報導／裁判書 ↗</span></a>` : ""}
+        <a href="${details.googleNewsUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>📰 新聞檔案庫檢索</span></a>
+        <a href="${details.judicialSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>⚖️ 司法院裁判／法拍查證</span></a>
+        <a href="${details.publicHauntedDbUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>🏠 台灣凶宅網／居易查證</span></a>
+        <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>🔍 全網公開資料查證</span></a>
         <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-center text-xs font-medium transition-colors flex items-center justify-center gap-1"><span>📍 Google 地圖精確定位 ↗</span></a>
       `;
 
@@ -3542,7 +3436,7 @@
           if (tr.reason) document.getElementById("drawer-reason").textContent = tr.reason;
           if (tr.auction_record || tr.media_verification) {
             document.getElementById("drawer-auction-box").innerHTML = `
-              <div><span class="font-semibold text-slate-800">Foreclosure / Price: </span>${tr.auction_record || "—"}</div>
+              <div><span class="font-semibold text-slate-800">Incident Note: </span>${tr.auction_record || "—"}</div>
               <div class="mt-1"><span class="font-semibold text-slate-800">Source: </span>${tr.media_verification || "—"}</div>
             `;
           }
@@ -3551,36 +3445,6 @@
           }
         }).catch(() => {});
       }
-
-      // Asynchronously fetch extra data from /api/official-lookup if running with server
-      fetch(`/api/official-lookup?city=${encodeURIComponent(item.city || "")}&district=${encodeURIComponent(item.district || "")}&address=${encodeURIComponent(details.doorplate)}&lat=${item.lat || ""}&lng=${item.lng || ""}&lang=${currentLang}`)
-        .then(r => r.ok ? r.json() : null)
-        .then(data => {
-          if (!data || currentDossierItem !== item) return;
-          const gmaps = data.googleMaps || {};
-          if (Array.isArray(gmaps.nearbyPlaces) && gmaps.nearbyPlaces.length > 0) {
-            nearbyPlacesBox.innerHTML = gmaps.nearbyPlaces.map(p => `
-              <a href="${p.googleMapsUri}" target="_blank" rel="noopener noreferrer" class="block p-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors">
-                <div class="flex items-center justify-between gap-2">
-                  <span class="font-semibold text-slate-900 truncate">${p.name}</span>
-                  <span class="text-[11px] text-slate-500 shrink-0">${p.categoryLabel}${p.rating ? ` · ★ ${p.rating}` : ""}</span>
-                </div>
-                <div class="text-[11px] text-slate-500 truncate mt-0.5">${p.formattedAddress}</div>
-              </a>
-            `).join("");
-          }
-          if (Array.isArray(data.relatedNews) && data.relatedNews.length > 0) {
-            liveNewsBox.innerHTML = data.relatedNews.map(n => `
-              <a href="${n.link}" target="_blank" rel="noopener noreferrer" class="block p-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors">
-                <div class="text-xs font-semibold text-slate-900 leading-snug mb-1">${n.title}</div>
-                <div class="text-[11px] text-slate-500 flex items-center justify-between">
-                  <span>${n.source || "News"}</span>
-                  <span class="font-mono tabular-nums">${n.pubDate || ""}</span>
-                </div>
-              </a>
-            `).join("");
-          }
-        }).catch(() => {});
     }
 
     function inferBuildingTypeRaw(item) {
@@ -3769,8 +3633,7 @@
       await initMapEngine(mapsKey);
 
       if (statusEl) {
-        const rawTotal = allRecords.reduce((acc, r) => acc + (r.merged_count || 1), 0);
-        statusEl.textContent = `${allRecords.length.toLocaleString()} 筆定位卷宗（涵蓋 ${rawTotal.toLocaleString()} 筆紀錄）`;
+        statusEl.textContent = `共 ${allRecords.length.toLocaleString()} 筆案件卷宗`;
       }
       updateCounters(allRecords);
       applyFilters(false);
@@ -3847,15 +3710,14 @@
 
       listContainer.innerHTML = "";
       const countStr = records.length.toLocaleString();
-      const rawTotal = records.reduce((acc, r) => acc + (r.merged_count || 1), 0);
       if (currentLang === "en") {
-        resultLabel.textContent = `${countStr} Locations (${rawTotal.toLocaleString()} Cases)`;
+        resultLabel.textContent = `${countStr} Cases`;
       } else if (currentLang === "ja") {
-        resultLabel.textContent = `全 ${countStr} 箇所（計 ${rawTotal.toLocaleString()} 件）`;
+        resultLabel.textContent = `全 ${countStr} 件`;
       } else if (currentLang === "ko") {
-        resultLabel.textContent = `총 ${countStr}개 지점 (${rawTotal.toLocaleString()}건)`;
+        resultLabel.textContent = `총 ${countStr}건`;
       } else {
-        resultLabel.textContent = `共 ${countStr} 筆定位卷宗（涵蓋 ${rawTotal.toLocaleString()} 筆紀錄）`;
+        resultLabel.textContent = `共 ${countStr} 筆案件卷宗`;
       }
       if (mNavCount) mNavCount.textContent = countStr;
 
@@ -4138,7 +4000,7 @@
       window.__openDossierById(recordKey);
     };
 
-    openModalBtn.addEventListener("click", () => {
+    function openPublicDbModal() {
       document.getElementById("form-date").value = new Date().toISOString().slice(0, 10);
       if (citySelect.value) {
         discCity.value = citySelect.value;
@@ -4147,8 +4009,12 @@
       }
       document.getElementById("disc-keyword").value = searchInput.value.trim();
       renderConsolidationStatsPanel();
+      refreshCrawlerStatsUI();
       recordModal.classList.remove("hidden");
-    });
+    }
+
+    openModalBtn.addEventListener("click", openPublicDbModal);
+    document.getElementById("footer-sync-db-btn")?.addEventListener("click", openPublicDbModal);
     closeModalBtn.addEventListener("click", closeModal);
     cancelFormBtn.addEventListener("click", closeModal);
     recordModal.addEventListener("click", (e) => {

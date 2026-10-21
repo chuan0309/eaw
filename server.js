@@ -774,17 +774,16 @@ app.get("/api/official-lookup", async (req, res) => {
 
   const rssPromise = (async () => {
     try {
-      const q = `${city.slice(0, 2)} ${district} ${cleanRoad}`.trim();
-      const [udnList, ltnList, bingList] = await Promise.all([
-        factCrawler.fetchUdnArticles(q, 1),
-        factCrawler.fetchLtnArticles(q, 1),
-        factCrawler.fetchBingNewsRss(`${q} 命案 OR 凶宅 OR 法拍 OR 火警 OR 墜樓`)
-      ]);
-      const combined = [...udnList, ...ltnList, ...bingList];
+      if (!cleanRoad) return [];
+      const q = `${city.slice(0, 2)} ${district} ${cleanRoad} 命案 OR 墜樓 OR 陳屍 OR 火警`.trim();
+      const bingList = await factCrawler.fetchBingNewsRss(q);
       const seenLinks = new Set();
       const out = [];
-      for (const a of combined) {
+      for (const a of bingList) {
         if (!a || !a.link || seenLinks.has(a.link)) continue;
+        if (cleanRoad && !String(a.title + " " + (a.summary || "")).includes(cleanRoad.slice(0, 3))) continue;
+        const verified = factCrawler.parseVerifiedArticleToRecord(a, city, district);
+        if (!verified) continue;
         seenLinks.add(a.link);
         out.push({
           title: a.title,
@@ -792,7 +791,7 @@ app.get("/api/official-lookup", async (req, res) => {
           pubDate: a.date || "",
           source: a.media || "新聞查證"
         });
-        if (out.length >= 5) break;
+        if (out.length >= 3) break;
       }
       return out;
     } catch (e) {}
@@ -964,11 +963,12 @@ function getCrawlerStatusSummary(totalCount) {
     lastRunAt: crawlerState.lastRunAt,
     recentDiscovered: crawlerState.recentDiscovered.slice(0, 8),
     sources: [
-      "聯合新聞網 (UDN 社會/房市資料庫)",
-      "自由時報 (LTN 社會/地方新聞檢索)",
-      "ETtoday新聞雲 (社會與法拍新聞)",
-      "Bing 綜合新聞 RSS (公視/中央社/TVBS/三立/鏡週刊)",
-      "司法院法拍屋公告與實價登錄特殊交易比對"
+      "司法院法學資料檢索系統 (民事隱瞞凶宅／刑事命案判決書)",
+      "司法院法拍屋公告系統 (查封筆錄載明非自然死亡紀錄)",
+      "內政部不動產交易實價查詢 (實價登錄特殊交易備註)",
+      "台灣凶宅網／居易網 (Juyiwang) 與公開社區事故索引",
+      "Google 新聞全臺公開檔案庫 (中央社/公視/TVBS/三立/中時/民視)",
+      "自由時報 (LTN) · 聯合新聞網 (UDN) · ETtoday 歷年社會資料庫"
     ]
   };
 }
@@ -996,13 +996,14 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
   const rawArticles = [];
   await Promise.all(
     querySpecs.map(async ({ q, page = 1, city = "", district = "" }) => {
-      const [udn, ltn, ett, bing] = await Promise.all([
+      const [udn, ltn, ett, bing, gnews] = await Promise.all([
         factCrawler.fetchUdnArticles(q, page),
         factCrawler.fetchLtnArticles(q, page),
         factCrawler.fetchEttodayArticles(q, page),
-        page === 1 ? factCrawler.fetchBingNewsRss(`台灣 ${q}`) : Promise.resolve([])
+        page === 1 ? factCrawler.fetchBingNewsRss(`台灣 ${q}`) : Promise.resolve([]),
+        page === 1 ? factCrawler.fetchGoogleNewsRss(q) : Promise.resolve([])
       ]);
-      for (const a of [...udn, ...ltn, ...ett, ...bing]) {
+      for (const a of [...gnews, ...udn, ...ltn, ...ett, ...bing]) {
         rawArticles.push({ article: a, hintCity: city, hintDistrict: district });
       }
     })

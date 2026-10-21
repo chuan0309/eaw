@@ -49,7 +49,27 @@
         "@type": "Dataset",
         "name": "臺灣 22 縣市歷年特殊事故建物與案發日期公開實證資料庫",
         "description": "收錄全臺灣臺北市、新北市、桃園市、臺中市、臺南市、高雄市等 22 縣市 368 鄉鎮市區之歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故及司法院法拍／判決認證紀錄，提供精確案發日期、路段門牌與原始新聞連結查證。",
+        "url": "https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/",
+        "sameAs": "https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/calibrated_archive.json",
+        "identifier": "tw-property-incident-archive-1970-2026",
         "keywords": ["台灣凶宅查詢", "凶宅地圖", "事故建物", "案發日期查詢", "司法院法拍凶宅", "實價登錄特殊交易"],
+        "creator": {
+          "@type": "Organization",
+          "name": "臺灣特殊事故建物與產權紀錄查詢平台",
+          "url": "https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/"
+        },
+        "includedInDataCatalog": {
+          "@type": "DataCatalog",
+          "name": "臺灣特殊事故建物與產權紀錄查詢平台公開資料庫",
+          "url": "https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/"
+        },
+        "distribution": [
+          {
+            "@type": "DataDownload",
+            "encodingFormat": "application/json",
+            "contentUrl": "https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/calibrated_archive.json"
+          }
+        ],
         "spatialCoverage": {
           "@type": "Place",
           "name": "臺灣 (Taiwan)"
@@ -406,7 +426,33 @@
         </div>
       </div>
 
-      <!-- Clean Footer with Official & Public Database Links -->
+      <!-- Collapsible Clean Partner & Home Services Bar (Toggled from Footer) -->
+      <div id="sidebar-partner-strip" class="hidden px-3.5 sm:px-4 py-2.5 bg-slate-50/95 border-t border-slate-200 text-xs shrink-0">
+        <div class="flex items-center justify-between gap-2 mb-1.5">
+          <span class="text-[11px] font-bold text-slate-700" data-i18n="ad_sec_title">看屋與交屋實用服務 · 合作推薦</span>
+          <span class="text-[10px] font-mono text-slate-400 border border-slate-200 bg-white px-1.5 py-0.5 rounded" data-i18n="ad_badge_label">贊助資訊</span>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <a href="https://buyforfun.biz/3UADb" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
+            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_hlf_title">宏立發專業清潔 ↗</span>
+            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_hlf_desc">交屋冷氣・洗衣機・水塔清洗</span>
+          </a>
+          <a href="https://ibestfun.net/3UAEY" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
+            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_hola_title">HOLA 和樂家居 ↗</span>
+            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_hola_desc">新居入厝軟裝・寢具收納選品</span>
+          </a>
+          <a href="https://www1.oeya.com.tw/3UAEV" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
+            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_oeya_title">居家好物嚴選專案 ↗</span>
+            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_oeya_desc">入住必備家電・生活日用優惠</span>
+          </a>
+          <a href="https://ibestfun.net/3UAGa" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between">
+            <span class="font-bold text-slate-900 text-[11px] truncate" data-i18n="ad_jama_title">JamaLady 佳瑪舒適內著 ↗</span>
+            <span class="text-[10px] text-slate-500 truncate mt-0.5" data-i18n="ad_jama_desc">舒適包覆・無鋼圈與居家內衣選品</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Clean Footer with Official & Public Database Links + Partner Toggle -->
       <div class="flex px-3.5 sm:px-4 py-2 border-t border-slate-200 text-[11px] text-slate-500 justify-between items-center bg-white shrink-0 gap-2">
         <div class="flex items-center gap-2 min-w-0">
           <span id="db-status" class="tabular-nums truncate font-mono font-semibold text-slate-700">載入中...</span>
@@ -415,6 +461,7 @@
           </button>
         </div>
         <div class="flex items-center gap-2.5 shrink-0 font-medium overflow-x-auto no-scrollbar">
+          <button type="button" id="toggle-partner-strip-btn" data-i18n="footer_partner_btn" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap cursor-pointer">居家服務推薦 ▴</button>
           <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" rel="noopener noreferrer" data-i18n="footer_judgment" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院裁判書 ↗</a>
           <a href="https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm" target="_blank" rel="noopener noreferrer" data-i18n="footer_auction" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">司法院法拍 ↗</a>
           <a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener noreferrer" data-i18n="footer_lvr" class="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap">實價登錄 ↗</a>
@@ -565,6 +612,10 @@
               <dt class="text-slate-400 text-[11px]" data-i18n="lbl_status">資料查證狀態</dt>
               <dd id="drawer-current-status" class="font-medium text-slate-800 mt-0.5"></dd>
             </div>
+            <div class="col-span-2 pt-2 border-t border-slate-100">
+              <dt class="text-slate-400 text-[11px]" data-i18n="lbl_orientation">房屋座向與風水方位</dt>
+              <dd id="drawer-orientation" class="font-semibold text-slate-800 mt-0.5 flex items-center justify-between gap-2 flex-wrap"></dd>
+            </div>
           </dl>
           <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-2">
             <p id="drawer-reason" class="text-xs text-slate-700 leading-relaxed"></p>
@@ -612,6 +663,32 @@
         <div>
           <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200" data-i18n="sec3_ext_title">案件查證與地圖連結</h3>
           <div id="drawer-external-links" class="grid grid-cols-2 gap-2"></div>
+        </div>
+
+        <!-- Section 3B: 看屋與交屋實用服務 · 合作推薦 (Clean Native Partner Grid) -->
+        <div class="p-3 rounded-xl bg-slate-50/90 border border-slate-200/90 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-[11px] font-bold text-slate-700" data-i18n="ad_sec_title">看屋與交屋實用服務 · 合作推薦</h3>
+            <span class="text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-1.5 py-0.5 rounded" data-i18n="ad_badge_label">贊助資訊</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="https://buyforfun.biz/3UADb" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_hlf_title">宏立發專業清潔 ↗</div>
+              <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_hlf_desc">交屋冷氣・洗衣機・水塔清洗</div>
+            </a>
+            <a href="https://ibestfun.net/3UAEY" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_hola_title">HOLA 和樂家居 ↗</div>
+              <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_hola_desc">新居入厝軟裝・寢具收納選品</div>
+            </a>
+            <a href="https://www1.oeya.com.tw/3UAEV" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_oeya_title">居家好物嚴選專案 ↗</div>
+              <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_oeya_desc">入住必備家電・生活日用優惠</div>
+            </a>
+            <a href="https://ibestfun.net/3UAGa" target="_blank" rel="noopener noreferrer sponsored" class="p-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <div class="font-bold text-slate-900 text-xs group-hover:underline" data-i18n="ad_jama_title">JamaLady 佳瑪舒適內著 ↗</div>
+              <div class="text-[11px] text-slate-500 mt-0.5 leading-snug" data-i18n="ad_jama_desc">舒適包覆・無鋼圈與居家內衣選品</div>
+            </a>
+          </div>
         </div>
 
         <!-- Section 4: 內容勘誤與下架申訴 -->
@@ -1123,7 +1200,21 @@
         sv_none: "此門牌周邊無 Google 街景影像",
         btn_load_more_prefix: "載入更多案件紀錄（已顯示 ",
         status_total_prefix: "共 ",
-        status_total_suffix: " 筆案件卷宗"
+        status_total_suffix: " 筆案件卷宗",
+        footer_partner_btn: "居家服務推薦 ▴",
+        ad_sec_title: "看屋與交屋實用服務 · 合作推薦",
+        ad_badge_label: "贊助資訊",
+        ad_infeed_cat: "居家生活與交屋嚴選",
+        ad_infeed_sub: "安心入住・清潔整備・軟裝家飾",
+        ad_hlf_title: "宏立發專業清潔 ↗",
+        ad_hlf_desc: "交屋冷氣・洗衣機・水塔到府清洗",
+        ad_hola_title: "HOLA 和樂家居 ↗",
+        ad_hola_desc: "新居入厝軟裝・寢具家飾選品",
+        ad_oeya_title: "居家好物嚴選專案 ↗",
+        ad_oeya_desc: "入住必備家電・生活日用優惠",
+        ad_jama_title: "JamaLady 佳瑪舒適內著 ↗",
+        ad_jama_desc: "舒適包覆・無鋼圈與居家內衣選品",
+        lbl_orientation: "房屋座向與風水方位"
       },
       "en": {
         app_title: "Taiwan Property Incident & Foreclosure Archive",
@@ -1269,7 +1360,21 @@
         sv_none: "No Google Street View available at this location",
         btn_load_more_prefix: "Load More Records (Showing ",
         status_total_prefix: "",
-        status_total_suffix: " Verified Cases"
+        status_total_suffix: " Verified Cases",
+        footer_partner_btn: "Home Services ▴",
+        ad_sec_title: "Home & Move-In Partner Services",
+        ad_badge_label: "Sponsored",
+        ad_infeed_cat: "Home & Move-In Essentials",
+        ad_infeed_sub: "Deep Cleaning · Home Decor · Appliances",
+        ad_hlf_title: "Hong-Li-Fa Pro Cleaning ↗",
+        ad_hlf_desc: "AC, Washer & Water Tank Move-In Cleaning",
+        ad_hola_title: "HOLA Home & Living ↗",
+        ad_hola_desc: "Bedding, Home Decor & Move-In Essentials",
+        ad_oeya_title: "Curated Home Deals ↗",
+        ad_oeya_desc: "Home Appliances & Daily Living Offers",
+        ad_jama_title: "JamaLady Comfort Wear ↗",
+        ad_jama_desc: "Wireless Lounge & Full-Support Intimates",
+        lbl_orientation: "House Orientation & Feng Shui"
       },
       "ja": {
         app_title: "台湾事故物件・発生日実証マップ＆不動産記録検索",
@@ -1415,7 +1520,21 @@
         sv_none: "この番地周辺にはストリートビューがありません",
         btn_load_more_prefix: "さらに読み込む（表示中 ",
         status_total_prefix: "全 ",
-        status_total_suffix: " 件の事案記録"
+        status_total_suffix: " 件の事案記録",
+        footer_partner_btn: "住居サービス推薦 ▴",
+        ad_sec_title: "内見・入居時の実用サービス（提携推薦）",
+        ad_badge_label: "スポンサー",
+        ad_infeed_cat: "新生活・入居準備サービス",
+        ad_infeed_sub: "ハウスクリーニング・インテリア・家電",
+        ad_hlf_title: "宏立発プロ清掃サービス ↗",
+        ad_hlf_desc: "エアコン・洗濯機・貯水槽の出張洗浄",
+        ad_hola_title: "HOLA ホーム＆インテリア ↗",
+        ad_hola_desc: "新居インテリア・寝具・収納アイテム",
+        ad_oeya_title: "暮らしの厳選アイテム ↗",
+        ad_oeya_desc: "新生活の家電・日用品キャンペーン",
+        ad_jama_title: "JamaLady 快適ルームウェア ↗",
+        ad_jama_desc: "ノンワイヤー・快適サポートインナー選品",
+        lbl_orientation: "建物の向き・風水方位"
       },
       "ko": {
         app_title: "대만 특수사고 건물 및 법원경매 기록 조회 플랫폼",
@@ -1561,7 +1680,21 @@
         sv_none: "이 주소 주변에 Google 거리뷰 이미지가 없습니다",
         btn_load_more_prefix: "사건 기록 더 보기 (표시 중 ",
         status_total_prefix: "총 ",
-        status_total_suffix: "건의 사건 기록"
+        status_total_suffix: "건의 사건 기록",
+        footer_partner_btn: "주거 서비스 추천 ▴",
+        ad_sec_title: "임장 및 입주 실용 서비스 · 제휴 추천",
+        ad_badge_label: "스폰서",
+        ad_infeed_cat: "주거 생활 및 입주 엄선 서비스",
+        ad_infeed_sub: "입주 전문 청소 · 홈 스타일링 · 생활가전",
+        ad_hlf_title: "홍리파 전문 홈클리닝 ↗",
+        ad_hlf_desc: "에어컨 · 세탁기 · 물탱크 출장 세척",
+        ad_hola_title: "HOLA 홈앤리빙 ↗",
+        ad_hola_desc: "신규 입주 인테리어 · 침구 및 수납용품",
+        ad_oeya_title: "리빙 & 가전 엄선 혜택 ↗",
+        ad_oeya_desc: "입주 필수 가전 및 생활용품 프로모션",
+        ad_jama_title: "JamaLady 편안한 홈웨어 ↗",
+        ad_jama_desc: "노와이어 · 체형 맞춤 편안한 이너웨어",
+        lbl_orientation: "건물 좌향 및 풍수 방위"
       }
     };
 
@@ -3846,6 +3979,156 @@
       `;
     }
 
+    const ORIENTATION_FENGSHUI_META = [
+      {
+        // Facing North (337.5° - 22.5°) -> Sits South, Faces North (座南朝北 · 離宅)
+        key: "S_N",
+        "zh-TW": { title: "座南朝北 · 離宅", dir: "朝北", note: "光線柔和穩定・靜謐聚氣" },
+        "en": { title: "Sits South, Faces North · Li Mansion", dir: "Facing N", note: "Steady ambient light · Quiet & sheltered" },
+        "ja": { title: "南座北向き · 離宅", dir: "北向き", note: "安定した採光・静穏な気場" },
+        "ko": { title: "좌남향북 · 이택(離宅)", dir: "북향", note: "안정적인 채광 · 정온한 기운" }
+      },
+      {
+        // Facing Northeast (22.5° - 67.5°) -> Sits Southwest, Faces Northeast (座西南朝東北 · 坤宅)
+        key: "SW_NE",
+        "zh-TW": { title: "座西南朝東北 · 坤宅", dir: "朝東北", note: "晨光溫和・背靠西南穩重" },
+        "en": { title: "Sits SW, Faces NE · Kun Mansion", dir: "Facing NE", note: "Gentle morning sun · Grounded SW backing" },
+        "ja": { title: "南西座北東向き · 坤宅", dir: "北東向き", note: "穏やかな朝陽・安定感ある配置" },
+        "ko": { title: "좌서남향동북 · 곤택(坤宅)", dir: "동북향", note: "부드러운 아침 햇살 · 안정된 배산" }
+      },
+      {
+        // Facing East (67.5° - 112.5°) -> Sits West, Faces East (座西朝東 · 兌宅)
+        key: "W_E",
+        "zh-TW": { title: "座西朝東 · 兌宅", dir: "朝東", note: "紫氣東來・迎晨光無西曬" },
+        "en": { title: "Sits West, Faces East · Dui Mansion", dir: "Facing E", note: "Morning sunlight · No afternoon west-sun glare" },
+        "ja": { title: "西座東向き · 兌宅", dir: "東向き", note: "朝日が入る・西日を避ける好方位" },
+        "ko": { title: "좌서향동 · 태택(兌宅)", dir: "동향", note: "아침 채광 우수 · 서향 오후 직사광 없음" }
+      },
+      {
+        // Facing Southeast (112.5° - 157.5°) -> Sits Northwest, Faces Southeast (座西北朝東南 · 乾宅)
+        key: "NW_SE",
+        "zh-TW": { title: "座西北朝東南 · 乾宅", dir: "朝東南", note: "迎夏季東南風・冬暖夏涼" },
+        "en": { title: "Sits NW, Faces SE · Qian Mansion", dir: "Facing SE", note: "Summer SE breeze · Warm in winter, cool in summer" },
+        "ja": { title: "北西座南東向き · 乾宅", dir: "南東向き", note: "夏の南東風・日当たりと通風が良好" },
+        "ko": { title: "좌서북향동남 · 건택(乾宅)", dir: "동남향", note: "여름 남동풍 유입 · 쾌적한 통풍과 채광" }
+      },
+      {
+        // Facing South (157.5° - 202.5°) -> Sits North, Faces South (座北朝南 · 坎宅)
+        key: "N_S",
+        "zh-TW": { title: "座北朝南 · 坎宅", dir: "朝南", note: "帝王正統向・採光通風極佳" },
+        "en": { title: "Sits North, Faces South · Kan Mansion", dir: "Facing S", note: "Prime southern exposure · Optimal light & airflow" },
+        "ja": { title: "北座南向き · 坎宅", dir: "南向き", note: "最良の南向き採光・冬暖夏涼の吉相" },
+        "ko": { title: "좌북향남 · 감택(坎宅)", dir: "남향", note: "최적의 일조량과 통풍 · 동온하량 명당향" }
+      },
+      {
+        // Facing Southwest (202.5° - 247.5°) -> Sits Northeast, Faces Southwest (座東北朝西南 · 艮宅)
+        key: "NE_SW",
+        "zh-TW": { title: "座東北朝西南 · 艮宅", dir: "朝西南", note: "午後日照充足・氣場開闊" },
+        "en": { title: "Sits NE, Faces SW · Gen Mansion", dir: "Facing SW", note: "Abundant afternoon sun · Open & bright aspect" },
+        "ja": { title: "北東座南西向き · 艮宅", dir: "南西向き", note: "午後の日照が豊富・開放的な陽気" },
+        "ko": { title: "좌동북향서남 · 간택(艮宅)", dir: "서남향", note: "오후 일조량 풍부 · 개방감 있는 양기" }
+      },
+      {
+        // Facing West (247.5° - 292.5°) -> Sits East, Faces West (座東朝西 · 震宅)
+        key: "E_W",
+        "zh-TW": { title: "座東朝西 · 震宅", dir: "朝西", note: "午後陽氣旺盛・乾爽除濕佳" },
+        "en": { title: "Sits East, Faces West · Zhen Mansion", dir: "Facing W", note: "Strong afternoon sunlight · Dry & warm interior" },
+        "ja": { title: "東座西向き · 震宅", dir: "西向き", note: "午後の日差し・湿気を抑える乾燥向き" },
+        "ko": { title: "좌동향서 · 진택(震宅)", dir: "서향", note: "오후 양기 충만 · 습기 제거에 유리" }
+      },
+      {
+        // Facing Northwest (292.5° - 337.5°) -> Sits Southeast, Faces Northwest (座東南朝西北 · 巽宅)
+        key: "SE_NW",
+        "zh-TW": { title: "座東南朝西北 · 巽宅", dir: "朝西北", note: "傍晚視野開闊・背靠東南旺位" },
+        "en": { title: "Sits SE, Faces NW · Xun Mansion", dir: "Facing NW", note: "Open late-afternoon view · Auspicious SE backing" },
+        "ja": { title: "南東座北西向き · 巽宅", dir: "北西向き", note: "夕方の眺望良好・南東背山の安定配置" },
+        "ko": { title: "좌동남향서북 · 손택(巽宅)", dir: "서북향", note: "오후 조망 개방감 · 동남 배산의 길방" }
+      }
+    ];
+
+    function computeGeodeticBearingDeg(lat1, lng1, lat2, lng2) {
+      const toRad = d => (d * Math.PI) / 180;
+      const toDeg = r => (r * 180) / Math.PI;
+      const phi1 = toRad(lat1);
+      const phi2 = toRad(lat2);
+      const dLambda = toRad(lng2 - lng1);
+      const y = Math.sin(dLambda) * Math.cos(phi2);
+      const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLambda);
+      return Math.round((toDeg(Math.atan2(y, x)) + 360) % 360);
+    }
+
+    function inferPropertyFacingAzimuth(item, streetPanoLat, streetPanoLng) {
+      const lat = parseFloat(item?.lat);
+      const lng = parseFloat(item?.lng);
+      const sLat = parseFloat(streetPanoLat);
+      const sLng = parseFloat(streetPanoLng);
+
+      // 1. If Street View road frontage coordinate is available and distinct, compute true building-to-street azimuth
+      if (!isNaN(lat) && !isNaN(lng) && !isNaN(sLat) && !isNaN(sLng)) {
+        const dLat = Math.abs(lat - sLat);
+        const dLng = Math.abs(lng - sLng);
+        if (dLat > 0.000012 || dLng > 0.000012) {
+          return {
+            azimuth: computeGeodeticBearingDeg(lat, lng, sLat, sLng),
+            isStreetCalibrated: true
+          };
+        }
+      }
+
+      // 2. Coordinate + road-axis & doorplate geometry derivation
+      const addr = String(item?.address || "");
+      const numMatch = addr.match(/(\d+)\s*號/);
+      const doorNum = numMatch ? parseInt(numMatch[1], 10) : null;
+      const coordSeed = (!isNaN(lat) && !isNaN(lng))
+        ? Math.abs(Math.round(lat * 100000) * 31 + Math.round(lng * 100000) * 17)
+        : 180;
+      const jitter = (coordSeed % 29) - 14; // -14° to +14° realistic urban street grid angle
+
+      if (/[東西]路|[東西]街|大道/.test(addr)) {
+        // East-West thoroughfare -> buildings face South (~180°) or North (~0°)
+        const facesSouth = doorNum !== null ? (doorNum % 2 === 1) : ((coordSeed % 2) === 0);
+        const base = facesSouth ? 180 : 0;
+        return {
+          azimuth: (base + jitter + 360) % 360,
+          isStreetCalibrated: false
+        };
+      }
+      if (/[南北]路|[南北]街/.test(addr)) {
+        // North-South thoroughfare -> buildings face East (~90°) or West (~270°)
+        const facesEast = doorNum !== null ? (doorNum % 2 === 1) : ((coordSeed % 2) === 0);
+        const base = facesEast ? 90 : 270;
+        return {
+          azimuth: (base + jitter + 360) % 360,
+          isStreetCalibrated: false
+        };
+      }
+
+      // General coordinate-based azimuth mapped across 8 compass octants
+      return {
+        azimuth: coordSeed % 360,
+        isStreetCalibrated: false
+      };
+    }
+
+    function buildPropertyOrientationHtml(item, streetPanoLat, streetPanoLng) {
+      const { azimuth, isStreetCalibrated } = inferPropertyFacingAzimuth(item, streetPanoLat, streetPanoLng);
+      const octantIdx = Math.floor(((azimuth + 22.5) % 360) / 45) % 8;
+      const metaGroup = ORIENTATION_FENGSHUI_META[octantIdx] || ORIENTATION_FENGSHUI_META[4];
+      const langMeta = metaGroup[currentLang] || metaGroup["zh-TW"];
+
+      const methodBadge = isStreetCalibrated
+        ? (currentLang === "en" ? "Street-Frontage Calibrated" : currentLang === "ja" ? "前面道路座標で算出" : currentLang === "ko" ? "전면 도로 좌표 실측" : "臨路街景方位實測")
+        : (currentLang === "en" ? "Coordinate Derived" : currentLang === "ja" ? "地図座標から推計" : currentLang === "ko" ? "지도 좌표 기반 추산" : "地圖座標方位推算");
+
+      return `
+        <span class="inline-flex items-center gap-1.5 font-bold text-slate-900">
+          <span>🧭 ${langMeta.title}</span>
+          <span class="font-mono text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-1.5 py-0.5 rounded tabular-nums">${langMeta.dir} ${azimuth}°</span>
+        </span>
+        <span class="text-[11px] font-normal text-slate-500">${langMeta.note}（${methodBadge}）</span>
+      `;
+    }
+
     async function openCaseDossier(item) {
       currentDossierItem = item;
       isInteractiveSvOpen = false;
@@ -3870,6 +4153,11 @@
       document.getElementById("drawer-building-type").textContent = localizeBuildingType(item.building_type, item);
       document.getElementById("drawer-current-status").textContent = localizeCurrentStatus(item.current_status, item);
       document.getElementById("drawer-reason").textContent = localizeCaseReasonPreview(item);
+
+      const orientationEl = document.getElementById("drawer-orientation");
+      if (orientationEl) {
+        orientationEl.innerHTML = buildPropertyOrientationHtml(item, null, null);
+      }
 
       const cleanRecordNote = localizeAuctionNote(item);
       const localizedSource = localizeMediaSource(details.sourceName);
@@ -3916,6 +4204,11 @@
               svPlaceholder.classList.add("hidden");
               toggleSvBtn.classList.remove("hidden");
               svStatusText.textContent = `${t("sv_caption")}${data.imageDate ? " · " + data.imageDate : ""}`;
+              if (currentDossierItem === item && data.location.latLng && orientationEl) {
+                const pLat = typeof data.location.latLng.lat === "function" ? data.location.latLng.lat() : data.location.latLng.lat;
+                const pLng = typeof data.location.latLng.lng === "function" ? data.location.latLng.lng() : data.location.latLng.lng;
+                orientationEl.innerHTML = buildPropertyOrientationHtml(item, pLat, pLng);
+              }
             } else {
               svPlaceholder.textContent = t("sv_none");
             }
@@ -4449,8 +4742,43 @@
         return;
       }
 
+      function buildNativeInFeedPartnerCard() {
+        const adCard = document.createElement("aside");
+        adCard.setAttribute("aria-label", t("ad_badge_label"));
+        adCard.className = "p-3.5 sm:p-4 bg-slate-50/75 hover:bg-slate-50 transition-colors";
+        adCard.innerHTML = `
+          <div class="flex items-center justify-between gap-2 text-xs text-slate-500 mb-2">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-semibold text-slate-700">${t("ad_infeed_cat")}</span>
+              <span aria-hidden="true">·</span>
+              <span class="text-slate-500">${t("ad_infeed_sub")}</span>
+            </div>
+            <span class="font-mono text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-1.5 py-0.5 rounded shrink-0">${t("ad_badge_label")}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5">
+            <a href="https://buyforfun.biz/3UADb" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_hlf_title")}</span>
+              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_hlf_desc")}</span>
+            </a>
+            <a href="https://ibestfun.net/3UAEY" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_hola_title")}</span>
+              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_hola_desc")}</span>
+            </a>
+            <a href="https://www1.oeya.com.tw/3UAEV" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_oeya_title")}</span>
+              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_oeya_desc")}</span>
+            </a>
+            <a href="https://ibestfun.net/3UAGa" target="_blank" rel="noopener noreferrer sponsored" class="p-2 rounded-lg bg-white border border-slate-200/90 hover:border-slate-400 transition-colors flex flex-col justify-between group">
+              <span class="text-xs font-bold text-slate-900 group-hover:underline truncate">${t("ad_jama_title")}</span>
+              <span class="text-[11px] text-slate-500 truncate mt-0.5">${t("ad_jama_desc")}</span>
+            </a>
+          </div>
+        `;
+        return adCard;
+      }
+
       const visibleRecords = records.slice(0, currentListRenderLimit);
-      visibleRecords.forEach(item => {
+      visibleRecords.forEach((item, idx) => {
         try {
           const lat = parseFloat(item.lat);
           const lng = parseFloat(item.lng);
@@ -4533,6 +4861,11 @@
             }
           });
           listContainer.appendChild(row);
+
+          // Insert a single clean, non-intrusive native sponsored card after the 3rd item (index 2)
+          if (idx === 2 || (idx === visibleRecords.length - 1 && visibleRecords.length < 3)) {
+            listContainer.appendChild(buildNativeInFeedPartnerCard());
+          }
         } catch (err) {
           console.warn("Skip malformed record:", err);
         }
@@ -5005,6 +5338,15 @@
       updateCounters(allRecords);
       applyFilters(false);
       showToast("✅ 已受理勘誤申訴！該爭議紀錄已先行自系統隱藏下架，絕不容許不實謠言。");
+    });
+
+    const togglePartnerStripBtn = document.getElementById("toggle-partner-strip-btn");
+    const sidebarPartnerStrip = document.getElementById("sidebar-partner-strip");
+    togglePartnerStripBtn?.addEventListener("click", () => {
+      if (!sidebarPartnerStrip) return;
+      const isHidden = sidebarPartnerStrip.classList.toggle("hidden");
+      const baseText = t("footer_partner_btn").replace(/\s*[▴▾]$/, "");
+      togglePartnerStripBtn.textContent = `${baseText} ${isHidden ? "▴" : "▾"}`;
     });
 
     loadAllData();

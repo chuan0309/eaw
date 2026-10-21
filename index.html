@@ -105,7 +105,7 @@
   <header class="bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 z-30 shrink-0">
     <!-- Zone 1: Brand Title -->
     <a href="#" id="brand-reset-link" class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-slate-900 truncate min-w-0">
-      臺灣事故建物與法拍產權實證資料庫
+      臺灣歷年事故建物與案發日期實證地圖
     </a>
 
     <!-- Zone 2: Statutory Haunted House Category Navigation Links (Desktop xl+) -->
@@ -235,9 +235,12 @@
           </select>
           <select id="time-preset-select" aria-label="Time Range" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="ALL" data-i18n="time_all">所有年份</option>
-            <option value="1Y" data-i18n="time_1y">近 1 年內</option>
-            <option value="3Y" data-i18n="time_3y">近 3 年內</option>
-            <option value="5Y" data-i18n="time_5y">近 5 年內</option>
+            <option value="Y2026">2026 年最新案件</option>
+            <option value="Y2025">2025 年案件</option>
+            <option value="Y2024">2024 年案件</option>
+            <option value="1Y" data-i18n="time_1y">近 1 年內 (2025–2026)</option>
+            <option value="3Y" data-i18n="time_3y">近 3 年內 (2023–2026)</option>
+            <option value="5Y" data-i18n="time_5y">近 5 年內 (2021–2026)</option>
             <option value="10Y" data-i18n="time_10y">近 10 年內</option>
             <option value="2010_2020" data-i18n="time_2010_2020">2010–2020 年</option>
             <option value="BEFORE_2010" data-i18n="time_before_2010">2010 年以前</option>
@@ -294,7 +297,7 @@
               <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
               <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
               <option value="merged_desc">多筆整合案件優先</option>
-              <option value="discount_desc">折價空間最高優先</option>
+              <option value="verified_desc">附原始報導連結優先</option>
             </select>
             <button
               type="button"
@@ -476,15 +479,15 @@
               <dd id="drawer-region" class="font-semibold text-slate-800 mt-0.5"></dd>
             </div>
             <div>
-              <dt class="text-slate-400 text-[11px]" data-i18n="lbl_date">發生或拍賣日期</dt>
-              <dd id="drawer-date" class="font-mono font-semibold text-slate-800 mt-0.5 tabular-nums"></dd>
+              <dt class="text-slate-400 text-[11px]" data-i18n="lbl_date">案發日期</dt>
+              <dd id="drawer-date" class="font-mono font-bold text-red-700 mt-0.5 tabular-nums"></dd>
             </div>
             <div>
               <dt class="text-slate-400 text-[11px]" data-i18n="lbl_bldg_type">建物型態描述</dt>
               <dd id="drawer-building-type" class="font-medium text-slate-800 mt-0.5"></dd>
             </div>
             <div>
-              <dt class="text-slate-400 text-[11px]" data-i18n="lbl_status">目前產權／使用現況</dt>
+              <dt class="text-slate-400 text-[11px]" data-i18n="lbl_status">資料查證狀態</dt>
               <dd id="drawer-current-status" class="font-medium text-slate-800 mt-0.5"></dd>
             </div>
           </dl>
@@ -494,9 +497,9 @@
           </div>
         </div>
 
-        <!-- Section 2: 歷年產權與法拍時間軸 -->
+        <!-- Section 2: 案發時間與歷史查證紀錄 -->
         <div>
-          <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200" data-i18n="sec2_title">歷年事件與交易轉手時間軸</h3>
+          <h3 class="text-xs font-bold text-slate-900 mb-2.5 pb-1.5 border-b border-slate-200" data-i18n="sec2_title">案發時間與歷史查證紀錄</h3>
           <div id="drawer-timeline" class="space-y-2.5 pl-1"></div>
         </div>
 
@@ -507,14 +510,14 @@
             <span id="drawer-merged-count-badge" class="font-mono text-[11px] font-semibold text-indigo-700 tabular-nums"></span>
           </div>
           <p class="text-[11px] text-slate-500 mb-2 leading-relaxed">
-            系統已比對同縣市、同行政區、同路街段或同社區大樓之多筆歷史通報與法拍紀錄，並歸戶整合為單一實測座標卷宗：
+            系統已比對同縣市、同行政區、同路街段或同社區大樓之多筆歷史通報與查證紀錄，並歸戶整合為單一實測座標卷宗：
           </p>
           <div id="drawer-merged-cases-list" class="space-y-2"></div>
         </div>
 
 
-        <!-- Section 3: 同區段行情與特殊物況折價試算器 -->
-        <div>
+        <!-- Section 3: Hidden legacy valuation container (kept for DOM compatibility, hidden to keep focus on incident date & facts) -->
+        <div class="hidden">
           <div class="flex items-center justify-between mb-2.5 pb-1.5 border-b border-slate-200">
             <h3 class="text-xs font-bold text-slate-900" data-i18n="sec3_title">區域行情比對與折讓試算</h3>
             <span id="drawer-discount-label" class="font-mono text-[11px] text-slate-500 tabular-nums"></span>
@@ -973,18 +976,18 @@
     // Clean, Concise 4-Language Dictionary (繁體中文 / English / 日本語 / 한국어)
     const I18N_DICT = {
       "zh-TW": {
-        app_title: "臺灣事故建物與法拍產權實證資料庫",
+        app_title: "臺灣歷年事故建物與案發日期實證地圖",
         cat_all: "全部事故案件",
         cat_all_short: "全部案件",
         cat_homicide: "刑事兇殺命案",
         cat_suicide: "屋內輕生事故",
         cat_accident: "火警與一氧化碳",
-        cat_court: "法拍與判決認證",
+        cat_court: "司法與實價認證",
         btn_add_discover: "搜尋新案 · 相似案件整合",
         all_taiwan: "全臺灣",
         all_cities_opt: "全部縣市",
         all_districts_opt: "全部行政區",
-        search_placeholder: "搜尋地址、路名、社區大樓或法拍字號...",
+        search_placeholder: "搜尋地址、路名、社區大樓、案發年份或關鍵字...",
         btn_reset: "重設",
         btn_google_locate: "定位搜尋",
         btn_locating: "搜尋中...",
@@ -994,23 +997,23 @@
         sort_newest: "近期發生優先",
         sort_oldest: "早期歷史優先",
         time_all: "所有年份",
-        time_1y: "近 1 年內",
-        time_3y: "近 3 年內",
-        time_5y: "近 5 年內",
+        time_1y: "近 1 年內 (2025–2026)",
+        time_3y: "近 3 年內 (2023–2026)",
+        time_5y: "近 5 年內 (2021–2026)",
         time_10y: "近 10 年內",
         time_2010_2020: "2010–2020 年",
         time_before_2010: "2010 年以前",
         time_custom: "自訂年份區間",
         label_year_range: "年份：",
         btn_quick_expand: "相似整合統計",
-        footer_auction: "司法院法拍 ↗",
+        footer_auction: "司法院查詢 ↗",
         footer_lvr: "實價登錄 ↗",
         map_roadmap: "街道地圖",
         map_hybrid: "衛星街廓圖",
         map_terrain: "地形圖",
         map_cadastral: "地段界線",
         btn_focus_map: "地圖位置",
-        sec1_title: "01. 案件地址、建物現況與街景",
+        sec1_title: "01. 案件地址、案發日期與街景",
         doorplate_verified_label: "門牌／路段位置",
         btn_copy_doorplate: "複製地址",
         sv_caption: "建物外觀街景",
@@ -1018,10 +1021,10 @@
         btn_toggle_static: "切換靜態照片",
         btn_open_gmaps: "Google 地圖開啟 ↗",
         lbl_region: "所屬行政區",
-        lbl_date: "發生或拍賣日期",
+        lbl_date: "案發日期",
         lbl_bldg_type: "建物型態描述",
-        lbl_status: "目前產權／使用現況",
-        sec2_title: "歷年事件與交易轉手時間軸",
+        lbl_status: "資料查證狀態",
+        sec2_title: "案發時間與歷史查證紀錄",
         sec3_title: "區域行情比對與折讓試算",
         calc_ping_label: "設定權狀坪數試算：",
         unit_ping: "坪",
@@ -2182,12 +2185,12 @@
 
           <div class="grid grid-cols-2 gap-1.5 mb-2.5 text-xs">
             <div class="bg-slate-50 p-2 rounded border border-slate-200">
-              <span class="block text-[10px] text-slate-500">${t("calc_normal_lbl")}</span>
-              <span class="font-mono font-semibold text-slate-900 tabular-nums">${formatUnitPingPrice(details.normalPing)}</span>
+              <span class="block text-[10px] text-slate-500">${t("lbl_date")}</span>
+              <span class="font-mono font-bold text-red-700 tabular-nums">${item.incident_date || "歷史紀錄"}</span>
             </div>
             <div class="bg-slate-50 p-2 rounded border border-slate-200">
-              <span class="block text-[10px] text-slate-500">${t("calc_est_lbl")} (${details.discountPct}%)</span>
-              <span class="font-mono font-semibold text-red-600 tabular-nums">${formatUnitPingPrice(details.estPing)}</span>
+              <span class="block text-[10px] text-slate-500">${t("lbl_bldg_type")}</span>
+              <span class="font-semibold text-slate-800 truncate block">${localizeBuildingType(item.building_type, item)}</span>
             </div>
           </div>
 
@@ -2796,6 +2799,15 @@
       if (preset === "ALL") {
         yearStartInput.value = "";
         yearEndInput.value = "";
+      } else if (preset === "Y2026") {
+        yearStartInput.value = "2026";
+        yearEndInput.value = "2026";
+      } else if (preset === "Y2025") {
+        yearStartInput.value = "2025";
+        yearEndInput.value = "2025";
+      } else if (preset === "Y2024") {
+        yearStartInput.value = "2024";
+        yearEndInput.value = "2024";
       } else if (preset === "1Y") {
         yearStartInput.value = String(currentYear - 1);
         yearEndInput.value = String(currentYear);
@@ -3305,8 +3317,14 @@
       document.getElementById("drawer-current-status").textContent = localizeCurrentStatus(item.current_status, item);
       document.getElementById("drawer-reason").textContent = localizeCaseReasonPreview(item);
       const safeKw = (details.smartKeyword || "").replace(/'/g, "\\'");
+      const cleanRecordNote = (item.auction_record && !/尚無法拍|無公開法拍|正常行情/.test(item.auction_record))
+        ? item.auction_record
+        : `案發日期核實：${item.incident_date || "歷史檔案"}`;
       document.getElementById("drawer-auction-box").innerHTML = `
-        <div><span class="font-semibold text-slate-800">拍賣／價格備註：</span>${item.auction_record || "—"}</div>
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div><span class="font-semibold text-slate-800">案發時間與查證備註：</span><span class="font-mono font-semibold text-slate-900">${cleanRecordNote}</span></div>
+          ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold">原始報導連結 ↗</a>` : ""}
+        </div>
         <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
           <div class="text-xs"><span class="font-semibold text-slate-800">核實來源：</span><span class="text-slate-700">${details.sourceName}</span></div>
           <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('已複製查證關鍵字：' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1">
@@ -3895,7 +3913,7 @@
                 <span aria-hidden="true">·</span>
                 <span class="font-medium ${dbMeta.textClass || 'text-slate-600'}">${dbMeta.label}</span>
               </div>
-              <time class="font-mono text-[11px] text-slate-400 tabular-nums shrink-0">${item.incident_date || ""}</time>
+              <time class="font-mono text-xs font-bold text-red-700 bg-red-50 border border-red-100 px-2 py-0.5 rounded tabular-nums shrink-0">案發 ${item.incident_date || ""}</time>
             </div>
 
             <h3 class="text-sm font-bold text-slate-900 mb-1.5 leading-snug">${item.address || ""}</h3>
@@ -3904,8 +3922,9 @@
 
             <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 gap-2">
               <div class="flex items-center gap-1.5 truncate">
-                <span class="font-mono tabular-nums">${formatUnitPingPrice(details.estPing)} (${details.discountPct}%)</span>
-                ${mergedCount > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums">已整合 ${mergedCount} 筆紀錄</span>` : ""}
+                <span class="text-slate-600 font-medium truncate">${localizeBuildingType(item.building_type, item)}</span>
+                ${mergedCount > 1 ? `<span aria-hidden="true">·</span><span class="font-semibold text-indigo-700 tabular-nums shrink-0">已整合 ${mergedCount} 筆紀錄</span>` : ""}
+                ${details.directSourceUrl ? `<span aria-hidden="true">·</span><span class="text-emerald-700 font-semibold shrink-0">附原始連結</span>` : ""}
               </div>
               <div class="flex items-center gap-2 shrink-0 font-semibold">
                 <button type="button" class="locate-pin-inline-btn px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium">
@@ -4028,10 +4047,10 @@
         if (sort === "merged_desc") {
           const dm = (b.merged_count || 1) - (a.merged_count || 1);
           if (dm !== 0) return dm;
-        } else if (sort === "discount_desc") {
-          const daPct = (CATEGORY_META[a.normalizedCat]?.discount || 0.75);
-          const dbPct = (CATEGORY_META[b.normalizedCat]?.discount || 0.75);
-          if (daPct !== dbPct) return daPct - dbPct;
+        } else if (sort === "verified_desc") {
+          const ua = (a.source_url && String(a.source_url).startsWith("http")) ? 1 : 0;
+          const ub = (b.source_url && String(b.source_url).startsWith("http")) ? 1 : 0;
+          if (ua !== ub) return ub - ua;
         }
         const da = String(a.incident_date || (a.incidentYear ? `${a.incidentYear}-01-01` : "0000-00-00"));
         const db = String(b.incident_date || (b.incidentYear ? `${b.incidentYear}-01-01` : "0000-00-00"));

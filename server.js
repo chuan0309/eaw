@@ -401,8 +401,7 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
           if (!geo || !geo.formattedAddress || !geo.formattedAddress.includes(district)) continue;
 
           let incDate = String(r.incident_date || "2024-06-15").replace(/\//g, "-").slice(0, 10);
-          if (incDate.startsWith("2026")) incDate = "2024-" + incDate.slice(5);
-          if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2022-06-15";
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2024-06-15";
           let db_source = r.db_source || "NEWS_PUBLIC_ARCHIVE";
           if (/實價登錄|內政部|特殊交易/.test(full)) db_source = "MOI_OPEN_DATA";
           else if (/法拍|拍賣公告|查封筆錄|執行處|點交|應買|一拍|二拍|三拍/.test(full)) db_source = "JUDICIAL_AUCTION";
@@ -1019,9 +1018,8 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
     // Require a concrete road or verified landmark so no vague roadless pin is ever placed
     if (!parsed.__road && !parsed.__community) continue;
 
-    // Normalize date
+    // Preserve true incident date (including 2025 & 2026)
     let d = String(parsed.incident_date || "2024-06-15").replace(/\//g, "-").slice(0, 10);
-    if (d.startsWith("2026")) d = "2024-" + d.slice(5);
     parsed.incident_date = d;
 
     const sigs = factCrawler.getSemanticCaseSignatures(parsed);

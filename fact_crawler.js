@@ -470,46 +470,44 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   const detailSuffix = `${floorPart ? floorPart + " · " : ""}${bldgType}`;
   const displayAddress = `${locCore}（${detailSuffix}）`;
 
-  // 7. Classify into Statutory Haunted House (凶宅) Category
-  let category = "法拍與其他";
-  if (/法拍|拍定|一拍|二拍|三拍|四拍|底價|流標|應買|點交|不點交|司執|執行處|判賠|減少價金|瑕疵擔保|隱瞞凶宅|撤銷買賣|解除契約/.test(fullText)) {
-    category = "法拍與其他";
-  } else if (/砍|殺|刺|弒|勒斃|分屍|滅門|桶屍|箱屍|槍擊|行兇|強盜殺人|虐死|毆打致死|割喉|割頸|情殺|仇殺|兇殺|雙屍|三屍|3屍|命案/.test(fullText) && !/輕生|自殺|燒炭|上吊|跳樓|墜樓/.test(article.title)) {
+  // 7. Classify into Statutory Haunted House (凶宅) Category by actual cause of death
+  let category = "其他非自然死亡";
+  if (/砍|殺|刺|弒|勒斃|分屍|滅門|桶屍|箱屍|槍擊|行兇|行凶|強盜殺人|虐死|毆打致死|割喉|割頸|情殺|仇殺|兇殺|雙屍|三屍|3屍|命案/.test(fullText) && !/輕生|自殺|燒炭|上吊|跳樓|墜樓/.test(article.title)) {
     category = "刑事命案";
   } else if (/一氧化碳中毒|瓦斯中毒|縱火|惡火|火警|火災|氣爆/.test(fullText)) {
     category = "意外身亡";
-  } else {
+  } else if (/輕生|自殺|墜樓|跳樓|燒炭|上吊|尋短|仰藥|自縊|自戕/.test(fullText)) {
     category = "輕生事故";
   }
 
   // 8. Identify Connected Public Database Source (db_source)
   let dbSource = "NEWS_PUBLIC_ARCHIVE";
-  if (/法拍|拍定|一拍|二拍|三拍|四拍|底價|流標|應買|點交|不點交|司執|執行處/.test(fullText)) {
-    dbSource = "JUDICIAL_AUCTION";
-  } else if (/判決|判賠|瑕疵擔保|隱瞞凶宅|減少價金|撤銷買賣|解除契約|地方法院|高等法院|最高法院/.test(fullText)) {
+  if (/判決|判賠|瑕疵擔保|隱瞞凶宅|減少價金|撤銷買賣|解除契約|地方法院|高等法院|最高法院/.test(fullText)) {
     dbSource = "JUDICIAL_JUDGMENT";
-  } else if (/實價登錄|特殊交易|成交行情|折價|打折|房價/.test(fullText)) {
+  } else if (/法拍|拍定|一拍|二拍|三拍|四拍|底價|流標|應買|點交|不點交|司執|執行處/.test(fullText)) {
+    dbSource = "JUDICIAL_AUCTION";
+  } else if (/實價登錄|特殊交易/.test(fullText)) {
     dbSource = "MOI_OPEN_DATA";
+  }
+
+  // 9. Determine exact Incident Date (案發日期): check if article explicitly states an earlier historical incident date, otherwise use article publication date
+  let trueIncidentDate = (article.date || new Date().toISOString().slice(0, 10)).replace(/\//g, "-").slice(0, 10);
+  const mFullHist = fullText.match(/(19[789]\d|20[012]\d)\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  if (mFullHist) {
+    trueIncidentDate = `${mFullHist[1]}-${String(mFullHist[2]).padStart(2, "0")}-${String(mFullHist[3]).padStart(2, "0")}`;
+  } else {
+    const mYmHist = fullText.match(/(19[789]\d|20[012]\d)\s*年\s*(\d{1,2})\s*月/);
+    if (mYmHist && mYmHist[1] < trueIncidentDate.slice(0, 4)) {
+      trueIncidentDate = `${mYmHist[1]}-${String(mYmHist[2]).padStart(2, "0")}-15`;
+    }
   }
 
   const cleanSnippet = (article.snippet || "").length >= 25
     ? article.snippet
-    : `依據公開資料庫與${article.media}核實紀錄「${article.title}」，該處位於${matchedCity}${matchedDist}${roadPart || communityPart || ""}，符合內政部專有部分非自然死亡之凶宅定義。`;
+    : `依據公開資料庫與${article.media}核實紀錄「${article.title}」，該處位於${matchedCity}${matchedDist}${roadPart || communityPart || ""}，於 ${trueIncidentDate} 發生非自然死亡事故。`;
   const reasonText = cleanSnippet.includes(article.title.slice(0, 8))
     ? cleanSnippet
     : `【${article.title}】${cleanSnippet}`;
-
-  let auctionNote = "依內政部不動產說明書應記載事項列為專有部分非自然死亡（凶宅）紀錄";
-  if (dbSource === "JUDICIAL_AUCTION") {
-    const priceMatch = fullText.match(/(?:底價|拍定價?|開價|總價)\s*[\d,]+(?:\.\d+)?\s*萬(?:元)?/);
-    auctionNote = priceMatch
-      ? `司法院法拍公開筆錄註記凶宅／行情紀錄：${priceMatch[0]}`
-      : "司法院法拍屋公開公告筆錄註記非自然死亡（凶宅）物件";
-  } else if (dbSource === "JUDICIAL_JUDGMENT") {
-    auctionNote = "司法院裁判書系統公開民事瑕疵擔保／凶宅爭訟判決認證物件";
-  } else if (dbSource === "MOI_OPEN_DATA") {
-    auctionNote = "內政部實價登錄公開資料庫特殊交易（事故屋／凶宅折價）備註物件";
-  }
 
   const [lat, lng] = getDistrictBaseCoords(matchedCity, matchedDist, `${roadPart}_${communityPart}_${article.title}`);
   const cleanSource = `${article.media}報導「${article.title}」`;
@@ -523,19 +521,19 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     lat,
     lng,
     location_accuracy: roadPart || communityPart ? "ROOFTOP" : "GEOMETRIC_CENTER",
-    incident_date: article.date || "2024-06-15",
+    incident_date: trueIncidentDate,
     building_type: bldgType,
-    current_status: dbSource === "JUDICIAL_AUCTION" ? "司法院法拍筆錄註記凶宅" : dbSource === "JUDICIAL_JUDGMENT" ? "法院裁判書認證凶宅" : "內政部定義列管凶宅",
+    current_status: "公開社會新聞與警消查證紀錄",
     category,
     db_source: dbSource,
     reason: reasonText.slice(0, 280),
     source: cleanSource,
     source_url: article.link,
     media_verification: cleanSource,
-    auction_record: auctionNote,
+    auction_record: `案發日期核實：${trueIncidentDate}`,
     history_timeline: [
       {
-        year: (article.date || "2024").slice(0, 4),
+        year: trueIncidentDate,
         stage: `${article.media}公開報導`,
         detail: `${article.title}（來源連結可點擊直接查閱原篇報導）`
       }
@@ -838,6 +836,8 @@ export function consolidateSimilarRecords(records = []) {
     }
 
     if (uniqueSub.length > 1) {
+      uniqueSub.sort((a, b) => String(b.incident_date || "").localeCompare(String(a.incident_date || "")));
+      primary.incident_date = uniqueSub[0].incident_date || primary.incident_date;
       primary.merged_count = uniqueSub.length;
       primary.merged_cases = uniqueSub.map((u, idx) => ({
         case_index: idx + 1,
@@ -845,28 +845,17 @@ export function consolidateSimilarRecords(records = []) {
         incident_date: u.incident_date,
         category: u.category,
         original_address: String(u.address || "").replace(/某號/g, ""),
-        reason: String(u.reason || "").replace(/（同址／同路段整合紀錄[\s\S]*$/, "").replace(/（系統已比對整合[\s\S]*$/, "").trim().slice(0, 180),
+        reason: String(u.reason || "").replace(/（同址／同路段整合紀錄[\s\S]*$/, "").replace(/（系統已自動?比對整合[\s\S]*$/, "").trim().slice(0, 220),
         source: u.source || u.media_verification || "公開紀錄",
         source_url: u.source_url || "",
         db_source: u.db_source || "NEWS_PUBLIC_ARCHIVE"
       }));
 
-      const combinedTimeline = [];
-      const seenTl = new Set();
-      for (const u of uniqueSub) {
-        const tlArr = Array.isArray(u.history_timeline) && u.history_timeline.length > 0
-          ? u.history_timeline
-          : [{ year: String(u.incident_date || "2022").slice(0, 4), stage: u.category || "歷史通報紀錄", detail: String(u.reason || "").slice(0, 120) }];
-        for (const t of tlArr) {
-          if (!t || typeof t !== "object") continue;
-          const tk = `${t.year}_${(t.detail || "").slice(0, 20)}`;
-          if (seenTl.has(tk)) continue;
-          seenTl.add(tk);
-          combinedTimeline.push(t);
-        }
-      }
-      combinedTimeline.sort((a, b) => String(a.year || "").localeCompare(String(b.year || "")));
-      primary.history_timeline = combinedTimeline;
+      primary.history_timeline = uniqueSub.map(u => ({
+        year: String(u.incident_date || "2024-06-15"),
+        stage: u.source && String(u.source).length <= 28 ? u.source : (u.category || "案發與公開查證紀錄"),
+        detail: String(u.reason || "").replace(/（同址／同路段整合紀錄[\s\S]*$/, "").replace(/（系統已自動?比對整合[\s\S]*$/, "").trim()
+      }));
 
       const uniqueSources = Array.from(new Set(uniqueSub.map(u => u.source || u.media_verification).filter(Boolean)));
       primary.source = uniqueSources.slice(0, 3).join(" ； ");

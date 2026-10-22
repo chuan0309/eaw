@@ -357,8 +357,8 @@ let lastSupabaseDeltaFetch = 0;
 
 const REAL_SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
-// Only accept rows from Supabase that have been verified with ROOFTOP_GEOCODED accuracy
-const CALIBRATED_SUPABASE_MAX_ID = 95000;
+// Accept all newly crawled rows from Supabase (original seed ended at id 3123; crawler.py inserts > 3123)
+const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
 async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const now = Date.now();
@@ -369,7 +369,7 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
 
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?id=gt.${CALIBRATED_SUPABASE_MAX_ID}&select=*&order=id.desc&limit=200`, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?id=gt.${CALIBRATED_SUPABASE_MAX_ID}&select=*&order=id.desc&limit=1000`, {
       headers: {
         apikey: REAL_SUPABASE_ANON_KEY,
         Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`
@@ -380,35 +380,47 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
       if (Array.isArray(allRows) && allRows.length > 0) {
         const verifiedDelta = [];
         for (const r of allRows) {
-          if (!r || !r.address || !/[路街巷大道]/.test(r.address)) continue;
-          const full = `${r.address || ""} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`.replace(/非自然死亡|非自然身亡/g, "凶宅事故");
-          if (/車禍|擦撞|追撞|自撞|酒駕撞|落水|溺斃|浮屍|海邊|海域|漁港|水庫|溪谷|河床|山難|登山客|公墓|墓園|納骨塔|殯儀館|工地|廠房|工廠|鐵塔|電塔|旅館|飯店|摩鐵|旅社|KTV|夜店|醫院|診所|學校|校園|大學|國小|國中|高中|看守所|監獄|軍營|自然死亡|病逝|壽終|孤獨死|久病厭世.*醫院|老死|幸無大礙|無人傷亡/.test(full)) {
-            continue;
-          }
-          const city = (r.city || "").replace(/台/g, "臺");
+          if (!r || !r.address || !/[路街巷大道里村社區大樓華廈公寓透天厝國宅]/.test(r.address)) continue;
+          const city = (r.city || "").replace(/台/g, "臺").trim();
           const district = (r.district || "").trim();
           let cleanAddr = String(r.address || "").replace(/台/g, "臺").replace(/某號/g, "").trim();
           cleanAddr = cleanAddr.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
-          const geo = await geocodeTaiwanAddressStrict(cleanAddr, city, district);
-          if (!geo || !geo.formattedAddress || !geo.formattedAddress.includes(district)) continue;
 
-          let incDate = String(r.incident_date || "2024-06-15").replace(/\//g, "-").slice(0, 10);
-          if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2024-06-15";
+          let lat = Number(r.lat);
+          let lng = Number(r.lng);
+          const hasValidCoords = !isNaN(lat) && !isNaN(lng) && lat >= 21.5 && lat <= 26.5 && lng >= 118.0 && lng <= 122.5;
+          if (!hasValidCoords) {
+            const geo = await geocodeTaiwanAddressStrict(cleanAddr, city, district);
+            if (!geo || !geo.lat || !geo.lng) continue;
+            lat = geo.lat;
+            lng = geo.lng;
+          }
+
+          let incDate = String(r.incident_date || "2023-06-15").replace(/\//g, "-").slice(0, 10);
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2023-06-15";
+          const full = `${r.address || ""} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`;
           let db_source = r.db_source || "NEWS_PUBLIC_ARCHIVE";
           if (/實價登錄|內政部|特殊交易/.test(full)) db_source = "MOI_OPEN_DATA";
           else if (/法拍|拍賣公告|查封筆錄|執行處|點交|應買|一拍|二拍|三拍/.test(full)) db_source = "JUDICIAL_AUCTION";
           else if (/裁判書|判決|地方法院|高等法院|最高法院|字第/.test(full)) db_source = "JUDICIAL_JUDGMENT";
 
+          const bldgMatch = cleanAddr.match(/（([^）]+)）|\(([^)]+)\)/);
+          const building_type = r.building_type || (bldgMatch ? (bldgMatch[1] || bldgMatch[2]) : "集合住宅大樓");
+
           verifiedDelta.push({
             ...r,
             db_source,
             city,
+            district,
             address: cleanAddr,
             doorplate_address: cleanAddr.replace(/（.*）/, "").replace(/\(.*\)/, "").trim(),
-            lat: geo.lat,
-            lng: geo.lng,
+            building_type,
+            current_status: r.current_status || "現況使用中",
+            lat: Number(lat.toFixed(6)),
+            lng: Number(lng.toFixed(6)),
             location_accuracy: "ROOFTOP_GEOCODED",
-            incident_date: incDate
+            incident_date: incDate,
+            merged_count: r.merged_count || 1
           });
         }
         cachedSupabaseDelta = verifiedDelta;
@@ -418,9 +430,31 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   return cachedSupabaseDelta;
 }
 
-// GET /api/records - Returns the exact 3,052 calibrated disk archive records
+// GET /api/records - Returns the unified calibrated archive + any newly crawled records from Supabase
 app.get("/api/records", async (req, res) => {
-  const base = loadAllUnifiedRecords();
+  let base = loadAllUnifiedRecords();
+  try {
+    const delta = await fetchLatestSupabaseCrawledRecords(false);
+    if (Array.isArray(delta) && delta.length > 0) {
+      const existingIds = new Set(base.map(r => String(r.id)));
+      const existingAddrs = new Set(base.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
+      const newFromSupa = [];
+      for (const r of delta) {
+        const rid = String(r.id);
+        const raddr = String(r.address || "").replace(/台/g, "臺").trim();
+        if (!existingIds.has(rid) && !existingAddrs.has(raddr)) {
+          existingIds.add(rid);
+          existingAddrs.add(raddr);
+          newFromSupa.push(r);
+        }
+      }
+      if (newFromSupa.length > 0) {
+        persistNewVerifiedRecordsToDisk(newFromSupa);
+        base = loadAllUnifiedRecords();
+      }
+    }
+  } catch (e) {}
+
   const rawTotalRepresented = base.reduce((acc, r) => acc + (r.merged_count || 1), 0);
   const mergedGroupsCount = base.filter(r => (r.merged_count || 1) > 1).length;
 

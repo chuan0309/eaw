@@ -223,6 +223,22 @@ export async function fetchEttodayArticles(keyword, page = 1) {
   }
 }
 
+function cleanRssHtmlEntities(rawStr) {
+  return String(rawStr || "")
+    .replace(/&amp;nbsp;/gi, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&#160;/g, " ")
+    .replace(/&amp;quot;/gi, '"')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&amp;lt;|&lt;/gi, "<")
+    .replace(/&amp;gt;|&gt;/gi, ">")
+    .replace(/&amp;/gi, "&")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // 4. Fetch from Bing News RSS (Aggregates PTS 公視, CNA 中央社, TVBS, 三立, 壹蘋, Yahoo)
 export async function fetchBingNewsRss(keyword) {
   const url = `https://www.bing.com/news/search?q=${encodeURIComponent(keyword)}&format=rss`;
@@ -250,14 +266,17 @@ export async function fetchBingNewsRss(keyword) {
       if (uParam) {
         try { link = decodeURIComponent(uParam[1]); } catch (e) {}
       }
-      const title = tMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&").trim();
-      const snippet = dMatch ? dMatch[1].replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/\s+/g, " ").trim() : "";
+      const title = cleanRssHtmlEntities(tMatch[1]);
+      const media = sMatch ? cleanRssHtmlEntities(sMatch[1]) : "臺灣綜合新聞";
+      let snippet = dMatch ? cleanRssHtmlEntities(dMatch[1]) : "";
+      if (media && snippet.endsWith(media)) {
+        snippet = snippet.slice(0, -media.length).replace(/[-｜|·\s]+$/, "").trim();
+      }
       let date = new Date().toISOString().slice(0, 10);
       if (pMatch) {
         const parsed = new Date(pMatch[1].trim());
         if (!isNaN(parsed.getTime())) date = parsed.toISOString().slice(0, 10);
       }
-      const media = sMatch ? sMatch[1].trim() : "臺灣綜合新聞";
       if (link.startsWith("http")) {
         out.push({ title, link, date, snippet, media });
       }
@@ -291,17 +310,21 @@ export async function fetchGoogleNewsRss(keyword) {
       const sMatch = raw.match(/<source[^>]*>([\s\S]*?)<\/source>/i);
       if (!tMatch || !lMatch) continue;
       const link = lMatch[1].trim();
-      const rawTitle = tMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, "&").trim();
+      const rawTitle = cleanRssHtmlEntities(tMatch[1]);
       const title = rawTitle.replace(/\s*-\s*[^-]+$/, "").trim() || rawTitle;
-      const snippet = dMatch
-        ? dMatch[1].replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim()
-        : "";
+      const media = sMatch ? cleanRssHtmlEntities(sMatch[1]) : "Google 新聞公開檔案庫";
+      let snippet = dMatch ? cleanRssHtmlEntities(dMatch[1]) : "";
+      if (media && snippet.endsWith(media)) {
+        snippet = snippet.slice(0, -media.length).replace(/[-｜|·\s]+$/, "").trim();
+      }
+      if (snippet === title || snippet === rawTitle) {
+        snippet = "";
+      }
       let date = new Date().toISOString().slice(0, 10);
       if (pMatch) {
         const parsed = new Date(pMatch[1].trim());
         if (!isNaN(parsed.getTime())) date = parsed.toISOString().slice(0, 10);
       }
-      const media = sMatch ? sMatch[1].replace(/<[^>]+>/g, "").trim() : "Google 新聞公開檔案庫";
       if (link.startsWith("http")) {
         out.push({ title, link, date, snippet, media });
       }
@@ -415,9 +438,9 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     return null;
   }
 
-  // 2. Reject non-residential incident scenes (bridges, mountains, parks, construction sites, factories, KTV/hotels, prisons, roads)
+  // 2. Reject non-residential incident scenes (bridges, mountains, parks, construction sites, factories, KTV/hotels, prisons, roads, cars, vacant lots, bars)
   const isExplicitHaunted = /凶宅|事故屋|隱瞞凶宅|買到凶宅|誤買凶宅/.test(fullText);
-  const nonResidentialScene = /大橋|陸橋|天橋|高架橋|橋面|橋下|河床|溪床|溪谷|草叢|掩埋場|垃圾場|公墓|墓園|納骨塔|火葬場|殯儀館|國道|省道|快速道路|平交道|鐵軌|車禍|擦撞|自撞|追撞|酒駕|毒駕|騎士|工地|施工|建案工地|興建工程|鷹架|吊車|工人|工安|職災|職業安全|工廠|廠房|鐵工廠|加工區|科技廠|倉庫|錢櫃|好樂迪|KTV|酒店|夜店|舞廳|養生館|摩鐵|汽車旅館|飯店|商旅|民宿|百貨|商場|賣場|大賣場|超商|超市|餐廳|小吃店|看守所|監獄|外役監|服刑|出監|入監|軍營|營區|部隊|堂口|幫派|百果山|山區|山難|登山|步道|海邊|海岸|海域|漁港|沙灘|碼頭|水庫|魚塭|農地|果園|竹林|防風林|涵洞|水圳|大排|溝渠|溪畔|河濱|路倒|街頭|校園墜樓|校內墜樓|教學大樓|病房墜樓|醫院墜樓|護理之家|安養院|長照中心/;
+  const nonResidentialScene = /大橋|陸橋|天橋|高架橋|橋面|橋下|河床|溪床|溪谷|草叢|路邊草叢|陳屍於?車內|橫死街頭|現場旁空地|安裝冷氣.*防火巷|知名酒吧喝酒|掩埋場|垃圾場|公墓|墓園|納骨塔|火葬場|殯儀館|國道|省道|快速道路|平交道|鐵軌|車禍|擦撞|自撞|追撞|酒駕|毒駕|騎士|工地|施工|建案工地|興建工程|鷹架|吊車|工人|工安|職災|職業安全|工廠|廠房|鐵工廠|加工區|科技廠|倉庫|錢櫃|好樂迪|KTV|酒店|夜店|舞廳|養生館|摩鐵|汽車旅館|飯店|商旅|民宿|百貨|商場|賣場|大賣場|超商|超市|餐廳|小吃店|看守所|監獄|外役監|服刑|出監|入監|軍營|營區|部隊|堂口|幫派|百果山|山區|山難|登山|步道|海邊|海岸|海域|漁港|沙灘|碼頭|水庫|魚塭|農地|果園|竹林|防風林|涵洞|水圳|大排|溝渠|溪畔|河濱|路倒|街頭|校園墜樓|校內墜樓|教學大樓|病房墜樓|醫院墜樓|護理之家|安養院|長照中心/;
   if (!isExplicitHaunted && nonResidentialScene.test(fullText)) {
     return null;
   }
@@ -442,7 +465,8 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   const hasStatutoryCause = /凶宅|事故屋|隱瞞凶宅|買到凶宅|誤買凶宅|非自然死亡|兇殺|殺害|砍殺|刺死|勒斃|分屍|滅門|桶屍|箱屍|雙屍|3屍|三屍|弒母|弒父|弒親|情殺|仇殺|輕生|自殺|燒炭|上吊|尋短|服毒|吞藥|割腕|一氧化碳中毒|瓦斯中毒|縱火.*死|縱火.*命|火警.*死|火警.*不治|惡火.*死|惡火.*命|屋內.*命案|住處.*命案|住家.*命案|民宅.*命案|公寓.*命案|大樓.*命案|透天.*命案|套房.*命案|墜樓.*身亡|墜樓.*不治|墜樓.*死|墜樓.*亡|墜落.*身亡|墜落.*不治|墜落.*死|跳樓.*身亡|跳樓.*不治|跳樓.*死|跳樓.*亡/.test(fullText);
   if (!hasResidentialUnit || !hasStatutoryCause) return null;
 
-  // 5. Identify Taiwan City & District from article text (NEVER fallback to dists[0]!)
+  // 5. Identify Taiwan City & District from article text (ignoring police precinct mentions like XX警分局 when another district precedes the actual road!)
+  const textWithoutPrecinct = fullText.replace(/[一-龥]{2,3}(?:警分局|分局|派出所|分駐所)/g, " ");
   let matchedCity = "";
   let matchedDist = "";
 
@@ -450,7 +474,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     const shortCity = city.slice(0, 2);
     for (const d of dists) {
       const shortDist = d.length > 2 ? d.slice(0, -1) : d;
-      if (fullText.includes(city + d) || fullText.includes(shortCity + d) || fullText.includes(shortCity + shortDist)) {
+      if (textWithoutPrecinct.includes(city + d) || textWithoutPrecinct.includes(shortCity + d) || textWithoutPrecinct.includes(shortCity + shortDist)) {
         matchedCity = city;
         matchedDist = d;
         break;
@@ -461,7 +485,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
 
   if (!matchedDist) {
     for (const [kw, [c, d]] of Object.entries(UNAMBIGUOUS_DISTRICT_MAP)) {
-      if (fullText.includes(kw)) {
+      if (textWithoutPrecinct.includes(kw)) {
         matchedCity = c;
         matchedDist = d;
         break;
@@ -473,12 +497,12 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     for (const [city, dists] of Object.entries(TAIWAN_368_DISTRICTS)) {
       for (const d of dists) {
         if (["東區","西區","南區","北區","中區","中正區","中山區","信義區","仁愛區","大安區","大同區"].includes(d)) {
-          if (fullText.includes(city.slice(0, 2)) && fullText.includes(d)) {
+          if (textWithoutPrecinct.includes(city.slice(0, 2)) && textWithoutPrecinct.includes(d)) {
             matchedCity = city;
             matchedDist = d;
             break;
           }
-        } else if (fullText.includes(d)) {
+        } else if (textWithoutPrecinct.includes(d)) {
           matchedCity = city;
           matchedDist = d;
           break;
@@ -500,21 +524,38 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   if (!matchedCity || !matchedDist) return null;
 
   // 6. Extract specific street / road / village / area / community / floor from fullText
+  // Also cross-verify if an explicit [區鎮鄉市] directly precedes the road in the text (e.g., 樹林區長壽街)
   let roadPart = "";
+  const directDistRoadMatch = textWithoutPrecinct.match(/([一-龥]{2,3}[區鎮鄉市])([一-龥]{2,4}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+  if (directDistRoadMatch) {
+    const candDist = directDistRoadMatch[1];
+    const candRoad = directDistRoadMatch[2];
+    for (const [city, dists] of Object.entries(TAIWAN_368_DISTRICTS)) {
+      if (dists.includes(candDist) && (city === matchedCity || fullText.includes(city.slice(0, 2)))) {
+        matchedCity = city;
+        matchedDist = candDist;
+        roadPart = candRoad;
+        break;
+      }
+    }
+  }
+
   const shortDistName = matchedDist.replace(/[區市鎮鄉]$/, "");
-  const textAfterDist = fullText.replace(new RegExp(`${matchedCity}|${matchedDist}|${shortDistName}`, "g"), " ");
-  const commonRoadMatch = textAfterDist.match(/(?:位於|坐落於|坐落|在|於|抵|往|處|家|區|里|鄰|\s|^)([一-龥]{2,3}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
-  const fallbackRoadMatch = textAfterDist.match(/([一-龥]{2,3}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
-  const rawRoadCandidate = (commonRoadMatch && commonRoadMatch[1]) || (fallbackRoadMatch && fallbackRoadMatch[1]) || "";
-  if (rawRoadCandidate) {
-    const cleanedRoad = rawRoadCandidate
-      .replace(/^(?:位於|坐落|在|於|抵|往|住|租|買|賣|傳|區|鎮|鄉|市|里|村|鄰|某|該|一處|間|北市|新北|台中|臺中|高雄|高市|台南|臺南|桃園|年|她|他|下|指稱|稱|驚傳|發生|大樓|公寓|民宅|套房|屋內|女子|男子|老翁|婦人)+/, "")
-      .trim();
-    if (
-      cleanedRoad.length >= 3 &&
-      !/網路|跑路|死路|絕路|退路|逃亡路|神報喜利路|走投無路|不歸路|絲路|鐵路|公路|國道|省道|道路|馬路|半路|同路|一路|出路|生路|末路|血路|心路|套路|紋路|管路|線路|電路|水路|陸路|山路|平路|老街|商店街|美食街|地下街|華爾街|逛街|上街|掃街|遊街|街頭|路面|路口|路段/.test(cleanedRoad)
-    ) {
-      roadPart = cleanedRoad;
+  if (!roadPart) {
+    const textAfterDist = textWithoutPrecinct.replace(new RegExp(`${matchedCity}|${matchedDist}|${shortDistName}`, "g"), " ");
+    const commonRoadMatch = textAfterDist.match(/(?:位於|坐落於|坐落|在|於|抵|往|處|家|區|里|鄰|\s|^)([一-龥]{2,3}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+    const fallbackRoadMatch = textAfterDist.match(/([一-龥]{2,3}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+    const rawRoadCandidate = (commonRoadMatch && commonRoadMatch[1]) || (fallbackRoadMatch && fallbackRoadMatch[1]) || "";
+    if (rawRoadCandidate) {
+      const cleanedRoad = rawRoadCandidate
+        .replace(/^(?:位於|坐落|在|於|抵|往|住|租|買|賣|傳|區|鎮|鄉|市|里|村|鄰|某|該|一處|間|北市|新北|台中|臺中|高雄|高市|台南|臺南|桃園|年|她|他|下|指稱|稱|驚傳|發生|大樓|公寓|民宅|套房|屋內|女子|男子|老翁|婦人)+/, "")
+        .trim();
+      if (
+        cleanedRoad.length >= 3 &&
+        !/網路|跑路|死路|絕路|退路|逃亡路|神報喜利路|走投無路|不歸路|絲路|鐵路|公路|國道|省道|道路|馬路|半路|同路|一路|出路|生路|末路|血路|心路|套路|紋路|管路|線路|電路|水路|陸路|山路|平路|老街|商店街|美食街|地下街|華爾街|逛街|上街|掃街|遊街|街頭|路面|路口|路段/.test(cleanedRoad)
+      ) {
+        roadPart = cleanedRoad;
+      }
     }
   }
 
@@ -556,8 +597,8 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   else if (/公寓/.test(fullText)) bldgType = "傳統公寓住宅";
   else if (/別墅/.test(fullText)) bldgType = "透天別墅";
 
-  // Require at least road, community, village, area, floor, or explicit haunted house / foreclosure context
-  if (!roadPart && !communityPart && !villagePart && !areaPart && !floorPart && !isExplicitHaunted && !/法拍|一拍|二拍|三拍|點交/.test(fullText)) {
+  // Strictly require at least a specific road, community, village, or well-known zone (never create vague district-only or headline-stuffed stubs!)
+  if (!roadPart && !communityPart && !villagePart && !areaPart) {
     return null;
   }
 
@@ -585,27 +626,78 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     dbSource = "MOI_OPEN_DATA";
   }
 
-  // 9. Determine exact Incident Date (案發日期): check if article explicitly states an earlier historical incident date, otherwise use article publication date
-  let trueIncidentDate = (article.date || new Date().toISOString().slice(0, 10)).replace(/\//g, "-").slice(0, 10);
+  // 9. Cross-verify exact Incident Date (案發日期雙重交叉比對):
+  //    Compare article publication date (article.date) with relative/explicit dates in fullText (e.g., 昨日清晨, 昨晚, 前天, M月D日)
+  const pubDateStr = (article.date || new Date().toISOString().slice(0, 10)).replace(/\//g, "-").slice(0, 10);
+  const pubDt = new Date(`${pubDateStr}T00:00:00Z`);
+  let trueIncidentDate = pubDateStr;
+  let dateVerifyMethod = `與新聞發布日 ${pubDateStr} 同步核實`;
+
+  const shiftDaysIso = (baseDate, deltaDays) => {
+    const d = new Date(baseDate.getTime() + deltaDays * 86400000);
+    return d.toISOString().slice(0, 10);
+  };
+
   const mFullHist = fullText.match(/(19[789]\d|20[012]\d)\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  const mRocHist = fullText.match(/民國\s*(\d{2,3})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+  const mParenDay = fullText.match(/(昨|前|今)\s*[（(]\s*(\d{1,2})\s*[）)]\s*日?/);
+
   if (mFullHist) {
     trueIncidentDate = `${mFullHist[1]}-${String(mFullHist[2]).padStart(2, "0")}-${String(mFullHist[3]).padStart(2, "0")}`;
+    dateVerifyMethod = `內文明確載明案發日期（報導發布日 ${pubDateStr}）`;
+  } else if (mRocHist) {
+    const yr = Number(mRocHist[1]) + 1911;
+    trueIncidentDate = `${yr}-${String(mRocHist[2]).padStart(2, "0")}-${String(mRocHist[3]).padStart(2, "0")}`;
+    dateVerifyMethod = `內文明確載明民國紀年案發日（報導發布日 ${pubDateStr}）`;
+  } else if (mParenDay && !isNaN(pubDt.getTime())) {
+    const relWord = mParenDay[1];
+    const delta = relWord === "昨" ? -1 : relWord === "前" ? -2 : 0;
+    trueIncidentDate = shiftDaysIso(pubDt, delta);
+    dateVerifyMethod = `報導發布日 ${pubDateStr} 交叉比對「${relWord}（${mParenDay[2]}）日」推算`;
+  } else if (/前天|前日|前晚|前夜/.test(fullText) && !isNaN(pubDt.getTime())) {
+    trueIncidentDate = shiftDaysIso(pubDt, -2);
+    dateVerifyMethod = `報導發布日 ${pubDateStr} 交叉比對內文「前天／前日」回推 2 日`;
+  } else if (/昨日|昨天|昨晚|昨夜|昨晨|昨清晨|昨凌晨|昨上午|昨下午|昨午|昨傍晚|昨深夜/.test(fullText) && !isNaN(pubDt.getTime())) {
+    trueIncidentDate = shiftDaysIso(pubDt, -1);
+    dateVerifyMethod = `報導發布日 ${pubDateStr} 交叉比對內文「昨日／昨晚」回推 1 日`;
   } else {
+    const mMd = fullText.match(/(?<!\d)(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
     const mYmHist = fullText.match(/(19[789]\d|20[012]\d)\s*年\s*(\d{1,2})\s*月/);
-    if (mYmHist && mYmHist[1] < trueIncidentDate.slice(0, 4)) {
+    if (mMd && !isNaN(pubDt.getTime())) {
+      const m = Number(mMd[1]);
+      const d = Number(mMd[2]);
+      let y = pubDt.getUTCFullYear();
+      const cand = new Date(Date.UTC(y, m - 1, d));
+      if (cand.getTime() > pubDt.getTime() + 86400000) y -= 1;
+      trueIncidentDate = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      dateVerifyMethod = `報導發布日 ${pubDateStr} 交叉比對內文「${m}月{d}日」核實`.replace("{d}", String(d));
+    } else if (mYmHist && mYmHist[1] < pubDateStr.slice(0, 4)) {
       trueIncidentDate = `${mYmHist[1]}-${String(mYmHist[2]).padStart(2, "0")}-15`;
+      dateVerifyMethod = `內文明確載明「${mYmHist[1]}年${mYmHist[2]}月」案發`;
     }
   }
 
-  const cleanSnippet = (article.snippet || "").length >= 25
-    ? article.snippet
-    : `依據公開資料庫與${article.media}核實紀錄「${article.title}」，該處位於${matchedCity}${matchedDist}${roadPart || communityPart || ""}，於 ${trueIncidentDate} 發生非自然死亡事故。`;
-  const reasonText = cleanSnippet.includes(article.title.slice(0, 8))
-    ? cleanSnippet
-    : `【${article.title}】${cleanSnippet}`;
+  const sanitizedTitle = cleanRssHtmlEntities(article.title);
+  const sanitizedSnippet = cleanRssHtmlEntities(article.snippet);
+  const normTitle = sanitizedTitle.replace(/\s+/g, "");
+  const normSnippet = sanitizedSnippet.replace(/\s+/g, "");
+  const hasDistinctSnippet = sanitizedSnippet.length >= 25 && !normSnippet.startsWith(normTitle.slice(0, 10));
+  let reasonText = hasDistinctSnippet
+    ? `【${sanitizedTitle}】${sanitizedSnippet}`
+    : `依據公開資料庫與${cleanRssHtmlEntities(article.media)}核實紀錄「${sanitizedTitle}」，該處位於${matchedCity}${matchedDist}${roadPart || communityPart || areaPart || villagePart || ""}，於 ${trueIncidentDate} 發生非自然死亡或特殊事故紀錄。`;
 
-  const [lat, lng] = getDistrictBaseCoords(matchedCity, matchedDist, `${roadPart}_${communityPart}_${article.title}`);
-  const cleanSource = `${article.media}報導「${article.title}」`;
+  // Annotate relative date expression in reasonText with the exact resolved calendar date
+  const [ty, tm, td] = trueIncidentDate.split("-").map(Number);
+  const resolvedLabel = `（${ty}年${tm}月${td}日）`;
+  if (ty && tm && td && !reasonText.includes(resolvedLabel)) {
+    reasonText = reasonText.replace(
+      /(前天清晨|前天凌晨|前天晚間|前天|前日|昨日清晨|昨日凌晨|昨日上午|昨日下午|昨日晚間|昨日深夜|昨天清晨|昨天凌晨|昨天上午|昨天下午|昨天晚間|昨晚|昨夜|昨晨|昨日|昨天)(?![（(])/,
+      `$1${resolvedLabel}`
+    );
+  }
+
+  const [lat, lng] = getDistrictBaseCoords(matchedCity, matchedDist, `${roadPart}_${communityPart}_${sanitizedTitle}`);
+  const cleanSource = `${cleanRssHtmlEntities(article.media)}報導「${sanitizedTitle}」`;
 
   return {
     id: `tw-haunted-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -625,7 +717,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     source: cleanSource,
     source_url: article.link,
     media_verification: cleanSource,
-    auction_record: `案發日期核實：${trueIncidentDate}`,
+    auction_record: `案發日期雙重核實：${trueIncidentDate}（${dateVerifyMethod}）`,
     history_timeline: [
       {
         year: trueIncidentDate,

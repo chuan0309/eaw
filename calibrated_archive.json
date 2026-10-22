@@ -1,5 +1,1805 @@
 [
   {
+    "id": 95045,
+    "city": "臺北市",
+    "district": "南港區",
+    "doorplate_address": "臺北市南港區研究院路",
+    "address": "臺北市南港區研究院路（4樓 · 集合住宅／民宅）",
+    "lat": 25.05507,
+    "lng": 121.592313,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-08-12",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "身分曝光！南港研究院路民宅4樓火警7旬婦人送醫不治- 社會 &amp;nbsp;&amp;nbsp; 中時新聞網",
+    "source": "中時新聞網報導「身分曝光！南港研究院路民宅4樓火警7旬婦人送醫不治- 社會」",
+    "source_url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5BX0tnMV9iWTdLVGViLUVnVldqSTNqZElGVGtZSmxSaU9GcFBxNUtsNWJyeHd3NXFMOHc5dWo4ZWtlRDBlNk5NY2hZYWJ6VHNLSHcxMXdlemxEcTNJblI4bkk2bU9UeHFxY2RLT3NR?oc=5",
+    "media_verification": "中時新聞網報導「身分曝光！南港研究院路民宅4樓火警7旬婦人送醫不治- 社會」",
+    "auction_record": "案發日期核實：2025-08-12",
+    "history_timeline": [
+      {
+        "year": "2025-08-12",
+        "stage": "中時新聞網公開報導",
+        "detail": "身分曝光！南港研究院路民宅4樓火警7旬婦人送醫不治- 社會（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "研究院路",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95046,
+    "city": "桃園市",
+    "district": "新屋區",
+    "doorplate_address": "桃園市新屋區",
+    "address": "桃園市新屋區（集合住宅／民宅 · 凶宅！前屋主猝死妻子輕生 新）",
+    "lat": 24.969364,
+    "lng": 121.113717,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2017-09-01",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "凶宅！前屋主猝死妻子輕生 新屋主刺死債主 &amp;nbsp;&amp;nbsp; TVBS新聞網",
+    "source": "TVBS新聞網報導「凶宅！前屋主猝死妻子輕生 新屋主刺死債主」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE4zTmV4R2dfaGNaaGtHbHkxbDhqaVBhUk5YY2N4RlBEbHA3Zk9LVFFnc1o0bUJYdkY0Q1VIXzFKMGJuUW04eGxmQ0NxUERmdw?oc=5",
+    "media_verification": "TVBS新聞網報導「凶宅！前屋主猝死妻子輕生 新屋主刺死債主」",
+    "auction_record": "案發日期核實：2017-09-01",
+    "history_timeline": [
+      {
+        "year": "2017-09-01",
+        "stage": "TVBS新聞網公開報導",
+        "detail": "凶宅！前屋主猝死妻子輕生 新屋主刺死債主（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95047,
+    "city": "桃園市",
+    "district": "新屋區",
+    "doorplate_address": "桃園市新屋區",
+    "address": "桃園市新屋區（集合住宅／民宅 · 「住戶輕生」3年新屋成凶宅！）",
+    "lat": 24.96834,
+    "lng": 121.093405,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2020-07-24",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "「住戶輕生」3年新屋成凶宅！1000萬房價狂砍50％ 意外成投資搶手貨 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「「住戶輕生」3年新屋成凶宅！1000萬房價狂砍50％　意外成投資搶手貨」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1sakEtenZPaU04NmJXVkpWODRsQW9hUnF5dFk2bHVFMEduc0hUcDdnc0NUcDFOUzFkQjJnV3pUenJWRXZoXy1UdXNPak5oMjDSAU5BVV95cUxOMlo2TVdSUHJYUDhNMXJUalJNdjF2N1hSanFNbi1YbW5HUWQ4d0N4dlRhWDE3WmVJWk5XYkZlTkJlMHR6WUdPZmV1cmtUdnc?oc=5",
+    "media_verification": "ETtoday房產雲報導「「住戶輕生」3年新屋成凶宅！1000萬房價狂砍50％　意外成投資搶手貨」",
+    "auction_record": "案發日期核實：2020-07-24",
+    "history_timeline": [
+      {
+        "year": "2020-07-24",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "「住戶輕生」3年新屋成凶宅！1000萬房價狂砍50％　意外成投資搶手貨（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95048,
+    "city": "桃園市",
+    "district": "新屋區",
+    "doorplate_address": "桃園市新屋區",
+    "address": "桃園市新屋區（集合住宅／民宅 · 入住花蓮五子命案凶宅 新屋主）",
+    "lat": 24.971356,
+    "lng": 121.099838,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2017-07-04",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "入住花蓮五子命案凶宅 新屋主：免驚啦！ &amp;nbsp;&amp;nbsp; 自由時報",
+    "source": "自由時報報導「入住花蓮五子命案凶宅 新屋主：免驚啦！」",
+    "source_url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE50OUZ4SzI4SEhRRVVEd1dBSmtuX1podWFDTUlIblZoYzJhX1hJTmxnN2RLa2hpMEZWT25kTVptT2wtU3ltX0NuRDdJV2NUY3ZlWmd6cWcxWEt5RWZqSjdRZ1VRWlNyWld50gFuQVVfeXFMTm95WVJuWUxHM1V0SElZMXJXN0pNZnlEWjd3ZGZ5ZHNLUFJ3VkFfbm12Rzk1Y0JzMmJaS3FGM0JrQ2k3NTdjWkRpbUhhN3BDb2ZiQW50TTNoVWYyR1phODRmd0U1aEp4Q1R2YXVzZWc?oc=5",
+    "media_verification": "自由時報報導「入住花蓮五子命案凶宅 新屋主：免驚啦！」",
+    "auction_record": "案發日期核實：2017-07-04",
+    "history_timeline": [
+      {
+        "year": "2017-07-04",
+        "stage": "自由時報公開報導",
+        "detail": "入住花蓮五子命案凶宅 新屋主：免驚啦！（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95049,
+    "city": "新北市",
+    "district": "永和區",
+    "doorplate_address": "新北市永和區",
+    "address": "新北市永和區（出租套房／公寓 · 永和套房變凶宅！77歲翁成白）",
+    "lat": 25.005822,
+    "lng": 121.509489,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-08-12",
+    "building_type": "出租套房／公寓",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "永和套房變凶宅！77歲翁成白骨 女友說：我同居人死了 &amp;nbsp;&amp;nbsp; Yahoo新聞",
+    "source": "Yahoo新聞報導「永和套房變凶宅！77歲翁成白骨 女友說：我同居人死了」",
+    "source_url": "https://news.google.com/rss/articles/CBMi1gJBVV95cUxNT28zUEtwekdacVNSWmpRdFJSMUNKNFdUZzBJMWZuS0dPUHhPNmxSdjJNaUF1cHpqMDU0RTRwWlZ3Qk4zNnZqZzFjVXdZeHN4b3RtSVhramhVZG82ZDJOOUxPU0xUNzdQUU1QOVhENHNQUE1kd25ndEQ2SFRNTnpISC1kcjAtT2d5amQwZWU0WUs0VTNPOW5RRE9EcnNITVM3RHEzSVFYN0lpMFhmX1R1U1JySUFISkxOYmJLelVlbUZqOEU4dkpCUl9RdVUwaVRBTEZuQVN6bV9HSExnYUJua2FNVDdsWjlSOXUyOVF2di1WRmM4am5JMGttMk1MZFczcVU3aFlSMmhUZUQxRkQzSk1BVndBVTQ3YTZuMWpmWFRMS1p4YU5mWUFlVDFGWkxKaTNMVVpWbW1HUVFGaEhvejhQU2wyWVYtYW5lU2RzT0Z1X0MyUlE?oc=5",
+    "media_verification": "Yahoo新聞報導「永和套房變凶宅！77歲翁成白骨 女友說：我同居人死了」",
+    "auction_record": "案發日期核實：2025-08-12",
+    "history_timeline": [
+      {
+        "year": "2025-08-12",
+        "stage": "Yahoo新聞公開報導",
+        "detail": "永和套房變凶宅！77歲翁成白骨 女友說：我同居人死了（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95050,
+    "city": "彰化縣",
+    "district": "大村鄉",
+    "doorplate_address": "彰化縣大村鄉",
+    "address": "彰化縣大村鄉（透天厝住宅 · 彰化大村透天凶宅開價328萬）",
+    "lat": 23.982274,
+    "lng": 120.568777,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-11-23",
+    "building_type": "透天厝住宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "彰化大村透天凶宅開價328萬 房仲備註「晚上不帶看」原因全說了 &amp;nbsp;&amp;nbsp; NOWnews今日新聞",
+    "source": "NOWnews今日新聞報導「彰化大村透天凶宅開價328萬　房仲備註「晚上不帶看」原因全說了」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5rbFh6aXV1TGdmXzNKN21YNHBIdm1wQmNWeWxpendjYXRBdUc5QXNDV0w0R1ZzbW1iV0hmNC1mb29pcTBCUndheU04VTfSAVJBVV95cUxOeUw5Yl9JeFN6bThuZ0Rvd3NQbThiT2xYRF82NEVPQ2I4LWZ0QU1mMXJmS3REdnkwZi05YklTcUFtRlctY2gxdzFaWjJRQUdBOS1R?oc=5",
+    "media_verification": "NOWnews今日新聞報導「彰化大村透天凶宅開價328萬　房仲備註「晚上不帶看」原因全說了」",
+    "auction_record": "案發日期核實：2024-11-23",
+    "history_timeline": [
+      {
+        "year": "2024-11-23",
+        "stage": "NOWnews今日新聞公開報導",
+        "detail": "彰化大村透天凶宅開價328萬　房仲備註「晚上不帶看」原因全說了（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95051,
+    "city": "臺中市",
+    "district": "烏日區",
+    "doorplate_address": "臺中市烏日區",
+    "address": "臺中市烏日區（集合住宅／民宅 · 烏日芭比Q凶宅二拍底價159）",
+    "lat": 24.107535,
+    "lng": 120.603835,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-08-06",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "烏日芭比Q凶宅二拍底價1593萬 「不夠便宜」流標 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「烏日芭比Q凶宅二拍底價1593萬　「不夠便宜」流標」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHei14QldiYW9WZDYyc0IwTV9Ga2RBOGc4M1NlSW1DNnhiWWRSbzRfWHA0MTUwSUhVcXhMemd1dTRoZmhQQXkwT1U4alN6dHPSAU5BVV95cUxNbHg2YkJrd2FhVExvTXpiRDJZeHhLWjQxUHZKcWZIMXFzYjB0cmNCWHJJUGRfWm9zWHBRTmlaRXZ6RDFTRjRZa1lZUmFhSVE?oc=5",
+    "media_verification": "ETtoday房產雲報導「烏日芭比Q凶宅二拍底價1593萬　「不夠便宜」流標」",
+    "auction_record": "案發日期核實：2022-08-06",
+    "history_timeline": [
+      {
+        "year": "2022-08-06",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "烏日芭比Q凶宅二拍底價1593萬　「不夠便宜」流標（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95052,
+    "city": "臺中市",
+    "district": "沙鹿區",
+    "doorplate_address": "臺中市沙鹿區",
+    "address": "臺中市沙鹿區（集合住宅／民宅 · 沙鹿「殺妻凶宅」投資客也怕！）",
+    "lat": 24.241957,
+    "lng": 120.582215,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-04-21",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "沙鹿「殺妻凶宅」投資客也怕！二拍法院驚奇...獨行俠加價89萬買走 專家揭內幕 &amp;nbsp;&amp;nbsp; 好房網News",
+    "source": "好房網News報導「沙鹿「殺妻凶宅」投資客也怕！二拍法院驚奇...獨行俠加價89萬買走　專家揭內幕」",
+    "source_url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9SLUdVWDFmZWQ5dENUdFJFTDJNRU44bE1nMmozV1lxQkttV3pmMjd0cWVjdVZINXdGSFQzQjFZa243NnVwTjhkWVVKRVNieVQtc3NzcHd3c2U3Y3hxNXlVOGVocnJCWlBmN0Zn0gFwQVVfeXFMTmYzejZrUVprd3dVUE1BLVkyX2ROT2tSNGo3NWJvS0x5aGdFVkJOMVBwSXloYW1FRXU4N0lvS3pBcmZOSHF5X3dFa05LbGIxMTB3MGhlbjhIRnY4RHVmQzJ4Y3JvUVZadV9kUjBDTTZkVg?oc=5",
+    "media_verification": "好房網News報導「沙鹿「殺妻凶宅」投資客也怕！二拍法院驚奇...獨行俠加價89萬買走　專家揭內幕」",
+    "auction_record": "案發日期核實：2022-04-21",
+    "history_timeline": [
+      {
+        "year": "2022-04-21",
+        "stage": "好房網News公開報導",
+        "detail": "沙鹿「殺妻凶宅」投資客也怕！二拍法院驚奇...獨行俠加價89萬買走　專家揭內幕（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95053,
+    "city": "臺北市",
+    "district": "士林區",
+    "doorplate_address": "臺北市士林區",
+    "address": "臺北市士林區（傳統公寓住宅 · 士林凶宅620萬法拍「7組來）",
+    "lat": 25.078991,
+    "lng": 121.507987,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2020-05-06",
+    "building_type": "傳統公寓住宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "士林凶宅620萬法拍「7組來搶標公寓」投資客的盤算是⋯ &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「士林凶宅620萬法拍「7組來搶標公寓」投資客的盤算是⋯」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9jVElQclFZSHRVX0pfcWJFYU9mdGpiZ3l2aU9NQnVvdXpqWGJtVmJUb0ZhVHdzVnh0TzEtNVNZWjNvZGRrSnB3UEdrdXnSAV5BVV95cUxPcG9DclVNRk1XTjlXMUFfNTJGUDVnVTlIVDZZeEdxVXJFVkZzVjR1Vlk2ZTNLV0RsMTJXRk02QlFOc1RHQ3paelo2WklYTWRVenBDRE5JcDNRVDk1aElR?oc=5",
+    "media_verification": "富房網報導「士林凶宅620萬法拍「7組來搶標公寓」投資客的盤算是⋯」",
+    "auction_record": "案發日期核實：2020-05-06",
+    "history_timeline": [
+      {
+        "year": "2020-05-06",
+        "stage": "富房網公開報導",
+        "detail": "士林凶宅620萬法拍「7組來搶標公寓」投資客的盤算是⋯（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95054,
+    "city": "臺中市",
+    "district": "沙鹿區",
+    "doorplate_address": "臺中市沙鹿區",
+    "address": "臺中市沙鹿區（集合住宅／民宅 · 法拍悲歌！老父繼承女兒債務雙）",
+    "lat": 24.218045,
+    "lng": 120.578732,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-06-02",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "法拍悲歌！老父繼承女兒債務雙亡 沙鹿「疑似凶宅」三拍引14人搶標 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「法拍悲歌！老父繼承女兒債務雙亡　沙鹿「疑似凶宅」三拍引14人搶標」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBORUgybWRTa2hOSkJmS0o1LVI5NS1qSXkzVXlMc3R3UXFLUDExbkl3bnh6QVdtajlzM2RaR19mV2d6MmxYYWF3VmRGaEFpcEnSAU5BVV95cUxQSnMtXzQ4TW93SUkyNDRDb2J1RUl3TkczS0ZRTFJaVjB3ZWN3Q2E1d25wVHd1WkFtNjl3bmVmM2I1ZHR4a2FmUzJXV1ptdkE?oc=5",
+    "media_verification": "ETtoday房產雲報導「法拍悲歌！老父繼承女兒債務雙亡　沙鹿「疑似凶宅」三拍引14人搶標」",
+    "auction_record": "案發日期核實：2022-06-02",
+    "history_timeline": [
+      {
+        "year": "2022-06-02",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "法拍悲歌！老父繼承女兒債務雙亡　沙鹿「疑似凶宅」三拍引14人搶標（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95055,
+    "city": "臺中市",
+    "district": "北屯區",
+    "doorplate_address": "臺中市北屯區",
+    "address": "臺中市北屯區（集合住宅／民宅 · 買凶宅沒折扣！　北屯流標3次）",
+    "lat": 24.157975,
+    "lng": 120.712473,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-12-29",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "【買凶宅沒折扣！　北屯流標3次法拍屋市價拍定】買凶宅沒折扣！ 北屯流標3次法拍屋市價拍定 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「買凶宅沒折扣！　北屯流標3次法拍屋市價拍定」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5SMHJ5SGRDUkV3b3IxYkR0MkVaTVlkdkZOQ1U0Sjh3d3BJc01sUVdBUTVqeXFsM1J5MzdGd3ZQNlpSeWc3a1RneEs5aDd0eUHSAU5BVV95cUxQZUtSa0J0a0VIcjBaTnJleVJRbWVqUUlmMkFuVklubS1NM0U2ZTdpREx5WUU1VmtSUFRzdTJVanE0enZCZ1BFQjZjNk9XbFE?oc=5",
+    "media_verification": "ETtoday房產雲報導「買凶宅沒折扣！　北屯流標3次法拍屋市價拍定」",
+    "auction_record": "案發日期核實：2021-12-29",
+    "history_timeline": [
+      {
+        "year": "2021-12-29",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "買凶宅沒折扣！　北屯流標3次法拍屋市價拍定（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95056,
+    "city": "新北市",
+    "district": "樹林區",
+    "doorplate_address": "新北市樹林區",
+    "address": "新北市樹林區（集合住宅／民宅 · 新北樹林「母子雙屍」凶宅法拍）",
+    "lat": 25.014925,
+    "lng": 121.409842,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-04-16",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "新北樹林「母子雙屍」凶宅法拍！一拍底價1606萬 專家揭貴在這點 &amp;nbsp;&amp;nbsp; NOWnews今日新聞",
+    "source": "NOWnews今日新聞報導「新北樹林「母子雙屍」凶宅法拍！一拍底價1606萬　專家揭貴在這點」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE1RV0w0Z1gyUlM1dHFxQWM2WGtEVTkzaEFKMGtQZ2hNZU9VZDB4azVOYnY4MnFZd1VOSWE3TjQzT1JUMVdpVGNqVmZWcXXSAVJBVV95cUxNZWpQS19fR2sxU1FjWktTSUt5UHU3Nm42Mk9JU3hRZThFeFZKSnhXbnBreDBtZXNWejk2cko2dHM3SUsydVlVNm5OcnBsYUZmOVZn?oc=5",
+    "media_verification": "NOWnews今日新聞報導「新北樹林「母子雙屍」凶宅法拍！一拍底價1606萬　專家揭貴在這點」",
+    "auction_record": "案發日期核實：2025-04-16",
+    "history_timeline": [
+      {
+        "year": "2025-04-16",
+        "stage": "NOWnews今日新聞公開報導",
+        "detail": "新北樹林「母子雙屍」凶宅法拍！一拍底價1606萬　專家揭貴在這點（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95057,
+    "city": "新北市",
+    "district": "土城區",
+    "doorplate_address": "新北市土城區",
+    "address": "新北市土城區（集合住宅／民宅 · 土城新社區鬧出小飛俠！ 事故）",
+    "lat": 24.986477,
+    "lng": 121.441537,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-12-12",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "土城新社區鬧出小飛俠！ 事故屋淪法拍、社區房價全打9折 &amp;nbsp;&amp;nbsp; 壹蘋新聞網",
+    "source": "壹蘋新聞網報導「土城新社區鬧出小飛俠！ 事故屋淪法拍、社區房價全打9折」",
+    "source_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNU3hqWlJaeXNodEFtcUc5N0tKRGpMb21PVElIUlA4Wl9zRVFhQXFJcmE2clpiY0ZMa3ZsbE1TYnlVMi1KX1hqMTBDM2NYODM5d3VLZmIxTkQtRGFsNnZ4MVhlaHY2WUNTX2VNcDkxLXpUWTZfSlNLY29RT3E1bU1tVWxnaw?oc=5",
+    "media_verification": "壹蘋新聞網報導「土城新社區鬧出小飛俠！ 事故屋淪法拍、社區房價全打9折」",
+    "auction_record": "案發日期核實：2022-12-12",
+    "history_timeline": [
+      {
+        "year": "2022-12-12",
+        "stage": "壹蘋新聞網公開報導",
+        "detail": "土城新社區鬧出小飛俠！ 事故屋淪法拍、社區房價全打9折（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95058,
+    "city": "新北市",
+    "district": "汐止區",
+    "doorplate_address": "新北市汐止區",
+    "address": "新北市汐止區（透天別墅 · 汐止別墅冒「短期暴賠」成交案）",
+    "lat": 25.059955,
+    "lng": 121.641791,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-03-12",
+    "building_type": "透天別墅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "汐止別墅冒「短期暴賠」成交案！不到2年「腰斬售出」慘賠46% 買到凶宅法拍屋讓屋主賠了| 林瑩真| 新聞 &amp;nbsp;&amp;nbsp; 風傳媒",
+    "source": "風傳媒報導「汐止別墅冒「短期暴賠」成交案！不到2年「腰斬售出」慘賠46% 買到凶宅法拍屋讓屋主賠了| 林瑩真| 新聞」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBtRDM5UjMyRlFCTXEzRHhTMkVzVlRfRVBTaF9kZU1XMTF4ZkhBNll2ekplczUzcFdYMjNybmVDd3hxSmIwOW5NMW8xREg?oc=5",
+    "media_verification": "風傳媒報導「汐止別墅冒「短期暴賠」成交案！不到2年「腰斬售出」慘賠46% 買到凶宅法拍屋讓屋主賠了| 林瑩真| 新聞」",
+    "auction_record": "案發日期核實：2024-03-12",
+    "history_timeline": [
+      {
+        "year": "2024-03-12",
+        "stage": "風傳媒公開報導",
+        "detail": "汐止別墅冒「短期暴賠」成交案！不到2年「腰斬售出」慘賠46% 買到凶宅法拍屋讓屋主賠了| 林瑩真| 新聞（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95059,
+    "city": "新竹縣",
+    "district": "竹北市",
+    "doorplate_address": "新竹縣竹北市",
+    "address": "新竹縣竹北市（透天厝住宅 · 買房遇凶宅！竹北千萬透天厝賣）",
+    "lat": 24.836044,
+    "lng": 121.019977,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-09-25",
+    "building_type": "透天厝住宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_JUDGMENT",
+    "reason": "買房遇凶宅！竹北千萬透天厝賣方隱瞞資訊 判賠157萬 &amp;nbsp;&amp;nbsp; 好房網News",
+    "source": "好房網News報導「買房遇凶宅！竹北千萬透天厝賣方隱瞞資訊　判賠157萬」",
+    "source_url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE11SkhzSmxFdW1vTUtteHgtbWZKR1o4SkZKSGhpNk9Gel9NVndJNXM5aFp4WDFoamxITlotQ2ZZWG41eEd1YlhrX1NPNzdTcks3cWxfT1QzRk5ZU0Voc01hMEx3M3pQQk45STJR0gFwQVVfeXFMTzd1OWt4UnZXSTlNSGxZQ21WOE9ORDB5TlB2M0s1cWR1WUZsM0ZJeTFvNjNfVldWUURmNGFSRXF6dVlrRFM4OU9LcmdjbHRBd1RZNmNERHhaUFFLWkI2NU82alNsRklTZm5LbGRqY1RfZg?oc=5",
+    "media_verification": "好房網News報導「買房遇凶宅！竹北千萬透天厝賣方隱瞞資訊　判賠157萬」",
+    "auction_record": "案發日期核實：2025-09-25",
+    "history_timeline": [
+      {
+        "year": "2025-09-25",
+        "stage": "好房網News公開報導",
+        "detail": "買房遇凶宅！竹北千萬透天厝賣方隱瞞資訊　判賠157萬（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95060,
+    "city": "新北市",
+    "district": "林口區",
+    "doorplate_address": "新北市林口區",
+    "address": "新北市林口區（19樓 · 國宅／社會住宅）",
+    "lat": 25.081068,
+    "lng": 121.397603,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-07-23",
+    "building_type": "國宅／社會住宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "社宅9年租約到期！林口37歲男19樓墜落身亡 曾向母提有找房壓力 &amp;nbsp;&amp;nbsp; 鏡週刊Mirror Media",
+    "source": "鏡週刊Mirror Media報導「社宅9年租約到期！林口37歲男19樓墜落身亡　曾向母提有找房壓力」",
+    "source_url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE82RTRYWUozWUhGSHk3eGgwY1A3Ykt0al9DcWJMMWoySnkxYWVLSnNGOVdtcTBiYlZWLUJjMGZnazlPdFZkSWx0cFVFZmxtN20xZjlMT2dNTk5Bb1XSAWBBVV95cUxPRi1nWkc3Vy1fRU50UFZMNzRCX29EMmRnRXREcGdOQTloZDZzMjFrZ2RqcW9KOHNDZFM4R3E5a1ZZZnlwRnpZQnJLbnVVS29IZU1lenYtV3BaVXZwRm5XYjU?oc=5",
+    "media_verification": "鏡週刊Mirror Media報導「社宅9年租約到期！林口37歲男19樓墜落身亡　曾向母提有找房壓力」",
+    "auction_record": "案發日期核實：2025-07-23",
+    "history_timeline": [
+      {
+        "year": "2025-07-23",
+        "stage": "鏡週刊Mirror Media公開報導",
+        "detail": "社宅9年租約到期！林口37歲男19樓墜落身亡　曾向母提有找房壓力（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95018,
+    "city": "新竹縣",
+    "district": "竹北市",
+    "doorplate_address": "新竹縣竹北市",
+    "address": "新竹縣竹北市（集合住宅／民宅 · 竹北「母殺2子」超凶宅1條件）",
+    "lat": 24.810094,
+    "lng": 121.019995,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-09-01",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "竹北「母殺2子」超凶宅1條件合法免告知 抓包後加價200萬繼續賣 &amp;nbsp;&amp;nbsp; NOWnews今日新聞",
+    "source": "NOWnews今日新聞報導「竹北「母殺2子」超凶宅1條件合法免告知　抓包後加價200萬繼續賣」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE4wMVFud1RybVdONTZ5bURyYkZpdmVsOUtHYUdrSWwtdVVDOGxyWFJYTEUzcjROTFNUajB3ck9hSnZsWXlPaFdURkxKVDfSAVJBVV95cUxQeWtKa1RnQk9udkZzNTBZVFpwN1ZFNWI1ZVNiZzk3LVdiWVAxUFJ4bVY3aVRnS1R0ZURyRU5uSTNjMnJ1TXE4RmhfTVZIT0FRcEtB?oc=5",
+    "media_verification": "NOWnews今日新聞報導「竹北「母殺2子」超凶宅1條件合法免告知　抓包後加價200萬繼續賣」",
+    "auction_record": "案發日期核實：2024-09-01",
+    "history_timeline": [
+      {
+        "year": "2024-09-01",
+        "stage": "NOWnews今日新聞公開報導",
+        "detail": "竹北「母殺2子」超凶宅1條件合法免告知　抓包後加價200萬繼續賣（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95019,
+    "city": "桃園市",
+    "district": "中壢區",
+    "doorplate_address": "桃園市中壢區食人案路",
+    "address": "桃園市中壢區食人案路（集合住宅／民宅）",
+    "lat": 24.978196,
+    "lng": 121.262154,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2019-11-12",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "佛心網友曝中壢凶宅名單 驚見分屍食人案路段 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「佛心網友曝中壢凶宅名單　驚見分屍食人案路段」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE93S3pnLVZvdFg3ak5RQ19WTU1uU0cxYUZrdk5Cc0IzQ0w5SWZiOGFKWFczaWx6aEtsZEZ4ZHR2TEs2ZXVmb0tkWWpramx5Z3fSAU5BVV95cUxQNzREZzcxVlZHa1BpRkdQYkVpVEZwY0QwT1BPMjVHWDR0VU1QY05SUEpXY1FfRWlYeTc1RFRRSTduSUtUdTZIWjJTV2tHZUE?oc=5",
+    "media_verification": "ETtoday房產雲報導「佛心網友曝中壢凶宅名單　驚見分屍食人案路段」",
+    "auction_record": "案發日期核實：2019-11-12",
+    "history_timeline": [
+      {
+        "year": "2019-11-12",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "佛心網友曝中壢凶宅名單　驚見分屍食人案路段（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "食人案路",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95020,
+    "city": "臺中市",
+    "district": "北屯區",
+    "doorplate_address": "臺中市北屯區",
+    "address": "臺中市北屯區（集合住宅／民宅 · 鬼門開凶宅話題熱！台中北屯出）",
+    "lat": 24.169699,
+    "lng": 120.691203,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-08-13",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "鬼門開凶宅話題熱！台中北屯出現事故屋喊價4980萬元 &amp;nbsp;&amp;nbsp; 富比士地產王",
+    "source": "富比士地產王報導「鬼門開凶宅話題熱！台中北屯出現事故屋喊價4980萬元」",
+    "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPcVY4M2x4UnFuUkd5cl84aWQ5TFd4bEJvMXdHQVAyMjlyLXpqdDZaR0RYTG9KdmRIVE1LUzFQQ3NEOF9kT1U3V2xnUjdYRllfczU5X25xYUsxNkU1a085OWpXcVRuWk1STG5nN2JjWGFtVElpMHl5QlR1a0ZPRlJWenJWaWxKUHV0eDdLMHhtVy1MZjVQ?oc=5",
+    "media_verification": "富比士地產王報導「鬼門開凶宅話題熱！台中北屯出現事故屋喊價4980萬元」",
+    "auction_record": "案發日期核實：2026-08-13",
+    "history_timeline": [
+      {
+        "year": "2026-08-13",
+        "stage": "富比士地產王公開報導",
+        "detail": "鬼門開凶宅話題熱！台中北屯出現事故屋喊價4980萬元（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95021,
+    "city": "苗栗縣",
+    "district": "竹南鎮",
+    "doorplate_address": "苗栗縣竹南鎮",
+    "address": "苗栗縣竹南鎮（集合住宅／民宅 · 台積電保庇苗栗！ 竹南偏鄉凶）",
+    "lat": 24.686027,
+    "lng": 120.876874,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-09-25",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "台積電保庇苗栗！ 竹南偏鄉凶宅喊賣1280萬 &amp;nbsp;&amp;nbsp; 壹蘋新聞網",
+    "source": "壹蘋新聞網報導「台積電保庇苗栗！ 竹南偏鄉凶宅喊賣1280萬」",
+    "source_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOLVQ0elEyOWtnWjJvOTFsaVZ6UkpSengxZHh4MktaeHhNWWdkSlgwM25qSzVVdEhKcmRzSkhoWWdxT3ZDZWFveHptaFExcUdVUXZ4Z3lvc0E5UTBScnpRblc1eTUzZE5ZR2t4S3lYNkpDME5ldFlKN050b0xXa1lrLXdmNA?oc=5",
+    "media_verification": "壹蘋新聞網報導「台積電保庇苗栗！ 竹南偏鄉凶宅喊賣1280萬」",
+    "auction_record": "案發日期核實：2022-09-25",
+    "history_timeline": [
+      {
+        "year": "2022-09-25",
+        "stage": "壹蘋新聞網公開報導",
+        "detail": "台積電保庇苗栗！ 竹南偏鄉凶宅喊賣1280萬（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95022,
+    "city": "新北市",
+    "district": "汐止區",
+    "doorplate_address": "新北市汐止區",
+    "address": "新北市汐止區（集合住宅／民宅 · 怕窮不怕鬼！汐止凶宅便宜租6）",
+    "lat": 25.072475,
+    "lng": 121.633064,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-07-22",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "怕窮不怕鬼！汐止凶宅便宜租6千 房東：前2組租客都沒事 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「怕窮不怕鬼！汐止凶宅便宜租6千　房東：前2組租客都沒事」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE8zMDF1MWpDYlpvSy1xdnd2VHg1S25HelJYXzJpR053aFp5Z3V3OGhWT1o5MGNWZWNTdkNKdTV1dkZGNlhVTGVyQVVYeExSeUHSAU5BVV95cUxOOTFnYklsMlZKTXJFMEdQcDNPNkh5c2plb0JzaUh4ajhGWjFPc3V3elQ0SGNCY3FtWExhVU8tY3JBZGVIY01QbkFrYmVneXc?oc=5",
+    "media_verification": "ETtoday房產雲報導「怕窮不怕鬼！汐止凶宅便宜租6千　房東：前2組租客都沒事」",
+    "auction_record": "案發日期核實：2021-07-22",
+    "history_timeline": [
+      {
+        "year": "2021-07-22",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "怕窮不怕鬼！汐止凶宅便宜租6千　房東：前2組租客都沒事（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95023,
+    "city": "臺中市",
+    "district": "潭子區",
+    "doorplate_address": "臺中市潭子區",
+    "address": "臺中市潭子區（集合住宅／民宅 · 兄妹情深！台中潭子凶宅藏洋蔥）",
+    "lat": 24.191911,
+    "lng": 120.702259,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2019-06-26",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "兄妹情深！台中潭子凶宅藏洋蔥 屋主開價295萬元出售 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「兄妹情深！台中潭子凶宅藏洋蔥　屋主開價295萬元出售」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE8xaGhsejZLMHF0SHA2RFpEejVtc3k5em9ZM2hvYXZOdnU4S0xFU09WbG9rdHBENV9jbjZVNF80RlVJQy1kOW9Hd1VzQmlwNUHSAU5BVV95cUxOWWtvUjgxRVd2bXNqRmVCWGFBQS1KN2s1UW9RUWxFMTJvRDVfOWVwZ2xDb3VfMlVhd1l5WTg5bmFoX1hsT21iVi1UTUgyaVE?oc=5",
+    "media_verification": "ETtoday房產雲報導「兄妹情深！台中潭子凶宅藏洋蔥　屋主開價295萬元出售」",
+    "auction_record": "案發日期核實：2019-06-26",
+    "history_timeline": [
+      {
+        "year": "2019-06-26",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "兄妹情深！台中潭子凶宅藏洋蔥　屋主開價295萬元出售（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95024,
+    "city": "臺北市",
+    "district": "萬華區",
+    "doorplate_address": "臺北市萬華區",
+    "address": "臺北市萬華區（集合住宅／民宅 · 房客穩租5、6年竟自殺　萬華）",
+    "lat": 25.043854,
+    "lng": 121.510227,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2020-10-29",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "房客穩租5、6年竟自殺 萬華凶宅開358萬尋有緣人 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「房客穩租5、6年竟自殺　萬華凶宅開358萬尋有緣人」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5JWk93a3dLdmEzU3UybXI5MTdWeDRGMWpxbFpYb3VRUkJuaXpSbGNfWWxWTEdlTmh4RDVheDhCTU5WbnQ5dTd1Vi1oa0ZQUGvSAU5BVV95cUxNdG5qb2lFSnJCcXFXYXREcDdLOEE2SUZrWURrdWNKbURtUHRvUXZuSVpDQS1mRTFlUWtUZHdRUC0wYkFvUDNxcmx6WDcyQkE?oc=5",
+    "media_verification": "ETtoday房產雲報導「房客穩租5、6年竟自殺　萬華凶宅開358萬尋有緣人」",
+    "auction_record": "案發日期核實：2020-10-29",
+    "history_timeline": [
+      {
+        "year": "2020-10-29",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "房客穩租5、6年竟自殺　萬華凶宅開358萬尋有緣人（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95025,
+    "city": "臺中市",
+    "district": "清水區",
+    "doorplate_address": "臺中市清水區",
+    "address": "臺中市清水區（集合住宅／民宅 · 屋主欠債想不開？清水凶宅5拍）",
+    "lat": 24.26544,
+    "lng": 120.569942,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-03-19",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "屋主欠債想不開？清水凶宅5拍流標 致命缺點曝光 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「屋主欠債想不開？清水凶宅5拍流標　致命缺點曝光」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5nNnU5SmlvVjV4ZWpxUzJQYXlMTFRHbVRDQk14WGNXM2ZvTHJaWFFmZmZ6QllFTWhLYjJqX2tYMnVZRFRDX0F6VW9FS2s1ZXPSAU5BVV95cUxPNUdabkt4STA0NEJuQ3NOazJvOEt6SXVTenI3NVJWemE0SmZ1QUhydWlQdmNfSFNBbklVMFN5T2lHeDY4WFdXQmY4M0dpWXc?oc=5",
+    "media_verification": "ETtoday房產雲報導「屋主欠債想不開？清水凶宅5拍流標　致命缺點曝光」",
+    "auction_record": "案發日期核實：2026-03-19",
+    "history_timeline": [
+      {
+        "year": "2026-03-19",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "屋主欠債想不開？清水凶宅5拍流標　致命缺點曝光（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95026,
+    "city": "新北市",
+    "district": "汐止區",
+    "doorplate_address": "新北市汐止區",
+    "address": "新北市汐止區（集合住宅／民宅 · 兩任屋主保不住資產　汐止知名）",
+    "lat": 25.058882,
+    "lng": 121.640721,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-05-07",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "兩任屋主保不住資產 汐止知名山莊凶宅陷「法拍輪迴」 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「兩任屋主保不住資產　汐止知名山莊凶宅陷「法拍輪迴」」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1hdnJ4ZUFCWktPSTBtNFdFSUxSQmt4T2lBbWxzUWhDWEUxY1VkejJVLU01aEtLQnFMdUw1d2Iwb253QWJRNmJaZWpIaE9sdVHSAU5BVV95cUxNR0JLTS1aRHZ4MDRXZEtvbnFZZ0h2cV9XczY4dTRJZXZ6Wm9HMTRlVDFiUW1XenVfTVI4bU5PdXVPNVJGWWNYMlJxdDBfc1E?oc=5",
+    "media_verification": "ETtoday房產雲報導「兩任屋主保不住資產　汐止知名山莊凶宅陷「法拍輪迴」」",
+    "auction_record": "案發日期核實：2026-05-07",
+    "history_timeline": [
+      {
+        "year": "2026-05-07",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "兩任屋主保不住資產　汐止知名山莊凶宅陷「法拍輪迴」（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95027,
+    "city": "新北市",
+    "district": "土城區",
+    "doorplate_address": "新北市土城區",
+    "address": "新北市土城區（集合住宅／民宅 · 獨家／1坪10萬沒人要！土城）",
+    "lat": 24.993179,
+    "lng": 121.444992,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-09-10",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／1坪10萬沒人要！土城凶宅法拍4拍流標 專家揭真相：比鬼恐怖 &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「獨家／1坪10萬沒人要！土城凶宅法拍4拍流標　專家揭真相：比鬼恐怖」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1UaU1ibVRaNjZIQm5HNlUwVDhBQTZiN0R4UVpUcEJHYWJwY0ZMV2xwN09Qdm1sNGZxeGU0aDJqbGc2X1dvN2FEZVk2N0dad9IBX0FVX3lxTE5xOUZ4M1NMcWN5SkZTYkpuVWp3OEZVdkh0Y3ZoUWxVZGhXZi1oclhrMG9vVS1aLVliMXVlYjRxczNtN3NScjYzYTdHLWJBTkNpeU5JMnptNk1hYlVnZVZn?oc=5",
+    "media_verification": "富房網報導「獨家／1坪10萬沒人要！土城凶宅法拍4拍流標　專家揭真相：比鬼恐怖」",
+    "auction_record": "案發日期核實：2025-09-10",
+    "history_timeline": [
+      {
+        "year": "2025-09-10",
+        "stage": "富房網公開報導",
+        "detail": "獨家／1坪10萬沒人要！土城凶宅法拍4拍流標　專家揭真相：比鬼恐怖（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95028,
+    "city": "新北市",
+    "district": "新店區",
+    "doorplate_address": "新北市新店區",
+    "address": "新北市新店區（高層豪宅大樓 · 不怕鬼只怕貴！新店法拍豪宅戶）",
+    "lat": 24.965759,
+    "lng": 121.512751,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2023-03-24",
+    "building_type": "高層豪宅大樓",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "不怕鬼只怕貴！新店法拍豪宅戶慘變凶宅 新屋主認賠開2999萬求脫手 &amp;nbsp;&amp;nbsp; 5168實價登錄比價王",
+    "source": "5168實價登錄比價王報導「不怕鬼只怕貴！新店法拍豪宅戶慘變凶宅 新屋主認賠開2999萬求脫手」",
+    "source_url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE50UnVGb1RSMThNVWhzY0U1UlZOdnlJbGlxMVJZVDFWakJzVF9QUEZmV2Qwc2wwM3NfRUlrcDZSamh6RFdNemZN?oc=5",
+    "media_verification": "5168實價登錄比價王報導「不怕鬼只怕貴！新店法拍豪宅戶慘變凶宅 新屋主認賠開2999萬求脫手」",
+    "auction_record": "案發日期核實：2023-03-24",
+    "history_timeline": [
+      {
+        "year": "2023-03-24",
+        "stage": "5168實價登錄比價王公開報導",
+        "detail": "不怕鬼只怕貴！新店法拍豪宅戶慘變凶宅 新屋主認賠開2999萬求脫手（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95029,
+    "city": "新北市",
+    "district": "蘆洲區",
+    "doorplate_address": "新北市蘆洲區",
+    "address": "新北市蘆洲區（集合住宅／民宅 · 蘆洲「名宅淪凶宅」疑洗白再法）",
+    "lat": 25.080318,
+    "lng": 121.477816,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2023-03-14",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "蘆洲「名宅淪凶宅」疑洗白再法拍 4字頭不夠便宜慘流標 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「蘆洲「名宅淪凶宅」疑洗白再法拍　4字頭不夠便宜慘流標」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5jbFkxOVFRc1BTbTYwazlXYUZtdnowdmVrNnlEYUthWTVlSjgwbFJ1WXY2ZTJCdS03WlZyUEZ2Sk9EMlBSQ2tjcGNXUTdjX2vSAU5BVV95cUxQV1lwVUdSbE4tYlNzS0c1b1J5RFdyZWFHRjhiREpiUWxFbUJ2dXMxWUlEbTBNMlpzS19BdWFlck5HRjZWWWMyX3VlWmhrQ2c?oc=5",
+    "media_verification": "ETtoday房產雲報導「蘆洲「名宅淪凶宅」疑洗白再法拍　4字頭不夠便宜慘流標」",
+    "auction_record": "案發日期核實：2023-03-14",
+    "history_timeline": [
+      {
+        "year": "2023-03-14",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "蘆洲「名宅淪凶宅」疑洗白再法拍　4字頭不夠便宜慘流標（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95030,
+    "city": "新北市",
+    "district": "蘆洲區",
+    "doorplate_address": "新北市蘆洲區",
+    "address": "新北市蘆洲區（集合住宅／民宅 · 「很明顯在洗」蘆洲凶宅拍完又）",
+    "lat": 25.08822,
+    "lng": 121.467493,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2023-11-14",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "「很明顯在洗」蘆洲凶宅拍完又賣 半年加價400萬被識破 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「「很明顯在洗」蘆洲凶宅拍完又賣　半年加價400萬被識破」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1kRVdORS0tamJ0LUJVYUZVOFNxYnlFOGE0VGNCNW1kY1lSdXJMallPUlJqTWxETUZPMWFnZWdJOGYxZWZlRGRyamRGeFhjNXfSAU5BVV95cUxQYnFwN3doODE5ejVhNkJFN3oyRHhnNjlTSHVTYlVmRWloR3c1Q3Q4b09kSEl0NGc3X3Jvd0laVWk2NTdVaXUtamlxaUVHREE?oc=5",
+    "media_verification": "ETtoday房產雲報導「「很明顯在洗」蘆洲凶宅拍完又賣　半年加價400萬被識破」",
+    "auction_record": "案發日期核實：2023-11-14",
+    "history_timeline": [
+      {
+        "year": "2023-11-14",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "「很明顯在洗」蘆洲凶宅拍完又賣　半年加價400萬被識破（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95031,
+    "city": "新北市",
+    "district": "林口區",
+    "doorplate_address": "新北市林口區",
+    "address": "新北市林口區（集合住宅／民宅 · 林口凶宅法拍流標 市場冷清連）",
+    "lat": 25.072994,
+    "lng": 121.397467,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-08-13",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "林口凶宅法拍流標 市場冷清連1字頭也難脫手 &amp;nbsp;&amp;nbsp; 樂屋網",
+    "source": "樂屋網報導「林口凶宅法拍流標 市場冷清連1字頭也難脫手」",
+    "source_url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1DREd2QTJLemJ5X2ZEc0k5R1d0Z0F0TUxWeXZ4SjFsM1NESjFHMVZwUlZ5RXM2b2drTVhTMGtEbmVta2dWbnhDcWJlbkI4UlFSV0VlTG9jaUh3aEd3ZUE?oc=5",
+    "media_verification": "樂屋網報導「林口凶宅法拍流標 市場冷清連1字頭也難脫手」",
+    "auction_record": "案發日期核實：2025-08-13",
+    "history_timeline": [
+      {
+        "year": "2025-08-13",
+        "stage": "樂屋網公開報導",
+        "detail": "林口凶宅法拍流標 市場冷清連1字頭也難脫手（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95032,
+    "city": "新北市",
+    "district": "土城區",
+    "doorplate_address": "新北市土城區",
+    "address": "新北市土城區（集合住宅／民宅 · 獨家／凶宅1坪10萬！行情5）",
+    "lat": 24.961437,
+    "lng": 121.421719,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-09-09",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／凶宅1坪10萬！行情51折土城「晴天娃娃屋」明法拍 &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「獨家／凶宅1坪10萬！行情51折土城「晴天娃娃屋」明法拍」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFA5ZDhVb1FXM3l2N3JQSEVLQ18xemtlN01XanBGYU5PeTVWNDh6OG4yVGZrelpfWEI2TC1taHJMUUMyMFNrOHd2WGN0WkxWZ9IBX0FVX3lxTFB2T2ZRZkFQTzY5RUFDTEVwNkdNNmJLU2xKT1ZZdll0aHl5RHI5dmxEeG1HbFhqTE41M1FKbjd5QnRPMnJ1RmdGdWhVR19MZ2RYVVZ0VGVfeFhrZ3o1aExN?oc=5",
+    "media_verification": "富房網報導「獨家／凶宅1坪10萬！行情51折土城「晴天娃娃屋」明法拍」",
+    "auction_record": "案發日期核實：2025-09-09",
+    "history_timeline": [
+      {
+        "year": "2025-09-09",
+        "stage": "富房網公開報導",
+        "detail": "獨家／凶宅1坪10萬！行情51折土城「晴天娃娃屋」明法拍（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95033,
+    "city": "新北市",
+    "district": "永和區",
+    "doorplate_address": "新北市永和區",
+    "address": "新北市永和區（集合住宅／民宅 · 法拍屋浪潮降臨？勇者出手這樣）",
+    "lat": 25.008899,
+    "lng": 121.527508,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-11-16",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "法拍屋浪潮降臨？勇者出手這樣幹 300萬買到「永和、萬華」凶宅 &amp;nbsp;&amp;nbsp; NOWnews今日新聞",
+    "source": "NOWnews今日新聞報導「法拍屋浪潮降臨？勇者出手這樣幹　300萬買到「永和、萬華」凶宅」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5GVVJVMm9rY0ktV1ZEVGdpeUdlR1FHTlpUNTNTTHlWN3Y4OTh1SDdVUnpMdkdCNThja3hFdWVpdE56cUVhdWMtNDM3aGnSAVJBVV95cUxPOFZyRV9MazlIWTlkLVpCTFh5eUFFWE5vT3kxbTgwWmVoZV85Vk14QUh4SUVKOVZTUXhOQVZZUWlUS0p3ci1kbjgwZW8yZ2tia3Zn?oc=5",
+    "media_verification": "NOWnews今日新聞報導「法拍屋浪潮降臨？勇者出手這樣幹　300萬買到「永和、萬華」凶宅」",
+    "auction_record": "案發日期核實：2024-11-16",
+    "history_timeline": [
+      {
+        "year": "2024-11-16",
+        "stage": "NOWnews今日新聞公開報導",
+        "detail": "法拍屋浪潮降臨？勇者出手這樣幹　300萬買到「永和、萬華」凶宅（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95034,
+    "city": "新北市",
+    "district": "鶯歌區",
+    "doorplate_address": "新北市鶯歌區",
+    "address": "新北市鶯歌區（集合住宅／民宅 · 獨／法拍屋羅生門！鶯歌「類凶）",
+    "lat": 24.953014,
+    "lng": 121.357257,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-08-13",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨／法拍屋羅生門！鶯歌「類凶宅」想買自己查 勇者8折價就出手 &amp;nbsp;&amp;nbsp; NOWnews今日新聞",
+    "source": "NOWnews今日新聞報導「獨／法拍屋羅生門！鶯歌「類凶宅」想買自己查　勇者8折價就出手」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFB4NmVSMW5nX09DSkpDcUUyLTlYQUpUSHl2WDFjUkhSYUZ5N21JZ25zbmd0dFVSaHRxM1hEZzQ1Z1ZVUUtkbHdwbGN6UUrSAVJBVV95cUxQblR0Q0hiaTkwUXhHampTV3lKT1NYaWhXZjdadU1TMWFjcEpQdjllZkdLaFFGdVRkV09PZjhWSmxlTGc0NlY2Q21XVTBrdHlJaFhR?oc=5",
+    "media_verification": "NOWnews今日新聞報導「獨／法拍屋羅生門！鶯歌「類凶宅」想買自己查　勇者8折價就出手」",
+    "auction_record": "案發日期核實：2024-08-13",
+    "history_timeline": [
+      {
+        "year": "2024-08-13",
+        "stage": "NOWnews今日新聞公開報導",
+        "detail": "獨／法拍屋羅生門！鶯歌「類凶宅」想買自己查　勇者8折價就出手（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95035,
+    "city": "臺南市",
+    "district": "永康區",
+    "doorplate_address": "臺南市永康區",
+    "address": "臺南市永康區（透天別墅 · 9年前562萬法拍取得！ 台）",
+    "lat": 23.011483,
+    "lng": 120.243837,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-03-07",
+    "building_type": "透天別墅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "9年前562萬法拍取得！ 台南永康凶宅別墅今加價千萬求售 &amp;nbsp;&amp;nbsp; TVBS新聞網",
+    "source": "TVBS新聞網報導「9年前562萬法拍取得！ 台南永康凶宅別墅今加價千萬求售」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFAyMTRrcmVFeV9JMDlJNFdydVVYclQtejFGbFMzN3lmVEViZHhWZDg1Ul9ac2JyVXJPYXVKc0ZqZ0ptVWNlNXUwQVlBczB6dw?oc=5",
+    "media_verification": "TVBS新聞網報導「9年前562萬法拍取得！ 台南永康凶宅別墅今加價千萬求售」",
+    "auction_record": "案發日期核實：2025-03-07",
+    "history_timeline": [
+      {
+        "year": "2025-03-07",
+        "stage": "TVBS新聞網公開報導",
+        "detail": "9年前562萬法拍取得！ 台南永康凶宅別墅今加價千萬求售（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95036,
+    "city": "新北市",
+    "district": "三重區",
+    "doorplate_address": "新北市三重區",
+    "address": "新北市三重區（集合住宅／民宅 · 獨家／三重凶宅晴天娃娃屋！法）",
+    "lat": 25.060619,
+    "lng": 121.495002,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-09-17",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／三重凶宅晴天娃娃屋！法拍1坪27萬 「51折贈頂加」竟還沒人要 &amp;nbsp;&amp;nbsp; 三立新聞",
+    "source": "三立新聞報導「獨家／三重凶宅晴天娃娃屋！法拍1坪27萬　「51折贈頂加」竟還沒人要」",
+    "source_url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9pQ3NIeFFJMFpwR2FWUWhWQVptNUpWOTlQRkpUV1FrNW81V1VZaHMxODZkeHU4UGd2SGhXUFRRWkZpaDM4bUVNdtIBTEFVX3lxTFB5SkhKblRYNmpWU0J0all1NWVrVFg0VWpuRm45TmhqcmthTl9ycE9PaHB1eVVjbGVHYVJzWHVvTkJ1d0pXb2w0NFE0Z0I?oc=5",
+    "media_verification": "三立新聞報導「獨家／三重凶宅晴天娃娃屋！法拍1坪27萬　「51折贈頂加」竟還沒人要」",
+    "auction_record": "案發日期核實：2025-09-17",
+    "history_timeline": [
+      {
+        "year": "2025-09-17",
+        "stage": "三立新聞公開報導",
+        "detail": "獨家／三重凶宅晴天娃娃屋！法拍1坪27萬　「51折贈頂加」竟還沒人要（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95037,
+    "city": "新北市",
+    "district": "土城區",
+    "doorplate_address": "新北市土城區",
+    "address": "新北市土城區（集合住宅／民宅 · 剛換屋主半年就傳墜樓　4組勇）",
+    "lat": 24.980788,
+    "lng": 121.445721,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2023-02-25",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "剛換屋主半年就傳墜樓 4組勇者搶拍土城「最美凶宅」 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「剛換屋主半年就傳墜樓　4組勇者搶拍土城「最美凶宅」」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1yZmJDTVpDSkJMUjAyS2kzQkNNb3Jzd3hidVFIcGhBM1A3NGQwTEN4MXdiamR5M1o3RWNEcUM1T3VqQVQtbnFQVjFPVldqWUXSAU5BVV95cUxPNkVSQXoyNjh6dG5WVGZBc2Q4UFNDaXRKWFNxc0pvZmpwYWJwb2NDUGtRWDBHaFQ1YkRUeTNnZjE2ZC0zT29haVZNTmFOOGc?oc=5",
+    "media_verification": "ETtoday房產雲報導「剛換屋主半年就傳墜樓　4組勇者搶拍土城「最美凶宅」」",
+    "auction_record": "案發日期核實：2023-02-25",
+    "history_timeline": [
+      {
+        "year": "2023-02-25",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "剛換屋主半年就傳墜樓　4組勇者搶拍土城「最美凶宅」（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95038,
+    "city": "臺中市",
+    "district": "大里區",
+    "doorplate_address": "臺中市大里區",
+    "address": "臺中市大里區（集合住宅／民宅 · 獨家／台中凶宅51折法拍！大）",
+    "lat": 24.082945,
+    "lng": 120.696283,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-10-03",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "意外身亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／台中凶宅51折法拍！大里「點火驅蛇」火災奪5命 4拍底價447.7萬 &amp;nbsp;&amp;nbsp; 三立新聞",
+    "source": "三立新聞報導「獨家／台中凶宅51折法拍！大里「點火驅蛇」火災奪5命　4拍底價447.7萬」",
+    "source_url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE00UFFxMEZPdjFTck5iYTJLYlVScjI5YzB6U0VBS19JRzlIOVQ4eEEyXzVTV3Z5LUhJc3h5TWRDcDVONWV2UVFkWNIBTEFVX3lxTE1ISWM2aExTWnBRWmVTMnU5ZkJSai00MFVCQTZLcnp5ZW44MVp5QksxLXkwVi01bHBqYWpTSldLVHEwLXNsMUU4djM0eXA?oc=5",
+    "media_verification": "三立新聞報導「獨家／台中凶宅51折法拍！大里「點火驅蛇」火災奪5命　4拍底價447.7萬」",
+    "auction_record": "案發日期核實：2025-10-03",
+    "history_timeline": [
+      {
+        "year": "2025-10-03",
+        "stage": "三立新聞公開報導",
+        "detail": "獨家／台中凶宅51折法拍！大里「點火驅蛇」火災奪5命　4拍底價447.7萬（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95039,
+    "city": "新北市",
+    "district": "土城區",
+    "doorplate_address": "新北市土城區",
+    "address": "新北市土城區（集合住宅／民宅 · 出事！土城「最美凶宅」法拍一）",
+    "lat": 24.989529,
+    "lng": 121.45431,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-12-15",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "出事！土城「最美凶宅」法拍一拍流標 Sway曾批社區很爛：7折才能賣掉 &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「出事！土城「最美凶宅」法拍一拍流標　Sway曾批社區很爛：7折才能賣掉」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFB5ZzZzSDVacHh4QXhGaEZxM3pRZVBvRTdsa2JOZHZGaHVhaWc0c1FXRkxHY0taVm5fd2pHaXlrTEFXRjFVQ0VCM3JaRlFUZ9IBX0FVX3lxTE5JdzdSR3pGVkFBOGo0eGt4LXZCTFJTbjhlcEViSUFUZVFjUVZ2U0VxR2hfVzRCbDJQOWtnR3dwdTBhNTVBaHpVcXFzYTg0T3l2MXU0ajRFNUNZYjVBZTg0?oc=5",
+    "media_verification": "富房網報導「出事！土城「最美凶宅」法拍一拍流標　Sway曾批社區很爛：7折才能賣掉」",
+    "auction_record": "案發日期核實：2022-12-15",
+    "history_timeline": [
+      {
+        "year": "2022-12-15",
+        "stage": "富房網公開報導",
+        "detail": "出事！土城「最美凶宅」法拍一拍流標　Sway曾批社區很爛：7折才能賣掉（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95040,
+    "city": "臺北市",
+    "district": "萬華區",
+    "doorplate_address": "臺北市萬華區",
+    "address": "臺北市萬華區（集合住宅／民宅 · 獨家／萬華凶宅煙燻過2次！1）",
+    "lat": 25.021751,
+    "lng": 121.49879,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-09-22",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／萬華凶宅煙燻過2次！10月將法拍 一拍底價2311萬 &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「獨家／萬華凶宅煙燻過2次！10月將法拍　一拍底價2311萬」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFAyNVd4MzBGYlFfRU9NRmhVZXNLeHBNRlRDN29YU0FlN2VvZ05TVDFscXFyZThJV0VMNXdpTHVNdlJGa2VwQ3BUMnpHWkd6d9IBX0FVX3lxTFB5UmR1LVo5Z21sSUVtQUt5T1F0Q3l4MXF3WmV1c2hzTFhyNG5ZUUJQQXktYndnX1M3Ni1PdXp1dC1ubnNOX1BVY1Y4ZDI2X20tV1FZYkpTXzVMSXFYMTRZ?oc=5",
+    "media_verification": "富房網報導「獨家／萬華凶宅煙燻過2次！10月將法拍　一拍底價2311萬」",
+    "auction_record": "案發日期核實：2025-09-22",
+    "history_timeline": [
+      {
+        "year": "2025-09-22",
+        "stage": "富房網公開報導",
+        "detail": "獨家／萬華凶宅煙燻過2次！10月將法拍　一拍底價2311萬（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95041,
+    "city": "新北市",
+    "district": "三重區",
+    "doorplate_address": "新北市三重區",
+    "address": "新北市三重區（集合住宅／民宅 · 房價暴跌45%！三重知名社區）",
+    "lat": 25.066514,
+    "lng": 121.4885,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-07-19",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "房價暴跌45%！三重知名社區淪「炭味凶宅」繼承者淚扛700萬房貸賣了 &amp;nbsp;&amp;nbsp; 好房網News",
+    "source": "好房網News報導「房價暴跌45%！三重知名社區淪「炭味凶宅」繼承者淚扛700萬房貸賣了」",
+    "source_url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBiNy1hQ0xFckhHVVNmRG9JY0V6azlMNzcyNzBtR3hkRmxWUkNwRC1QVFZudmpxRDdWT0N5ZGhBMHJvUmVEZXVHRV9CRUc1UnpIUG1Idk9reVVGWkFWNmY1UnZDMTVCdU5pU0w00gFwQVVfeXFMUHNSbEUwNHpKY2dSaTRlUjVQNUc1X3VqSFZTOUhaM3o5bnlRQTRXTW0xLW1ncTQ1cGZFWjJLX2h6SVljQkZmQW1tcmlWRXpLdzZ2WV9UMWI1b1BGcUlFWE02M2tJOTdIeXhGR2diQzlSWg?oc=5",
+    "media_verification": "好房網News報導「房價暴跌45%！三重知名社區淪「炭味凶宅」繼承者淚扛700萬房貸賣了」",
+    "auction_record": "案發日期核實：2024-07-19",
+    "history_timeline": [
+      {
+        "year": "2024-07-19",
+        "stage": "好房網News公開報導",
+        "detail": "房價暴跌45%！三重知名社區淪「炭味凶宅」繼承者淚扛700萬房貸賣了（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95042,
+    "city": "新北市",
+    "district": "汐止區",
+    "doorplate_address": "新北市汐止區",
+    "address": "新北市汐止區（13樓 · 集合住宅／民宅）",
+    "lat": 25.075945,
+    "lng": 121.640299,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-08-30",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "新北汐止大樓驚傳墜樓 5旬獨居婦「13樓頂樓墜落」身亡 &amp;nbsp;&amp;nbsp; Yahoo新聞",
+    "source": "Yahoo新聞報導「新北汐止大樓驚傳墜樓 5旬獨居婦「13樓頂樓墜落」身亡」",
+    "source_url": "https://news.google.com/rss/articles/CBMi1wJBVV95cUxQWUtuY0RMMDYxNF9vWlZxcUsxYkdUb2FMeURlZlJWUzVrYjVjYXNaSTQxZVR4TUVnb0FnajdWNGs0YzJnMlBVNTlHbXNFeWkzUXktNmZfTUZ2QmQ0MVp6UU01UmN3R1labVJyOHR4dnBYZlJ4azN4VmR0aHdIVWtXM0tsY1NpUXE0YkxpM21LbGY5UlN3enpOTU05QmZZamticl9oOVFGU1hZa3hiZjNuMHRmVkdiN0pfVmMweVFITVFVbktFOUwzN2Z1UVNndkNnQ0VvTEk1YXkyaEFOOVhlSlg2U1VmSFdySjBIUGtVTjgyLURmbXJmbFVjT3IxRmVXREJPaTNlcHRaQUNWYkVhTk84bDlld0o0RXNwdUg5ZmJjNjV2WmdQVFFVWjAyS3Bya0hVQ2NwQUZEbHRqYTNmSmNCM1RvRU1peS1sc2gxMnpEMjlxQk9J?oc=5",
+    "media_verification": "Yahoo新聞報導「新北汐止大樓驚傳墜樓 5旬獨居婦「13樓頂樓墜落」身亡」",
+    "auction_record": "案發日期核實：2026-08-30",
+    "history_timeline": [
+      {
+        "year": "2026-08-30",
+        "stage": "Yahoo新聞公開報導",
+        "detail": "新北汐止大樓驚傳墜樓 5旬獨居婦「13樓頂樓墜落」身亡（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95043,
+    "city": "花蓮縣",
+    "district": "花蓮市",
+    "doorplate_address": "花蓮縣花蓮市民德四街",
+    "address": "花蓮縣花蓮市民德四街（集合住宅／民宅）",
+    "lat": 23.9712,
+    "lng": 121.608906,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-09-15",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "花蓮市民德四街一棟大樓傳出火警 社區管理員疑似吸入濃煙不治 &amp;nbsp;&amp;nbsp; 更生新聞網",
+    "source": "更生新聞網報導「花蓮市民德四街一棟大樓傳出火警 社區管理員疑似吸入濃煙不治」",
+    "source_url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBKVkFQaWZwV0EybzRzUmRMS0h5YS01QUhQNm5EUl81MHlQbzlHdDJoVEt6THpPY21BUk9XUmh0Q2tBd1hGd1NrLXdn?oc=5",
+    "media_verification": "更生新聞網報導「花蓮市民德四街一棟大樓傳出火警 社區管理員疑似吸入濃煙不治」",
+    "auction_record": "案發日期核實：2026-09-15",
+    "history_timeline": [
+      {
+        "year": "2026-09-15",
+        "stage": "更生新聞網公開報導",
+        "detail": "花蓮市民德四街一棟大樓傳出火警 社區管理員疑似吸入濃煙不治（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "民德四街",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95044,
+    "city": "新北市",
+    "district": "中和區",
+    "doorplate_address": "新北市中和區",
+    "address": "新北市中和區（頂樓 · 出租套房／公寓）",
+    "lat": 25.007424,
+    "lng": 121.483837,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-03-17",
+    "building_type": "出租套房／公寓",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "中和縱火釀9死！無良隔出41間套房＋頂樓加蓋 女房東也要入獄2年 &amp;nbsp;&amp;nbsp; ETtoday新聞雲",
+    "source": "ETtoday新聞雲報導「中和縱火釀9死！無良隔出41間套房＋頂樓加蓋　女房東也要入獄2年」",
+    "source_url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1YV056bk1DVWlDRnY4ck9UZlZSLXRqYnlNamZlekoxeGctNmt3eHk2ZnVZTXlKLTBfU3FiUm1YTURRek1GT3Fyd0Q4dzhPNy1MVVZKZE9jODdaUUJMckHSAUtBVV95cUxOc19YT1JMSjZqeTVEdnhXTXhldE9mT3paYTdBWG5qb1dNUnc0Rk9JX0M4R09ESmZxcnhMdl9oVHluQkdDdFo4N3Z5Y3M?oc=5",
+    "media_verification": "ETtoday新聞雲報導「中和縱火釀9死！無良隔出41間套房＋頂樓加蓋　女房東也要入獄2年」",
+    "auction_record": "案發日期核實：2021-03-17",
+    "history_timeline": [
+      {
+        "year": "2021-03-17",
+        "stage": "ETtoday新聞雲公開報導",
+        "detail": "中和縱火釀9死！無良隔出41間套房＋頂樓加蓋　女房東也要入獄2年（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95014,
+    "city": "新北市",
+    "district": "三重區",
+    "doorplate_address": "新北市三重區",
+    "address": "新北市三重區（集合住宅／民宅 · 獨家／屋主自喊煙燻屋！三重類）",
+    "lat": 25.057256,
+    "lng": 121.490273,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-08-25",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／屋主自喊煙燻屋！三重類凶宅法拍 3拍底價61折未再降 &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「獨家／屋主自喊煙燻屋！三重類凶宅法拍　3拍底價61折未再降」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE45Q3FPWHp0SWRzb0Q3ZEdjZUI1YndCYXVFNXVac0NralFHOHlKaVZpbjdxcEM3dnlyMDRwLVR3YnZDc2RKUkY3SkdENG9kd9IBX0FVX3lxTE44Tk8wTnJKU3lzVnFvOTlDazh0NWFGZmlfMVdnZzdQZTk4NEFaOWpmY0pqd3UtSXl5RkNqa1NOZk9JQ2ZJcDdwclRtdVhSMzVwejBXQzdWSFYydEJsekpF?oc=5",
+    "media_verification": "富房網報導「獨家／屋主自喊煙燻屋！三重類凶宅法拍　3拍底價61折未再降」",
+    "auction_record": "案發日期核實：2025-08-25",
+    "history_timeline": [
+      {
+        "year": "2025-08-25",
+        "stage": "富房網公開報導",
+        "detail": "獨家／屋主自喊煙燻屋！三重類凶宅法拍　3拍底價61折未再降（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95015,
+    "city": "新北市",
+    "district": "永和區",
+    "doorplate_address": "新北市永和區",
+    "address": "新北市永和區（集合住宅／民宅 · 永和新建案工人墜樓！全棟變凶）",
+    "lat": 24.998563,
+    "lng": 121.51457,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-09-24",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "永和新建案工人墜樓！全棟變凶宅？一關鍵曝光：非內政部定義範圍 &amp;nbsp;&amp;nbsp; NOWnews今日新聞",
+    "source": "NOWnews今日新聞報導「永和新建案工人墜樓！全棟變凶宅？一關鍵曝光：非內政部定義範圍」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9xNnd1Vkl5cXdET25WelZPMlZYNEJRbWhxX2VxWDJVU3ZhZG5HVUFZeGw3Y05JZVdpMEhhNVFmMXZOVUs5c3FtS3lndELSAVJBVV95cUxQcUcyQURXUEtFVktmcWRPb2tHNzJnS3RfVTdQX1dJcTdBdV85bTBEVU9TWTVuMjBpd3dreGNNWk1XLUJEVjFyV3FnZFJqT0xoTGJn?oc=5",
+    "media_verification": "NOWnews今日新聞報導「永和新建案工人墜樓！全棟變凶宅？一關鍵曝光：非內政部定義範圍」",
+    "auction_record": "案發日期核實：2024-09-24",
+    "history_timeline": [
+      {
+        "year": "2024-09-24",
+        "stage": "NOWnews今日新聞公開報導",
+        "detail": "永和新建案工人墜樓！全棟變凶宅？一關鍵曝光：非內政部定義範圍（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95016,
+    "city": "臺中市",
+    "district": "東區",
+    "doorplate_address": "臺中市東區",
+    "address": "臺中市東區（集合住宅／民宅 · 情殺悲劇不影響　14組人馬搶）",
+    "lat": 24.131845,
+    "lng": 120.683746,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-07-24",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "【情殺悲劇不影響　14組人馬搶台中東區凶宅破上拍】情殺悲劇不影響 14組人馬搶台中東區凶宅破上拍 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「情殺悲劇不影響　14組人馬搶台中東區凶宅破上拍」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9mLXpHSjlFTWo3dGtRSklZSEVvYm9jWlRwMHN5dmhxa3Ewa1NlZjJuU0N6bWFTWjBFRmsycXZRaGlQdUNYS3FnQlVzOWZGQ1XSAU5BVV95cUxQQ3VUQWpUdUpKeFpDMjZjNTd5SDZrdG1HaGtRNi0yNS1HODhQS3Fqc0NRZlBUbDJnanFEcE0xTGlpRkNxd0MzUWpiNXhSRWc?oc=5",
+    "media_verification": "ETtoday房產雲報導「情殺悲劇不影響　14組人馬搶台中東區凶宅破上拍」",
+    "auction_record": "案發日期核實：2024-07-24",
+    "history_timeline": [
+      {
+        "year": "2024-07-24",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "情殺悲劇不影響　14組人馬搶台中東區凶宅破上拍（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95017,
+    "city": "新北市",
+    "district": "土城區",
+    "doorplate_address": "新北市土城區",
+    "address": "新北市土城區（集合住宅／民宅 · 土城7年社區「最美凶宅」淪法）",
+    "lat": 24.988716,
+    "lng": 121.459373,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-12-13",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "土城7年社區「最美凶宅」淪法拍 他曾預言：能出場就快出場 &amp;nbsp;&amp;nbsp; 好房網News",
+    "source": "好房網News報導「土城7年社區「最美凶宅」淪法拍　他曾預言：能出場就快出場」",
+    "source_url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5vaU12b3B2WkxfcndXcUt2a2dhSGxibHJBR253Q09jY1R6ZXhDczF4ZXJKS09JYkdpbHVqaEdXRmd4b3ZTRnRkWHpvcnlNN19DdGFmdlJCUU5FOTM3MHV5cjYyaERhV3M2YmJN0gFwQVVfeXFMTV8zQVRoTjBtR3E4RUx2SXMwbE9wMkszMlk3bGZhRGVlRWQyWGhEZmV5bkhZNDNtSUFJeVA2ZHgwXzFSd0tMWm1RNUc5LXhvTVozbTVMdklOeUY0ZnI1MWkwS3NqcURxUXVrU3JBRVkwbg?oc=5",
+    "media_verification": "好房網News報導「土城7年社區「最美凶宅」淪法拍　他曾預言：能出場就快出場」",
+    "auction_record": "案發日期核實：2022-12-13",
+    "history_timeline": [
+      {
+        "year": "2022-12-13",
+        "stage": "好房網News公開報導",
+        "detail": "土城7年社區「最美凶宅」淪法拍　他曾預言：能出場就快出場（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95001,
+    "city": "臺中市",
+    "district": "沙鹿區",
+    "doorplate_address": "臺中市沙鹿區",
+    "address": "臺中市沙鹿區（集合住宅／民宅 · 全台「極凶宅」現況搜查　沙鹿）",
+    "lat": 24.252247,
+    "lng": 120.566739,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-08-17",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "全台「極凶宅」現況搜查 沙鹿這間連抓6交替「從此塵封」 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "公開房產社群與ETtoday房產雲報導「全台「極凶宅」現況搜查　沙鹿這間連抓6交替「從此塵封」」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9EV2JkMC1GZGtleGVHV3l5VEpQRzgzaVJoXzBvSFk1YlhRWGc0SEVPLVZNNmEybjdVVFY2bTJnZlJWOTFQWUZFMkxLSzlvak3SAU5BVV95cUxOVTROVWJxSEg1Wk8wVzdBRWgzZ2hpUzhqVlVPOFBOeXY3NDRqamVraG9TTUFjalBxdnZsMGY0ZGF4UlVpSkEtajlTcWptOEE?oc=5",
+    "media_verification": "公開房產社群與ETtoday房產雲報導「全台「極凶宅」現況搜查　沙鹿這間連抓6交替「從此塵封」」",
+    "auction_record": "案發日期核實：2024-08-17",
+    "history_timeline": [
+      {
+        "year": "2024-08-17",
+        "stage": "公開房產社群與ETtoday房產雲公開報導",
+        "detail": "全台「極凶宅」現況搜查　沙鹿這間連抓6交替「從此塵封」（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95002,
+    "city": "臺中市",
+    "district": "梧棲區",
+    "doorplate_address": "臺中市梧棲區",
+    "address": "臺中市梧棲區（集合住宅／民宅 · 梧棲夫妻雙亡凶宅出租「2房1）",
+    "lat": 24.245353,
+    "lng": 120.555241,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-06-21",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "梧棲夫妻雙亡凶宅出租「2房1廳月租9000元」！網：窮比鬼更可怕 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「梧棲夫妻雙亡凶宅出租「2房1廳月租9000元」！網：窮比鬼更可怕」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1KQjdlQVFMU1ZkUktzazh6UTl4TVg2ZGlnYVBQTGNMcjBiVGFOOFVqZDloVGVMc3NZazJqX3ZmZDlETEw2LWR3TGtTT3RvSkHSAU5BVV95cUxNWDJmNEFibnFzc3ktVWFYMDhZY3l6ekFzUFVNTDJTRUhnYVB5b1NxT0d0S3I5ejRvcmtFNTQ4MWRBNEZKb0NmaFJiZnM5dFE?oc=5",
+    "media_verification": "ETtoday房產雲報導「梧棲夫妻雙亡凶宅出租「2房1廳月租9000元」！網：窮比鬼更可怕」",
+    "auction_record": "案發日期核實：2026-06-21",
+    "history_timeline": [
+      {
+        "year": "2026-06-21",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "梧棲夫妻雙亡凶宅出租「2房1廳月租9000元」！網：窮比鬼更可怕（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95003,
+    "city": "新北市",
+    "district": "三重區",
+    "doorplate_address": "新北市三重區",
+    "address": "新北市三重區（集合住宅／民宅 · 三重「3屍滅門凶宅」登網招租）",
+    "lat": 25.058156,
+    "lng": 121.493423,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-11-21",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "三重「3屍滅門凶宅」登網招租 租金大砍逾5成 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「三重「3屍滅門凶宅」登網招租　租金大砍逾5成」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBWakw4V29TelFEWTU4ZkJJdndkaWlFb2VET2NKUEFFZVZQVWF4ZjVxN1I0dVBsNTVVblotaUdkV1VKZ3pxU2dudmdGaWd0ZzjSAU5BVV95cUxNSnFkRlBfRU1BWlVlWjZBUW10MjZQRnBuejFRSllRc2dKWEZvTjVpR3RDcnIyTUlrMlhoa1dKYkZ4X3VIb25XZkdBb0ItZkE?oc=5",
+    "media_verification": "ETtoday房產雲報導「三重「3屍滅門凶宅」登網招租　租金大砍逾5成」",
+    "auction_record": "案發日期核實：2024-11-21",
+    "history_timeline": [
+      {
+        "year": "2024-11-21",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "三重「3屍滅門凶宅」登網招租　租金大砍逾5成（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95004,
+    "city": "高雄市",
+    "district": "三民區",
+    "doorplate_address": "高雄市三民區",
+    "address": "高雄市三民區（集合住宅／民宅 · 價格不夠甜？　三民區BBQ凶）",
+    "lat": 22.656807,
+    "lng": 120.320534,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-11-26",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "【價格不夠甜？　三民區BBQ凶宅每坪18.5萬流標】價格不夠甜？ 三民區BBQ凶宅每坪18.5萬流標 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「價格不夠甜？　三民區BBQ凶宅每坪18.5萬流標」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE04SGpxbGhMcFJyNVd5ZXNXd2tyX3R6NWhhVU5RLWxmVHpyWVhOQi1FX0d1UjBEQTF1NXVYV0FQVGdWbHJpSThjVTBLdEpkalXSAU5BVV95cUxPUjFpNElXMVIyOGZJMFhQVGZNRHkxOWVvNUNwclN3Qmk1a1poQnR6WVhQeVdoT3JOcDYyZXBCSDgweW1yZi1ZRTdTamtralE?oc=5",
+    "media_verification": "ETtoday房產雲報導「價格不夠甜？　三民區BBQ凶宅每坪18.5萬流標」",
+    "auction_record": "案發日期核實：2025-11-26",
+    "history_timeline": [
+      {
+        "year": "2025-11-26",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "價格不夠甜？　三民區BBQ凶宅每坪18.5萬流標（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95005,
+    "city": "新北市",
+    "district": "林口區",
+    "doorplate_address": "新北市林口區",
+    "address": "新北市林口區（集合住宅／民宅 · 【法拍風暴】「屋內有遭燻燒痕）",
+    "lat": 25.079964,
+    "lng": 121.397115,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-11-11",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "【法拍風暴】「屋內有遭燻燒痕跡」起疑！投標人誤拍林口凶宅 撤案關鍵全看這條新法 &amp;nbsp;&amp;nbsp; Yahoo股市",
+    "source": "Yahoo股市報導「【法拍風暴】「屋內有遭燻燒痕跡」起疑！投標人誤拍林口凶宅 撤案關鍵全看這條新法」",
+    "source_url": "https://news.google.com/rss/articles/CBMipARBVV95cUxOM3pLRGpMSTA5S0ZHdFZiNnEzTkg1M1VkYk4tVDNKOFN2WWVWS2NLX0tONXNpMk02Ml82QmNGR0k1WTFwYUVOUEc1V3B5NWlCNUdNeTdLUXR0YldBU3FpT181NWxmaXdUS3dVTDkzdDQ0NUJzUFUyVHhzNDBtdXYyU1E1V050YVpVR3g2YlI1VE45elJkVHNYYUQ2NWg2VXBnbEdkekpqU1A1ckMwdWZrTlF5NWRaVG81dWdGeHVfaXNETnJoNFBPb1NBOFVlb1dwZmtNN0RveDU2TG8yaDFtSXAwZ0V4cVY1TnkxVmlGUERNLWVyQjVoRTJhSDNjcEZXbHEtQmZScF8yZ2gzYklTdzBLS0RiSjhKb09VcUxXRlpacmtQQlRzYUNmTDQwaW9pbzk4Ql9sNjFuVVVZelV2N2hRdzJwWHFDTUhqOEpGLUw4bnFtZUQyaU9qYmY5azBpTHd4LUlyUk5yNmpQdmNTSG1EWXk2SlJkVUYwaTVXWTMyS0VZQ1BLOENzOTJpT0xWRXBBVjNuSEZfVDZURzNuQkREY0hwNlVyeGNuSHZ5SXE1VmZlWnJEVkJ0b1JVSXZldDNhY1BNNXp1NjdZVXFEbVdvLVVDQ1RMOEtrTlY0VzllWHljTVJ1QllIRVhaWnk2M29nazI0TE15bm1vUGZxNUc0VkM2VHNwQ01Wbk9yNXlCRWR6amgwWE5mTkE1TXM3WkVfVQ?oc=5",
+    "media_verification": "Yahoo股市報導「【法拍風暴】「屋內有遭燻燒痕跡」起疑！投標人誤拍林口凶宅 撤案關鍵全看這條新法」",
+    "auction_record": "案發日期核實：2024-11-11",
+    "history_timeline": [
+      {
+        "year": "2024-11-11",
+        "stage": "Yahoo股市公開報導",
+        "detail": "【法拍風暴】「屋內有遭燻燒痕跡」起疑！投標人誤拍林口凶宅 撤案關鍵全看這條新法（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95006,
+    "city": "新北市",
+    "district": "林口區",
+    "doorplate_address": "新北市林口區",
+    "address": "新北市林口區（集合住宅／民宅 · 獨家／林口「煙燻」凶宅72折）",
+    "lat": 25.073865,
+    "lng": 121.386641,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2025-08-11",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "獨家／林口「煙燻」凶宅72折法拍！1坪19萬流標 專家曝致命點沒人敢碰 &amp;nbsp;&amp;nbsp; 富房網",
+    "source": "富房網報導「獨家／林口「煙燻」凶宅72折法拍！1坪19萬流標　專家曝致命點沒人敢碰」",
+    "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5LWHR3VFhMdjBGQzA5TVZiYzJPNWpfVkVWdERkNkNlMXhXZXl6QV81Z0V5c3JTblZFeWI3cmQwb3pxTEI3R3YzRVJ0NE41UdIBX0FVX3lxTFB0S0xMYVdnSElvVWdmV2s2TmtGT01raFRpMWZwSFNQNERWc296T3BXdThRUzdtMzU0dDhQcjdnRTRZN2FybGZGaU9uNHNud0l1SHhaWlNSU1ZTWHZWVUg0?oc=5",
+    "media_verification": "富房網報導「獨家／林口「煙燻」凶宅72折法拍！1坪19萬流標　專家曝致命點沒人敢碰」",
+    "auction_record": "案發日期核實：2025-08-11",
+    "history_timeline": [
+      {
+        "year": "2025-08-11",
+        "stage": "富房網公開報導",
+        "detail": "獨家／林口「煙燻」凶宅72折法拍！1坪19萬流標　專家曝致命點沒人敢碰（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95007,
+    "city": "臺北市",
+    "district": "文山區",
+    "doorplate_address": "臺北市文山區",
+    "address": "臺北市文山區（集合住宅／民宅 · 【法拍風暴】凶宅大洗白？！ ）",
+    "lat": 25.008721,
+    "lng": 121.562207,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2024-11-25",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "【法拍風暴】凶宅大洗白？！ 北市文山區凶宅換手再次拍賣 新筆錄：「非凶宅」 &amp;nbsp;&amp;nbsp; Yahoo股市",
+    "source": "Yahoo股市報導「【法拍風暴】凶宅大洗白？！ 北市文山區凶宅換手再次拍賣 新筆錄：「非凶宅」」",
+    "source_url": "https://news.google.com/rss/articles/CBMiggRBVV95cUxPQUthMFo3TXBocDhiTFU3NGhKT3Z0eElRU1hPTGQ3V2lGRWVZenhHWmNiRnBSNzZKMzR5eTdfVFhsZFRVSzNMRDVhTzhEbGM3Y3k4dUUzVjYzNGpWNGlVY0lIZUpoRWExMW5QNnU4M0VRVUh3azZfZUJITVJPM2NBV1lqQVFxOWM4WGZnRDR4ZER0VVkzTGJLcjllcXBxOHZSelhsYWJweVkwNzVBbXdBY29zdmdaVFN4bWdvSTdkVGo3Si1MRWw5bjhGYWYwZndfdnk5c0ttM3NRUmJFdjUtOGh3VTQxamNGaEEtdFZNWHNGNmlzaWlGRmNhYko3V29nbmdyWWI2enNEZmIzQ0p3UU1iUkItd2FjMXY5RC0tZDgySEUxek5PMWE4RlRPeTZZOHF4dkRnZ2wwM3lkeHBLcnJhbFlnTXNqTzk3OVI3bGRIZjJYWmM5MjlxaUdUZjZieDc5NFBSajR1dC1yMENKRDJDa1lfM3NRVXV2X1psRHN1N01yRGxORW9nYk1ZMDdXM2RoQkVIVUM2dTk3OWkxalJieHp6UG16RHFfWmcwaEl5T0ZtWDJMZWFvaHl5REt2QU5hNWNZZVI1Q01EY0t0WjBjTXpHRnlEX1BxN25LcWZJcEZkTzAzbTFCMHZ1aHNSOGU3ZDdwRlprczZUd2FoT2dn?oc=5",
+    "media_verification": "Yahoo股市報導「【法拍風暴】凶宅大洗白？！ 北市文山區凶宅換手再次拍賣 新筆錄：「非凶宅」」",
+    "auction_record": "案發日期核實：2024-11-25",
+    "history_timeline": [
+      {
+        "year": "2024-11-25",
+        "stage": "Yahoo股市公開報導",
+        "detail": "【法拍風暴】凶宅大洗白？！ 北市文山區凶宅換手再次拍賣 新筆錄：「非凶宅」（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95008,
+    "city": "臺北市",
+    "district": "北投區",
+    "doorplate_address": "臺北市北投區",
+    "address": "臺北市北投區（集合住宅／民宅 · 非自然死亡＋屋主欠債　買家不）",
+    "lat": 25.116807,
+    "lng": 121.517634,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-01-26",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "非自然死亡＋屋主欠債 買家不信邪！每坪16萬拍下新北投凶宅 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「非自然死亡＋屋主欠債　買家不信邪！每坪16萬拍下新北投凶宅」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9yclZWWGZqZHVNbGFZQ0tQUnVvcmFTTmxHT25uV1RhNkZ3QVRUQ1pEZWRUNmI3aUk4ejNaSzM4aGhxRjN0SVhMdGg0ZVFjdGfSAU5BVV95cUxPeWExSlBFZV83V2NkX2l2R05nMjRGdWNZRzM2YjB6c2dKSVh3X1IzWk96S2hMM1ppRHB6X1lXTFdKLUxMOU16TDVlN1lWamc?oc=5",
+    "media_verification": "ETtoday房產雲報導「非自然死亡＋屋主欠債　買家不信邪！每坪16萬拍下新北投凶宅」",
+    "auction_record": "案發日期核實：2021-01-26",
+    "history_timeline": [
+      {
+        "year": "2021-01-26",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "非自然死亡＋屋主欠債　買家不信邪！每坪16萬拍下新北投凶宅（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95009,
+    "city": "臺北市",
+    "district": "北投區",
+    "doorplate_address": "臺北市北投區",
+    "address": "臺北市北投區（集合住宅／民宅 · 新北投凶宅第1輪拍賣慘流標　）",
+    "lat": 25.135924,
+    "lng": 121.492608,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2020-11-09",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "新北投凶宅第1輪拍賣慘流標 底價降到522萬找買家 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「新北投凶宅第1輪拍賣慘流標　底價降到522萬找買家」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40QWgzSmtTTUswVWt6aXZKMzgyd3dRdF9qWXFjSXBCdmFabDJ0VHNfbWNZUG5mWW40ZVpxZXpJUlk0NjV3Wjk2STNaSVpwMEnSAU5BVV95cUxQLXk5RXRadVJTVkJxMU5ya1dEV2xQdnBlRVQ1SVNwQ2JDSGRVbkotS2pGU3ZFQjByRDZHYlB6NTdVUHp3UnRyWllhb21TbkE?oc=5",
+    "media_verification": "ETtoday房產雲報導「新北投凶宅第1輪拍賣慘流標　底價降到522萬找買家」",
+    "auction_record": "案發日期核實：2020-11-09",
+    "history_timeline": [
+      {
+        "year": "2020-11-09",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "新北投凶宅第1輪拍賣慘流標　底價降到522萬找買家（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95010,
+    "city": "新北市",
+    "district": "汐止區",
+    "doorplate_address": "新北市汐止區",
+    "address": "新北市汐止區（集合住宅／民宅 · 汐止1字頭社區　上吊自殺凶宅）",
+    "lat": 25.0734,
+    "lng": 121.630503,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2020-11-16",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "【汐止1字頭社區　上吊自殺凶宅底價258萬淪拍賣】汐止1字頭社區 上吊自殺凶宅底價258萬淪拍賣 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「汐止1字頭社區　上吊自殺凶宅底價258萬淪拍賣」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBuRzQ4MDRsRnpYbUZHM0hjRm5hYnBFcWZiRk1ZQm1tdGp0ZHVYQjRLMDR1OVBkWnhtVVpvZmNtM05IRHhKZTJPdjdXTTBpeTjSAU5BVV95cUxPWFlzVFFnTXE3ZFpQd1NKaENaNmJwMlJ2Q3l5cUlQWklPZVhxRW9xZmg5MmVuenkxX0d1VGN4UUFNc1ZsOXBaY3dWSjA0WXc?oc=5",
+    "media_verification": "ETtoday房產雲報導「汐止1字頭社區　上吊自殺凶宅底價258萬淪拍賣」",
+    "auction_record": "案發日期核實：2020-11-16",
+    "history_timeline": [
+      {
+        "year": "2020-11-16",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "汐止1字頭社區　上吊自殺凶宅底價258萬淪拍賣（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95011,
+    "city": "新北市",
+    "district": "五股區",
+    "doorplate_address": "新北市五股區",
+    "address": "新北市五股區（集合住宅／民宅 · 凶宅被洗白？　導演五股燒炭屋）",
+    "lat": 25.070605,
+    "lng": 121.431454,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-08-02",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "【凶宅被洗白？　導演五股燒炭屋每坪28萬被搶下】凶宅被洗白？ 導演五股燒炭屋每坪28萬被搶下 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「凶宅被洗白？　導演五股燒炭屋每坪28萬被搶下」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5lNm1HSktibUE0ZFQ5LWg0M0YxNlVOYWUyeVJuemxwRjQ0eUI5RDJxamk1RUZYYlhoX0hPZ3JzOWRhdkF3eFIxUzFrbC12bzjSAU5BVV95cUxPY3JXRXBLS1Ftd2RWUVJEZ0stN29oQWNhT05mRWtCRWlkVTVhRE5JdFQwdzRCdGJSVGR6WVpTeDRoOXUxbFRHMldYYllwV3c?oc=5",
+    "media_verification": "ETtoday房產雲報導「凶宅被洗白？　導演五股燒炭屋每坪28萬被搶下」",
+    "auction_record": "案發日期核實：2022-08-02",
+    "history_timeline": [
+      {
+        "year": "2022-08-02",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "凶宅被洗白？　導演五股燒炭屋每坪28萬被搶下（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95012,
+    "city": "新北市",
+    "district": "汐止區",
+    "doorplate_address": "新北市汐止區",
+    "address": "新北市汐止區（集合住宅／民宅 · 3組人搶汐止凶宅法拍屋　「幸）",
+    "lat": 25.065055,
+    "lng": 121.652221,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-01-21",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "JUDICIAL_AUCTION",
+    "reason": "3組人搶汐止凶宅法拍屋 「幸運兒」203萬拿下 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「3組人搶汐止凶宅法拍屋　「幸運兒」203萬拿下」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1CcEgyOGRlQjJfUThsTXgwUDZoTV85X2h5WWdSeUFPZ1VSczVGazFvTjNGcEFySk1mTy1hTk5PdXd6QzFackczeHZqbHU0R3fSAU5BVV95cUxNWW5UX3hqRHB3Z24ybF9sV21OTUVabk9QY3Fsck1QcXNJOEd3a1k0bDh1N3ZaTFJvUndDd1pNdHNGdU1NWmRtWmYtdEd1b3c?oc=5",
+    "media_verification": "ETtoday房產雲報導「3組人搶汐止凶宅法拍屋　「幸運兒」203萬拿下」",
+    "auction_record": "案發日期核實：2021-01-21",
+    "history_timeline": [
+      {
+        "year": "2021-01-21",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "3組人搶汐止凶宅法拍屋　「幸運兒」203萬拿下（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
+    "id": 95013,
+    "city": "臺中市",
+    "district": "烏日區",
+    "doorplate_address": "臺中市烏日區",
+    "address": "臺中市烏日區（集合住宅／民宅 · 烏日芭比Q凶宅市價打75折拍）",
+    "lat": 24.106794,
+    "lng": 120.622022,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-09-09",
+    "building_type": "集合住宅／民宅",
+    "current_status": "公開社會新聞與警消查證紀錄",
+    "category": "其他非自然死亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "烏日芭比Q凶宅市價打75折拍出 在地驚呆：竟然衝破1500萬 &amp;nbsp;&amp;nbsp; ETtoday房產雲",
+    "source": "ETtoday房產雲報導「烏日芭比Q凶宅市價打75折拍出　在地驚呆：竟然衝破1500萬」",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Lb3lhTUUxZmpkdVVVSDZWRWw5WTVqSDRkZjVBUWR6NzVUYkwxdzJ2RHk4cF83WFhmS2xFR003SFQ1cS1nY1RQNy12X3JsRzTSAU5BVV95cUxNUlByVWtWZ1JQS19TX0U0b2Q2cWZ2djBIZUpRNzVjOG1MX2dCSGdNaWJVMDJZb1R5LV9vcVRBbXd6akpnWF83ZlBUcmp0RUE?oc=5",
+    "media_verification": "ETtoday房產雲報導「烏日芭比Q凶宅市價打75折拍出　在地驚呆：竟然衝破1500萬」",
+    "auction_record": "案發日期核實：2022-09-09",
+    "history_timeline": [
+      {
+        "year": "2022-09-09",
+        "stage": "ETtoday房產雲公開報導",
+        "detail": "烏日芭比Q凶宅市價打75折拍出　在地驚呆：竟然衝破1500萬（來源連結可點擊直接查閱原篇報導）"
+      }
+    ],
+    "__road": "",
+    "__community": "",
+    "merged_count": 1
+  },
+  {
     "id": "tw-haunted-1792508363128-4mlfu",
     "city": "彰化縣",
     "district": "彰化市",

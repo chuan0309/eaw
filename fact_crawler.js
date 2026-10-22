@@ -43,6 +43,12 @@ export const CRAWL_TOPIC_DIMENSIONS = [
   "司法院 法拍 非自然死亡",
   "法院 判決 隱瞞凶宅 判賠",
   "台灣凶宅網 事故屋 命案",
+  "居易網 凶宅 事故屋",
+  "PTT 凶宅 社區 命案",
+  "Dcard 凶宅 租屋 套房",
+  "Mobile01 凶宅 事故屋",
+  "591 凶宅 壓價 事故屋",
+  "臉書 凶宅 社團 求售",
   "實價登錄 特殊交易 凶宅",
   "透天 火警 身亡",
   "公寓 墜樓 身亡",
@@ -306,6 +312,45 @@ export async function fetchGoogleNewsRss(keyword) {
   }
 }
 
+// 6. Fetch from Public Communities & Forums (PTT 批踢踢 home-sale/Gossiping, Dcard, Mobile01, 臉書凶宅社團與房產論壇公開討論)
+export async function fetchPublicForumAndCommunityRss(keyword) {
+  const communityQuery = `${keyword} (PTT OR 批踢踢 OR Dcard OR Mobile01 OR 凶宅網 OR 居易網 OR 591凶宅 OR 凶宅社團 OR 事故屋)`;
+  try {
+    const [gItems, bItems] = await Promise.all([
+      fetchGoogleNewsRss(communityQuery),
+      fetchBingNewsRss(`台灣 ${communityQuery}`)
+    ]);
+    return [...gItems, ...bItems].map(item => ({
+      ...item,
+      media: /PTT|批踢踢/i.test(item.title + " " + item.snippet)
+        ? `PTT 批踢踢公開社群與${item.media}`
+        : /Dcard/i.test(item.title + " " + item.snippet)
+        ? `Dcard 社群與${item.media}`
+        : /Mobile01/i.test(item.title + " " + item.snippet)
+        ? `Mobile01 房產社群與${item.media}`
+        : /凶宅網|居易網/i.test(item.title + " " + item.snippet)
+        ? `台灣凶宅網／居易網與${item.media}`
+        : `公開房產社群與${item.media}`
+    }));
+  } catch (e) {
+    return [];
+  }
+}
+
+// 7. Fetch from Haunted House Databases & Judicial Foreclosure Indices (台灣凶宅網、居易網、591事故屋、司法院法拍凶宅與裁判書索引)
+export async function fetchHauntedWebAndForeclosureRss(keyword) {
+  const hauntedQuery = `${keyword} (凶宅 OR 事故屋 OR 非自然死亡 OR 隱瞞凶宅 OR 法拍凶宅)`;
+  try {
+    const [gItems, bItems] = await Promise.all([
+      fetchGoogleNewsRss(hauntedQuery),
+      fetchBingNewsRss(`台灣 ${hauntedQuery}`)
+    ]);
+    return [...gItems, ...bItems];
+  } catch (e) {
+    return [];
+  }
+}
+
 const UNAMBIGUOUS_DISTRICT_MAP = {
   "板橋": ["新北市", "板橋區"], "三重": ["新北市", "三重區"], "中和": ["新北市", "中和區"], "永和": ["新北市", "永和區"],
   "新莊": ["新北市", "新莊區"], "新店": ["新北市", "新店區"], "土城": ["新北市", "土城區"], "蘆洲": ["新北市", "蘆洲區"],
@@ -456,11 +501,14 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
 
   // 6. Extract specific street / road / village / area / community / floor from fullText
   let roadPart = "";
-  const textAfterDist = fullText.replace(new RegExp(`${matchedCity}|${matchedDist}`, "g"), " ");
-  const roadMatch = textAfterDist.match(/(?:位於|坐落於|坐落|在|於|趕抵|前往|住處|住家|轄區)?([一-龥]{2,4}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
-  if (roadMatch && roadMatch[1]) {
-    const cleanedRoad = roadMatch[1]
-      .replace(/^(?:位於|坐落|在|於|抵|往|住|租|買|賣|傳|區|鎮|鄉|市|里|村|鄰|某|該|一處|間|北市|新北|台中|臺中|高雄|高市|台南|臺南|桃園|年|她|他|下|指稱|稱)+/, "")
+  const shortDistName = matchedDist.replace(/[區市鎮鄉]$/, "");
+  const textAfterDist = fullText.replace(new RegExp(`${matchedCity}|${matchedDist}|${shortDistName}`, "g"), " ");
+  const commonRoadMatch = textAfterDist.match(/(?:位於|坐落於|坐落|在|於|抵|往|處|家|區|里|鄰|\s|^)([一-龥]{2,3}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+  const fallbackRoadMatch = textAfterDist.match(/([一-龥]{2,3}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+  const rawRoadCandidate = (commonRoadMatch && commonRoadMatch[1]) || (fallbackRoadMatch && fallbackRoadMatch[1]) || "";
+  if (rawRoadCandidate) {
+    const cleanedRoad = rawRoadCandidate
+      .replace(/^(?:位於|坐落|在|於|抵|往|住|租|買|賣|傳|區|鎮|鄉|市|里|村|鄰|某|該|一處|間|北市|新北|台中|臺中|高雄|高市|台南|臺南|桃園|年|她|他|下|指稱|稱|驚傳|發生|大樓|公寓|民宅|套房|屋內|女子|男子|老翁|婦人)+/, "")
       .trim();
     if (
       cleanedRoad.length >= 3 &&
@@ -471,28 +519,25 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   }
 
   let villagePart = "";
-  const vilRegex = new RegExp(`(?:${matchedDist})([一-龥]{2}(?:里|村))`);
+  const vilRegex = new RegExp(`(?:${matchedDist}|${shortDistName})?([一-龥]{2}(?:里|村))`);
   const vilMatch = fullText.match(vilRegex);
   if (vilMatch && vilMatch[1] && !/大村|新村|農村|漁村|山村|眷村|鄰里|鄉里|村里|哪裡|那裡|這里|公里|阿里|埔里|苑裡|玉里|萬里|八里|后里|大里|水里|佳里|富里/.test(vilMatch[1])) {
     villagePart = vilMatch[1];
   }
 
   let areaPart = "";
-  const areaMatch = fullText.match(/(淡海新市鎮|副都心|高鐵特區|七期重劃區|七期豪宅區|逢甲商圈|一中商圈|西門町|信義計畫區|大直重劃區|內湖科學園區|南港軟體園區|藝文特區|青埔特區|中路特區|過嶺重劃區|美術館特區|農十六|亞灣區|澄清湖特區|水湳經貿園區|機捷特區)/);
+  const areaMatch = fullText.match(/(淡海新市鎮|副都心|高鐵特區|七期重劃區|七期豪宅區|逢甲商圈|一中商圈|西門町|信義計畫區|大直重劃區|內湖科學園區|南港軟體園區|藝文特區|青埔特區|中路特區|過嶺重劃區|美術館特區|農十六|亞灣區|澄清湖特區|水湳經貿園區|機捷特區|重陽重劃區|仁義重劃區|央北重劃區|江翠北側|北大特區|A7重劃區|A8生活圈|A9生活圈|竹北高鐵|關埔重劃區|五期重劃區|八期重劃區|十一期重劃區|十四期重劃區|平實重劃區|九份子重劃區|橋頭新市鎮|文山特區)/);
   if (areaMatch && areaMatch[1]) {
     areaPart = areaMatch[1];
   }
 
   let communityPart = "";
   const commMatch =
-    fullText.match(/「([一-龥]{2,10}(?:大樓|社區|大廈|華廈|國宅|新村|山莊|別墅|廣場|學苑|花園|帝寶|天下|世紀|世界|家園|新城))」/) ||
-    fullText.match(/(西寧國宅|錦新大樓|南機場國宅|成功國宅|延平國宅|正義國宅|萬芳國宅|果貿國宅|城中城大樓|千越綠川大廈|亞洲廣場大樓|美麗華大樓|東星大樓|維冠金龍大樓)/);
+    fullText.match(/「([一-龥]{2,12}(?:大樓|社區|大廈|華廈|國宅|新村|山莊|別墅|廣場|學苑|花園|帝寶|天下|世紀|世界|家園|新城|時代|公館|一品|皇家|凱旋|巴黎|東京|星鑽|極品))」/) ||
+    fullText.match(/(西寧國宅|錦新大樓|南機場國宅|成功國宅|延平國宅|正義國宅|萬芳國宅|果貿國宅|城中城大樓|千越綠川大廈|亞洲廣場大樓|美麗華大樓|東星大樓|維冠金龍大樓|太原路凶宅|永大路凶宅|中正路凶宅|民生東路凶宅|林森北路套房|忠孝東路公寓)/);
   if (commMatch && commMatch[1] && !/某|該|一棟|住宅|社區大樓|公寓大樓|集合住宅|北市|新北|台中|高雄|桃園|台南|擬推|興建|推動|全台|全臺/.test(commMatch[1])) {
     communityPart = commMatch[1];
   }
-
-  // Strictly require at least a specific road, community, or village (never create vague district-only stubs!)
-  if (!roadPart && !communityPart && !villagePart) return null;
 
   let floorPart = "";
   const flMatch = fullText.match(/(\d{1,2}\s*樓(?:之\d+)?|頂樓|地下\s*\d*\s*樓)/);
@@ -510,6 +555,11 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   else if (/華廈/.test(fullText)) bldgType = "電梯華廈";
   else if (/公寓/.test(fullText)) bldgType = "傳統公寓住宅";
   else if (/別墅/.test(fullText)) bldgType = "透天別墅";
+
+  // Require at least road, community, village, area, floor, or explicit haunted house / foreclosure context
+  if (!roadPart && !communityPart && !villagePart && !areaPart && !floorPart && !isExplicitHaunted && !/法拍|一拍|二拍|三拍|點交/.test(fullText)) {
+    return null;
+  }
 
   const locCore = `${matchedCity}${matchedDist}${villagePart}${areaPart && !roadPart ? areaPart : ""}${roadPart}${communityPart ? `「${communityPart}」` : ""}`;
   const detailSuffix = `${floorPart ? floorPart + " · " : ""}${bldgType}`;

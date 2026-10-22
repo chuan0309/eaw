@@ -1053,12 +1053,13 @@ function getCrawlerStatusSummary(totalCount) {
     lastRunAt: crawlerState.lastRunAt,
     recentDiscovered: crawlerState.recentDiscovered.slice(0, 8),
     sources: [
+      "PTT 批踢踢實業坊 (home-sale 房版 / Gossiping / 各縣市地方版公開討論)",
+      "Dcard 購屋租屋版 · Mobile01 居家房產論壇 · 臉書凶宅自售公開社團",
+      "台灣凶宅網 (unluckyhouse) · 居易網 (Juyiwang) · 591/樂居公開事故索引",
       "司法院法學資料檢索系統 (民事隱瞞凶宅／刑事命案判決書)",
       "司法院法拍屋公告系統 (查封筆錄載明非自然死亡紀錄)",
       "內政部不動產交易實價查詢 (實價登錄特殊交易備註)",
-      "台灣凶宅網／居易網 (Juyiwang) 與公開社區事故索引",
-      "Google 新聞全臺公開檔案庫 (中央社/公視/TVBS/三立/中時/民視)",
-      "自由時報 (LTN) · 聯合新聞網 (UDN) · ETtoday 歷年社會資料庫"
+      "Google 新聞 & 自由時報 (LTN) · 聯合新聞網 (UDN) · ETtoday 歷年社會資料庫"
     ]
   };
 }
@@ -1066,17 +1067,24 @@ function getCrawlerStatusSummary(totalCount) {
 function persistNewVerifiedRecordsToDisk(newItems) {
   if (!Array.isArray(newItems) || newItems.length === 0) return;
   try {
-    const targetPath = CALIBRATED_ARCHIVE_PATHS[0];
-    const currentDisk = fs.existsSync(targetPath)
-      ? JSON.parse(fs.readFileSync(targetPath, "utf8"))
+    const primaryPath = CALIBRATED_ARCHIVE_PATHS[0];
+    const publicPath = CALIBRATED_ARCHIVE_PATHS[1];
+    const currentDisk = fs.existsSync(primaryPath)
+      ? JSON.parse(fs.readFileSync(primaryPath, "utf8"))
       : [];
-    const consolidated = factCrawler.consolidateSimilarRecords([...currentDisk, ...newItems]);
-    fs.writeFileSync(targetPath, JSON.stringify(consolidated, null, 2), "utf8");
-    cachedCalibratedDiskRecords = consolidated;
+    const existingIds = new Set(currentDisk.map(r => String(r.id || r.source_url || r.address)));
+    const uniqueNew = newItems.filter(r => !existingIds.has(String(r.id || r.source_url || r.address)));
+    if (uniqueNew.length === 0) return;
+    const updated = [...uniqueNew, ...currentDisk];
+    fs.writeFileSync(primaryPath, JSON.stringify(updated, null, 2), "utf8");
+    if (fs.existsSync(path.dirname(publicPath))) {
+      fs.writeFileSync(publicPath, JSON.stringify(updated, null, 2), "utf8");
+    }
+    cachedCalibratedDiskRecords = updated;
   } catch (e) {}
 }
 
-async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
+async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 35) {
   const existing = loadAllUnifiedRecords();
   const seenSigs = new Set();
   for (const r of existing) {
@@ -1086,14 +1094,20 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 25) {
   const rawArticles = [];
   await Promise.all(
     querySpecs.map(async ({ q, page = 1, city = "", district = "" }) => {
-      const [udn, ltn, ett, bing, gnews] = await Promise.all([
+      const [udn, ltn, ett, bing, gnews, communityRss, hauntedRss] = await Promise.all([
         factCrawler.fetchUdnArticles(q, page),
         factCrawler.fetchLtnArticles(q, page),
         factCrawler.fetchEttodayArticles(q, page),
         page === 1 ? factCrawler.fetchBingNewsRss(`台灣 ${q}`) : Promise.resolve([]),
-        page === 1 ? factCrawler.fetchGoogleNewsRss(q) : Promise.resolve([])
+        page === 1 ? factCrawler.fetchGoogleNewsRss(q) : Promise.resolve([]),
+        page === 1 && typeof factCrawler.fetchPublicForumAndCommunityRss === "function"
+          ? factCrawler.fetchPublicForumAndCommunityRss(q)
+          : Promise.resolve([]),
+        page === 1 && typeof factCrawler.fetchHauntedWebAndForeclosureRss === "function"
+          ? factCrawler.fetchHauntedWebAndForeclosureRss(q)
+          : Promise.resolve([])
       ]);
-      for (const a of [...gnews, ...udn, ...ltn, ...ett, ...bing]) {
+      for (const a of [...communityRss, ...hauntedRss, ...gnews, ...udn, ...ltn, ...ett, ...bing]) {
         rawArticles.push({ article: a, hintCity: city, hintDistrict: district });
       }
     })
@@ -1354,6 +1368,13 @@ app.post("/api/affiliate-click", express.text({ type: "*/*" }), (req, res) => {
   } catch (err) {
     return res.status(200).json({ ok: false });
   }
+});
+
+// Google AdSense ads.txt verification endpoint
+app.get("/ads.txt", (req, res) => {
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  res.status(200).send("google.com, pub-4333106443725240, DIRECT, f08c47fec0942fa0\n");
 });
 
 // Google Search Console HTML file verification endpoint

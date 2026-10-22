@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated automatically by generate_sitemap.js | Total URLs: 4388 | Active Cases: 4074 -->
+<!-- Generated automatically by generate_sitemap.js | Total URLs: 4390 | Active Cases: 4076 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://chuancn.org/</loc>
@@ -156,6 +156,12 @@
     <lastmod>2026-10-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://chuancn.org/?city=%E9%AB%98%E9%9B%84%E5%B8%82&amp;district=%E8%B7%AF%E7%AB%B9%E5%8D%80</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://chuancn.org/?city=%E6%A1%83%E5%9C%92%E5%B8%82&amp;district=%E6%A5%8A%E6%A2%85%E5%8D%80</loc>
@@ -1040,12 +1046,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://chuancn.org/?city=%E9%AB%98%E9%9B%84%E5%B8%82&amp;district=%E8%B7%AF%E7%AB%B9%E5%8D%80</loc>
-    <lastmod>2026-10-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://chuancn.org/?city=%E9%AB%98%E9%9B%84%E5%B8%82&amp;district=%E6%97%97%E5%B1%B1%E5%8D%80</loc>
     <lastmod>2026-10-22</lastmod>
     <changefreq>weekly</changefreq>
@@ -1884,6 +1884,18 @@
     <lastmod>2026-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chuancn.org/?city=%E9%AB%98%E9%9B%84%E5%B8%82&amp;district=%E8%B7%AF%E7%AB%B9%E5%8D%80&amp;case=12441</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://chuancn.org/?city=%E9%AB%98%E9%9B%84%E5%B8%82&amp;district=%E8%B7%AF%E7%AB%B9%E5%8D%80&amp;case=12440</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://chuancn.org/?city=%E6%A1%83%E5%9C%92%E5%B8%82&amp;district=%E6%A5%8A%E6%A2%85%E5%8D%80&amp;case=12396</loc>

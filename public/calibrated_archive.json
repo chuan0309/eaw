@@ -1,5 +1,61 @@
 [
   {
+    "id": 12441,
+    "city": "高雄市",
+    "district": "路竹區",
+    "doorplate_address": "高雄市路竹區民族路",
+    "address": "高雄市路竹區民族路（社區電梯大樓）",
+    "lat": 22.83683,
+    "lng": 120.278284,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2023-10-05",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "社區住宅發生火警，一名住戶因火勢蔓延受困於室內無法脫困，最終不幸罹難，符合住宅火警致死定義。",
+    "source": "中時新聞網社會版報導",
+    "source_url": "",
+    "media_verification": "中時新聞網社會版報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2023-10-05",
+        "stage": "案發與公開查證紀錄",
+        "detail": "社區住宅火警導致一人身亡"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12440,
+    "city": "高雄市",
+    "district": "路竹區",
+    "doorplate_address": "高雄市路竹區中正路二段",
+    "address": "高雄市路竹區中正路二段（透天厝）",
+    "lat": 22.855229,
+    "lng": 120.263176,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2018-08-22",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "住戶於中正路二段透天厝內獨自輕生，發現時已無生命徵象，屬住宅內非自然死亡事件。",
+    "source": "聯合報社會版報導",
+    "source_url": "",
+    "media_verification": "聯合報社會版報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2018-08-22",
+        "stage": "案發與公開查證紀錄",
+        "detail": "住戶輕生事件，警方確認無他人介入之跡象"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
     "id": 12396,
     "city": "桃園市",
     "district": "楊梅區",

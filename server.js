@@ -13,7 +13,9 @@ const PORT = 3000;
 const GMP_ATTRIBUTION_ID = "gmp_mcp_codeassist_v1_aistudio";
 const CALIBRATED_ARCHIVE_PATHS = [
   path.join(__dirname, "calibrated_archive.json"),
-  "/calibrated_archive.json"
+  path.join(__dirname, "public", "calibrated_archive.json"),
+  "/calibrated_archive.json",
+  "/public/calibrated_archive.json"
 ];
 
 app.use(express.json({ limit: "5mb" }));
@@ -180,20 +182,9 @@ function loadAllUnifiedRecords() {
   const baseList = cachedCalibratedDiskRecords || CURATED_LANDMARK_CASES;
   const combined = [...dynamicRecords, ...baseList];
 
-  const seenIds = new Set();
-  const seenSigs = new Set();
   const result = [];
   for (const item of combined) {
     if (!item || !item.address) continue;
-    const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
-    if (idKey && seenIds.has(idKey)) continue;
-
-    const sigs = factCrawler.getSemanticCaseSignatures(item);
-    if (sigs.some(s => seenSigs.has(s))) continue;
-
-    if (idKey) seenIds.add(idKey);
-    sigs.forEach(s => seenSigs.add(s));
-
     const city = (item.city || "").replace(/台/g, "臺");
     const src = item.source || item.media_verification || "公開社會新聞與司法實務紀錄";
     const media = item.media_verification || item.source || "公開社會新聞與司法實務紀錄";
@@ -426,45 +417,18 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   return cachedSupabaseDelta;
 }
 
-// GET /api/records - Merges calibrated disk archive with live verified delta & runs Smart Similar Case Consolidation
+// GET /api/records - Returns the exact 3,052 calibrated disk archive records
 app.get("/api/records", async (req, res) => {
-  const delta = await fetchLatestSupabaseCrawledRecords();
   const base = loadAllUnifiedRecords();
-  const seenIds = new Set(base.map(r => String(r.id !== undefined && r.id !== null ? r.id : "")));
-  const seenSigs = new Set();
-  for (const r of base) {
-    for (const s of factCrawler.getSemanticCaseSignatures(r)) seenSigs.add(s);
-  }
-
-  const combined = [...base];
-  for (const item of delta) {
-    if (!item || !item.address) continue;
-    const idKey = item.id !== undefined && item.id !== null ? String(item.id) : "";
-    if (idKey && seenIds.has(idKey)) continue;
-    const sigs = factCrawler.getSemanticCaseSignatures(item);
-    if (sigs.some(s => seenSigs.has(s))) continue;
-
-    if (idKey) seenIds.add(idKey);
-    sigs.forEach(s => seenSigs.add(s));
-
-    combined.push({
-      ...item,
-      city: (item.city || "").replace(/台/g, "臺"),
-      doorplate_address: item.doorplate_address || item.address,
-      location_accuracy: item.location_accuracy || "ROOFTOP"
-    });
-  }
-
-  const consolidated = factCrawler.consolidateSimilarRecords(combined);
-  const rawTotalRepresented = consolidated.reduce((acc, r) => acc + (r.merged_count || 1), 0);
-  const mergedGroupsCount = consolidated.filter(r => (r.merged_count || 1) > 1).length;
+  const rawTotalRepresented = base.reduce((acc, r) => acc + (r.merged_count || 1), 0);
+  const mergedGroupsCount = base.filter(r => (r.merged_count || 1) > 1).length;
 
   res.json({
-    records: consolidated,
-    totalCount: consolidated.length,
+    records: base,
+    totalCount: base.length,
     rawSourceCount: rawTotalRepresented,
     mergedGroupsCount,
-    crawlerStats: getCrawlerStatusSummary(consolidated.length),
+    crawlerStats: getCrawlerStatusSummary(base.length),
     mapsConfigured: Boolean(getGoogleMapsApiKey()),
     mapsApiKey: getGoogleMapsApiKey(),
     attributionId: GMP_ATTRIBUTION_ID,
@@ -1399,25 +1363,36 @@ app.get("/google6a317e59d3daa28c.html", (req, res) => {
   res.status(200).send("google-site-verification: google6a317e59d3daa28c.html");
 });
 
-// Dynamic robots.txt for Googlebot & Search Console
+// Dynamic robots.txt for Googlebot, AdSense & Search Console
 app.get("/robots.txt", (req, res) => {
   const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
-  const host = req.headers["x-forwarded-host"] || req.get("host") || "ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app";
+  const host = req.headers["x-forwarded-host"] || req.get("host") || "chuancn.org";
   const baseUrl = (process.env.APP_URL || `${proto}://${host}`).replace(/\/$/, "");
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.status(200).send(
     [
-      "User-agent: *",
+      "User-agent: Mediapartners-Google",
       "Allow: /",
-      "Allow: /google6a317e59d3daa28c.html",
-      "Allow: /sitemap.xml",
-      "Allow: /calibrated_archive.json",
+      "",
+      "User-agent: AdsBot-Google",
+      "Allow: /",
+      "",
+      "User-agent: AdsBot-Google-Mobile",
+      "Allow: /",
       "",
       "User-agent: Googlebot",
       "Allow: /",
       "",
       "User-agent: Google-Site-Verification",
       "Allow: /",
+      "",
+      "User-agent: *",
+      "Allow: /",
+      "Allow: /ads.txt",
+      "Allow: /favicon.svg",
+      "Allow: /google6a317e59d3daa28c.html",
+      "Allow: /sitemap.xml",
+      "Allow: /calibrated_archive.json",
       "",
       `Sitemap: ${baseUrl}/sitemap.xml`
     ].join("\n")

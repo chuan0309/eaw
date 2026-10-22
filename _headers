@@ -1,0 +1,11 @@
+/*
+  Access-Control-Allow-Origin: *
+  Content-Security-Policy: frame-ancestors 'self' https://*.google.com https://adsense.google.com https://*.googlesyndication.com https://*.doubleclick.net https://*.aistudio.google.com https://*.run.app;
+
+/ads.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/favicon.svg
+  Content-Type: image/svg+xml
+  Cache-Control: public, max-age=86400

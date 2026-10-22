@@ -1,8 +1,11 @@
-User-agent: *
+User-agent: Mediapartners-Google
 Allow: /
-Allow: /google6a317e59d3daa28c.html
-Allow: /sitemap.xml
-Allow: /calibrated_archive.json
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
 
 User-agent: Googlebot
 Allow: /
@@ -10,4 +13,12 @@ Allow: /
 User-agent: Google-Site-Verification
 Allow: /
 
-Sitemap: https://ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app/sitemap.xml
+User-agent: *
+Allow: /
+Allow: /ads.txt
+Allow: /favicon.svg
+Allow: /google6a317e59d3daa28c.html
+Allow: /sitemap.xml
+Allow: /calibrated_archive.json
+
+Sitemap: https://chuancn.org/sitemap.xml

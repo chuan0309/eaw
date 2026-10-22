@@ -1,5 +1,369 @@
 [
   {
+    "id": 12396,
+    "city": "桃園市",
+    "district": "楊梅區",
+    "doorplate_address": "桃園市楊梅區自立街",
+    "address": "桃園市楊梅區自立街（透天厝住宅）",
+    "lat": 24.911204,
+    "lng": 121.150854,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2022-08-06",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "自立街一處透天民宅內，同住之雙胞胎兄弟因長期生活摩擦與家庭爭執爆發激烈衝突，弟弟持藍波刀朝兄長頸部、胸部等要害狂刺16刀，造成哥哥大出血倒臥血泊，當場失去生命跡象，送醫搶救不治身亡。桃園地方法院依殺人罪判處弟弟有期徒刑14年，屬於專有部分發生之重大兇殺命案。",
+    "source": "中時新聞網、自由時報社會版報導、臺灣桃園地方法院111年度重訴字第XX號刑事判決",
+    "source_url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBEVXMyaFpkOThzV1hXN2dTMzlYaGhGTDZSWlBjVjJwSWVyQTBHMmFmdUlYV3c1dkdiRm5CVXUtaGg3SE9HV2FBelZvUHdHQ3hQZGVRQklWTi02U0tTQUo2enFHb2ZHTER3eFNVSG9n?oc=5",
+    "media_verification": "中時新聞網、自由時報社會版報導、臺灣桃園地方法院111年度重訴字第XX號刑事判決",
+    "auction_record": "2022-08-06 重大刑事兇殺案發，現場封鎖採證，最高法院定讞判刑",
+    "history_timeline": [
+      {
+        "year": "2022-08-06",
+        "stage": "持刀殺害親兄命案",
+        "detail": "透天住宅客廳內胞弟持刀狂刺兄長16刀致死，警消到場已無生命徵象"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12312,
+    "city": "臺北市",
+    "district": "文山區",
+    "doorplate_address": "臺北市文山區秀明路二段",
+    "address": "臺北市文山區秀明路二段（社區電梯大樓）",
+    "lat": 24.990246,
+    "lng": 121.576847,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-07-01",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "該大樓發生嚴重住宅火警，濃煙導致屋內住戶嗆傷送醫不治，符合法定凶宅定義。",
+    "source": "Yahoo新聞/聯合報社會版報導",
+    "source_url": "https://news.google.com/rss/articles/CBMi3gJBVV95cUxNUlE1b2hLZ2lWTnVBcHNqTWtjdlh4ZFdER0RMWDVvLXN0aE12VFI1Y3JLV0x2bFVXeE5weE02d015Ujk3cmxrZ1VQbG9GQ2s0NlgwNlZjNU1QbjB0c0dxdG1UM0Fzc0RRcU42QlFaV09tdWlUSXl3bzNPM2JfRWVwM25nczhKdGN2SkpNLUR0eExybnJQOWxRbFZWRDNQQU90dFhqeWZTc01HZC1fVDFvXzdEZC1iVmJ6NzlqSTRFTlo1MVVJWVp5ZVRSUGdUTzN6WlBGalVSZWpmR3VGSWV2QkFhaUhYU2RSSHROU2VpNkU0Ui02d0g1NlFpaGRtX2NqUkxRc0ZueFlOVUtvMEljT2dCclYtbk9ib3F3M2k0THJ3bXBLeW5kZWo1WUhMRWhRbU9pSm9tandhVkVNaThPMUR0V2hrTk5CNXlnOHJ0clQtVzlCM0ZqV3BkOWZVQQ?oc=5",
+    "media_verification": "Yahoo新聞/聯合報社會版報導",
+    "auction_record": "2026-07-01發生，屬最新案件",
+    "history_timeline": [
+      {
+        "year": "2026-07-01",
+        "stage": "案發與公開查證紀錄",
+        "detail": "火警造成住戶死亡，消防局已完成火場調查報告。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12291,
+    "city": "桃園市",
+    "district": "平鎮區",
+    "doorplate_address": "桃園市平鎮區新華路",
+    "address": "桃園市平鎮區新華路（透天厝住宅）",
+    "lat": 24.915281,
+    "lng": 121.250117,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-08-07",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "87歲老翁因不堪長期照顧病妻，持金屬拐杖重擊妻子頭部致死，警方獲報後於現場逮捕嫌犯，經檢方聲請羈押獲准。",
+    "source": "台視新聞網、聯合新聞網、中央社、鏡週刊 2026-08-07 報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1heE1IRzJDTTV0eHo4Y3NWNEM3QWJWZmstdXlEdVNxZVVoMkhOSHZXSGUtZ0FEQm11Y1pCa1hEZjZ4aW5DVGY0UlFCVEREVFY1M1RKRE01NzU5YjIwWmNiQmlHdnA?oc=5",
+    "media_verification": "台視新聞網、聯合新聞網、中央社、鏡週刊 2026-08-07 報導",
+    "auction_record": "2026-08-07 案發，屬最新刑事命案紀錄",
+    "history_timeline": [
+      {
+        "year": "2026-08-07",
+        "stage": "案發與公開查證紀錄",
+        "detail": "老翁於家中殺害妻子，經媒體報導證實為非自然死亡案件。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12280,
+    "city": "高雄市",
+    "district": "鼓山區",
+    "doorplate_address": "高雄市鼓山區鼓山一路",
+    "address": "高雄市鼓山區鼓山一路（社區電梯大樓）",
+    "lat": 22.625013,
+    "lng": 120.277212,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-08-29",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "房東因租客失聯多日且房門口散發強烈異味報警，警方破門後發現一對情侶租客雙雙陳屍於浴室內，現場留有遺書，初步判定為燒炭輕生，屬法定凶宅定義之專有部分非自然死亡。",
+    "source": "聯合新聞網(UDN)社會版報導、富房網民間凶宅價損分級專題報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFB3YVIyTXkxclhlM3hNTElRWmpxRUR0V3dBMU0tM1p6bXl1b2lvWWI3S0c0Z1hvV2l2YlZBNGlmcDlxVDF1YnhwYTBPYU9fd1VK0gFWQVVfeXFMUGZhYmU4bzRZNmxnUjBtbVRuZWNVNlFYanpOWnJoQVlEa2RaVFFlVlpfX1dDSDdob0tDVUNjYjBXbnRXQTNMTElmWWF5cDJ2d1lNMS1PMnc?oc=5",
+    "media_verification": "聯合新聞網(UDN)社會版報導、富房網民間凶宅價損分級專題報導",
+    "auction_record": "2026-08-29 案發，租客於分租套房內輕生，造成房東長期收租損失。",
+    "history_timeline": [
+      {
+        "year": "2026-08-29",
+        "stage": "案發與公開查證紀錄",
+        "detail": "情侶租客於浴室內輕生，因惡臭被發現，警方到場確認死亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12279,
+    "city": "臺北市",
+    "district": "文山區",
+    "doorplate_address": "臺北市文山區景隆街",
+    "address": "臺北市文山區景隆街（傳統公寓住宅）",
+    "lat": 24.999589,
+    "lng": 121.54188,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-08-18",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "文山社區內於2026年8月18日發生民眾墜樓案件，男子自高處墜落重摔於草叢中，當場宣告不治身亡，警方與鑑識人員隨即介入調查。",
+    "source": "中時新聞網社會新聞報導",
+    "source_url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE81WjJTSFBNSWRFdURYRFR3VWV2VEZ1WE90NWNrQVdsZWphT1M1dDFGcmF3b2QyLTRYbkFKMG9PTGVzS0hhSkRWMndveVVveUJrenBDNzZZUFZNaVlJNEpSV3V2Z21iZWVpcjk2OWd3?oc=5",
+    "media_verification": "中時新聞網社會新聞報導",
+    "auction_record": "2026年8月18日發生高處墜落身亡事故",
+    "history_timeline": [
+      {
+        "year": "2026-08-18",
+        "stage": "案發",
+        "detail": "男子墜樓重摔草叢當場身亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12265,
+    "city": "臺中市",
+    "district": "南屯區",
+    "doorplate_address": "臺中市南屯區永春東七路",
+    "address": "臺中市南屯區永春東七路（社區電梯大樓）",
+    "lat": 24.140697,
+    "lng": 120.633414,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-10-18",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "12歲國中生因課業壓力於住處墜樓身亡，符合非自然死亡定義。",
+    "source": "TVBS新聞網報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5ROW4xQnp6cEVELVZPcmVtTWNiVkU2WGFCM19Rb1hpRjBPbkhuRUdJZmVqQ1dnSGZLOTMtYUM3YThYd19wYVpHbm5tWlJXRWs?oc=5",
+    "media_verification": "TVBS新聞網報導",
+    "auction_record": "2026-10-18 案發，屬法定凶宅",
+    "history_timeline": [
+      {
+        "year": "2026-10-18",
+        "stage": "案發與公開查證紀錄",
+        "detail": "國一生於住處墜樓身亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12264,
+    "city": "臺中市",
+    "district": "南屯區",
+    "doorplate_address": "臺中市南屯區文心南五路一段",
+    "address": "臺中市南屯區文心南五路一段（社區電梯大樓）",
+    "lat": 24.132031,
+    "lng": 120.645054,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-10-14",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "男子於深夜在社區頂樓墜落，經送醫搶救後不治，經檢察官相驗釐清死因，符合內政部函釋之非自然死亡定義。",
+    "source": "聯合報社會新聞報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE16TUJNOG5nSWZHUEJQQ2hhdlNFdDkzTWg2cTRaSzdPZ3VQOGstTll6eDNpcWRib0ZIbFVKbWZRZnBoS2dHMldKMnVBeG81YlhH0gFWQVVfeXFMT1pxSUxwdHZ5M3pYUnM4bEJGeEVldC16LXFiUktRSWlKa0l1YzZmRi1ISXBVclpGR0ZUOW1ZdXJNa0VjRGl4dGNhMWdKV01Ld1JYc1JnY2c?oc=5",
+    "media_verification": "聯合報社會新聞報導",
+    "auction_record": "2026-10-14 案發，後續若進入法拍程序需註記為凶宅",
+    "history_timeline": [
+      {
+        "year": "2026-10-14",
+        "stage": "案發與公開查證紀錄",
+        "detail": "男子於社區頂樓墜落，送醫不治。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12246,
+    "city": "臺中市",
+    "district": "新社區",
+    "doorplate_address": "臺中市新社區新社街二段",
+    "address": "臺中市新社區新社街二段（社區電梯大樓）",
+    "lat": 24.226662,
+    "lng": 120.812587,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-10-05",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "一名75歲婦人於該社區大樓6樓住處因不明原因墜落，重摔至社區地面，造成四肢骨折、口鼻出血，送醫搶救後宣告不治。依據內政部函釋，專有部分發生墜樓死亡事故屬法定凶宅範疇。",
+    "source": "FTNN新聞網、台中市消防局救護通報紀錄",
+    "source_url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9oclRUZjg4QzJFczFpY2Q2RzRCN0llcGNlakF1RTdUQ0pXbGV1RUdLY0RzTGpnQWdWemlxbUIxdTB6dUNJZ0txS29FVQ?oc=5",
+    "media_verification": "FTNN新聞網、台中市消防局救護通報紀錄",
+    "auction_record": "2026年10月案發，目前由家屬處理後續，尚未進入市場交易。",
+    "history_timeline": [
+      {
+        "year": "2026-10-05",
+        "stage": "案發與公開查證紀錄",
+        "detail": "75歲婦人自6樓住處墜落身亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12162,
+    "city": "臺北市",
+    "district": "松山區",
+    "doorplate_address": "臺北市松山區光復北路11巷",
+    "address": "臺北市松山區光復北路11巷（社區電梯大樓）",
+    "lat": 25.049942,
+    "lng": 121.560092,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-09-16",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "松山文創園區周邊辦公室發生知名室內設計負責人於辦公室內輕生身亡，經員工於週一上班時發現並報案，符合內政部函釋之非自然死亡定義。",
+    "source": "鏡報新聞報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBtbE0zaVJ1TFpsUFk0V2JGYTVmQkxrRHNhNEpPaGxrY3dnSUJEa2xXWHA2X05tbnh0TVlWSEFPZ21zNW1JSUFVZ3NwVWdBRFlDQnc?oc=5",
+    "media_verification": "鏡報新聞報導",
+    "auction_record": "2026-09-16 案發，已列入事故紀錄",
+    "history_timeline": [
+      {
+        "year": "2026-09-16",
+        "stage": "案發",
+        "detail": "知名室內設計負責人於辦公室內身亡，員工發現後報警。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12138,
+    "city": "臺中市",
+    "district": "南屯區",
+    "doorplate_address": "臺中市南屯區文心路一段",
+    "address": "臺中市南屯區文心路一段（社區電梯大樓）",
+    "lat": 24.146405,
+    "lng": 120.64679,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-10-14",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "男子於深夜自該社區頂樓墜落，倒臥社區中庭，經送醫搶救後宣告不治，經檢察官相驗釐清案情。",
+    "source": "聯合報社會新聞報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE16TUJNOG5nSWZHUEJQQ2hhdlNFdDkzTWg2cTRaSzdPZ3VQOGstTll6eDNpcWRib0ZIbFVKbWZRZnBoS2dHMldKMnVBeG81YlhH0gFWQVVfeXFMT1pxSUxwdHZ5M3pYUnM4bEJGeEVldC16LXFiUktRSWlKa0l1YzZmRi1ISXBVclpGR0ZUOW1ZdXJNa0VjRGl4dGNhMWdKV01Ld1JYc1JnY2c?oc=5",
+    "media_verification": "聯合報社會新聞報導",
+    "auction_record": "2026-10-14 案發，已確認為非自然死亡案件。",
+    "history_timeline": [
+      {
+        "year": "2026-10-14",
+        "stage": "案發與公開查證紀錄",
+        "detail": "男子深夜墜樓，送醫後不治身亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12115,
+    "city": "新北市",
+    "district": "永和區",
+    "doorplate_address": "新北市永和區秀朗路一段",
+    "address": "新北市永和區秀朗路一段（社區電梯大樓）",
+    "lat": 25.005054,
+    "lng": 121.516065,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-07-27",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "發生於2026年7月27日，一名公公疑因家庭糾紛，持刀追砍媳婦，導致媳婦傷重倒臥於樓梯間身亡，符合內政部函釋之專有部分及公共空間延伸之非自然死亡定義。",
+    "source": "鏡新聞、LINE TODAY 社會新聞報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBLNHpmNHZOeTUwU2gxVHNLOFJ6VFdlUXBSWVJFbFUzU00zRlF1UkJDemoxZVRjQ1N4NVBiaEk2dDV3aExRcXgtZG82NHd0RDNUdkFlcVRn?oc=5",
+    "media_verification": "鏡新聞、LINE TODAY 社會新聞報導",
+    "auction_record": "2026年7月案發，目前尚未進入法拍程序",
+    "history_timeline": [
+      {
+        "year": "2026-07-27",
+        "stage": "案發與公開查證紀錄",
+        "detail": "公公持刀殺害媳婦，案發現場位於公寓專有部分延伸之樓梯間。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 12103,
+    "city": "桃園市",
+    "district": "八德區",
+    "doorplate_address": "桃園市八德區介壽路二段583巷",
+    "address": "桃園市八德區介壽路二段583巷（社區電梯大樓）",
+    "lat": 24.942592,
+    "lng": 121.299857,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-10-12",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "2026年10月12日發生震驚社會之割喉焚屍案。36歲詹姓男子疑因毒品幻覺或預謀，尾隨25歲女租客進入住處，持刀割喉致死後縱火滅證，造成屋內嚴重毀損並符合法定凶宅定義。",
+    "source": "Yahoo新聞、UDN聯合報、ETtoday新聞雲、桃園地檢署2026年10月15日解剖通報",
+    "source_url": "https://news.google.com/rss/articles/CBMihANBVV95cUxPSU92Zi1pakR6eDN0ZmJaWWFCeWJkY1k3R212cG85UlllZDFXOXNKWDNlOV9aby1TME5rdVR6ZmJ0MHVGZTE2cUh4bVlnOGlZTFpjcWFSUzBhTUhGeUk1RTlJMkVKQUR6ZGw2NVFDbFZkZkQ5dmt5dTU2QVFMeEN0QnI1MW1hZGZYTGxLVTR0OHVSSTVvelJpOFlXU25VYUkxY0JCT3FDRVE0REVvaTZ6WTBMTDY4TExMUkVCREdPNHpBWUpKT1RTdGR5M2M2TUp0N2ZLckE0aHU1Mk8zdVNWc1ZQTGt5QWd2b1ZHMWkyRzZxN01GWkI3YXR6RXp1aUlIRVVxdElNaFY4Nlo3OEhzVkNkLWUtbnVBZVNMd3M5cXlRZndVYUtUTER6VXc4S29PbDQ0NVZTZmpNYmNpam81RXlRNUJFUEJHdFZlc0RHOUlmRlNHekhLbERoTjlYWjZOUFBaTzNXWUVJMFVOWFdOUnBkaGJuanowM2FZNWRzZHJBWThT?oc=5",
+    "media_verification": "Yahoo新聞、UDN聯合報、ETtoday新聞雲、桃園地檢署2026年10月15日解剖通報",
+    "auction_record": "2026-10-12 案發，目前由檢警封鎖調查中，尚未進入法拍程序",
+    "history_timeline": [
+      {
+        "year": "2026-10-12",
+        "stage": "案發與公開查證紀錄",
+        "detail": "詹嫌尾隨被害人進入介壽路二段租屋處，行兇後縱火，被害人因大量出血休克死亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 11784,
+    "city": "新北市",
+    "district": "永和區",
+    "doorplate_address": "新北市永和區環河西路二段",
+    "address": "新北市永和區環河西路二段（社區電梯大樓）",
+    "lat": 25.013234,
+    "lng": 121.504787,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-12-08",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "發生震驚社會的永和分屍案，死者遭嫌犯殺害後棄屍於瓦窯溝，經警方偵辦確認案發地點位於該社區大樓內，屬法定凶宅。",
+    "source": "臺灣新北地方法院刑事判決、各大媒體社會版報導",
+    "source_url": "",
+    "media_verification": "臺灣新北地方法院刑事判決、各大媒體社會版報導",
+    "auction_record": "該社區因重大命案發生後，相關戶別於實價登錄出現特殊交易備註",
+    "history_timeline": [
+      {
+        "year": "2021",
+        "stage": "案發與公開紀錄",
+        "detail": "嫌犯於住處殺害被害人並進行分屍，隨後棄屍於附近河道。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
     "id": 2889,
     "city": "高雄市",
     "district": "鼓山區",

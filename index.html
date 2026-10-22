@@ -5172,7 +5172,7 @@
         const baseTitle = t("app_title") || "臺灣特殊事故建物與產權紀錄查詢平台";
         const city = citySelect ? citySelect.value.trim() : "";
         const dist = districtSelect ? districtSelect.value.trim() : "";
-        const totalStr = (matchedCount || allRecords.length || 3052).toLocaleString();
+        const totalStr = (matchedCount || allRecords.length || 3112).toLocaleString();
 
         let nextTitle = baseTitle;
         let nextDesc = `整合全臺灣 22 縣市、368 鄉鎮市區共 ${allRecords.length ? allRecords.length.toLocaleString() : "3,112"} 筆歷年特殊事故建物、重大傷亡建築與司法院法拍點交紀錄之空間查詢與產權脈絡平台。`;
@@ -5200,6 +5200,9 @@
           params.set("lang", currentLang);
         }
 
+        const qs = params.toString();
+        const fullCanonicalUrl = qs ? `${canonicalBase}?${qs}` : canonicalBase;
+
         document.title = nextTitle;
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) metaDesc.setAttribute("content", nextDesc);
@@ -5207,11 +5210,49 @@
         if (ogTitle) ogTitle.setAttribute("content", nextTitle);
         const ogDesc = document.querySelector('meta[property="og:description"]');
         if (ogDesc) ogDesc.setAttribute("content", nextDesc);
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) ogUrl.setAttribute("content", fullCanonicalUrl);
+        const twTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twTitle) twTitle.setAttribute("content", nextTitle);
+        const twDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twDesc) twDesc.setAttribute("content", nextDesc);
 
         const canonicalEl = document.getElementById("canonical-link");
         if (canonicalEl) {
-          const qs = params.toString();
-          canonicalEl.setAttribute("href", qs ? `${canonicalBase}?${qs}` : canonicalBase);
+          canonicalEl.setAttribute("href", fullCanonicalUrl);
+        }
+
+        // Inject or update dynamic per-case Schema.org JSON-LD for Googlebot Rich Indexing
+        let caseLdScript = document.getElementById("dynamic-case-jsonld");
+        if (activeCase && activeCase.address) {
+          if (!caseLdScript) {
+            caseLdScript = document.createElement("script");
+            caseLdScript.id = "dynamic-case-jsonld";
+            caseLdScript.type = "application/ld+json";
+            document.head.appendChild(caseLdScript);
+          }
+          const caseLdObj = {
+            "@context": "https://schema.org",
+            "@type": "Place",
+            "name": localizeAddressDisplay(activeCase),
+            "description": nextDesc,
+            "url": fullCanonicalUrl,
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "TW",
+              "addressRegion": activeCase.city || "",
+              "addressLocality": activeCase.district || "",
+              "streetAddress": activeCase.doorplate_address || activeCase.address || ""
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": Number(activeCase.lat) || 25.0478,
+              "longitude": Number(activeCase.lng) || 121.5319
+            }
+          };
+          caseLdScript.textContent = JSON.stringify(caseLdObj);
+        } else if (caseLdScript) {
+          caseLdScript.remove();
         }
       } catch (e) {}
     }

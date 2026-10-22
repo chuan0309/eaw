@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { GoogleGenAI, ThinkingLevel, Type } from "@google/genai";
 import * as factCrawler from "./fact_crawler.js";
+import { buildSitemapXml, generateAndWriteSitemapFiles } from "./generate_sitemap.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1011,6 +1012,7 @@ app.post("/api/records", async (req, res) => {
     };
 
     dynamicRecords.unshift(newRecord);
+    persistNewVerifiedRecordsToDisk([newRecord]);
     return res.json({ record: newRecord });
   } catch (err) {
     return res.status(500).json({ error: err.message || "新增紀錄失敗" });
@@ -1081,6 +1083,7 @@ function persistNewVerifiedRecordsToDisk(newItems) {
       fs.writeFileSync(publicPath, JSON.stringify(updated, null, 2), "utf8");
     }
     cachedCalibratedDiskRecords = updated;
+    generateAndWriteSitemapFiles(updated, "https://chuancn.org");
   } catch (e) {}
 }
 
@@ -1420,42 +1423,32 @@ app.get("/robots.txt", (req, res) => {
   );
 });
 
-// Dynamic XML Sitemap for Google Search Console indexing across all 22 Taiwan cities/counties & high-search districts
+// Dynamic XML Sitemap for Google Search Console indexing across all 22 Taiwan cities/counties, active districts, and all 3,112+ individual case pages
 app.get("/sitemap.xml", (req, res) => {
-  const proto = req.headers["x-forwarded-proto"] || req.protocol || "https";
-  const host = req.headers["x-forwarded-host"] || req.get("host") || "ais-pre-qhovny3455t7lprz472yea-505209179474.asia-east1.run.app";
-  const baseUrl = (process.env.APP_URL || `${proto}://${host}`).replace(/\/$/, "");
-  const today = new Date().toISOString().slice(0, 10);
-  const cities = Object.keys(CITY_BASE_COORDS);
-
-  const urlEntries = [
-    `  <url>\n    <loc>${baseUrl}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>`
-  ];
-
-  for (const city of cities) {
-    urlEntries.push(
-      `  <url>\n    <loc>${baseUrl}/?city=${encodeURIComponent(city)}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`
-    );
-  }
-
-  // Add top high-intent house-hunting districts for long-tail SEO organic traffic
-  const seoHotDistricts = [
-    ["臺北市", "中山區"], ["臺北市", "萬華區"], ["臺北市", "信義區"], ["臺北市", "大安區"], ["臺北市", "內湖區"], ["臺北市", "文山區"],
-    ["新北市", "板橋區"], ["新北市", "中和區"], ["新北市", "永和區"], ["新北市", "三重區"], ["新北市", "新莊區"], ["新北市", "淡水區"],
-    ["桃園市", "桃園區"], ["桃園市", "中壢區"], ["桃園市", "龜山區"], ["桃園市", "八德區"],
-    ["臺中市", "西屯區"], ["臺中市", "北屯區"], ["臺中市", "北區"], ["臺中市", "南屯區"],
-    ["臺南市", "永康區"], ["臺南市", "東區"], ["臺南市", "中西區"],
-    ["高雄市", "三民區"], ["高雄市", "左營區"], ["高雄市", "鳳山區"], ["高雄市", "苓雅區"], ["高雄市", "鹽埕區"]
-  ];
-  for (const [c, d] of seoHotDistricts) {
-    urlEntries.push(
-      `  <url>\n    <loc>${baseUrl}/?city=${encodeURIComponent(c)}&amp;district=${encodeURIComponent(d)}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`
-    );
-  }
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries.join("\n")}\n</urlset>`;
+  const baseUrl = (process.env.APP_URL || "https://chuancn.org").replace(/\/$/, "");
+  const allRecords = loadAllUnifiedRecords();
+  const { xml } = buildSitemapXml(allRecords, baseUrl);
   res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=1800");
   res.status(200).send(xml);
+});
+
+// On-demand Sitemap regeneration endpoint
+app.all("/api/sitemap/regenerate", (req, res) => {
+  try {
+    const baseUrl = (process.env.APP_URL || "https://chuancn.org").replace(/\/$/, "");
+    const allRecords = loadAllUnifiedRecords();
+    const result = generateAndWriteSitemapFiles(allRecords, baseUrl);
+    res.json({
+      ok: true,
+      totalUrls: result.totalUrls,
+      caseCount: result.caseCount,
+      cityCount: result.cityCount,
+      districtCount: result.districtCount
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
 });
 
 // Serve static assets
@@ -1467,7 +1460,10 @@ app.get("*", (req, res) => {
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  loadAllUnifiedRecords();
-  console.log(`Server listening on http://0.0.0.0:${PORT}`);
+  const records = loadAllUnifiedRecords();
+  try {
+    generateAndWriteSitemapFiles(records, "https://chuancn.org");
+  } catch (e) {}
+  console.log(`Server listening on http://0.0.0.0:${PORT} (${records.length} active records indexed in sitemap.xml)`);
 });
 

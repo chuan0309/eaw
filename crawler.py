@@ -474,7 +474,7 @@ def main():
                 "source": r.get("media_verification") or "歷年法拍與社會新聞查證",
                 "source_url": r.get("source_url") or "",
                 "media_verification": r.get("media_verification") or "司法院法拍筆錄 / 歷年紙媒與公開資料庫",
-                "auction_record": r.get("auction_record") or f"案發日期雙重核實：{inc_date}",
+                "auction_record": "",
                 "history_timeline": r.get("history_timeline") or [],
                 "verification_score": 92,
                 "audit_note": "多源新案爬蟲與相似比對入庫"
@@ -520,7 +520,10 @@ def normalize_supa_row_for_archive(r: dict) -> dict:
         except Exception:
             timeline = []
     if not isinstance(timeline, list) or not timeline:
-        timeline = [{"year": inc_date, "stage": "案發與公開查證紀錄", "detail": str(r.get("reason") or "").strip()}]
+        timeline = [{"year": inc_date, "stage": "公開查證紀錄", "detail": str(r.get("reason") or "").strip()}]
+    raw_auc = str(r.get("auction_record") or "").strip()
+    if any(k in raw_auc for k in ["案發日期雙重核實", "案發日期核實", "無公開法拍", "尚無法拍", "公開資訊與歷史紀錄核實"]):
+        raw_auc = ""
     return {
         "id": r.get("id"),
         "city": city,
@@ -539,7 +542,7 @@ def normalize_supa_row_for_archive(r: dict) -> dict:
         "source": str(r.get("source") or r.get("media_verification") or "公開社會新聞與司法實務紀錄").strip(),
         "source_url": str(r.get("source_url") or "").strip(),
         "media_verification": str(r.get("media_verification") or r.get("source") or "公開社會新聞與司法實務紀錄").strip(),
-        "auction_record": str(r.get("auction_record") or f"案發日期核實：{inc_date}").strip(),
+        "auction_record": raw_auc,
         "history_timeline": timeline,
         "merged_count": r.get("merged_count") or 1
     }

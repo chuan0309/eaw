@@ -1100,6 +1100,66 @@ function getCrawlerStatusSummary(totalCount) {
   };
 }
 
+async function checkAiSameIncidentInDistrict(candidate, districtRecords = []) {
+  // 1. Fast deterministic semantic check first (victim age + modus operandi + date proximity)
+  for (const ex of districtRecords) {
+    if (factCrawler.areSameIncidentInDistrict(candidate, ex)) {
+      return ex;
+    }
+  }
+
+  // 2. If GEMINI_API_KEY is available, silently compare against same-district cases within ±60 days using gemini-3.8-flash
+  if (!process.env.GEMINI_API_KEY) return null;
+  const candTime = Date.parse(`${String(candidate.incident_date || "").slice(0, 10)}T00:00:00Z`);
+  if (isNaN(candTime)) return null;
+
+  const nearbyCandidates = districtRecords.filter(ex => {
+    const exTime = Date.parse(`${String(ex.incident_date || "").slice(0, 10)}T00:00:00Z`);
+    return !isNaN(exTime) && Math.abs(candTime - exTime) <= 60 * 86400000;
+  }).slice(0, 8);
+
+  if (nearbyCandidates.length === 0) return null;
+
+  try {
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+      httpOptions: { headers: { "User-Agent": "aistudio-build" } }
+    });
+    const prompt = `請在背景比對以下新進案件與同行政區既有案件是否屬於「同一起真實社會事件」（例如：被害人年齡相符、死因或犯案手法相符、案發日期相近，即使兩筆紀錄記載之路段名稱不同）。
+新案件：
+- 日期：${candidate.incident_date}
+- 地址：${candidate.address}
+- 案情：${candidate.reason}
+
+同行政區既有案件清單：
+${nearbyCandidates.map((r, idx) => `[${idx}] id=${r.id} | 日期=${r.incident_date} | 地址=${r.address} | 案情=${r.reason}`).join("\n")}
+
+若屬於同一案件，請回傳 matchedIndex 為對應的整數索引；若為不同案件，請回傳 matchedIndex 為 -1。`;
+
+    const resp = await ai.models.generateContent({
+      model: "gemini-3.8-flash",
+      contents: prompt,
+      config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            isSameIncident: { type: Type.BOOLEAN },
+            matchedIndex: { type: Type.INTEGER }
+          },
+          required: ["isSameIncident", "matchedIndex"]
+        }
+      }
+    });
+    const parsed = JSON.parse(resp.text || "{}");
+    if (parsed.isSameIncident && typeof parsed.matchedIndex === "number" && nearbyCandidates[parsed.matchedIndex]) {
+      return nearbyCandidates[parsed.matchedIndex];
+    }
+  } catch (e) {}
+  return null;
+}
+
 function persistNewVerifiedRecordsToDisk(newItems) {
   if (!Array.isArray(newItems) || newItems.length === 0) return;
   try {
@@ -1111,13 +1171,27 @@ function persistNewVerifiedRecordsToDisk(newItems) {
     const existingIds = new Set(currentDisk.map(r => String(r.id || r.source_url || r.address)));
     const uniqueNew = newItems.filter(r => !existingIds.has(String(r.id || r.source_url || r.address)));
     if (uniqueNew.length === 0) return;
-    const updated = [...uniqueNew, ...currentDisk];
-    fs.writeFileSync(primaryPath, JSON.stringify(updated, null, 2), "utf8");
-    if (fs.existsSync(path.dirname(publicPath))) {
-      fs.writeFileSync(publicPath, JSON.stringify(updated, null, 2), "utf8");
+
+    const mergedPool = [...uniqueNew, ...currentDisk];
+    // Silently deduplicate same-incident records in the same district, keeping URL/judgment-verified records as primary
+    const finalUpdated = [];
+    for (const item of mergedPool) {
+      const dupIdx = finalUpdated.findIndex(ex => factCrawler.areSameIncidentInDistrict(ex, item));
+      if (dupIdx === -1) {
+        finalUpdated.push(item);
+      } else {
+        const ex = finalUpdated[dupIdx];
+        const winner = factCrawler.getRecordAuthorityScore(item) > factCrawler.getRecordAuthorityScore(ex) ? { ...item } : { ...ex };
+        finalUpdated[dupIdx] = winner;
+      }
     }
-    cachedCalibratedDiskRecords = updated;
-    generateAndWriteSitemapFiles(updated, "https://chuancn.org");
+
+    fs.writeFileSync(primaryPath, JSON.stringify(finalUpdated, null, 2), "utf8");
+    if (fs.existsSync(path.dirname(publicPath))) {
+      fs.writeFileSync(publicPath, JSON.stringify(finalUpdated, null, 2), "utf8");
+    }
+    cachedCalibratedDiskRecords = finalUpdated;
+    generateAndWriteSitemapFiles(finalUpdated, "https://chuancn.org");
   } catch (e) {}
 }
 
@@ -1170,6 +1244,26 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 35) {
       continue;
     }
 
+    // Silent background semantic + Gemini AI same-incident check within the same (city, district)
+    const sameDistExisting = existing.filter(
+      r => r.city === parsed.city && r.district === parsed.district
+    );
+    const matchedSameCase = await checkAiSameIncidentInDistrict(parsed, sameDistExisting);
+    if (matchedSameCase) {
+      // If the newly crawled article has a higher authority score (e.g., direct news URL where existing lacked one), silently upgrade the existing record
+      if (factCrawler.getRecordAuthorityScore(parsed) > factCrawler.getRecordAuthorityScore(matchedSameCase)) {
+        Object.assign(matchedSameCase, {
+          ...parsed,
+          id: matchedSameCase.id || parsed.id,
+          lat: matchedSameCase.lat || parsed.lat,
+          lng: matchedSameCase.lng || parsed.lng
+        });
+      }
+      crawlerState.duplicatesFilteredCount++;
+      sigs.forEach(s => seenSigs.add(s));
+      continue;
+    }
+
     // Strict Google Maps Geocoding verification: must resolve to a specific road/building inside the target district
     let geocodedOk = false;
     if (getGoogleMapsApiKey()) {
@@ -1191,6 +1285,7 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 35) {
     delete parsed.__community;
 
     dynamicRecords.unshift(parsed);
+    existing.unshift(parsed);
     added.push(parsed);
     crawlerState.newlyDiscoveredCount++;
     crawlerState.recentDiscovered.unshift({

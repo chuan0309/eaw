@@ -2237,17 +2237,17 @@
     }
 
     function localizeAuctionNote(item) {
-      const rawNote = (item.auction_record && !/尚無法拍|無公開法拍|正常行情/.test(item.auction_record))
-        ? String(item.auction_record)
+      const rawNote = (item.auction_record && !/尚無法拍|無公開法拍|正常行情|案發日期雙重核實|案發日期核實|公開資訊與歷史紀錄核實/.test(item.auction_record))
+        ? String(item.auction_record).trim()
         : "";
       if (currentLang === "zh-TW") {
-        return rawNote || `案發日期核實：${item.incident_date || "歷史檔案"}`;
+        return rawNote;
       }
       const cached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
-      if (cached && cached.auction_record) return cached.auction_record;
-
-      const dateStr = item.incident_date || (item.incidentYear ? String(item.incidentYear) : "Historical");
-      return `${t("lbl_verified_date_prefix")}${dateStr}`;
+      if (cached && cached.auction_record && !/Verified Incident Date|案發日期/.test(cached.auction_record)) {
+        return cached.auction_record;
+      }
+      return "";
     }
 
     function localizeCaseReasonPreview(item) {
@@ -4159,14 +4159,13 @@
       const safeToastPrefix = t("toast_copied_kw").replace(/'/g, "\\'");
       document.getElementById("drawer-auction-box").innerHTML = `
         <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div><span class="font-semibold text-slate-800">${t("lbl_incident_note")}</span><span class="font-mono font-semibold text-slate-900">${noteText}</span></div>
-          ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold">${t("lbl_orig_report_link")}</a>` : ""}
-        </div>
-        <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
           <div class="text-xs"><span class="font-semibold text-slate-800">${t("lbl_verified_source")}</span><span class="text-slate-700">${sourceText}</span></div>
-          <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1">
-            <span>${t("btn_copy_kw")}</span>
-          </button>
+          <div class="flex items-center gap-2">
+            ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold text-xs">${t("lbl_orig_report_link")}</a>` : ""}
+            <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1">
+              <span>${t("btn_copy_kw")}</span>
+            </button>
+          </div>
         </div>
       `;
     }
@@ -4590,9 +4589,14 @@
 
     function prepareRecord(r, index) {
       const cleanAddress = sanitizeHtmlEntitiesAndText(r.address)
-        // Remove any truncated news headline fragment mistakenly appended after building_type (e.g., "（集合住宅／民宅 · 價格不夠甜？...）" -> "（集合住宅／民宅）")
+        // Remove any truncated news headline fragment mistakenly appended after building_type
         .replace(/（([^）·]+)·\s*[^）]*[？?！!／「][^）]*）/g, "（$1）");
-      let cleanReason = sanitizeHtmlEntitiesAndText(r.reason);
+      let cleanReason = sanitizeHtmlEntitiesAndText(r.reason)
+        // Strip any injected relative-date parentheticals or system consolidation notes
+        .replace(/(前天清晨|前天凌晨|前天晚間|前天|前日|昨日清晨|昨日凌晨|昨日上午|昨日下午|昨日晚間|昨日深夜|昨天清晨|昨天凌晨|昨天上午|昨天下午|昨天晚間|昨晚|昨夜|昨晨|昨日|昨天)（(?:19\d{2}|20\d{2})年\d{1,2}月\d{1,2}日）/g, "$1")
+        .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
+        .replace(/（系統已自動?比對整合[\s\S]*$/, "")
+        .trim();
       // If reason starts with 【Headline】 followed immediately by the same Headline, deduplicate it
       const dupMatch = cleanReason.match(/^【([^】]+)】\s*(.+)$/);
       if (dupMatch) {
@@ -4604,12 +4608,18 @@
       }
       const cleanSource = sanitizeHtmlEntitiesAndText(r.source);
       const cleanMedia = sanitizeHtmlEntitiesAndText(r.media_verification || r.source);
-      const cleanAuction = sanitizeHtmlEntitiesAndText(r.auction_record);
+      const rawAuction = sanitizeHtmlEntitiesAndText(r.auction_record);
+      const cleanAuction = /案發日期雙重核實|案發日期核實|無公開法拍|尚無法拍|公開資訊與歷史紀錄核實/.test(rawAuction) ? "" : rawAuction;
       const cleanTimeline = Array.isArray(r.history_timeline)
         ? r.history_timeline.map(t => ({
             ...t,
             stage: sanitizeHtmlEntitiesAndText(t?.stage),
             detail: sanitizeHtmlEntitiesAndText(t?.detail)
+              .replace(/(前天清晨|前天凌晨|前天晚間|前天|前日|昨日清晨|昨日凌晨|昨日上午|昨日下午|昨日晚間|昨日深夜|昨天清晨|昨天凌晨|昨天上午|昨天下午|昨天晚間|昨晚|昨夜|昨晨|昨日|昨天)（(?:19\d{2}|20\d{2})年\d{1,2}月\d{1,2}日）/g, "$1")
+              .replace(/（來源連結可點擊直接查閱原篇報導）/g, "")
+              .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
+              .replace(/（系統已自動?比對整合[\s\S]*$/, "")
+              .trim()
           }))
         : r.history_timeline;
 
@@ -4715,7 +4725,7 @@
         }
 
         if (newPrepared.length > 0) {
-          allRecords = [...newPrepared, ...allRecords];
+          allRecords = consolidateSimilarRecordsClient([...newPrepared, ...allRecords]);
           return newPrepared.length;
         }
       } catch (e) {}
@@ -4745,6 +4755,80 @@
       return stripped ? `${city}_${dist}_${stripped}` : "";
     }
 
+    function getClientAuthorityScore(r) {
+      let score = 0;
+      const url = String(r.source_url || "").trim();
+      const reason = String(r.reason || "");
+      const source = `${r.source || ""} ${r.media_verification || ""}`;
+      if (url.startsWith("http")) {
+        score += 1000;
+        const roadMatch = String(r.address || "").match(/([一-龥]{2,5}(?:路|街|大道))/);
+        if (roadMatch && reason.includes(roadMatch[1])) score += 500;
+      }
+      if (/字第\s*\d+\s*號/.test(`${reason} ${source}`)) score += 400;
+      if (/(聯合|自由|ETtoday|中央社|TVBS|三立|中時|公視|鏡週刊|CTWant).*「.+」/.test(source)) score += 200;
+      if (r.location_accuracy === "ROOFTOP_GEOCODED") score += 50;
+      return score;
+    }
+
+    function extractClientModusTags(text = "") {
+      const tags = [];
+      const hasBlade = /割喉|頸部.*刀|中刀|砍殺|持刀|刀傷|刺死|砍死/.test(text);
+      const hasFire = /縱火|惡火|火警|焚屍|毀屍滅跡|起火|火災|燒死/.test(text);
+      if (hasBlade && hasFire) tags.push("arson_blade");
+      if (hasBlade) tags.push("blade");
+      if (hasFire) tags.push("fire");
+      if (/尾隨/.test(text)) tags.push("tail_stalk");
+      if (/分屍|肢解/.test(text)) tags.push("dismember");
+      if (/桶屍|水泥封屍/.test(text)) tags.push("barrel");
+      if (/滅門|雙屍|三屍|四屍|一家.*口/.test(text)) tags.push("mass_death");
+      if (/槍擊|行刑式|開槍|中彈|舉槍/.test(text)) tags.push("gunshot");
+      if (/弒母|弒父|殺母|殺父|逆子|逆倫/.test(text)) tags.push("parricide");
+      if (/燒炭/.test(text)) tags.push("charcoal");
+      if (/一氧化碳中毒|熱水器/.test(text)) tags.push("co_poison");
+      if (/墜樓|跳樓/.test(text)) tags.push("jump");
+      if (/上吊|自縊/.test(text)) tags.push("hang");
+      if (/勒斃|掐死|窒息/.test(text)) tags.push("strangle");
+      return tags;
+    }
+
+    function areSameIncidentClient(r1, r2) {
+      const c1 = String(r1.city || "").replace(/台/g, "臺").trim();
+      const c2 = String(r2.city || "").replace(/台/g, "臺").trim();
+      const d1 = String(r1.district || "").trim();
+      const d2 = String(r2.district || "").trim();
+      if (!c1 || c1 !== c2 || !d1 || d1 !== d2) return false;
+
+      const u1 = String(r1.source_url || "").split("?")[0].trim();
+      const u2 = String(r2.source_url || "").split("?")[0].trim();
+      if (u1 && u2 && u1.startsWith("http") && u1 === u2) return true;
+
+      const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
+      const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
+      const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
+      if (daysDiff > 45) return false;
+
+      const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
+      const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
+      const ages1 = new Set(Array.from(txt1.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
+      const ages2 = new Set(Array.from(txt2.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
+      const sharedAges = [...ages1].filter(a => ages2.has(a));
+
+      const tags1 = new Set(extractClientModusTags(txt1));
+      const tags2 = new Set(extractClientModusTags(txt2));
+      const sharedTags = [...tags1].filter(t => tags2.has(t));
+
+      if (sharedAges.length > 0) {
+        if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
+        if (sharedTags.length >= 2) return true;
+        if (sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle"].includes(t))) return true;
+      }
+      if (daysDiff <= 30 && sharedTags.some(t => ["arson_blade", "dismember", "barrel", "parricide"].includes(t))) {
+        return true;
+      }
+      return false;
+    }
+
     function consolidateSimilarRecordsClient(records) {
       const groups = new Map();
       for (const r of records) {
@@ -4754,18 +4838,17 @@
         if (!groups.has(key)) groups.set(key, []);
         groups.get(key).push(r);
       }
-      const result = [];
+      const roadMerged = [];
       for (const [key, items] of groups.entries()) {
         if (items.length === 1) {
           const single = { ...items[0] };
           single.merged_count = single.merged_count || (Array.isArray(single.merged_cases) ? single.merged_cases.length : 1);
-          result.push(single);
+          roadMerged.push(single);
           continue;
         }
         items.sort((a, b) => {
-          const aGeo = a.location_accuracy === "ROOFTOP_GEOCODED" ? 1 : 0;
-          const bGeo = b.location_accuracy === "ROOFTOP_GEOCODED" ? 1 : 0;
-          if (aGeo !== bGeo) return bGeo - aGeo;
+          const scoreDiff = getClientAuthorityScore(b) - getClientAuthorityScore(a);
+          if (scoreDiff !== 0) return scoreDiff;
           return (b.merged_count || 1) - (a.merged_count || 1);
         });
         const primary = { ...items[0] };
@@ -4784,7 +4867,20 @@
         }
         primary.merged_count = subPool.length;
         primary.merged_cases = subPool;
-        result.push(primary);
+        roadMerged.push(primary);
+      }
+
+      // Second pass: silently merge same-incident records in the same district (prioritizing URL / court case number)
+      const result = [];
+      for (const cand of roadMerged) {
+        const dupIdx = result.findIndex(ex => areSameIncidentClient(ex, cand));
+        if (dupIdx === -1) {
+          result.push(cand);
+        } else {
+          const ex = result[dupIdx];
+          const winner = getClientAuthorityScore(cand) > getClientAuthorityScore(ex) ? { ...cand } : { ...ex };
+          result[dupIdx] = winner;
+        }
       }
       return result;
     }

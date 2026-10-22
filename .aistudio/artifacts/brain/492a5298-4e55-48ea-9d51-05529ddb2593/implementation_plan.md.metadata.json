@@ -1,6 +1,6 @@
 {
-  "summary":  "Implementation plan for custom Judicial Dossier & Property Verification Seal SVG/ICO Favicon, Google AdSense Display Unit (slot: 3488263290) integration in the left case list and case dossier drawer, and Google AdSense Site Preview & crawler compatibility fixes.",
-  "updatedAt":  "2026-10-22T09:09:36.276259752Z",
+  "summary":  "Implementation plan for silent background semantic & AI-assisted duplicate case deduplication (prioritizing URL/judgment-verified records) and complete removal of internal verification/date-inference explanation text from the website UI and dataset.",
+  "updatedAt":  "2026-10-22T11:39:52.508019609Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

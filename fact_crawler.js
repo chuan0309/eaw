@@ -682,19 +682,9 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   const normTitle = sanitizedTitle.replace(/\s+/g, "");
   const normSnippet = sanitizedSnippet.replace(/\s+/g, "");
   const hasDistinctSnippet = sanitizedSnippet.length >= 25 && !normSnippet.startsWith(normTitle.slice(0, 10));
-  let reasonText = hasDistinctSnippet
+  const reasonText = hasDistinctSnippet
     ? `【${sanitizedTitle}】${sanitizedSnippet}`
     : `依據公開資料庫與${cleanRssHtmlEntities(article.media)}核實紀錄「${sanitizedTitle}」，該處位於${matchedCity}${matchedDist}${roadPart || communityPart || areaPart || villagePart || ""}，於 ${trueIncidentDate} 發生非自然死亡或特殊事故紀錄。`;
-
-  // Annotate relative date expression in reasonText with the exact resolved calendar date
-  const [ty, tm, td] = trueIncidentDate.split("-").map(Number);
-  const resolvedLabel = `（${ty}年${tm}月${td}日）`;
-  if (ty && tm && td && !reasonText.includes(resolvedLabel)) {
-    reasonText = reasonText.replace(
-      /(前天清晨|前天凌晨|前天晚間|前天|前日|昨日清晨|昨日凌晨|昨日上午|昨日下午|昨日晚間|昨日深夜|昨天清晨|昨天凌晨|昨天上午|昨天下午|昨天晚間|昨晚|昨夜|昨晨|昨日|昨天)(?![（(])/,
-      `$1${resolvedLabel}`
-    );
-  }
 
   const [lat, lng] = getDistrictBaseCoords(matchedCity, matchedDist, `${roadPart}_${communityPart}_${sanitizedTitle}`);
   const cleanSource = `${cleanRssHtmlEntities(article.media)}報導「${sanitizedTitle}」`;
@@ -717,12 +707,12 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     source: cleanSource,
     source_url: article.link,
     media_verification: cleanSource,
-    auction_record: `案發日期雙重核實：${trueIncidentDate}（${dateVerifyMethod}）`,
+    auction_record: "",
     history_timeline: [
       {
         year: trueIncidentDate,
         stage: `${article.media}公開報導`,
-        detail: `${article.title}（來源連結可點擊直接查閱原篇報導）`
+        detail: sanitizedTitle
       }
     ],
     __road: roadPart,
@@ -730,7 +720,28 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   };
 }
 
-// Semantic Event Signature Generator to prevent duplicate cases across outlets
+export function extractModusOperandiTags(text = "") {
+  const tags = [];
+  const hasBlade = /割喉|頸部.*刀|中刀|砍殺|持刀|刀傷|刺死|砍死/.test(text);
+  const hasFire = /縱火|惡火|火警|焚屍|毀屍滅跡|起火|火災|燒死/.test(text);
+  if (hasBlade && hasFire) tags.push("arson_blade");
+  if (hasBlade) tags.push("blade");
+  if (hasFire) tags.push("fire");
+  if (/尾隨/.test(text)) tags.push("tail_stalk");
+  if (/分屍|肢解/.test(text)) tags.push("dismember");
+  if (/桶屍|水泥封屍/.test(text)) tags.push("barrel");
+  if (/滅門|雙屍|三屍|四屍|一家.*口/.test(text)) tags.push("mass_death");
+  if (/槍擊|行刑式|開槍|中彈|舉槍/.test(text)) tags.push("gunshot");
+  if (/弒母|弒父|殺母|殺父|逆子|逆倫/.test(text)) tags.push("parricide");
+  if (/燒炭/.test(text)) tags.push("charcoal");
+  if (/一氧化碳中毒|熱水器/.test(text)) tags.push("co_poison");
+  if (/墜樓|跳樓/.test(text)) tags.push("jump");
+  if (/上吊|自縊/.test(text)) tags.push("hang");
+  if (/勒斃|掐死|窒息/.test(text)) tags.push("strangle");
+  return tags;
+}
+
+// Semantic Event Signature Generator to prevent duplicate cases across outlets or different road descriptions in the same district
 export function getSemanticCaseSignatures(record) {
   const sigs = [];
   const city = (record.city || "").replace(/台/g, "臺");
@@ -766,21 +777,32 @@ export function getSemanticCaseSignatures(record) {
     sigs.push(`door:${city}_${dist}_${cleanAddr}`);
   }
 
-  // Road + Year-Month + Category signature
+  // Road + Year-Month signature
   const ym = (record.incident_date || "").slice(0, 7);
   const roadMatch = text.match(/([一-龥]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?)/);
   if (roadMatch && ym.length === 7) {
     sigs.push(`road_ym:${city}_${dist}_${roadMatch[1]}_${ym}`);
   }
 
-  // Surname + Age + District signature (e.g. 八德區_25歲_盧姓)
-  const ageMatch = text.match(/(\d{1,2})\s*歲/);
+  // Victim/Suspect Age + Modus Operandi + District + Year-Month signature (catches same incident even if road differs)
+  const ages = Array.from(text.matchAll(/(\d{1,2})\s*歲/g)).map(m => m[1]);
+  const modusTags = extractModusOperandiTags(text);
   const surnameMatch = text.match(/([陳林黃張李王吳劉蔡楊許鄭謝郭洪曾邱廖賴周徐蘇葉莊呂江何蕭羅高潘簡朱鍾連彭游詹胡施沈余盧梁趙顏柯翁魏孫戴范方宋鄧杜傅侯曹薛丁卓馬阮])\s*(?:姓|男|女|婦|翁|嫌)/);
-  if (ageMatch && surnameMatch && dist) {
-    sigs.push(`person:${city}_${dist}_${ageMatch[1]}_${surnameMatch[1]}`);
+  if (ages.length > 0 && surnameMatch && dist) {
+    sigs.push(`person:${city}_${dist}_${ages[0]}_${surnameMatch[1]}`);
+  }
+  if (dist && ym.length === 7) {
+    for (const age of ages) {
+      for (const tag of modusTags) {
+        sigs.push(`evt_age_modus:${city}_${dist}_${ym}_${age}_${tag}`);
+      }
+    }
+    for (const rareTag of modusTags.filter(t => ["arson_blade", "dismember", "barrel", "parricide"].includes(t))) {
+      sigs.push(`evt_compound:${city}_${dist}_${ym}_${rareTag}`);
+    }
   }
 
-  // Reason + address fingerprint so distinct streets in the same district never collide
+  // Reason + address fingerprint
   const cleanReason = (record.reason || "").replace(/^【[^】]+】/, "").replace(/\s+/g, "").slice(0, 36);
   if (cleanReason.length >= 15) {
     sigs.push(`reason:${city}_${dist}_${cleanAddr.slice(0, 16)}_${cleanReason}`);
@@ -873,7 +895,7 @@ export const LANDMARK_CANONICAL = {
   }
 };
 
-// Extract canonical road/lane/building key for Similar Case Comparison & Consolidation (相似案件比對與整合)
+// Extract canonical road/lane/building key for Similar Case Comparison & Consolidation
 export function extractConsolidationKey(r) {
   const city = String(r.city || "").replace(/台/g, "臺").trim();
   const dist = String(r.district || "").trim();
@@ -917,7 +939,60 @@ export function extractConsolidationKey(r) {
   return `${city}_${dist}_${stripped}`;
 }
 
-// Smart Similar Case Consolidation Engine: Merges duplicate or same-road vague records into unified multi-source dossiers
+export function getRecordAuthorityScore(r) {
+  let score = 0;
+  const url = String(r.source_url || "").trim();
+  const reason = String(r.reason || "");
+  const source = `${r.source || ""} ${r.media_verification || ""}`;
+  if (url.startsWith("http")) {
+    score += 1000;
+    const roadMatch = String(r.address || "").match(/([一-龥]{2,5}(?:路|街|大道))/);
+    if (roadMatch && reason.includes(roadMatch[1])) score += 500;
+  }
+  if (/字第\s*\d+\s*號/.test(`${reason} ${source}`)) score += 400;
+  if (/(聯合|自由|ETtoday|中央社|TVBS|三立|中時|公視|鏡週刊|CTWant).*「.+」/.test(source)) score += 200;
+  if (r.location_accuracy === "ROOFTOP_GEOCODED") score += 50;
+  return score;
+}
+
+export function areSameIncidentInDistrict(r1, r2) {
+  const c1 = String(r1.city || "").replace(/台/g, "臺").trim();
+  const c2 = String(r2.city || "").replace(/台/g, "臺").trim();
+  const d1 = String(r1.district || "").trim();
+  const d2 = String(r2.district || "").trim();
+  if (!c1 || c1 !== c2 || !d1 || d1 !== d2) return false;
+
+  const u1 = String(r1.source_url || "").split("?")[0].trim();
+  const u2 = String(r2.source_url || "").split("?")[0].trim();
+  if (u1 && u2 && u1.startsWith("http") && u1 === u2) return true;
+
+  const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
+  const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
+  const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
+  if (daysDiff > 45) return false;
+
+  const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
+  const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
+  const ages1 = new Set(Array.from(txt1.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
+  const ages2 = new Set(Array.from(txt2.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
+  const sharedAges = [...ages1].filter(a => ages2.has(a));
+
+  const tags1 = new Set(extractModusOperandiTags(txt1));
+  const tags2 = new Set(extractModusOperandiTags(txt2));
+  const sharedTags = [...tags1].filter(t => tags2.has(t));
+
+  if (sharedAges.length > 0) {
+    if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
+    if (sharedTags.length >= 2) return true;
+    if (sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle"].includes(t))) return true;
+  }
+  if (daysDiff <= 30 && sharedTags.some(t => ["arson_blade", "dismember", "barrel", "parricide"].includes(t))) {
+    return true;
+  }
+  return false;
+}
+
+// Smart Similar Case Consolidation Engine: Silently merges duplicate or same-incident records prioritizing verified news URLs & court case numbers
 export function consolidateSimilarRecords(records = []) {
   const groups = new Map();
   for (const r of records) {
@@ -928,7 +1003,7 @@ export function consolidateSimilarRecords(records = []) {
     groups.get(key).push(r);
   }
 
-  const consolidated = [];
+  const roadConsolidated = [];
   for (const [key, items] of groups.entries()) {
     let lmMeta = null;
     for (const [lmName, meta] of Object.entries(LANDMARK_CANONICAL)) {
@@ -961,15 +1036,8 @@ export function consolidateSimilarRecords(records = []) {
     }
 
     rawPool.sort((a, b) => {
-      const aGeo = a.location_accuracy === "ROOFTOP_GEOCODED" ? 1 : 0;
-      const bGeo = b.location_accuracy === "ROOFTOP_GEOCODED" ? 1 : 0;
-      if (aGeo !== bGeo) return bGeo - aGeo;
-      const aCurated = String(a.id || "").startsWith("tw-arch-") ? 1 : 0;
-      const bCurated = String(b.id || "").startsWith("tw-arch-") ? 1 : 0;
-      if (aCurated !== bCurated) return bCurated - aCurated;
-      const aHasUrl = a.source_url && String(a.source_url).startsWith("http") ? 1 : 0;
-      const bHasUrl = b.source_url && String(b.source_url).startsWith("http") ? 1 : 0;
-      if (aHasUrl !== bHasUrl) return bHasUrl - aHasUrl;
+      const scoreDiff = getRecordAuthorityScore(b) - getRecordAuthorityScore(a);
+      if (scoreDiff !== 0) return scoreDiff;
       return String(b.incident_date || "").localeCompare(String(a.incident_date || ""));
     });
 
@@ -979,7 +1047,7 @@ export function consolidateSimilarRecords(records = []) {
       const cleanReason = String(it.reason || "")
         .replace(/^【[^】]+】/, "")
         .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
-        .replace(/（系統已比對整合[\s\S]*$/, "")
+        .replace(/（系統已自動?比對整合[\s\S]*$/, "")
         .replace(/\s+/g, "")
         .slice(0, 28);
       const subSig = `${it.incident_date}_${cleanReason}`;
@@ -988,7 +1056,7 @@ export function consolidateSimilarRecords(records = []) {
       uniqueSub.push(it);
     }
 
-    const geocodedMaster = items.find(i => i.location_accuracy === "ROOFTOP_GEOCODED") || uniqueSub[0];
+    const geocodedMaster = uniqueSub.find(i => i.location_accuracy === "ROOFTOP_GEOCODED") || uniqueSub[0];
     const primary = { ...uniqueSub[0] };
     const city = (lmMeta ? lmMeta.city : (primary.city || "")).replace(/台/g, "臺");
     const dist = lmMeta ? lmMeta.district : (primary.district || "");
@@ -1023,7 +1091,7 @@ export function consolidateSimilarRecords(records = []) {
     }
 
     if (uniqueSub.length > 1) {
-      uniqueSub.sort((a, b) => String(b.incident_date || "").localeCompare(String(a.incident_date || "")));
+      uniqueSub.sort((a, b) => getRecordAuthorityScore(b) - getRecordAuthorityScore(a));
       primary.incident_date = uniqueSub[0].incident_date || primary.incident_date;
       primary.merged_count = uniqueSub.length;
       primary.merged_cases = uniqueSub.map((u, idx) => ({
@@ -1037,16 +1105,6 @@ export function consolidateSimilarRecords(records = []) {
         source_url: u.source_url || "",
         db_source: u.db_source || "NEWS_PUBLIC_ARCHIVE"
       }));
-
-      primary.history_timeline = uniqueSub.map(u => ({
-        year: String(u.incident_date || "2024-06-15"),
-        stage: u.source && String(u.source).length <= 28 ? u.source : (u.category || "案發與公開查證紀錄"),
-        detail: String(u.reason || "").replace(/（同址／同路段整合紀錄[\s\S]*$/, "").replace(/（系統已自動?比對整合[\s\S]*$/, "").trim()
-      }));
-
-      const uniqueSources = Array.from(new Set(uniqueSub.map(u => u.source || u.media_verification).filter(Boolean)));
-      primary.source = uniqueSources.slice(0, 3).join(" ； ");
-      primary.media_verification = primary.source;
     } else {
       primary.merged_count = 1;
       primary.merged_cases = [{
@@ -1062,7 +1120,27 @@ export function consolidateSimilarRecords(records = []) {
       }];
     }
 
-    consolidated.push(primary);
+    roadConsolidated.push(primary);
+  }
+
+  // Second pass: Same-district semantic incident deduplication (merges same case across different road descriptions, prioritizing verified URL/judgment record)
+  const consolidated = [];
+  for (const cand of roadConsolidated) {
+    const matchIdx = consolidated.findIndex(existing => areSameIncidentInDistrict(existing, cand));
+    if (matchIdx === -1) {
+      consolidated.push(cand);
+    } else {
+      const existing = consolidated[matchIdx];
+      const winner = getRecordAuthorityScore(cand) > getRecordAuthorityScore(existing) ? { ...cand } : { ...existing };
+      const loser = winner === cand ? existing : cand;
+      const mergedSubs = [
+        ...(Array.isArray(winner.merged_cases) ? winner.merged_cases : []),
+        ...(Array.isArray(loser.merged_cases) ? loser.merged_cases : [])
+      ];
+      winner.merged_count = mergedSubs.length || 1;
+      winner.merged_cases = mergedSubs;
+      consolidated[matchIdx] = winner;
+    }
   }
 
   return consolidated;

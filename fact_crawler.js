@@ -966,11 +966,6 @@ export function areSameIncidentInDistrict(r1, r2) {
   const u2 = String(r2.source_url || "").split("?")[0].trim();
   if (u1 && u2 && u1.startsWith("http") && u1 === u2) return true;
 
-  const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
-  const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
-  const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
-  if (daysDiff > 45) return false;
-
   const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
   const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
   const ages1 = new Set(Array.from(txt1.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
@@ -981,8 +976,18 @@ export function areSameIncidentInDistrict(r1, r2) {
   const tags2 = new Set(extractModusOperandiTags(txt2));
   const sharedTags = [...tags1].filter(t => tags2.has(t));
 
+  // Cross-year check: if same district + same victim age + rare/compound modus operandi (e.g. 25歲 + 割喉 + 縱火/尾隨), it is the same case even if year was mis-inferred
   if (sharedAges.length > 0) {
     if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
+    if (sharedTags.some(t => ["dismember", "barrel", "parricide", "tail_stalk"].includes(t)) && sharedTags.length >= 2) return true;
+  }
+
+  const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
+  const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
+  const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
+  if (daysDiff > 45) return false;
+
+  if (sharedAges.length > 0) {
     if (sharedTags.length >= 2) return true;
     if (sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle"].includes(t))) return true;
   }
@@ -1123,14 +1128,17 @@ export function consolidateSimilarRecords(records = []) {
     roadConsolidated.push(primary);
   }
 
-  // Second pass: Same-district semantic incident deduplication (merges same case across different road descriptions, prioritizing verified URL/judgment record)
-  const consolidated = [];
+  // Second pass: Fast O(N) district-bucketed semantic incident deduplication
+  const byDistrict = new Map();
   for (const cand of roadConsolidated) {
-    const matchIdx = consolidated.findIndex(existing => areSameIncidentInDistrict(existing, cand));
+    const dKey = `${String(cand.city || "").replace(/台/g, "臺").trim()}_${String(cand.district || "").trim()}`;
+    if (!byDistrict.has(dKey)) byDistrict.set(dKey, []);
+    const bucket = byDistrict.get(dKey);
+    const matchIdx = bucket.findIndex(existing => areSameIncidentInDistrict(existing, cand));
     if (matchIdx === -1) {
-      consolidated.push(cand);
+      bucket.push(cand);
     } else {
-      const existing = consolidated[matchIdx];
+      const existing = bucket[matchIdx];
       const winner = getRecordAuthorityScore(cand) > getRecordAuthorityScore(existing) ? { ...cand } : { ...existing };
       const loser = winner === cand ? existing : cand;
       const mergedSubs = [
@@ -1139,10 +1147,14 @@ export function consolidateSimilarRecords(records = []) {
       ];
       winner.merged_count = mergedSubs.length || 1;
       winner.merged_cases = mergedSubs;
-      consolidated[matchIdx] = winner;
+      bucket[matchIdx] = winner;
     }
   }
 
+  const consolidated = [];
+  for (const bucket of byDistrict.values()) {
+    consolidated.push(...bucket);
+  }
   return consolidated;
 }
 

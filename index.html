@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>臺灣特殊事故建物與產權紀錄查詢平台</title>
+  <title>臺灣凶宅地圖</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
   <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Crect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23334155' stroke-width='1.5'/%3E%3Cpath d='M14 10 H38 L48 20 V52 C48 54.2 46.2 56 44 56 H14 C11.8 56 10 54.2 10 52 V14 C10 11.8 11.8 10 14 10 Z' fill='%23F8FAFC'/%3E%3Cpath d='M38 10 V18 C38 19.1 38.9 20 40 20 H48 L38 10 Z' fill='%23CBD5E1'/%3E%3Cpath d='M18 25 L27 17 L36 25' fill='none' stroke='%230F172A' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='21' y='25' width='12' height='9' rx='1' fill='%230F172A'/%3E%3Crect x='25.5' y='28' width='3' height='6' fill='%23F8FAFC'/%3E%3Crect x='16' y='38' width='20' height='2.6' rx='1.3' fill='%23475569'/%3E%3Crect x='16' y='43.5' width='14' height='2.6' rx='1.3' fill='%2364748B'/%3E%3Crect x='16' y='49' width='11' height='2.6' rx='1.3' fill='%2394A3B8'/%3E%3Crect x='33' y='33' width='23' height='23' rx='4.5' fill='%23DC2626' stroke='%23FFFFFF' stroke-width='2'/%3E%3Crect x='36' y='36' width='17' height='17' rx='2' fill='none' stroke='%23FECACA' stroke-width='1.2'/%3E%3Cpath d='M40 44.5 L43.2 47.7 L49.5 41.2' fill='none' stroke='%23FFFFFF' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="/favicon.svg?v=2" />
-  <meta name="description" content="整合全臺灣 22 縣市、368 鄉鎮市區歷年特殊事故建物、重大傷亡建築與司法院法拍點交紀錄之空間查詢與產權脈絡平台。" />
-  <meta name="keywords" content="台灣凶宅查詢, 台灣凶宅網, 凶宅地圖, 事故建物查詢, 事故屋地圖, 案發日期查詢, 歷年命案地址查詢, 司法院法拍凶宅, 實價登錄特殊交易, 台北市凶宅, 新北市凶宅, 桃園市凶宅, 台中市凶宅, 台南市凶宅, 高雄市凶宅, 居易網凶宅查詢" />
+  <meta name="application-name" content="臺灣凶宅地圖" />
+  <meta name="apple-mobile-web-app-title" content="臺灣凶宅地圖" />
+  <meta name="description" content="臺灣凶宅地圖（台灣凶宅查詢與事故屋免費查詢平台）。整合全臺 22 縣市、368 鄉鎮市區歷年凶宅名單、屋內兇殺命案、跳樓墜樓、燒炭輕生、奪命火警、司法院法拍屋非自然死亡筆錄與隱瞞凶宅判決，提供真實案發日期、門牌定位與 360° 實景街景，買房看房、租屋避雷必備。" />
+  <meta name="keywords" content="臺灣凶宅地圖, 台灣凶宅地圖, 台灣凶宅查詢, 台灣凶宅網, 凶宅地圖, 事故建物查詢, 事故屋地圖, 案發日期查詢, 歷年命案地址查詢, 司法院法拍凶宅, 實價登錄特殊交易, 台北市凶宅, 新北市凶宅, 桃園市凶宅, 台中市凶宅, 台南市凶宅, 高雄市凶宅, 居易網凶宅查詢" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow" />
   <meta name="google-site-verification" content="google6a317e59d3daa28c" />
@@ -20,20 +22,25 @@
   <!-- OpenGraph Social & Search Metadata -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://chuancn.org/" />
-  <meta property="og:site_name" content="臺灣特殊事故建物與產權紀錄查詢平台" />
+  <meta property="og:site_name" content="臺灣凶宅地圖" />
   <meta property="og:locale" content="zh_TW" />
   <meta property="og:locale:alternate" content="en_US" />
   <meta property="og:locale:alternate" content="ja_JP" />
   <meta property="og:locale:alternate" content="ko_KR" />
-  <meta property="og:title" content="臺灣特殊事故建物與產權紀錄查詢平台" />
-  <meta property="og:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,078 筆歷年特殊事故建物、重大傷亡建築與司法院法拍點交紀錄之空間查詢與產權脈絡平台。" />
-  <meta property="og:image" content="https://chuancn.org/og-cover.svg" />
+  <meta property="og:title" content="臺灣凶宅地圖" />
+  <meta property="og:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。" />
+  <meta property="og:image" content="https://chuancn.org/og-cover.png?v=3" />
+  <meta property="og:image:secure_url" content="https://chuancn.org/og-cover.png?v=3" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="臺灣凶宅地圖 — 全臺 22 縣市歷年事故建物與法拍查證" />
 
   <!-- Twitter / X Card Metadata -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="臺灣特殊事故建物與產權紀錄查詢平台" />
-  <meta name="twitter:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,078 筆歷年特殊事故建物、重大傷亡建築與司法院法拍點交紀錄之空間查詢與產權脈絡平台。" />
-  <meta name="twitter:image" content="https://chuancn.org/og-cover.svg" />
+  <meta name="twitter:title" content="臺灣凶宅地圖" />
+  <meta name="twitter:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。" />
+  <meta name="twitter:image" content="https://chuancn.org/og-cover.png?v=3" />
 
   <link rel="canonical" id="canonical-link" href="https://chuancn.org/" />
   <link rel="alternate" hreflang="zh-TW" href="https://chuancn.org/" />
@@ -50,13 +57,13 @@
     "@graph": [
       {
         "@type": "WebApplication",
-        "name": "臺灣特殊事故建物與產權紀錄查詢平台",
+        "name": "臺灣凶宅地圖",
         "url": "https://chuancn.org/",
-        "alternateName": ["臺灣歷年事故建物與案發日期實證地圖", "台灣凶宅與事故屋案發日期查詢地圖"],
+        "alternateName": ["台灣凶宅地圖", "臺灣歷年事故建物與案發日期實證地圖", "台灣凶宅與事故屋案發日期查詢地圖"],
         "applicationCategory": "ReferenceApplication",
         "operatingSystem": "All",
         "inLanguage": ["zh-TW", "en", "ja", "ko"],
-        "description": "整合全臺灣 22 縣市、368 鄉鎮市區共 4,078 筆歷年特殊事故建物、非自然死亡案件發生日期、公開社會新聞與司法院裁判書／法拍筆錄之空間地圖查詢平台。",
+        "description": "整合全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年特殊事故建物、非自然死亡案件發生日期、公開社會新聞與司法院裁判書／法拍筆錄之空間地圖查詢平台。",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -65,20 +72,20 @@
       },
       {
         "@type": "Dataset",
-        "name": "臺灣 22 縣市歷年特殊事故建物與案發日期公開實證資料庫（共 4,078 筆）",
-        "description": "收錄全臺灣臺北市、新北市、桃園市、臺中市、臺南市、高雄市等 22 縣市 368 鄉鎮市區共 4,078 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故及司法院法拍／判決認證紀錄，提供精確案發日期、路段門牌與原始新聞連結查證。",
+        "name": "臺灣凶宅地圖 — 全臺 22 縣市歷年事故建物與案發日期公開實證資料庫（共 4,062 筆）",
+        "description": "收錄全臺灣臺北市、新北市、桃園市、臺中市、臺南市、高雄市等 22 縣市 368 鄉鎮市區共 4,062 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故及司法院法拍／判決認證紀錄，提供精確案發日期、路段門牌與原始新聞連結查證。",
         "url": "https://chuancn.org/",
         "sameAs": "https://chuancn.org/calibrated_archive.json",
-        "identifier": "tw-property-incident-archive-1970-2026-3052",
-        "keywords": ["台灣凶宅查詢", "凶宅地圖", "事故建物", "案發日期查詢", "司法院法拍凶宅", "實價登錄特殊交易"],
+        "identifier": "tw-property-incident-archive-1970-2026-4062",
+        "keywords": ["臺灣凶宅地圖", "台灣凶宅查詢", "凶宅地圖", "事故建物", "案發日期查詢", "司法院法拍凶宅", "實價登錄特殊交易"],
         "creator": {
           "@type": "Organization",
-          "name": "臺灣特殊事故建物與產權紀錄查詢平台",
+          "name": "臺灣凶宅地圖",
           "url": "https://chuancn.org/"
         },
         "includedInDataCatalog": {
           "@type": "DataCatalog",
-          "name": "臺灣特殊事故建物與產權紀錄查詢平台公開資料庫",
+          "name": "臺灣凶宅地圖公開資料庫",
           "url": "https://chuancn.org/"
         },
         "distribution": [
@@ -267,7 +274,7 @@
   <header class="bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 z-30 shrink-0">
     <!-- Zone 1: Brand Title -->
     <a href="#" id="brand-reset-link" class="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-slate-900 truncate min-w-0">
-      台灣凶宅地圖
+      臺灣凶宅地圖
     </a>
 
     <!-- Zone 2: Statutory Haunted House Category Navigation Links (Desktop xl+) -->
@@ -468,10 +475,22 @@
         </div>
       </div>
 
-      <!-- Clean Summary Bar -->
+      <!-- Clean Summary Bar with Per-Page Size Selector -->
       <div class="px-3.5 sm:px-4 py-2 bg-slate-50 border-b border-slate-200 text-xs text-slate-500 flex justify-between items-center gap-2 shrink-0">
-        <span id="filter-result-label" class="font-semibold text-slate-800 tabular-nums shrink-0">載入中...</span>
-        <span id="region-summary-label" class="text-slate-500 truncate text-right">全臺灣</span>
+        <div class="flex items-center gap-2 min-w-0">
+          <span id="filter-result-label" class="font-semibold text-slate-800 tabular-nums shrink-0">載入中...</span>
+          <span aria-hidden="true" class="text-slate-300">·</span>
+          <span id="region-summary-label" class="text-slate-500 truncate">全臺灣</span>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <label for="page-size-select" class="text-[11px] text-slate-500 hidden sm:inline">每頁顯示</label>
+          <select id="page-size-select" aria-label="每頁顯示筆數" class="bg-white border border-slate-200 text-slate-800 text-[11px] font-semibold rounded-md px-2 py-1 focus:outline-none focus:border-slate-800 cursor-pointer tabular-nums">
+            <option value="20">20 筆/頁</option>
+            <option value="50" selected>50 筆/頁</option>
+            <option value="100">100 筆/頁</option>
+            <option value="200">200 筆/頁</option>
+          </select>
+        </div>
       </div>
 
       <!-- Case List Container -->
@@ -854,6 +873,29 @@
             啟動全臺各大社群＆凶宅網廣域爬蟲
           </button>
         </div>
+
+        <!-- Standalone Database Vault Backup & Restore (Protects against version rollbacks) -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 mt-2">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <span class="font-bold text-slate-900">獨立資料庫防回溯保險箱（雲端 ＋ 本機 IndexedDB ＋ 獨立備份檔）</span>
+            <span id="vault-sync-badge" class="font-mono text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded tabular-nums">已獨立保存</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            所有爬蟲與新增案件皆自動獨立保存於伺服器外部保險箱、Supabase 雲端與瀏覽器 IndexedDB；即使程式碼版本回溯也不會遺失資料。您亦可隨時下載完整 JSON 資料庫備份或匯入還原：
+          </p>
+          <div class="flex flex-wrap items-center gap-2 pt-0.5">
+            <button type="button" id="export-vault-btn" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold cursor-pointer transition-colors">
+              ⬇ 下載獨立資料庫備份 (.json)
+            </button>
+            <label for="import-vault-input" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold cursor-pointer transition-colors">
+              ⬆ 匯入資料庫備份檔 (.json)
+            </label>
+            <input type="file" id="import-vault-input" accept=".json,application/json" class="hidden" />
+            <button type="button" id="force-supa-sync-btn" class="px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer transition-colors">
+              🔄 立即同步雲端最新爬蟲資料
+            </button>
+          </div>
+        </div>
       </div>
 
       <div id="consolidate-panel" class="hidden"></div>
@@ -1024,7 +1066,7 @@
     // Clean, Concise 4-Language Dictionary (繁體中文 / English / 日本語 / 한국어)
     const I18N_DICT = {
       "zh-TW": {
-        app_title: "台灣凶宅地圖",
+        app_title: "臺灣凶宅地圖",
         cat_all: "全部事故案件",
         cat_all_short: "全部案件",
         cat_homicide: "刑事兇殺命案",
@@ -3998,48 +4040,65 @@
       }
     });
 
-    async function toggle360StreetView() {
-      if (!currentDossierItem) return;
+    let currentStaticSvLoaded = false;
+    let currentSvHeading = 165;
+
+    async function mountInteractive360Panorama(lat, lng, headingDeg = 165) {
       const svImg = document.getElementById("drawer-sv-img");
       const panoDiv = document.getElementById("drawer-sv-pano");
       const toggleBtn = document.getElementById("toggle-sv-embed-btn");
       const svPlaceholder = document.getElementById("drawer-sv-placeholder");
 
-      isInteractiveSvOpen = !isInteractiveSvOpen;
-      if (isInteractiveSvOpen) {
-        svImg.classList.add("hidden");
-        panoDiv.classList.remove("hidden");
-        svPlaceholder.classList.add("hidden");
+      isInteractiveSvOpen = true;
+      svImg.classList.add("hidden");
+      panoDiv.classList.remove("hidden");
+      svPlaceholder.classList.add("hidden");
+      if (currentStaticSvLoaded) {
+        toggleBtn.classList.remove("hidden");
         toggleBtn.textContent = t("btn_toggle_static");
-
-        const lat = parseFloat(currentDossierItem.lat);
-        const lng = parseFloat(currentDossierItem.lng);
-
-        if (window.google && window.google.maps) {
-          try {
-            const { StreetViewPanorama } = await google.maps.importLibrary("streetView");
-            if (!gmapStreetViewPanoInstance) {
-              gmapStreetViewPanoInstance = new StreetViewPanorama(panoDiv, {
-                position: { lat, lng },
-                pov: { heading: 165, pitch: 0 },
-                zoom: 1,
-                addressControl: false,
-                fullscreenControl: true,
-                panControl: true,
-                zoomControl: true,
-                enableCloseButton: false,
-                showRoadLabels: true
-              });
-            } else {
-              gmapStreetViewPanoInstance.setPosition({ lat, lng });
-              gmapStreetViewPanoInstance.setPov({ heading: 165, pitch: 0 });
-              gmapStreetViewPanoInstance.setVisible(true);
-            }
-          } catch (err) {
-            console.warn("Native StreetView init:", err);
-          }
-        }
       } else {
+        toggleBtn.classList.add("hidden");
+      }
+
+      if (window.google && window.google.maps) {
+        try {
+          const { StreetViewPanorama } = await google.maps.importLibrary("streetView");
+          if (!gmapStreetViewPanoInstance) {
+            gmapStreetViewPanoInstance = new StreetViewPanorama(panoDiv, {
+              position: { lat, lng },
+              pov: { heading: headingDeg, pitch: 2 },
+              zoom: 1,
+              addressControl: false,
+              fullscreenControl: true,
+              panControl: true,
+              zoomControl: true,
+              enableCloseButton: false,
+              showRoadLabels: true
+            });
+          } else {
+            gmapStreetViewPanoInstance.setPosition({ lat, lng });
+            gmapStreetViewPanoInstance.setPov({ heading: headingDeg, pitch: 2 });
+            gmapStreetViewPanoInstance.setVisible(true);
+          }
+        } catch (err) {
+          console.warn("Native StreetView init:", err);
+        }
+      }
+    }
+
+    async function toggle360StreetView() {
+      if (!currentDossierItem) return;
+      const svImg = document.getElementById("drawer-sv-img");
+      const panoDiv = document.getElementById("drawer-sv-pano");
+      const toggleBtn = document.getElementById("toggle-sv-embed-btn");
+
+      const lat = parseFloat(currentDossierItem.lat);
+      const lng = parseFloat(currentDossierItem.lng);
+
+      if (!isInteractiveSvOpen) {
+        await mountInteractive360Panorama(lat, lng, currentSvHeading);
+      } else if (currentStaticSvLoaded) {
+        isInteractiveSvOpen = false;
         panoDiv.classList.add("hidden");
         if (gmapStreetViewPanoInstance) {
           gmapStreetViewPanoInstance.setVisible(false);
@@ -4363,7 +4422,10 @@
 
       // Reset Street View controls
       isInteractiveSvOpen = false;
+      currentStaticSvLoaded = false;
+      currentSvHeading = 165;
       svImg.classList.add("hidden");
+      svImg.removeAttribute("src");
       panoDiv.classList.add("hidden");
       if (gmapStreetViewPanoInstance) {
         gmapStreetViewPanoInstance.setVisible(false);
@@ -4381,42 +4443,73 @@
         : details.googleMapsUrl;
       svExtLink.href = svLocationUrl;
 
-      // Check Google Maps JS API StreetViewService directly on client
+      // Try static image preview only if backend proxy responds with a valid image; otherwise auto-mount 360° StreetViewPanorama so broken [?] icon never appears
+      if (!isNaN(latNum) && !isNaN(lngNum)) {
+        svImg.onload = () => {
+          if (currentDossierItem !== item) return;
+          if (svImg.naturalWidth > 10) {
+            currentStaticSvLoaded = true;
+            svPlaceholder.classList.add("hidden");
+            toggleSvBtn.classList.remove("hidden");
+            if (!isInteractiveSvOpen) {
+              svImg.classList.remove("hidden");
+              toggleSvBtn.textContent = t("btn_toggle_360");
+            } else {
+              toggleSvBtn.textContent = t("btn_toggle_static");
+            }
+          }
+        };
+        svImg.onerror = () => {
+          if (currentDossierItem !== item) return;
+          currentStaticSvLoaded = false;
+          svImg.classList.add("hidden");
+          svImg.removeAttribute("src");
+          toggleSvBtn.classList.add("hidden");
+        };
+        svImg.src = `/api/maps/streetview-image?lat=${latNum}&lng=${lngNum}&address=${encodeURIComponent(details.doorplate || item.address)}`;
+      }
+
+      // Check Google Maps JS API StreetViewService directly on client and automatically mount interactive StreetViewPanorama if static photo is unavailable
       if (!isNaN(latNum) && !isNaN(lngNum) && window.google && window.google.maps) {
         google.maps.importLibrary("streetView").then(({ StreetViewService, StreetViewStatus, StreetViewPreference, StreetViewSource }) => {
           const svService = new StreetViewService();
           svService.getPanorama({
             location: { lat: latNum, lng: lngNum },
-            radius: 80,
+            radius: 85,
             preference: StreetViewPreference.NEAREST,
             source: StreetViewSource.OUTDOOR
           }, (data, status) => {
+            if (currentDossierItem !== item) return;
             if (status === StreetViewStatus.OK && data && data.location) {
               svPlaceholder.classList.add("hidden");
-              toggleSvBtn.classList.remove("hidden");
               svStatusText.textContent = `${t("sv_caption")}${data.imageDate ? " · " + data.imageDate : ""}`;
-              if (currentDossierItem === item && data.location.latLng && orientationEl) {
-                const pLat = typeof data.location.latLng.lat === "function" ? data.location.latLng.lat() : data.location.latLng.lat;
-                const pLng = typeof data.location.latLng.lng === "function" ? data.location.latLng.lng() : data.location.latLng.lng;
-                orientationEl.innerHTML = buildPropertyOrientationHtml(item, pLat, pLng);
+              let pLat = latNum;
+              let pLng = lngNum;
+              if (data.location.latLng) {
+                pLat = typeof data.location.latLng.lat === "function" ? data.location.latLng.lat() : data.location.latLng.lat;
+                pLng = typeof data.location.latLng.lng === "function" ? data.location.latLng.lng() : data.location.latLng.lng;
+                if (orientationEl) {
+                  orientationEl.innerHTML = buildPropertyOrientationHtml(item, pLat, pLng);
+                }
+                // Point camera from road panorama directly toward the building rooftop coordinate
+                if (Math.abs(pLat - latNum) > 0.00001 || Math.abs(pLng - lngNum) > 0.00001) {
+                  currentSvHeading = computeGeodeticBearingDeg(pLat, pLng, latNum, lngNum);
+                }
+              }
+              // Automatically display interactive 360° Street View when static image didn't load so a broken [?] icon never shows
+              if (!currentStaticSvLoaded) {
+                mountInteractive360Panorama(pLat, pLng, currentSvHeading);
+              } else {
+                toggleSvBtn.classList.remove("hidden");
               }
             } else {
+              svImg.classList.add("hidden");
+              panoDiv.classList.add("hidden");
+              svPlaceholder.classList.remove("hidden");
               svPlaceholder.textContent = t("sv_none");
             }
           });
         }).catch(() => {});
-      }
-
-      // Try static image preview as default
-      if (!isNaN(latNum) && !isNaN(lngNum)) {
-        svImg.src = `/api/maps/streetview-image?lat=${latNum}&lng=${lngNum}&address=${encodeURIComponent(details.doorplate || item.address)}`;
-        svImg.onload = () => {
-          svPlaceholder.classList.add("hidden");
-          if (!isInteractiveSvOpen) svImg.classList.remove("hidden");
-        };
-        svImg.onerror = () => {
-          // If static proxy fails, user can use 360 toggle
-        };
       }
 
       const searchGroundingBox = document.getElementById("drawer-search-grounding-box");
@@ -4684,9 +4777,92 @@
 
     const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
+    // ============================================================================
+    // Standalone Browser IndexedDB Vault (Protects against code rollbacks)
+    // ============================================================================
+    const IDB_VAULT_NAME = "tw_haunted_standalone_db";
+    const IDB_STORE_NAME = "records_vault";
+
+    function openStandaloneIndexedDB() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) return resolve(null);
+        try {
+          const req = window.indexedDB.open(IDB_VAULT_NAME, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(IDB_STORE_NAME)) {
+              db.createObjectStore(IDB_STORE_NAME, { keyPath: "vault_key" });
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    }
+
+    async function loadRecordsFromIndexedDBVault() {
+      const db = await openStandaloneIndexedDB();
+      if (!db) return [];
+      return new Promise((resolve) => {
+        try {
+          const tx = db.transaction(IDB_STORE_NAME, "readonly");
+          const store = tx.objectStore(IDB_STORE_NAME);
+          const getAllReq = store.getAll();
+          getAllReq.onsuccess = () => resolve(Array.isArray(getAllReq.result) ? getAllReq.result : []);
+          getAllReq.onerror = () => resolve([]);
+        } catch (e) {
+          resolve([]);
+        }
+      });
+    }
+
+    async function saveRecordsToIndexedDBVault(records) {
+      if (!Array.isArray(records) || records.length === 0) return;
+      const db = await openStandaloneIndexedDB();
+      if (!db) return;
+      try {
+        const tx = db.transaction(IDB_STORE_NAME, "readwrite");
+        const store = tx.objectStore(IDB_STORE_NAME);
+        for (const r of records) {
+          if (!r || !r.address) continue;
+          const vault_key = String(r.id !== undefined && r.id !== null ? r.id : (r.__key || `${r.city}_${r.district}_${r.address}`));
+          store.put({
+            vault_key,
+            id: r.id,
+            city: r.city,
+            district: r.district,
+            address: r.address,
+            doorplate_address: r.doorplate_address,
+            lat: r.lat,
+            lng: r.lng,
+            location_accuracy: r.location_accuracy,
+            incident_date: r.incident_date,
+            building_type: r.building_type,
+            current_status: r.current_status,
+            category: r.category,
+            db_source: r.db_source,
+            reason: r.reason,
+            source: r.source,
+            source_url: r.source_url,
+            media_verification: r.media_verification,
+            auction_record: r.auction_record,
+            history_timeline: r.history_timeline,
+            merged_count: r.merged_count || 1
+          });
+        }
+        const badge = document.getElementById("vault-sync-badge");
+        if (badge) {
+          badge.textContent = `已獨立保存 ${records.length.toLocaleString()} 筆`;
+        }
+      } catch (e) {}
+    }
+
     async function fetchAndMergeSupabaseCrawledDelta() {
       try {
-        const supaUrl = `${SUPABASE_BASE_URL}/rest/v1/haunted_houses?id=gt.${CALIBRATED_SUPABASE_MAX_ID}&select=*&order=id.desc&limit=1000`;
+        // Query latest 1,000 rows from Supabase without ID floor restriction so all crawler.py inserts sync immediately
+        const supaUrl = `${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000`;
         const res = await fetch(supaUrl, {
           headers: {
             apikey: SUPABASE_PUB_KEY,
@@ -4726,6 +4902,14 @@
 
         if (newPrepared.length > 0) {
           allRecords = consolidateSimilarRecordsClient([...newPrepared, ...allRecords]);
+          saveRecordsToIndexedDBVault(allRecords);
+          if (loadedViaApiServer) {
+            fetch("/api/records/sync-vault", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ records: newPrepared })
+            }).catch(() => {});
+          }
           return newPrepared.length;
         }
       } catch (e) {}
@@ -4803,11 +4987,6 @@
       const u2 = String(r2.source_url || "").split("?")[0].trim();
       if (u1 && u2 && u1.startsWith("http") && u1 === u2) return true;
 
-      const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
-      const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
-      const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
-      if (daysDiff > 45) return false;
-
       const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
       const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
       const ages1 = new Set(Array.from(txt1.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
@@ -4818,8 +4997,18 @@
       const tags2 = new Set(extractClientModusTags(txt2));
       const sharedTags = [...tags1].filter(t => tags2.has(t));
 
+      // Cross-year check for rare compound crimes in the same district with identical victim age
       if (sharedAges.length > 0) {
         if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
+        if (sharedTags.some(t => ["dismember", "barrel", "parricide", "tail_stalk"].includes(t)) && sharedTags.length >= 2) return true;
+      }
+
+      const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
+      const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
+      const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
+      if (daysDiff > 45) return false;
+
+      if (sharedAges.length > 0) {
         if (sharedTags.length >= 2) return true;
         if (sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle"].includes(t))) return true;
       }
@@ -4870,23 +5059,29 @@
         roadMerged.push(primary);
       }
 
-      // Second pass: silently merge same-incident records in the same district (prioritizing URL / court case number)
-      const result = [];
+      // Fast O(N) district-bucketed second pass: silently merge same-incident records in the same district
+      const byDistrict = new Map();
       for (const cand of roadMerged) {
-        const dupIdx = result.findIndex(ex => areSameIncidentClient(ex, cand));
+        const dKey = `${String(cand.city || "").replace(/台/g, "臺").trim()}_${String(cand.district || "").trim()}`;
+        if (!byDistrict.has(dKey)) byDistrict.set(dKey, []);
+        const bucket = byDistrict.get(dKey);
+        const dupIdx = bucket.findIndex(ex => areSameIncidentClient(ex, cand));
         if (dupIdx === -1) {
-          result.push(cand);
+          bucket.push(cand);
         } else {
-          const ex = result[dupIdx];
+          const ex = bucket[dupIdx];
           const winner = getClientAuthorityScore(cand) > getClientAuthorityScore(ex) ? { ...cand } : { ...ex };
-          result[dupIdx] = winner;
+          bucket[dupIdx] = winner;
         }
+      }
+      const result = [];
+      for (const bucket of byDistrict.values()) {
+        result.push(...bucket);
       }
       return result;
     }
 
     async function loadAllData() {
-      applyLanguageUI(currentLang);
       const statusEl = document.getElementById("db-status");
       let loadedFromApi = false;
       let mapsKey = "";
@@ -4933,17 +5128,14 @@
         mapsKey = FALLBACK_GMP_KEY;
       }
 
-      // Always pull & merge any newly crawled records directly from Supabase (crawler.py output) so live website stays 100% in sync!
-      await fetchAndMergeSupabaseCrawledDelta();
-
-      await initMapEngine(mapsKey);
-
+      // Immediately render loaded records & UI counters BEFORE waiting for map engine or cloud delta so 0筆/載入中 never blocks!
+      applyLanguageUI(currentLang);
       if (statusEl) {
         statusEl.textContent = `共 ${allRecords.length.toLocaleString()} 筆案件卷宗`;
       }
       updateCounters(allRecords);
 
-      // Dynamic Canonical & URL Query Parameter Deep-Linking for Google Search / Sitemap
+      // Handle URL Query Parameter Deep-Linking immediately
       try {
         const params = new URLSearchParams(window.location.search);
         const qLang = (params.get("lang") || "").trim();
@@ -4981,6 +5173,52 @@
         applyFilters(false);
       }
 
+      // Initialize Google Maps Engine and re-render map pins once ready
+      initMapEngine(mapsKey).then(() => {
+        renderMapMarkersOnly(currentFilteredRecords.length > 0 ? currentFilteredRecords : allRecords);
+      }).catch(() => {});
+
+      // Union-merge with Browser IndexedDB Standalone Vault (protects against code version rollbacks)
+      try {
+        const idbRecords = await loadRecordsFromIndexedDBVault();
+        if (Array.isArray(idbRecords) && idbRecords.length > 0) {
+          const existingIds = new Set(allRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : r.__key)));
+          const existingAddrs = new Set(allRecords.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
+          const missingFromServer = [];
+          for (let i = 0; i < idbRecords.length; i++) {
+            const r = idbRecords[i];
+            if (!r || !r.address) continue;
+            const rid = String(r.id !== undefined && r.id !== null ? r.id : r.vault_key);
+            const raddr = String(r.address || "").replace(/台/g, "臺").trim();
+            if (!existingIds.has(rid) && !existingAddrs.has(raddr)) {
+              existingIds.add(rid);
+              existingAddrs.add(raddr);
+              missingFromServer.push(prepareRecord(r, Date.now() + i));
+            }
+          }
+          if (missingFromServer.length > 0) {
+            allRecords = consolidateSimilarRecordsClient([...missingFromServer, ...allRecords]);
+            updateCounters(allRecords);
+            applyFilters(false, true);
+            if (loadedViaApiServer) {
+              fetch("/api/records/sync-vault", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ records: missingFromServer })
+              }).catch(() => {});
+            }
+          }
+        }
+        saveRecordsToIndexedDBVault(allRecords);
+      } catch (e) {}
+
+      // Pull & merge any newly crawled records directly from Supabase (crawler.py output)
+      const supaAdded = await fetchAndMergeSupabaseCrawledDelta();
+      if (supaAdded > 0) {
+        updateCounters(allRecords);
+        applyFilters(false, true);
+      }
+
       // Start quiet background polling for new updates
       startRealtimeSyncWatcher();
     }
@@ -4993,7 +5231,7 @@
         const addedFromSupa = await fetchAndMergeSupabaseCrawledDelta();
         if (addedFromSupa > 0) {
           updateCounters(allRecords);
-          applyFilters(false);
+          applyFilters(false, true);
         } else if (loadedViaApiServer) {
           const syncRes = await fetch("/api/records");
           if (syncRes.ok) {
@@ -5010,8 +5248,9 @@
               if (newItems.length > 0) {
                 const prepared = newItems.map((item, idx) => prepareRecord(item, Date.now() + idx));
                 allRecords.unshift(...prepared);
+                saveRecordsToIndexedDBVault(allRecords);
                 updateCounters(allRecords);
-                applyFilters(false);
+                applyFilters(false, true);
               }
             }
           }
@@ -5027,7 +5266,7 @@
       if (realtimeSyncTimer) clearInterval(realtimeSyncTimer);
       realtimeSyncTimer = setInterval(() => {
         checkRealtimeDbUpdates();
-      }, 60000);
+      }, 30000);
     }
 
     function updateCounters(scopeRecords = allRecords) {
@@ -5047,7 +5286,26 @@
       });
     }
 
-    let currentListRenderLimit = 100;
+    let currentPage = 1;
+    let currentPageSize = (() => {
+      const saved = parseInt(localStorage.getItem("tw_archive_page_size") || "50", 10);
+      return [20, 50, 100, 200].includes(saved) ? saved : 50;
+    })();
+    const topPageSizeSelect = document.getElementById("page-size-select");
+    if (topPageSizeSelect) {
+      topPageSizeSelect.value = String(currentPageSize);
+      topPageSizeSelect.addEventListener("change", () => {
+        const val = parseInt(topPageSizeSelect.value, 10);
+        if ([20, 50, 100, 200].includes(val)) {
+          currentPageSize = val;
+          localStorage.setItem("tw_archive_page_size", String(val));
+          currentPage = 1;
+          renderData(currentFilteredRecords);
+          const listContainer = document.getElementById("list-container");
+          if (listContainer) listContainer.scrollTop = 0;
+        }
+      });
+    }
 
     let batchTranslationAbortController = null;
 
@@ -5095,9 +5353,11 @@
       } catch (e) {}
     }
 
-    function renderData(records) {
+    function renderData(records, shouldUpdateMapMarkers = true) {
       currentFilteredRecords = records;
-      renderMapMarkersOnly(records);
+      if (shouldUpdateMapMarkers) {
+        renderMapMarkersOnly(records);
+      }
 
       const listContainer = document.getElementById("list-container");
       const resultLabel = document.getElementById("filter-result-label");
@@ -5185,7 +5445,18 @@
         return adCard;
       }
 
-      const visibleRecords = records.slice(0, currentListRenderLimit);
+      const totalItems = records.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / currentPageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      const startIndex = (currentPage - 1) * currentPageSize;
+      const endIndex = Math.min(startIndex + currentPageSize, totalItems);
+      const visibleRecords = records.slice(startIndex, endIndex);
+
+      if (topPageSizeSelect && topPageSizeSelect.value !== String(currentPageSize)) {
+        topPageSizeSelect.value = String(currentPageSize);
+      }
+
       visibleRecords.forEach((item, idx) => {
         try {
           const lat = parseFloat(item.lat);
@@ -5200,7 +5471,6 @@
           const distLabel = tDistrict(item.district);
           const dbSourceLabel = tDbSourceLabel(item.db_source);
           const addrDisplay = localizeAddressDisplay(item);
-          const mergedCount = item.merged_count || 1;
 
           const row = document.createElement("article");
           row.setAttribute("data-record-key", String(item.__key));
@@ -5280,27 +5550,130 @@
         }
       });
 
-      if (records.length > currentListRenderLimit) {
-        const loadMoreContainer = document.createElement("div");
-        loadMoreContainer.className = "p-3.5 bg-slate-50 text-center border-t border-slate-200";
-        loadMoreContainer.innerHTML = `
-          <button type="button" id="load-more-records-btn" class="w-full sm:w-auto px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors">
-            ${t("btn_load_more_prefix")}${visibleRecords.length} / ${records.length.toLocaleString()})
-          </button>
-        `;
-        loadMoreContainer.querySelector("#load-more-records-btn")?.addEventListener("click", () => {
-          currentListRenderLimit += 100;
-          renderData(records);
-        });
-        listContainer.appendChild(loadMoreContainer);
+      // Full Pagination & Per-Page Count Controls Footer
+      const paginationFooter = document.createElement("nav");
+      paginationFooter.setAttribute("aria-label", "案件分頁導覽");
+      paginationFooter.className = "p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200 space-y-2.5 text-xs select-none";
+
+      const pageButtons = [];
+      const windowRadius = 2;
+      let pStart = Math.max(1, currentPage - windowRadius);
+      let pEnd = Math.min(totalPages, currentPage + windowRadius);
+      if (pEnd - pStart < windowRadius * 2) {
+        if (pStart === 1) pEnd = Math.min(totalPages, pStart + windowRadius * 2);
+        else if (pEnd === totalPages) pStart = Math.max(1, pEnd - windowRadius * 2);
       }
+
+      if (pStart > 1) {
+        pageButtons.push(`<button type="button" data-page="1" class="page-nav-btn min-w-[30px] h-7 px-2 rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-mono text-[11px] font-semibold tabular-nums cursor-pointer">1</button>`);
+        if (pStart > 2) {
+          pageButtons.push(`<span class="px-1 text-slate-400 font-mono">…</span>`);
+        }
+      }
+      for (let p = pStart; p <= pEnd; p++) {
+        const isCurr = p === currentPage;
+        pageButtons.push(`
+          <button type="button" data-page="${p}" class="page-nav-btn min-w-[30px] h-7 px-2 rounded border ${isCurr ? "border-slate-900 bg-slate-900 text-white font-bold" : "border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-semibold"} font-mono text-[11px] tabular-nums cursor-pointer transition-colors">
+            ${p}
+          </button>
+        `);
+      }
+      if (pEnd < totalPages) {
+        if (pEnd < totalPages - 1) {
+          pageButtons.push(`<span class="px-1 text-slate-400 font-mono">…</span>`);
+        }
+        pageButtons.push(`<button type="button" data-page="${totalPages}" class="page-nav-btn min-w-[30px] h-7 px-2 rounded border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-mono text-[11px] font-semibold tabular-nums cursor-pointer">${totalPages}</button>`);
+      }
+
+      paginationFooter.innerHTML = `
+        <div class="flex items-center justify-between gap-2 flex-wrap text-[11px] text-slate-600">
+          <span class="font-mono tabular-nums">
+            顯示第 <strong class="text-slate-900">${(startIndex + 1).toLocaleString()}–${endIndex.toLocaleString()}</strong> 筆（共 <strong class="text-slate-900">${totalItems.toLocaleString()}</strong> 筆 · 第 ${currentPage}/${totalPages} 頁）
+          </span>
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-500">每頁筆數：</span>
+            <select class="footer-page-size-select bg-white border border-slate-200 text-slate-800 text-[11px] font-semibold rounded px-2 py-1 focus:outline-none focus:border-slate-800 cursor-pointer tabular-nums">
+              <option value="20" ${currentPageSize === 20 ? "selected" : ""}>20 筆/頁</option>
+              <option value="50" ${currentPageSize === 50 ? "selected" : ""}>50 筆/頁</option>
+              <option value="100" ${currentPageSize === 100 ? "selected" : ""}>100 筆/頁</option>
+              <option value="200" ${currentPageSize === 200 ? "selected" : ""}>200 筆/頁</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-1.5 flex-wrap pt-1">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button type="button" data-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled" : ""} class="page-nav-btn h-7 px-2.5 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none text-slate-700 text-[11px] font-semibold cursor-pointer">
+              ‹ 上一頁
+            </button>
+            ${pageButtons.join("")}
+            <button type="button" data-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled" : ""} class="page-nav-btn h-7 px-2.5 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none text-slate-700 text-[11px] font-semibold cursor-pointer">
+              下一頁 ›
+            </button>
+          </div>
+          <div class="flex items-center gap-1 text-[11px]">
+            <span class="text-slate-500">跳至</span>
+            <input type="number" min="1" max="${totalPages}" value="${currentPage}" aria-label="跳至頁碼" class="page-jump-input w-14 h-7 bg-white border border-slate-200 rounded px-1.5 text-center font-mono text-slate-900 tabular-nums focus:outline-none focus:border-slate-800" />
+            <button type="button" class="page-jump-btn h-7 px-2 rounded bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer">前往</button>
+          </div>
+        </div>
+      `;
+
+      paginationFooter.querySelectorAll(".page-nav-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetPage = parseInt(btn.getAttribute("data-page"), 10);
+          if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
+            currentPage = targetPage;
+            renderData(records, false);
+            listContainer.scrollTop = 0;
+          }
+        });
+      });
+
+      const footerSizeSelect = paginationFooter.querySelector(".footer-page-size-select");
+      if (footerSizeSelect) {
+        footerSizeSelect.addEventListener("change", () => {
+          const val = parseInt(footerSizeSelect.value, 10);
+          if ([20, 50, 100, 200].includes(val)) {
+            currentPageSize = val;
+            localStorage.setItem("tw_archive_page_size", String(val));
+            if (topPageSizeSelect) topPageSizeSelect.value = String(val);
+            currentPage = 1;
+            renderData(records, false);
+            listContainer.scrollTop = 0;
+          }
+        });
+      }
+
+      const jumpInput = paginationFooter.querySelector(".page-jump-input");
+      const jumpBtn = paginationFooter.querySelector(".page-jump-btn");
+      const handleJump = () => {
+        if (!jumpInput) return;
+        const p = parseInt(jumpInput.value, 10);
+        if (!isNaN(p)) {
+          currentPage = Math.min(Math.max(1, p), totalPages);
+          renderData(records, false);
+          listContainer.scrollTop = 0;
+        }
+      };
+      jumpBtn?.addEventListener("click", handleJump);
+      jumpInput?.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          handleJump();
+        }
+      });
+
+      listContainer.appendChild(paginationFooter);
 
       if (currentLang !== "zh-TW") {
         translateVisibleCardsBatch(visibleRecords, currentLang);
       }
     }
 
-    function applyFilters(shouldAutoFitMap = false) {
+    function applyFilters(shouldAutoFitMap = false, preservePage = false) {
+      if (!preservePage) {
+        currentPage = 1;
+      }
       const city = citySelect.value.trim();
       const dist = districtSelect.value.trim();
       const dbFilter = dbSourceSelect ? dbSourceSelect.value : "ALL";
@@ -5493,12 +5866,12 @@
               "license": "https://creativecommons.org/licenses/by-nc/4.0/",
               "creator": {
                 "@type": "Organization",
-                "name": "臺灣特殊事故建物與產權紀錄查詢平台",
+                "name": "臺灣凶宅地圖",
                 "url": "https://chuancn.org/"
               },
               "includedInDataCatalog": {
                 "@type": "DataCatalog",
-                "name": "臺灣特殊事故建物與產權紀錄查詢平台公開資料庫",
+                "name": "臺灣凶宅地圖公開資料庫",
                 "url": "https://chuancn.org/"
               },
               ...(details.directSourceUrl ? { "sameAs": details.directSourceUrl } : {})
@@ -5512,13 +5885,13 @@
 
     function updateDynamicSeoMeta(activeCase = null, matchedCount = allRecords.length) {
       try {
-        const baseTitle = t("app_title") || "臺灣特殊事故建物與產權紀錄查詢平台";
+        const baseTitle = t("app_title") || "臺灣凶宅地圖";
         const city = citySelect ? citySelect.value.trim() : "";
         const dist = districtSelect ? districtSelect.value.trim() : "";
-        const totalStr = (matchedCount || allRecords.length || 4078).toLocaleString();
+        const totalStr = (matchedCount || allRecords.length || 4062).toLocaleString();
 
         let nextTitle = baseTitle;
-        let nextDesc = `整合全臺灣 22 縣市、368 鄉鎮市區共 ${allRecords.length ? allRecords.length.toLocaleString() : "4,078"} 筆歷年特殊事故建物、重大傷亡建築與司法院法拍點交紀錄之空間查詢與產權脈絡平台。`;
+        let nextDesc = `整合全臺灣 22 縣市、368 鄉鎮市區共 ${allRecords.length ? allRecords.length.toLocaleString() : "4,062"} 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。`;
         const canonicalBase = "https://chuancn.org/";
         const params = new URLSearchParams();
 
@@ -5870,6 +6243,96 @@
       }
     });
 
+    // Standalone Vault Export / Import / Live Supabase Sync Handlers
+    document.getElementById("export-vault-btn")?.addEventListener("click", () => {
+      try {
+        const cleanExport = allRecords.map(r => ({
+          id: r.id,
+          city: r.city,
+          district: r.district,
+          address: r.address,
+          doorplate_address: r.doorplate_address,
+          lat: r.lat,
+          lng: r.lng,
+          location_accuracy: r.location_accuracy,
+          incident_date: r.incident_date,
+          building_type: r.building_type,
+          current_status: r.current_status,
+          category: r.category,
+          db_source: r.db_source,
+          reason: r.reason,
+          source: r.source,
+          source_url: r.source_url,
+          media_verification: r.media_verification,
+          auction_record: r.auction_record,
+          history_timeline: r.history_timeline,
+          merged_count: r.merged_count || 1
+        }));
+        const blob = new Blob([JSON.stringify(cleanExport, null, 2)], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `tw_haunted_map_database_${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast(`✅ 已匯出獨立資料庫備份（共 ${cleanExport.length.toLocaleString()} 筆案件）`);
+      } catch (err) {
+        showToast("匯出失敗：" + err.message);
+      }
+    });
+
+    document.getElementById("import-vault-input")?.addEventListener("change", async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+        const list = Array.isArray(imported) ? imported : (Array.isArray(imported?.records) ? imported.records : []);
+        if (list.length === 0) {
+          showToast("檔案內無有效案件陣列");
+          return;
+        }
+        const prepared = list.filter(r => r && r.address).map((r, idx) => prepareRecord(r, Date.now() + idx));
+        allRecords = consolidateSimilarRecordsClient([...prepared, ...allRecords]);
+        await saveRecordsToIndexedDBVault(allRecords);
+        updateCounters(allRecords);
+        applyFilters(false);
+        await refreshCrawlerStatsUI();
+        if (loadedViaApiServer) {
+          fetch("/api/records/sync-vault", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ records: prepared })
+          }).catch(() => {});
+        }
+        showToast(`✅ 已成功匯入並聯集整合！目前獨立資料庫共 ${allRecords.length.toLocaleString()} 筆案件`);
+      } catch (err) {
+        showToast("匯入失敗，請確認檔案為有效 JSON");
+      } finally {
+        e.target.value = "";
+      }
+    });
+
+    document.getElementById("force-supa-sync-btn")?.addEventListener("click", async () => {
+      const statusBox = document.getElementById("discover-status");
+      if (statusBox) {
+        statusBox.classList.remove("hidden");
+        statusBox.textContent = "🔄 正在從 Supabase 雲端與外部獨立保險箱同步最新爬蟲案件...";
+      }
+      const added = await fetchAndMergeSupabaseCrawledDelta();
+      await checkRealtimeDbUpdates();
+      updateCounters(allRecords);
+      applyFilters(false, true);
+      await refreshCrawlerStatsUI();
+      if (statusBox) {
+        statusBox.textContent = added > 0
+          ? `✅ 同步完成！已從雲端拉取並合併 +${added} 筆新爬蟲案件（目前共 ${allRecords.length.toLocaleString()} 筆）。`
+          : `✅ 雲端與本機獨立資料庫已完全同步（目前共 ${allRecords.length.toLocaleString()} 筆案件）。`;
+      }
+    });
+
     const reportCorrectionBtn = document.getElementById("report-correction-btn");
     const takedownModal = document.getElementById("takedown-modal");
     const closeTakedownBtn = document.getElementById("close-takedown-btn");
@@ -6048,8 +6511,8 @@
   <!-- Crawlable Semantic Regional Index for Search Engines -->
   <noscript>
     <section aria-label="全臺灣各縣市歷年事故建物與案發日期查詢索引">
-      <h1>臺灣特殊事故建物與產權紀錄查詢平台（全臺 22 縣市共 3,052 筆歷年事故建物與案發日期實證地圖）</h1>
-      <p>提供全臺灣 22 縣市、368 鄉鎮市區共 3,052 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故、司法院法拍查封筆錄與民事判決認證凶宅之發生日期與地圖位置查詢：</p>
+      <h1>臺灣凶宅地圖（全臺 22 縣市共 4,062 筆歷年事故建物與案發日期實證地圖）</h1>
+      <p>提供全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故、司法院法拍查封筆錄與民事判決認證凶宅之發生日期與地圖位置查詢：</p>
       <ul>
         <li><a href="https://chuancn.org/?city=臺北市">臺北市歷年事故建物與案發日期查詢</a></li>
         <li><a href="https://chuancn.org/?city=新北市">新北市歷年事故建物與案發日期查詢</a></li>

@@ -18,8 +18,9 @@ const CALIBRATED_ARCHIVE_PATHS = [
   "/calibrated_archive.json",
   "/public/calibrated_archive.json"
 ];
+const STANDALONE_VAULT_PATH = "/var/tmp/tw_haunted_standalone_vault.json";
 
-app.use(express.json({ limit: "5mb" }));
+app.use(express.json({ limit: "25mb" }));
 
 function getGoogleMapsApiKey() {
   return (
@@ -163,20 +164,55 @@ const caseTranslationCache = new Map();
 
 function loadAllUnifiedRecords() {
   if (!cachedCalibratedDiskRecords) {
+    let workspaceList = [];
     for (const candidatePath of CALIBRATED_ARCHIVE_PATHS) {
       if (fs.existsSync(candidatePath)) {
         try {
           const raw = fs.readFileSync(candidatePath, "utf8");
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            cachedCalibratedDiskRecords = parsed;
-            factCrawler.initDistrictCoordinates(parsed);
+            workspaceList = parsed;
             break;
           }
-        } catch (e) {
-          // Ignore parse error
-        }
+        } catch (e) {}
       }
+    }
+
+    let standaloneVaultList = [];
+    if (fs.existsSync(STANDALONE_VAULT_PATH)) {
+      try {
+        const rawVault = fs.readFileSync(STANDALONE_VAULT_PATH, "utf8");
+        const parsedVault = JSON.parse(rawVault);
+        if (Array.isArray(parsedVault) && parsedVault.length > 0) {
+          standaloneVaultList = parsedVault;
+        }
+      } catch (e) {}
+    }
+
+    // Union-merge standalone external vault + workspace archive so code version rollbacks never lose records
+    const unionMap = new Map();
+    for (const rec of [...standaloneVaultList, ...workspaceList]) {
+      if (!rec || !rec.address) continue;
+      const key = String(rec.id !== undefined && rec.id !== null ? rec.id : `${rec.city || ""}_${rec.district || ""}_${rec.address || ""}`);
+      if (!unionMap.has(key)) {
+        unionMap.set(key, rec);
+      }
+    }
+    const unioned = Array.from(unionMap.values());
+    if (unioned.length > 0) {
+      cachedCalibratedDiskRecords = unioned;
+      factCrawler.initDistrictCoordinates(unioned);
+      try {
+        if (!fs.existsSync(STANDALONE_VAULT_PATH) || unioned.length > standaloneVaultList.length) {
+          fs.writeFileSync(STANDALONE_VAULT_PATH, JSON.stringify(unioned, null, 2), "utf8");
+        }
+        if (unioned.length > workspaceList.length) {
+          fs.writeFileSync(CALIBRATED_ARCHIVE_PATHS[0], JSON.stringify(unioned, null, 2), "utf8");
+          if (fs.existsSync(path.dirname(CALIBRATED_ARCHIVE_PATHS[1]))) {
+            fs.writeFileSync(CALIBRATED_ARCHIVE_PATHS[1], JSON.stringify(unioned, null, 2), "utf8");
+          }
+        }
+      } catch (e) {}
     }
   }
 
@@ -362,14 +398,14 @@ const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
 async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const now = Date.now();
-  if (!forceFresh && now - lastSupabaseDeltaFetch < 30000 && cachedSupabaseDelta.length > 0) {
+  if (!forceFresh && now - lastSupabaseDeltaFetch < 15000 && cachedSupabaseDelta.length > 0) {
     return cachedSupabaseDelta;
   }
   lastSupabaseDeltaFetch = now;
   const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
 
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?id=gt.${CALIBRATED_SUPABASE_MAX_ID}&select=*&order=id.desc&limit=1000`, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000`, {
       headers: {
         apikey: REAL_SUPABASE_ANON_KEY,
         Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`
@@ -508,6 +544,31 @@ app.get("/api/records/live-sync", async (req, res) => {
     records: delta.slice(0, 50),
     totalLiveCount: delta.length
   });
+});
+
+// POST /api/records/sync-vault - Bidirectional union sync with client IndexedDB vault or imported JSON backup
+app.post("/api/records/sync-vault", (req, res) => {
+  try {
+    const clientRecords = Array.isArray(req.body?.records) ? req.body.records : [];
+    if (clientRecords.length > 0) {
+      persistNewVerifiedRecordsToDisk(clientRecords);
+    }
+    const all = loadAllUnifiedRecords();
+    return res.json({
+      ok: true,
+      totalCount: all.length
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// GET /api/records/export-vault - Download standalone JSON database snapshot
+app.get("/api/records/export-vault", (req, res) => {
+  const all = loadAllUnifiedRecords();
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Content-Disposition", `attachment; filename="tw_haunted_map_database_${new Date().toISOString().slice(0, 10)}.json"`);
+  res.status(200).send(JSON.stringify(all, null, 2));
 });
 
 
@@ -735,7 +796,12 @@ app.get("/api/maps/streetview-image", async (req, res) => {
       svUrl += `&heading=${heading}`;
     }
 
-    const upstream = await fetch(svUrl);
+    const upstream = await fetch(svUrl, {
+      headers: {
+        Referer: "https://chuancn.org/",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      }
+    });
     if (!upstream.ok) {
       return res.status(upstream.status).send("Street View imagery unavailable");
     }
@@ -1165,33 +1231,68 @@ function persistNewVerifiedRecordsToDisk(newItems) {
   try {
     const primaryPath = CALIBRATED_ARCHIVE_PATHS[0];
     const publicPath = CALIBRATED_ARCHIVE_PATHS[1];
-    const currentDisk = fs.existsSync(primaryPath)
-      ? JSON.parse(fs.readFileSync(primaryPath, "utf8"))
-      : [];
+    const currentDisk = fs.existsSync(STANDALONE_VAULT_PATH)
+      ? JSON.parse(fs.readFileSync(STANDALONE_VAULT_PATH, "utf8"))
+      : (fs.existsSync(primaryPath) ? JSON.parse(fs.readFileSync(primaryPath, "utf8")) : []);
     const existingIds = new Set(currentDisk.map(r => String(r.id || r.source_url || r.address)));
-    const uniqueNew = newItems.filter(r => !existingIds.has(String(r.id || r.source_url || r.address)));
+    const uniqueNew = newItems.filter(r => r && r.address && !existingIds.has(String(r.id || r.source_url || r.address)));
     if (uniqueNew.length === 0) return;
 
     const mergedPool = [...uniqueNew, ...currentDisk];
-    // Silently deduplicate same-incident records in the same district, keeping URL/judgment-verified records as primary
-    const finalUpdated = [];
+    // Fast district-bucketed deduplication keeping URL/judgment-verified records as primary
+    const byDistrict = new Map();
     for (const item of mergedPool) {
-      const dupIdx = finalUpdated.findIndex(ex => factCrawler.areSameIncidentInDistrict(ex, item));
+      const dKey = `${String(item.city || "").replace(/台/g, "臺").trim()}_${String(item.district || "").trim()}`;
+      if (!byDistrict.has(dKey)) byDistrict.set(dKey, []);
+      const bucket = byDistrict.get(dKey);
+      const dupIdx = bucket.findIndex(ex => factCrawler.areSameIncidentInDistrict(ex, item));
       if (dupIdx === -1) {
-        finalUpdated.push(item);
+        bucket.push(item);
       } else {
-        const ex = finalUpdated[dupIdx];
+        const ex = bucket[dupIdx];
         const winner = factCrawler.getRecordAuthorityScore(item) > factCrawler.getRecordAuthorityScore(ex) ? { ...item } : { ...ex };
-        finalUpdated[dupIdx] = winner;
+        bucket[dupIdx] = winner;
       }
     }
+    const finalUpdated = [];
+    for (const bucket of byDistrict.values()) {
+      finalUpdated.push(...bucket);
+    }
 
+    fs.writeFileSync(STANDALONE_VAULT_PATH, JSON.stringify(finalUpdated, null, 2), "utf8");
     fs.writeFileSync(primaryPath, JSON.stringify(finalUpdated, null, 2), "utf8");
     if (fs.existsSync(path.dirname(publicPath))) {
       fs.writeFileSync(publicPath, JSON.stringify(finalUpdated, null, 2), "utf8");
     }
     cachedCalibratedDiskRecords = finalUpdated;
     generateAndWriteSitemapFiles(finalUpdated, "https://chuancn.org");
+
+    // Also asynchronously mirror newly discovered records to Supabase cloud database so external crawler.py & cloud stay in sync
+    const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
+    for (const item of uniqueNew.slice(0, 25)) {
+      fetch(`${supabaseUrl}/rest/v1/haunted_houses`, {
+        method: "POST",
+        headers: {
+          apikey: REAL_SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "resolution=ignore-duplicates"
+        },
+        body: JSON.stringify({
+          city: item.city,
+          district: item.district,
+          address: item.address,
+          lat: item.lat,
+          lng: item.lng,
+          category: item.category || "法拍與其他",
+          reason: item.reason || "",
+          incident_date: item.incident_date || "2024-06-15",
+          source: item.source || "公開社會新聞與司法實務紀錄",
+          source_url: item.source_url || "",
+          auction_record: ""
+        })
+      }).catch(() => {});
+    }
   } catch (e) {}
 }
 

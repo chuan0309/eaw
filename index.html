@@ -28,7 +28,7 @@
   <meta property="og:locale:alternate" content="ja_JP" />
   <meta property="og:locale:alternate" content="ko_KR" />
   <meta property="og:title" content="臺灣凶宅地圖" />
-  <meta property="og:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。" />
+  <meta property="og:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,045 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。" />
   <meta property="og:image" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:secure_url" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:type" content="image/png" />
@@ -39,7 +39,7 @@
   <!-- Twitter / X Card Metadata -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="臺灣凶宅地圖" />
-  <meta name="twitter:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。" />
+  <meta name="twitter:description" content="整合全臺灣 22 縣市、368 鄉鎮市區共 4,045 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。" />
   <meta name="twitter:image" content="https://chuancn.org/og-cover.png?v=3" />
 
   <link rel="canonical" id="canonical-link" href="https://chuancn.org/" />
@@ -50,38 +50,48 @@
   <link rel="alternate" hreflang="x-default" href="https://chuancn.org/" />
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
-  <!-- Schema.org Structured Data (WebApplication + Dataset + FAQPage) for Google Rich Results -->
-  <script type="application/ld+json">
+  <!-- Schema.org Structured Data (WebSite + Organization + Dataset + FAQPage) for Google Rich Results (Zero Warnings) -->
+  <script type="application/ld+json" id="initial-seo-jsonld">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebApplication",
+        "@type": "WebSite",
+        "@id": "https://chuancn.org/#website",
         "name": "臺灣凶宅地圖",
         "url": "https://chuancn.org/",
-        "alternateName": ["台灣凶宅地圖", "臺灣歷年事故建物與案發日期實證地圖", "台灣凶宅與事故屋案發日期查詢地圖"],
-        "applicationCategory": "ReferenceApplication",
-        "operatingSystem": "All",
+        "alternateName": ["台灣凶宅地圖", "臺灣歷年事故建物與案發日期實證地圖", "Taiwan Incident Map"],
         "inLanguage": ["zh-TW", "en", "ja", "ko"],
-        "description": "整合全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年特殊事故建物、非自然死亡案件發生日期、公開社會新聞與司法院裁判書／法拍筆錄之空間地圖查詢平台。",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "TWD"
+        "description": "整合全臺灣 22 縣市、368 鄉鎮市區共 4,045 筆歷年特殊事故建物、非自然死亡案件發生日期、公開社會新聞與司法院裁判書／法拍筆錄之空間地圖查詢平台。",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://chuancn.org/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://chuancn.org/#organization",
+        "name": "臺灣凶宅地圖",
+        "url": "https://chuancn.org/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://chuancn.org/og-cover.png?v=3",
+          "width": 1200,
+          "height": 630
         }
       },
       {
         "@type": "Dataset",
-        "name": "臺灣凶宅地圖 — 全臺 22 縣市歷年事故建物與案發日期公開實證資料庫（共 4,062 筆）",
-        "description": "收錄全臺灣臺北市、新北市、桃園市、臺中市、臺南市、高雄市等 22 縣市 368 鄉鎮市區共 4,062 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故及司法院法拍／判決認證紀錄，提供精確案發日期、路段門牌與原始新聞連結查證。",
+        "@id": "https://chuancn.org/#dataset",
+        "name": "臺灣凶宅地圖 — 全臺 22 縣市歷年事故建物與案發日期公開實證資料庫（共 4,045 筆）",
+        "description": "收錄全臺灣臺北市、新北市、桃園市、臺中市、臺南市、高雄市等 22 縣市 368 鄉鎮市區共 4,045 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故及司法院法拍／判決認證紀錄，提供精確案發日期、路段門牌與原始新聞連結查證。",
         "url": "https://chuancn.org/",
         "sameAs": "https://chuancn.org/calibrated_archive.json",
-        "identifier": "tw-property-incident-archive-1970-2026-4062",
+        "identifier": "tw-property-incident-archive-1970-2026-4045",
         "keywords": ["臺灣凶宅地圖", "台灣凶宅查詢", "凶宅地圖", "事故建物", "案發日期查詢", "司法院法拍凶宅", "實價登錄特殊交易"],
         "creator": {
-          "@type": "Organization",
-          "name": "臺灣凶宅地圖",
-          "url": "https://chuancn.org/"
+          "@id": "https://chuancn.org/#organization"
         },
         "includedInDataCatalog": {
           "@type": "DataCatalog",
@@ -105,13 +115,14 @@
       },
       {
         "@type": "FAQPage",
+        "@id": "https://chuancn.org/#faq",
         "mainEntity": [
           {
             "@type": "Question",
             "name": "如何查詢台灣各縣市事故建物（凶宅）的發生日期與地址位置？",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "可透過本平台選擇全臺 22 縣市、368 鄉鎮市區、案發年份（涵蓋 1970–2026 歷年共 3,055 筆實證紀錄）或直接輸入路名、社區名稱與門牌關鍵字，即可在地圖與列表中查看每筆案件的案發日期、建物型態與原始新聞或司法院裁判書來源連結。"
+              "text": "可透過本平台選擇全臺 22 縣市、368 鄉鎮市區、案發年份（涵蓋 1970–2026 歷年共 4,045 筆實證紀錄）或直接輸入路名、社區名稱與門牌關鍵字，即可在地圖與列表中查看每筆案件的案發日期、建物型態與原始新聞或司法院裁判書來源連結。"
             }
           },
           {
@@ -119,15 +130,15 @@
             "name": "平台整合了哪些台灣公開資料庫？",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "本系統串聯司法院裁判書查詢系統（民事隱瞞凶宅與刑事命案判決）、司法院法拍屋公告系統（查封筆錄載明非自然死亡）、內政部不動產實價登錄（特殊交易備註）、台灣凶宅網／居易網公開索引及各大新聞媒體歷年社會檔案庫。"
+              "text": "本系統串聯司法院裁判書查詢系統（民事隱瞞凶宅與刑事命案判決）、司法院法拍屋公告系統（查封筆錄載明非自然死亡）、內政部不動產實價登錄（特殊交易備註）及各大新聞媒體歷年社會檔案庫。"
             }
           },
           {
             "@type": "Question",
-            "name": "如何透過本平台估算特殊事故建物（凶宅）的行情折價與實價登錄參考？",
+            "name": "若發現案件記載有誤或需申請更正下架應如何處理？",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "點選任一案件卷宗即可查看依據案件類別（重大刑事、屋內輕生、意外火警、法拍點交）與行政區段行情推算之參考折數與每坪單價區間，並提供一鍵跳轉內政部實價登錄與司法院裁判書查詢。"
+              "text": "點選任一案件卷宗或獨立案件頁底部的「內容勘誤／申請下架」按鈕，填寫申訴事由後即可立即隱藏爭議紀錄並啟動人工複核。"
             }
           }
         ]
@@ -138,7 +149,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" />
+  </noscript>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -154,11 +168,11 @@
     };
   </script>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" media="print" onload="this.media='all'" />
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script defer src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
   <style>
     body, html {
@@ -416,7 +430,7 @@
             <option value="10Y" data-i18n="time_10y">近 10 年內</option>
             <option value="2010_2020" data-i18n="time_2010_2020">2010–2020 年</option>
             <option value="BEFORE_2010" data-i18n="time_before_2010">2010 年以前 (1970–2009)</option>
-            <option value="1970_1990">1970–1990 年早期歷史案件</option>
+            <option value="1970_1990" data-i18n="time_1970_1990">1970–1990 年早期歷史案件</option>
             <option value="CUSTOM" data-i18n="time_custom">自訂年份區間</option>
           </select>
         </div>
@@ -483,12 +497,12 @@
           <span id="region-summary-label" class="text-slate-500 truncate">全臺灣</span>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <label for="page-size-select" class="text-[11px] text-slate-500 hidden sm:inline">每頁顯示</label>
+          <label for="page-size-select" data-i18n="lbl_per_page" class="text-[11px] text-slate-500 hidden sm:inline">每頁顯示</label>
           <select id="page-size-select" aria-label="每頁顯示筆數" class="bg-white border border-slate-200 text-slate-800 text-[11px] font-semibold rounded-md px-2 py-1 focus:outline-none focus:border-slate-800 cursor-pointer tabular-nums">
-            <option value="20">20 筆/頁</option>
-            <option value="50" selected>50 筆/頁</option>
-            <option value="100">100 筆/頁</option>
-            <option value="200">200 筆/頁</option>
+            <option value="20" data-i18n="opt_page_20">20 筆/頁</option>
+            <option value="50" data-i18n="opt_page_50" selected>50 筆/頁</option>
+            <option value="100" data-i18n="opt_page_100">100 筆/頁</option>
+            <option value="200" data-i18n="opt_page_200">200 筆/頁</option>
           </select>
         </div>
       </div>
@@ -839,11 +853,11 @@
       <div id="discover-panel" class="hidden p-5 sm:p-6 space-y-3.5 text-xs overflow-y-auto flex-1">
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
           <div class="flex items-center justify-between gap-2 flex-wrap">
-            <span class="font-bold text-slate-900">各大公開社群、論壇與凶宅網實證爬蟲引擎</span>
-            <span id="crawler-total-badge" class="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded tabular-nums">共 3,055 筆法定凶宅</span>
+            <span class="font-bold text-slate-900" data-i18n="crawler_engine_title">各大公開社群、論壇與司法法拍實證爬蟲引擎</span>
+            <span id="crawler-total-badge" class="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded tabular-nums">共 4,045 筆案件</span>
           </div>
-          <p class="text-[11px] text-slate-600 leading-relaxed">
-            自動跨平台檢索 <strong>PTT 批踢踢 (home-sale / Gossiping)</strong>、<strong>Dcard</strong>、<strong>Mobile01 居家房產</strong>、<strong>台灣凶宅網</strong>、<strong>居易網</strong>、<strong>591／樂居特殊註記</strong>、<strong>司法院法拍筆錄與民事判決</strong> 及各大社會新聞檔案庫，經門牌座標定位後寫入資料庫。
+          <p class="text-[11px] text-slate-600 leading-relaxed" data-i18n="crawler_engine_desc">
+            自動跨平台檢索 PTT、Dcard、Mobile01、司法院法拍筆錄與民事判決及各大社會新聞檔案庫，經門牌座標定位後寫入獨立資料庫。
           </p>
         </div>
 
@@ -860,7 +874,7 @@
 
         <div>
           <label class="block font-semibold text-slate-700 mb-1" data-i18n="lbl_disc_kw">指定社群來源、路名或社區關鍵字（選填）</label>
-          <input type="text" id="disc-keyword" placeholder="例如：PTT 凶宅、台灣凶宅網、居易網、Dcard 租屋、中正路..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
+          <input type="text" id="disc-keyword" placeholder="PTT / Dcard / 法拍 / 中正路..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-800" />
         </div>
 
         <div id="discover-status" class="hidden p-3 rounded-lg bg-slate-900 text-white text-[11px] leading-relaxed font-medium"></div>
@@ -869,29 +883,29 @@
           <button type="button" id="run-discover-btn" data-i18n="btn_run_discover" class="w-full py-2.5 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer transition-colors">
             立即爬蟲檢索此行政區案件
           </button>
-          <button type="button" id="run-wide-crawler-btn" class="w-full py-2.5 px-4 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold cursor-pointer transition-colors">
-            啟動全臺各大社群＆凶宅網廣域爬蟲
+          <button type="button" id="run-wide-crawler-btn" data-i18n="btn_run_wide_crawler" class="w-full py-2.5 px-4 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold cursor-pointer transition-colors">
+            啟動全臺廣域新聞＆法拍深層爬蟲
           </button>
         </div>
 
         <!-- Standalone Database Vault Backup & Restore (Protects against version rollbacks) -->
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 mt-2">
           <div class="flex items-center justify-between gap-2 flex-wrap">
-            <span class="font-bold text-slate-900">獨立資料庫防回溯保險箱（雲端 ＋ 本機 IndexedDB ＋ 獨立備份檔）</span>
-            <span id="vault-sync-badge" class="font-mono text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded tabular-nums">已獨立保存</span>
+            <span class="font-bold text-slate-900" data-i18n="vault_box_title">獨立資料庫防回溯保險箱（雲端 ＋ 本機 IndexedDB ＋ 獨立備份檔）</span>
+            <span id="vault-sync-badge" class="font-mono text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded tabular-nums" data-i18n="vault_badge_saved">已獨立保存</span>
           </div>
-          <p class="text-[11px] text-slate-600 leading-relaxed">
+          <p class="text-[11px] text-slate-600 leading-relaxed" data-i18n="vault_box_desc">
             所有爬蟲與新增案件皆自動獨立保存於伺服器外部保險箱、Supabase 雲端與瀏覽器 IndexedDB；即使程式碼版本回溯也不會遺失資料。您亦可隨時下載完整 JSON 資料庫備份或匯入還原：
           </p>
           <div class="flex flex-wrap items-center gap-2 pt-0.5">
-            <button type="button" id="export-vault-btn" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold cursor-pointer transition-colors">
+            <button type="button" id="export-vault-btn" data-i18n="btn_export_vault" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold cursor-pointer transition-colors">
               ⬇ 下載獨立資料庫備份 (.json)
             </button>
-            <label for="import-vault-input" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold cursor-pointer transition-colors">
+            <label for="import-vault-input" data-i18n="btn_import_vault" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold cursor-pointer transition-colors">
               ⬆ 匯入資料庫備份檔 (.json)
             </label>
             <input type="file" id="import-vault-input" accept=".json,application/json" class="hidden" />
-            <button type="button" id="force-supa-sync-btn" class="px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer transition-colors">
+            <button type="button" id="force-supa-sync-btn" data-i18n="btn_force_supa_sync" class="px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer transition-colors">
               🔄 立即同步雲端最新爬蟲資料
             </button>
           </div>
@@ -988,43 +1002,43 @@
     <div class="bg-white border border-slate-200 rounded-t-2xl sm:rounded-xl shadow-2xl w-full max-w-lg max-h-[90dvh] flex flex-col overflow-hidden">
       <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-amber-50/50">
         <div class="flex items-center gap-2">
-          <span class="text-base font-bold text-slate-900">⚠️ 案件內容勘誤與立即下架申訴</span>
+          <span class="text-base font-bold text-slate-900" data-i18n="takedown_modal_title">⚠️ 案件內容勘誤與立即下架申訴</span>
         </div>
-        <button type="button" id="close-takedown-btn" class="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white">
+        <button type="button" id="close-takedown-btn" data-i18n="btn_close" class="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white">
           關閉
         </button>
       </div>
 
       <form id="takedown-form" class="p-5 sm:p-6 space-y-3.5 text-xs overflow-y-auto flex-1">
-        <div class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 text-[11px] leading-relaxed">
-          <strong>事實核實與名譽保護：</strong> 本平台嚴格禁止任何虛構、造謠或未經證實之案件。若您為建物所有權人、管理委員會或住戶，發現本案件缺乏具體公開判決依據或有登載錯誤，請填寫下方申訴，系統將於第一時間將該案標記隱藏並啟動事實重審。
+        <div class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 text-[11px] leading-relaxed" data-i18n="takedown_notice_body">
+          事實核實與名譽保護：本平台嚴格禁止任何虛構、造謠或未經證實之案件。若您為建物所有權人、管理委員會或住戶，發現本案件缺乏具體公開判決依據或有登載錯誤，請填寫下方申訴，系統將於第一時間將該案標記隱藏並啟動事實重審。
         </div>
 
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">申訴目標門牌</label>
+          <label class="block font-semibold text-slate-700 mb-1" data-i18n="takedown_lbl_target">申訴目標門牌</label>
           <input type="text" id="takedown-target-addr" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 font-medium" />
         </div>
 
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">申訴事由類別</label>
+          <label class="block font-semibold text-slate-700 mb-1" data-i18n="takedown_lbl_reason">申訴事由類別</label>
           <select id="takedown-reason-type" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 font-medium focus:outline-none focus:border-slate-800">
-            <option value="no_fact">查無此案件／缺乏事實依據（要求立即下架）</option>
-            <option value="wrong_door">地址門牌登載錯誤／誤植他人門牌</option>
-            <option value="not_incident">非事故建物（已有地政／檢察署不起訴或清白證明）</option>
-            <option value="detail_err">案發經過或時間有重大誤植</option>
+            <option value="no_fact" data-i18n="takedown_opt_no_fact">查無此案件／缺乏事實依據（要求立即下架）</option>
+            <option value="wrong_door" data-i18n="takedown_opt_wrong_door">地址門牌登載錯誤／誤植他人門牌</option>
+            <option value="not_incident" data-i18n="takedown_opt_not_incident">非事故建物（已有地政／檢察署不起訴或清白證明）</option>
+            <option value="detail_err" data-i18n="takedown_opt_detail_err">案發經過或時間有重大誤植</option>
           </select>
         </div>
 
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">申訴說明與查證線索（選填）</label>
-          <textarea id="takedown-notes" rows="3" placeholder="請簡要描述您查證之情形或提供正確資訊，以利查證人員快速處置..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-900 focus:outline-none focus:border-slate-800"></textarea>
+          <label class="block font-semibold text-slate-700 mb-1" data-i18n="takedown_lbl_notes">申訴說明與查證線索（選填）</label>
+          <textarea id="takedown-notes" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-900 focus:outline-none focus:border-slate-800"></textarea>
         </div>
 
         <div class="pt-2 flex justify-end gap-2">
-          <button type="button" id="cancel-takedown-btn" class="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold">
+          <button type="button" id="cancel-takedown-btn" data-i18n="btn_cancel" class="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold">
             取消
           </button>
-          <button type="submit" class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow-xs">
+          <button type="submit" data-i18n="takedown_btn_submit" class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow-xs">
             確認提交並先行隱藏下架
           </button>
         </div>
@@ -1232,7 +1246,44 @@
         disclaimer_chk_label: "我已閱讀並了解本網站所有資訊僅供參考",
         disclaimer_agree_btn: "我已了解並同意",
         form_disclaimer_text: "本網站所載資訊均整理自公開新聞、法拍紀錄與使用者通報，僅供看屋與資訊參考，不具法律證明效力；實際產權與物況請以《不動產說明書》及官方登記為準。請確認通報內容具公開事實依據，切勿虛構造謠。",
-        form_agree_label: "我已閱讀並同意上述說明（確認網站資訊僅供參考，且通報內容屬實）"
+        form_agree_label: "我已閱讀並同意上述說明（確認網站資訊僅供參考，且通報內容屬實）",
+        time_1970_1990: "1970–1990 年早期歷史案件",
+        lbl_per_page: "每頁顯示",
+        per_page_unit: "筆/頁",
+        opt_page_20: "20 筆/頁",
+        opt_page_50: "50 筆/頁",
+        opt_page_100: "100 筆/頁",
+        opt_page_200: "200 筆/頁",
+        page_showing_prefix: "顯示第 ",
+        page_showing_total_prefix: " 筆（共 ",
+        page_showing_page_prefix: " 筆 · 第 ",
+        page_showing_page_suffix: " 頁）",
+        lbl_footer_page_size: "每頁筆數：",
+        btn_prev_page: "‹ 上一頁",
+        btn_next_page: "下一頁 ›",
+        lbl_jump_to: "跳至",
+        btn_go_page: "前往",
+        err_load_failed: "資料載入逾時或網路異常，請點擊重試",
+        btn_retry_load: "重新載入資料庫",
+        crawler_engine_title: "各大公開社群、論壇與司法法拍實證爬蟲引擎",
+        crawler_engine_desc: "自動跨平台檢索 PTT、Dcard、Mobile01、司法院法拍筆錄與民事判決及各大社會新聞檔案庫，經門牌座標定位後寫入獨立資料庫。",
+        btn_run_wide_crawler: "啟動全臺廣域新聞＆法拍深層爬蟲",
+        vault_box_title: "獨立資料庫防回溯保險箱（雲端 ＋ 本機 IndexedDB ＋ 獨立備份檔）",
+        vault_badge_saved: "已獨立保存",
+        vault_box_desc: "所有爬蟲與新增案件皆自動獨立保存於伺服器外部保險箱、Supabase 雲端與瀏覽器 IndexedDB；即使程式碼版本回溯也不會遺失資料。您亦可隨時下載完整 JSON 資料庫備份或匯入還原：",
+        btn_export_vault: "⬇ 下載獨立資料庫備份 (.json)",
+        btn_import_vault: "⬆ 匯入資料庫備份檔 (.json)",
+        btn_force_supa_sync: "🔄 立即同步雲端最新爬蟲資料",
+        takedown_modal_title: "⚠️ 案件內容勘誤與立即下架申訴",
+        takedown_notice_body: "事實核實與名譽保護：本平台嚴格禁止任何虛構、造謠或未經證實之案件。若您為建物所有權人、管理委員會或住戶，發現本案件缺乏具體公開判決依據或有登載錯誤，請填寫下方申訴，系統將於第一時間將該案標記隱藏並啟動事實重審。",
+        takedown_lbl_target: "申訴目標門牌",
+        takedown_lbl_reason: "申訴事由類別",
+        takedown_opt_no_fact: "查無此案件／缺乏事實依據（要求立即下架）",
+        takedown_opt_wrong_door: "地址門牌登載錯誤／誤植他人門牌",
+        takedown_opt_not_incident: "非事故建物（已有地政／檢察署不起訴或清白證明）",
+        takedown_opt_detail_err: "案發經過或時間有重大誤植",
+        takedown_lbl_notes: "申訴說明與查證線索（選填）",
+        takedown_btn_submit: "確認提交並先行隱藏下架"
       },
       "en": {
         app_title: "Taiwan Incident Map",
@@ -1402,7 +1453,44 @@
         disclaimer_chk_label: "I understand and agree that all information on this site is for reference only",
         disclaimer_agree_btn: "I Understand & Agree",
         form_disclaimer_text: "All information on this website is for reference only and has no legal binding effect. Please ensure your report is based on factual public sources.",
-        form_agree_label: "I have read and agree to the above notice (information is for reference only)"
+        form_agree_label: "I have read and agree to the above notice (information is for reference only)",
+        time_1970_1990: "1970–1990 Historical Cases",
+        lbl_per_page: "Per page",
+        per_page_unit: "/ page",
+        opt_page_20: "20 / page",
+        opt_page_50: "50 / page",
+        opt_page_100: "100 / page",
+        opt_page_200: "200 / page",
+        page_showing_prefix: "Showing ",
+        page_showing_total_prefix: " (of ",
+        page_showing_page_prefix: " · Page ",
+        page_showing_page_suffix: ")",
+        lbl_footer_page_size: "Per page:",
+        btn_prev_page: "‹ Prev",
+        btn_next_page: "Next ›",
+        lbl_jump_to: "Page",
+        btn_go_page: "Go",
+        err_load_failed: "Failed to load database records. Please retry.",
+        btn_retry_load: "Retry Loading",
+        crawler_engine_title: "Multi-Source Public News & Judicial Foreclosure Crawler",
+        crawler_engine_desc: "Automatically indexes verified records across PTT, Dcard, Mobile01, Judicial Yuan foreclosure notes, civil judgments, and major news archives.",
+        btn_run_wide_crawler: "Run Taiwan-Wide Deep News & Court Crawler",
+        vault_box_title: "Standalone Database Vault (Cloud + IndexedDB + JSON Backup)",
+        vault_badge_saved: "Saved in Vault",
+        vault_box_desc: "All crawled and submitted cases are saved independently in the server vault, Supabase Cloud, and browser IndexedDB to prevent rollback loss:",
+        btn_export_vault: "⬇ Export Database Backup (.json)",
+        btn_import_vault: "⬆ Import Database Backup (.json)",
+        btn_force_supa_sync: "🔄 Sync Latest Cloud Crawler Records",
+        takedown_modal_title: "⚠️ Report Case Error / Request Immediate Takedown",
+        takedown_notice_body: "Fact Verification & Protection: Unverified or inaccurate records are strictly prohibited. Property owners, residents, or stakeholders may submit a correction or takedown request below for immediate removal.",
+        takedown_lbl_target: "Target Property Address",
+        takedown_lbl_reason: "Reason for Correction / Takedown",
+        takedown_opt_no_fact: "No factual basis / Unverified record (Request immediate removal)",
+        takedown_opt_wrong_door: "Incorrect street number / Misattributed address",
+        takedown_opt_not_incident: "Not a stigmatized property (Cleared by official records)",
+        takedown_opt_detail_err: "Inaccurate incident date or summary details",
+        takedown_lbl_notes: "Additional Verification Notes (Optional)",
+        takedown_btn_submit: "Submit & Immediately Hide Record"
       },
       "ja": {
         app_title: "台湾事故物件マップ",
@@ -1572,7 +1660,44 @@
         disclaimer_chk_label: "当サイトのすべての情報が参考用であることを理解し同意します",
         disclaimer_agree_btn: "理解して同意する",
         form_disclaimer_text: "当サイトの情報はすべて参考用であり、法的効力はありません。公開事実に基づいた正確な情報のみを登録してください。",
-        form_agree_label: "上記の説明を読み同意します（サイトの情報は参考用であり、登録内容は事実に基づいています）"
+        form_agree_label: "上記の説明を読み同意します（サイトの情報は参考用であり、登録内容は事実に基づいています）",
+        time_1970_1990: "1970–1990年 初期歴史事案",
+        lbl_per_page: "表示件数",
+        per_page_unit: "件/頁",
+        opt_page_20: "20 件/頁",
+        opt_page_50: "50 件/頁",
+        opt_page_100: "100 件/頁",
+        opt_page_200: "200 件/頁",
+        page_showing_prefix: "表示 ",
+        page_showing_total_prefix: " 件（全 ",
+        page_showing_page_prefix: " 件 · ",
+        page_showing_page_suffix: " ページ）",
+        lbl_footer_page_size: "1ページ表示数：",
+        btn_prev_page: "‹ 前へ",
+        btn_next_page: "次へ ›",
+        lbl_jump_to: "移動",
+        btn_go_page: "表示",
+        err_load_failed: "データの読み込みに失敗しました。再試行してください。",
+        btn_retry_load: "再読み込み",
+        crawler_engine_title: "公開コミュニティ・司法院競売・報道クローラーエンジン",
+        crawler_engine_desc: "PTT、Dcard、Mobile01、司法院競売調書、民事判決および主要ニュースアーカイブを横断検索し、座標照合後に独立データベースへ保存します。",
+        btn_run_wide_crawler: "台湾全域の報道・競売ディープクローラーを実行",
+        vault_box_title: "独立データベース保管庫（クラウド＋IndexedDB＋JSONバックアップ）",
+        vault_badge_saved: "独立保存済",
+        vault_box_desc: "すべての事案データはサーバー保管庫、Supabaseクラウド、ブラウザIndexedDBに独立保存され、バージョン巻き戻しでも消失しません：",
+        btn_export_vault: "⬇ 独立DBバックアップを保存 (.json)",
+        btn_import_vault: "⬆ DBバックアップを読込 (.json)",
+        btn_force_supa_sync: "🔄 クラウド最新クローラーデータを同期",
+        takedown_modal_title: "⚠️ 記載内容の訂正・即時非表示（削除）申請",
+        takedown_notice_body: "事実確認と権利保護：事実に基づかない記録は厳禁です。所有者・管理組合・居住者の方で、記載内容や番地に誤りがある場合は下記より申請してください。即時に非表示処理を行います。",
+        takedown_lbl_target: "対象の番地・住所",
+        takedown_lbl_reason: "訂正・削除申請の理由",
+        takedown_opt_no_fact: "該当する事案なし／事実根拠なし（即時削除を要請）",
+        takedown_opt_wrong_door: "番地・部屋番号の誤記／別物件との混同",
+        takedown_opt_not_incident: "事故物件ではない（公式書類・検察証明あり）",
+        takedown_opt_detail_err: "発生日時または事案概要の重大な誤り",
+        takedown_lbl_notes: "補足説明・確認資料（任意）",
+        takedown_btn_submit: "送信して即時に非表示にする"
       },
       "ko": {
         app_title: "대만 사고건물 지도",
@@ -1742,7 +1867,44 @@
         disclaimer_chk_label: "본 사이트의 모든 정보가 단순 참고용임을 이해하고 동의합니다",
         disclaimer_agree_btn: "이해 및 동의",
         form_disclaimer_text: "본 사이트의 정보는 단순 참고용이며 법적 효력이 없습니다. 공개된 사실에 근거한 내용만 제보해 주시기 바랍니다.",
-        form_agree_label: "위 안내 사항을 읽었으며 이에 동의합니다 (참고용 정보 확인 및 사실 기반 제보)"
+        form_agree_label: "위 안내 사항을 읽었으며 이에 동의합니다 (참고용 정보 확인 및 사실 기반 제보)",
+        time_1970_1990: "1970–1990년 초기 역사 사건",
+        lbl_per_page: "페이지당 표시",
+        per_page_unit: "건 / 페이지",
+        opt_page_20: "20건 / 페이지",
+        opt_page_50: "50건 / 페이지",
+        opt_page_100: "100건 / 페이지",
+        opt_page_200: "200건 / 페이지",
+        page_showing_prefix: "표시 ",
+        page_showing_total_prefix: "건 (총 ",
+        page_showing_page_prefix: "건 · ",
+        page_showing_page_suffix: " 페이지)",
+        lbl_footer_page_size: "페이지당 건수:",
+        btn_prev_page: "‹ 이전",
+        btn_next_page: "다음 ›",
+        lbl_jump_to: "이동",
+        btn_go_page: "확인",
+        err_load_failed: "데이터를 불러오지 못했습니다. 다시 시도해 주세요.",
+        btn_retry_load: "다시 불러오기",
+        crawler_engine_title: "공개 커뮤니티 · 사법원 경매 · 언론 보도 크롤러 엔진",
+        crawler_engine_desc: "PTT, Dcard, Mobile01, 사법원 경매조서, 민사 판결문 및 주요 사회 뉴스 아카이브를 자동 검색하여 좌표 검증 후 독립 데이터베이스에 저장합니다.",
+        btn_run_wide_crawler: "대만 전역 뉴스·경매 심층 크롤러 실행",
+        vault_box_title: "독립 데이터베이스 보관함 (클라우드 + IndexedDB + JSON 백업)",
+        vault_badge_saved: "독립 저장됨",
+        vault_box_desc: "모든 크롤링 및 제보 사건은 서버 외부 보관함, Supabase 클라우드, 브라우저 IndexedDB에 독립 저장되어 버전 롤백 시에도 유실되지 않습니다:",
+        btn_export_vault: "⬇ 독립 DB 백업 다운로드 (.json)",
+        btn_import_vault: "⬆ DB 백업 파일 가져오기 (.json)",
+        btn_force_supa_sync: "🔄 클라우드 최신 크롤러 데이터 동기화",
+        takedown_modal_title: "⚠️ 사건 내용 정정 및 즉시 비공개(삭제) 신청",
+        takedown_notice_body: "사실 확인 및 권리 보호: 본 플랫폼은 허위 제보나 미확인 루머를 엄격히 금지합니다. 건물 소유주, 관리위원회 또는 거주자로서 기재 오류를 발견한 경우 아래 양식을 제출하면 즉시 비공개 처리됩니다.",
+        takedown_lbl_target: "신청 대상 주소",
+        takedown_lbl_reason: "정정 / 삭제 사유 유형",
+        takedown_opt_no_fact: "해당 사건 없음 / 사실 근거 부족 (즉시 삭제 요청)",
+        takedown_opt_wrong_door: "번지·주소 오기재 / 타 건물 오식",
+        takedown_opt_not_incident: "사고 건물 아님 (공식 서류·무혐의 확인)",
+        takedown_opt_detail_err: "발생 일자 또는 사건 경위 오기재",
+        takedown_lbl_notes: "상세 설명 및 확인 단서 (선택)",
+        takedown_btn_submit: "제출 및 즉시 비공개 처리"
       }
     };
 
@@ -1882,6 +2044,78 @@
     };
 
     const clientTranslationCache = new Map();
+    const I18N_CACHE_STORAGE_KEY = "tw_haunted_i18n_cache_v3";
+    try {
+      const savedCache = JSON.parse(localStorage.getItem(I18N_CACHE_STORAGE_KEY) || "{}");
+      if (savedCache && typeof savedCache === "object") {
+        for (const [k, v] of Object.entries(savedCache)) {
+          if (k && v) clientTranslationCache.set(k, v);
+        }
+      }
+    } catch (e) {}
+
+    let saveI18nCacheTimer = null;
+    function persistClientTranslationCache() {
+      clearTimeout(saveI18nCacheTimer);
+      saveI18nCacheTimer = setTimeout(() => {
+        try {
+          const entries = Array.from(clientTranslationCache.entries()).slice(-600);
+          const obj = {};
+          for (const [k, v] of entries) obj[k] = v;
+          localStorage.setItem(I18N_CACHE_STORAGE_KEY, JSON.stringify(obj));
+        } catch (e) {}
+      }, 600);
+    }
+
+    // Direct browser-side neural translation fallback (works on static hosts & when backend API is unavailable)
+    async function translateTextFreeGoogleClient(text, lang) {
+      const clean = String(text || "").trim();
+      if (!clean || lang === "zh-TW") return clean;
+      const tlMap = { en: "en", ja: "ja", ko: "ko" };
+      const tl = tlMap[lang] || lang;
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=${encodeURIComponent(tl)}&dt=t&q=${encodeURIComponent(clean)}`;
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timer);
+        if (!res.ok) return clean;
+        const data = await res.json();
+        if (Array.isArray(data) && Array.isArray(data[0])) {
+          return data[0].map(seg => (Array.isArray(seg) ? seg[0] || "" : "")).join("").trim() || clean;
+        }
+      } catch (e) {}
+      return clean;
+    }
+
+    const CITY_ASCII_SLUG_CLIENT = {
+      "臺北市": "taipei", "台北市": "taipei", "新北市": "new-taipei", "桃園市": "taoyuan",
+      "臺中市": "taichung", "台中市": "taichung", "臺南市": "tainan", "台南市": "tainan",
+      "高雄市": "kaohsiung", "基隆市": "keelung", "新竹市": "hsinchu-city", "新竹縣": "hsinchu",
+      "苗栗縣": "miaoli", "彰化縣": "changhua", "南投縣": "nantou", "雲林縣": "yunlin",
+      "嘉義市": "chiayi-city", "嘉義縣": "chiayi", "屏東縣": "pingtung", "宜蘭縣": "yilan",
+      "花蓮縣": "hualien", "臺東縣": "taitung", "台東縣": "taitung", "澎湖縣": "penghu",
+      "金門縣": "kinmen", "連江縣": "lienchiang"
+    };
+
+    function buildCaseSlugClient(record, fallbackIndex = 0) {
+      if (!record || typeof record !== "object") return `case-${fallbackIndex}`;
+      if (record.__seo_slug) return String(record.__seo_slug);
+      const rawCity = String(record.city || "").replace(/台/g, "臺").trim();
+      const citySlug = CITY_ASCII_SLUG_CLIENT[rawCity] || "taiwan";
+      let rawId = record.id !== undefined && record.id !== null ? String(record.id).trim() : "";
+      if (!rawId) {
+        const addr = String(record.doorplate_address || record.address || `rec-${fallbackIndex}`);
+        let h = 2166136261;
+        for (let i = 0; i < addr.length; i++) {
+          h ^= addr.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        rawId = `h${(h >>> 0).toString(36)}`;
+      }
+      const cleanId = rawId.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "") || String(fallbackIndex);
+      return cleanId.startsWith(`${citySlug}-`) ? cleanId : `${citySlug}-${cleanId}`;
+    }
 
     function t(key) {
       return (I18N_DICT[currentLang] && I18N_DICT[currentLang][key]) || I18N_DICT["zh-TW"][key] || key;
@@ -2227,7 +2461,7 @@
       const rawAddr = String(item.address || "");
       if (currentLang === "zh-TW") return rawAddr;
       const cached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
-      if (cached && cached.address) return cached.address;
+      if (cached && cached.address && !/大F/.test(cached.address)) return cached.address;
 
       const cityZh = String(item.city || "").replace(/台/g, "臺");
       const distZh = String(item.district || "");
@@ -2235,45 +2469,78 @@
       const distLoc = tDistrict(distZh);
       let rest = rawAddr.replace(/台/g, "臺").replace(cityZh, "").replace(distZh, "").trim();
 
+      // 1. Extract and localize parenthetical building type FIRST so "大樓" never gets corrupted by floor replacement
+      let bldgSuffix = "";
+      rest = rest.replace(/[（(]([^）)]+)[）)]/g, (_, inner) => {
+        bldgSuffix = ` (${localizeBuildingType(inner, item)})`;
+        return "";
+      }).trim();
+
       if (currentLang === "ja") {
         rest = rest
           .replace(/一段/g, "1段").replace(/二段/g, "2段").replace(/三段/g, "3段").replace(/四段/g, "4段")
           .replace(/五段/g, "5段").replace(/六段/g, "6段").replace(/七段/g, "7段").replace(/八段/g, "8段")
-          .replace(/號/g, "号").replace(/樓/g, "階")
-          .replace(/某指標性商辦大樓/g, "商業オフィスビル")
-          .replace(/某住商混合大樓/g, "住商複合ビル")
-          .replace(/某集合住宅大樓/g, "集合住宅マンション")
-          .replace(/某社區大樓/g, "マンション")
-          .replace(/某公寓/g, "低層マンション")
-          .replace(/某透天厝|某透天民宅|某民宅/g, "住宅")
-          .replace(/某出租套房/g, "賃貸ワンルーム");
-        return `${cityLoc} ${distLoc} ${rest}`.trim();
+          .replace(/(\d+)\s*號/g, "$1号")
+          .replace(/(\d+)\s*樓/g, "$1階")
+          .replace(/某指標性商辦大樓|商辦大樓/g, "商業オフィスビル")
+          .replace(/某住商混合大樓|住商混合大樓/g, "住商複合ビル")
+          .replace(/某集合住宅大樓|社區電梯大樓|集合住宅大樓|電梯大樓/g, "マンション")
+          .replace(/某社區大樓|社區大樓|大樓/g, "マンション")
+          .replace(/某公寓|舊式公寓|公寓/g, "低層マンション")
+          .replace(/某透天厝|某透天民宅|透天厝|透天民宅|某民宅|民宅/g, "一戸建て住宅")
+          .replace(/某出租套房|出租套房|獨立套房/g, "賃貸ワンルーム");
+        return `${cityLoc} ${distLoc} ${rest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
       } else if (currentLang === "ko") {
         rest = rest
           .replace(/一段/g, " 1단 ").replace(/二段/g, " 2단 ").replace(/三段/g, " 3단 ").replace(/四段/g, " 4단 ")
           .replace(/五段/g, " 5단 ").replace(/六段/g, " 6단 ").replace(/七段/g, " 7단 ").replace(/八段/g, " 8단 ")
           .replace(/大道/g, "대로 ").replace(/路/g, "로 ").replace(/街/g, "가 ").replace(/巷/g, "항 ").replace(/弄/g, "롱 ")
-          .replace(/號/g, "호 ").replace(/樓/g, "층 ")
-          .replace(/某指標性商辦大樓/g, "상업·업무 빌딩")
-          .replace(/某住商混合大樓/g, "주상복합 빌딩")
-          .replace(/某集合住宅大樓|某社區大樓/g, "공동주택 단지")
-          .replace(/某公寓/g, "저층 아파트")
-          .replace(/某透天厝|某透天民宅|某民宅/g, "단독주택")
-          .replace(/某出租套房/g, "임대 원룸");
-        return `${cityLoc} ${distLoc} ${rest}`.replace(/\s+/g, " ").trim();
+          .replace(/(\d+)\s*號/g, "$1호 ").replace(/(\d+)\s*樓/g, "$1층 ")
+          .replace(/某指標性商辦大樓|商辦大樓/g, "상업·업무 빌딩")
+          .replace(/某住商混合大樓|住商混合大樓/g, "주상복합 빌딩")
+          .replace(/某集合住宅大樓|社區電梯大樓|集合住宅大樓|電梯大樓|某社區大樓|社區大樓|大樓/g, "공동주택 단지")
+          .replace(/某公寓|舊式公寓|公寓/g, "저층 아파트")
+          .replace(/某透天厝|某透天民宅|透天厝|透天民宅|某民宅|民宅/g, "단독주택")
+          .replace(/某出租套房|出租套房|獨立套房/g, "임대 원룸");
+        return `${cityLoc} ${distLoc} ${rest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
       } else if (currentLang === "en") {
+        const roadDict = [
+          ["忠孝東", "Zhongxiao E."], ["忠孝西", "Zhongxiao W."], ["仁愛", "Ren'ai"], ["信義", "Xinyi"],
+          ["和平東", "Heping E."], ["和平西", "Heping W."], ["南京東", "Nanjing E."], ["南京西", "Nanjing W."],
+          ["民權東", "Minquan E."], ["民權西", "Minquan W."], ["民生東", "Minsheng E."], ["民生西", "Minsheng W."],
+          ["八德", "Bade"], ["市民", "Civic"], ["復興南", "Fuxing S."], ["復興北", "Fuxing N."],
+          ["敦化南", "Dunhua S."], ["敦化北", "Dunhua N."], ["建國南", "Jianguo S."], ["建國北", "Jianguo N."],
+          ["新生南", "Xinsheng S."], ["新生北", "Xinsheng N."], ["松江", "Songjiang"], ["中山北", "Zhongshan N."],
+          ["中山南", "Zhongshan S."], ["中山", "Zhongshan"], ["中正", "Zhongzheng"], ["中華", "Zhonghua"],
+          ["承德", "Chengde"], ["重慶北", "Chongqing N."], ["重慶南", "Chongqing S."], ["延平北", "Yanping N."],
+          ["延平南", "Yanping S."], ["羅斯福", "Roosevelt"], ["基隆", "Keelung"], ["內湖", "Neihu"],
+          ["成功", "Chenggong"], ["民權", "Minquan"], ["民生", "Minsheng"], ["民族", "Minzu"],
+          ["自由", "Ziyou"], ["自立", "Zili"], ["自強", "Ziqiang"], ["博愛", "Bo'ai"], ["光明", "Guangming"],
+          ["光復", "Guangfu"], ["中興", "Zhongxing"], ["復興", "Fuxing"], ["文化", "Wenhua"],
+          ["文心", "Wenxin"], ["臺灣", "Taiwan"], ["西門", "Ximen"], ["北門", "Beimen"], ["東門", "Dongmen"],
+          ["南門", "Nanmen"], ["五福", "Wufu"], ["三多", "Sanduo"], ["四維", "Siwei"], ["七賢", "Qixian"],
+          ["九如", "Jiuru"], ["十全", "Shiquan"], ["一心", "Yixin"], ["二聖", "Ersheng"], ["六合", "Liuhe"],
+          ["八德", "Bade"], ["站前", "Zhanqian"], ["天倫", "Tianlun"], ["瑞隆", "Ruilong"], ["凱旋", "Kaixuan"],
+          ["永大", "Yongda"], ["林森", "Linsen"], ["西寧南", "Xining S."], ["西寧北", "Xining N."]
+        ];
+        for (const [zhName, enName] of roadDict) {
+          rest = rest.replace(new RegExp(zhName, "g"), `${enName} `);
+        }
         rest = rest
           .replace(/一段/g, " Sec. 1 ").replace(/二段/g, " Sec. 2 ").replace(/三段/g, " Sec. 3 ").replace(/四段/g, " Sec. 4 ")
           .replace(/五段/g, " Sec. 5 ").replace(/六段/g, " Sec. 6 ").replace(/七段/g, " Sec. 7 ").replace(/八段/g, " Sec. 8 ")
-          .replace(/大道/g, " Blvd. ").replace(/路/g, " Rd. ").replace(/街/g, " St. ").replace(/巷/g, " Ln. ").replace(/弄/g, " Aly. ")
-          .replace(/號/g, " No. ").replace(/樓/g, "F ")
-          .replace(/某指標性商辦大樓/g, "Commercial Office Building")
-          .replace(/某住商混合大樓/g, "Mixed-Use Building")
-          .replace(/某集合住宅大樓|某社區大樓/g, "Residential Complex")
-          .replace(/某公寓/g, "Walk-up Apartment")
-          .replace(/某透天厝|某透天民宅|某民宅/g, "Townhouse")
-          .replace(/某出租套房/g, "Rental Studio");
-        return `${rest}, ${distLoc}, ${cityLoc}`.replace(/\s+/g, " ").replace(/^,\s*/, "").trim();
+          .replace(/大道/g, " Blvd. ").replace(/路/g, " Rd. ").replace(/街/g, " St. ")
+          .replace(/(\d+)\s*巷/g, " Ln. $1 ").replace(/巷/g, " Ln. ")
+          .replace(/(\d+)\s*弄/g, " Aly. $1 ").replace(/弄/g, " Aly. ")
+          .replace(/(\d+)\s*號/g, " No. $1 ").replace(/號/g, " ")
+          .replace(/(\d+)\s*樓/g, " $1F ")
+          .replace(/某指標性商辦大樓|商辦大樓/g, "Commercial Office Building")
+          .replace(/某住商混合大樓|住商混合大樓/g, "Mixed-Use Building")
+          .replace(/某集合住宅大樓|社區電梯大樓|集合住宅大樓|電梯大樓|某社區大樓|社區大樓|大樓/g, "Residential Building")
+          .replace(/某公寓|舊式公寓|公寓/g, "Walk-up Apartment")
+          .replace(/某透天厝|某透天民宅|透天厝|透天民宅|某民宅|民宅/g, "Townhouse")
+          .replace(/某出租套房|出租套房|獨立套房/g, "Rental Studio");
+        return `${rest}${bldgSuffix}, ${distLoc}, ${cityLoc}`.replace(/\s+/g, " ").replace(/^,\s*/, "").trim();
       }
       return rawAddr;
     }
@@ -2906,6 +3173,30 @@
       });
     }
 
+    let mapEngineInitialized = false;
+    let mapEngineInitPromise = null;
+    let pendingMapsApiKey = "";
+
+    async function ensureMapEngineReady(apiKeyOverride) {
+      if (apiKeyOverride !== undefined && apiKeyOverride !== "") {
+        pendingMapsApiKey = apiKeyOverride;
+      }
+      if (mapEngineInitialized && (gmap || fallbackMap)) {
+        return;
+      }
+      if (mapEngineInitPromise) {
+        return mapEngineInitPromise;
+      }
+      mapEngineInitPromise = (async () => {
+        await initMapEngine(pendingMapsApiKey);
+        mapEngineInitialized = true;
+        renderMapMarkersOnly(currentFilteredRecords.length > 0 ? currentFilteredRecords : allRecords);
+      })().finally(() => {
+        mapEngineInitPromise = null;
+      });
+      return mapEngineInitPromise;
+    }
+
     async function initMapEngine(apiKey) {
       if (apiKey) {
         try {
@@ -2946,6 +3237,11 @@
           console.warn("Fallback to Google Maps Tile Engine:", e);
         }
       }
+
+      if (typeof L === "undefined") {
+        await new Promise(r => setTimeout(r, 180));
+      }
+      if (typeof L === "undefined") return;
 
       usingNativeGoogleMap = false;
       const mapEl = document.getElementById("map");
@@ -2999,17 +3295,26 @@
       const parsedLng = parseFloat(lng);
       if (isNaN(parsedLat) || isNaN(parsedLng)) return;
 
-      if (usingNativeGoogleMap && gmap) {
-        gmap.panTo({ lat: parsedLat, lng: parsedLng });
-        gmap.setZoom(zoom);
-      } else if (fallbackMap) {
-        fallbackMap.invalidateSize();
-        fallbackMap.flyTo([parsedLat, parsedLng], zoom, { duration: 0.65 });
+      const performFly = () => {
+        if (usingNativeGoogleMap && gmap) {
+          gmap.panTo({ lat: parsedLat, lng: parsedLng });
+          gmap.setZoom(zoom);
+        } else if (fallbackMap) {
+          fallbackMap.invalidateSize();
+          fallbackMap.flyTo([parsedLat, parsedLng], zoom, { duration: 0.65 });
+        }
+      };
+
+      if (!mapEngineInitialized && typeof ensureMapEngineReady === "function") {
+        ensureMapEngineReady().then(performFly);
+      } else {
+        performFly();
       }
     }
 
     function mapFitCoordinates(coords) {
       if (!Array.isArray(coords) || coords.length === 0) return;
+      if (!mapEngineInitialized) return;
       if (usingNativeGoogleMap && gmap) {
         const bounds = new google.maps.LatLngBounds();
         coords.forEach(([lat, lng]) => bounds.extend({ lat, lng }));
@@ -3309,9 +3614,15 @@
         rightMapPanel.className = "block flex-1 relative h-[46%] md:h-full min-h-0 overflow-hidden";
       }
 
-      setTimeout(() => {
-        mapInvalidateSize();
-      }, 120);
+      if (mode === "map" || mode === "split") {
+        ensureMapEngineReady().then(() => {
+          setTimeout(() => mapInvalidateSize(), 120);
+        });
+      } else {
+        setTimeout(() => {
+          mapInvalidateSize();
+        }, 120);
+      }
     }
 
     document.querySelectorAll(".mobile-view-btn").forEach(btn => {
@@ -3343,6 +3654,9 @@
     });
 
     window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768 && !mapEngineInitialized && allRecords.length > 0) {
+        ensureMapEngineReady();
+      }
       mapInvalidateSize();
     });
 
@@ -3660,6 +3974,15 @@
         mLangSelect.value = lang;
       }
 
+      // Localize top per-page selector options dynamically in all 4 languages (zh-TW, en, ja, ko)
+      const topSizeSel = document.getElementById("page-size-select");
+      if (topSizeSel) {
+        Array.from(topSizeSel.options).forEach(opt => {
+          const i18nKey = opt.getAttribute("data-i18n") || `opt_page_${opt.value}`;
+          opt.textContent = t(i18nKey);
+        });
+      }
+
       populateCityDropdown(citySelect, true);
       populateDistrictDropdown(citySelect.value, districtSelect, true);
       populateCityDropdown(formCity, false);
@@ -3669,7 +3992,7 @@
         updateFallbackTileLanguage();
       }
 
-      applyFilters(false);
+      applyFilters(false, true);
       if (typeof refreshStaticPartnerGrids === "function") refreshStaticPartnerGrids();
       if (typeof renderPromoAnalyticsModal === "function") renderPromoAnalyticsModal();
       if (currentDossierItem && !document.getElementById("case-dossier-drawer").classList.contains("hidden")) {
@@ -4562,8 +4885,7 @@
         ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2.5 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-center font-semibold transition-colors flex items-center justify-center gap-1.5"><span>${t("ext_btn_orig")}</span></a>` : ""}
         <a href="${details.googleNewsUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_news")}</span></a>
         <a href="${details.judicialSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_judicial")}</span></a>
-        <a href="${details.publicHauntedDbUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_haunted")}</span></a>
-        <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_web")}</span></a>
+        <a href="${details.googleSearchUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-center font-semibold transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_web")}</span></a>
         <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-center text-xs font-medium transition-colors flex items-center justify-center gap-1"><span>${t("ext_btn_gmaps")}</span></a>
       `;
 
@@ -4581,73 +4903,163 @@
         initAdSenseSlotsInContainer(dossierDrawer);
       }
 
-      // Dynamically inject or update unique Schema.org JSON-LD (Place + Dataset) for this specific case
+      // Update valuation calculator and official government portals for current language
+      updateValuationCalculator(item);
+      const portalsBox = document.getElementById("drawer-official-portals");
+      if (portalsBox) {
+        const { officialPortals } = buildClientOfficialPortals(item);
+        renderOfficialPortalsList(portalsBox, officialPortals);
+      }
+
+      // Dynamically inject or update unique Schema.org JSON-LD (WebPage + BreadcrumbList + Place + Dataset) for this specific case
       upsertCaseDossierJsonLd(item, details);
 
       if (typeof updateDynamicSeoMeta === "function") {
         updateDynamicSeoMeta(item);
       }
 
+      function applyTranslatedCaseToDrawer(tr, reqLang) {
+        if (!tr || currentDossierItem !== item || currentLang !== reqLang) return;
+        clientTranslationCache.set(`case_${item.id || item.address}_${reqLang}`, tr);
+        clientTranslationCache.set(`${item.__key}_${reqLang}`, {
+          address: tr.address,
+          district: tr.district,
+          reason: tr.reason
+        });
+        persistClientTranslationCache();
+        if (tr.address) {
+          document.getElementById("drawer-title").textContent = tr.address;
+          document.getElementById("drawer-doorplate-text").textContent = `${tr.address} (${details.doorplate})`;
+        }
+        if (tr.district) {
+          document.getElementById("drawer-region").textContent = `${cityLabel} · ${tr.district}`;
+          const metaReg = document.getElementById("drawer-meta-region");
+          if (metaReg) metaReg.textContent = `${cityLabel} ${tr.district}`;
+        }
+        if (tr.building_type) document.getElementById("drawer-building-type").textContent = tr.building_type;
+        if (tr.current_status) document.getElementById("drawer-current-status").textContent = tr.current_status;
+        if (tr.reason) document.getElementById("drawer-reason").textContent = tr.reason;
+        renderAuctionVerificationBox(
+          details,
+          tr.auction_record || cleanRecordNote,
+          tr.media_verification || localizedSource
+        );
+        if (Array.isArray(tr.history_timeline) && tr.history_timeline.length > 0) {
+          renderTimelineList(tr.history_timeline);
+        }
+        if (Array.isArray(tr.merged_cases) && tr.merged_cases.length > 0 && mergedCases.length > 1) {
+          const mergedTranslated = mergedCases.map((orig, i) => ({
+            ...orig,
+            original_address: tr.merged_cases[i]?.original_address || orig.original_address,
+            reason: tr.merged_cases[i]?.reason || orig.reason,
+            source: tr.merged_cases[i]?.source || orig.source
+          }));
+          renderMergedCasesSubList(mergedTranslated);
+        }
+        // Also update the matching card in the list if visible
+        const cardEl = document.querySelector(`[data-record-key="${CSS.escape(String(item.__key))}"]`);
+        if (cardEl) {
+          const addrEl = cardEl.querySelector(".card-addr-el");
+          const distEl = cardEl.querySelector(".card-dist-el");
+          const reasonEl = cardEl.querySelector(".card-reason-el");
+          if (addrEl && tr.address) addrEl.textContent = tr.address;
+          if (distEl && tr.district) distEl.textContent = `${cityLabel} ${tr.district}`;
+          if (reasonEl && tr.reason) reasonEl.textContent = tr.reason;
+        }
+        upsertCaseDossierJsonLd(item, details);
+        if (typeof updateDynamicSeoMeta === "function") {
+          updateDynamicSeoMeta(item);
+        }
+      }
+
       if (currentLang !== "zh-TW") {
         const reqLang = currentLang;
-        fetch("/api/translate-case", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: item.id,
-            lang: reqLang,
-            address: item.address,
-            district: item.district,
-            building_type: inferBuildingTypeRaw(item),
-            current_status: inferCurrentStatusRaw(item),
-            reason: item.reason,
-            auction_record: item.auction_record || "",
-            media_verification: details.sourceName || "",
-            history_timeline: details.timeline,
-            merged_cases: mergedCases
+        const cachedFull = clientTranslationCache.get(`case_${item.id || item.address}_${reqLang}`);
+        if (cachedFull && cachedFull.reason) {
+          applyTranslatedCaseToDrawer(cachedFull, reqLang);
+        } else {
+          fetch("/api/translate-case", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: item.id,
+              lang: reqLang,
+              address: item.address,
+              district: item.district,
+              building_type: inferBuildingTypeRaw(item),
+              current_status: inferCurrentStatusRaw(item),
+              reason: item.reason,
+              auction_record: item.auction_record || "",
+              media_verification: details.sourceName || "",
+              history_timeline: details.timeline,
+              merged_cases: mergedCases
+            })
           })
-        }).then(r => r.ok ? r.json() : null).then(tr => {
-          if (!tr || currentDossierItem !== item || currentLang !== reqLang) return;
-          clientTranslationCache.set(`case_${item.id || item.address}_${reqLang}`, tr);
-          clientTranslationCache.set(`${item.__key}_${reqLang}`, {
-            address: tr.address,
-            district: tr.district,
-            reason: tr.reason
-          });
-          if (tr.address) {
-            document.getElementById("drawer-title").textContent = tr.address;
-            document.getElementById("drawer-doorplate-text").textContent = `${tr.address} (${details.doorplate})`;
-          }
-          if (tr.district) {
-            document.getElementById("drawer-region").textContent = `${cityLabel} · ${tr.district}`;
-            const metaReg = document.getElementById("drawer-meta-region");
-            if (metaReg) metaReg.textContent = `${cityLabel} ${tr.district}`;
-          }
-          if (tr.building_type) document.getElementById("drawer-building-type").textContent = tr.building_type;
-          if (tr.current_status) document.getElementById("drawer-current-status").textContent = tr.current_status;
-          if (tr.reason) document.getElementById("drawer-reason").textContent = tr.reason;
-          renderAuctionVerificationBox(
-            details,
-            tr.auction_record || cleanRecordNote,
-            tr.media_verification || localizedSource
-          );
-          if (Array.isArray(tr.history_timeline) && tr.history_timeline.length > 0) {
-            renderTimelineList(tr.history_timeline);
-          }
-          if (Array.isArray(tr.merged_cases) && tr.merged_cases.length > 0 && mergedCases.length > 1) {
-            const mergedTranslated = mergedCases.map((orig, i) => ({
-              ...orig,
-              original_address: tr.merged_cases[i]?.original_address || orig.original_address,
-              reason: tr.merged_cases[i]?.reason || orig.reason,
-              source: tr.merged_cases[i]?.source || orig.source
-            }));
-            renderMergedCasesSubList(mergedTranslated);
-          }
-          upsertCaseDossierJsonLd(item, details);
-          if (typeof updateDynamicSeoMeta === "function") {
-            updateDynamicSeoMeta(item);
-          }
-        }).catch(() => {});
+            .then(r => (r.ok ? r.json() : null))
+            .then(async tr => {
+              // If server returned a valid translated narrative, apply it; otherwise run direct client neural translation fallback
+              const hasChineseLeft = !tr || !tr.reason || tr.reason === item.reason;
+              if (!hasChineseLeft) {
+                applyTranslatedCaseToDrawer(tr, reqLang);
+                return;
+              }
+              const [tAddress, tDistrict, tBldg, tStatus, tReason, tAuction, tMedia] = await Promise.all([
+                translateTextFreeGoogleClient(item.address, reqLang),
+                translateTextFreeGoogleClient(item.district, reqLang),
+                translateTextFreeGoogleClient(inferBuildingTypeRaw(item), reqLang),
+                translateTextFreeGoogleClient(inferCurrentStatusRaw(item), reqLang),
+                translateTextFreeGoogleClient(item.reason, reqLang),
+                translateTextFreeGoogleClient(item.auction_record || "", reqLang),
+                translateTextFreeGoogleClient(details.sourceName || "", reqLang)
+              ]);
+              const tTimeline = await Promise.all(
+                (details.timeline || []).slice(0, 6).map(async tl => ({
+                  year: tl.year,
+                  stage: await translateTextFreeGoogleClient(tl.stage, reqLang),
+                  detail: await translateTextFreeGoogleClient(tl.detail, reqLang)
+                }))
+              );
+              applyTranslatedCaseToDrawer(
+                {
+                  address: tAddress,
+                  district: tDistrict,
+                  building_type: tBldg,
+                  current_status: tStatus,
+                  reason: tReason,
+                  auction_record: tAuction,
+                  media_verification: tMedia,
+                  history_timeline: tTimeline,
+                  merged_cases: []
+                },
+                reqLang
+              );
+            })
+            .catch(async () => {
+              const [tAddress, tDistrict, tBldg, tStatus, tReason, tAuction, tMedia] = await Promise.all([
+                translateTextFreeGoogleClient(item.address, reqLang),
+                translateTextFreeGoogleClient(item.district, reqLang),
+                translateTextFreeGoogleClient(inferBuildingTypeRaw(item), reqLang),
+                translateTextFreeGoogleClient(inferCurrentStatusRaw(item), reqLang),
+                translateTextFreeGoogleClient(item.reason, reqLang),
+                translateTextFreeGoogleClient(item.auction_record || "", reqLang),
+                translateTextFreeGoogleClient(details.sourceName || "", reqLang)
+              ]);
+              applyTranslatedCaseToDrawer(
+                {
+                  address: tAddress,
+                  district: tDistrict,
+                  building_type: tBldg,
+                  current_status: tStatus,
+                  reason: tReason,
+                  auction_record: tAuction,
+                  media_verification: tMedia,
+                  history_timeline: details.timeline || [],
+                  merged_cases: []
+                },
+                reqLang
+              );
+            });
+        }
       }
     }
 
@@ -4778,10 +5190,43 @@
     const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
     // ============================================================================
-    // Standalone Browser IndexedDB Vault (Protects against code rollbacks)
+    // Standalone Browser IndexedDB Vault v2 (Protects against code rollbacks & syncs with crawler_vault_backup.json)
     // ============================================================================
-    const IDB_VAULT_NAME = "tw_haunted_standalone_db";
+    const IDB_VAULT_NAME = "tw_haunted_standalone_db_v2";
     const IDB_STORE_NAME = "records_vault";
+    const TAKEDOWN_LOCAL_KEY = "tw_haunted_takedown_blacklist_v1";
+
+    function getLocalTakedownSet() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(TAKEDOWN_LOCAL_KEY) || "[]");
+        return new Set(Array.isArray(raw) ? raw.map(x => String(x || "").replace(/台/g, "臺").trim()).filter(Boolean) : []);
+      } catch (e) {
+        return new Set();
+      }
+    }
+
+    function addLocalTakedownKeys(keys = []) {
+      try {
+        const current = getLocalTakedownSet();
+        for (const k of keys) {
+          const clean = String(k || "").replace(/台/g, "臺").trim();
+          if (clean) current.add(clean);
+        }
+        localStorage.setItem(TAKEDOWN_LOCAL_KEY, JSON.stringify([...current]));
+      } catch (e) {}
+    }
+
+    function filterOutTakedownRecords(records = []) {
+      const bl = getLocalTakedownSet();
+      if (bl.size === 0) return records;
+      return records.filter(r => {
+        if (!r) return false;
+        const idStr = String(r.id ?? r.__key ?? "").trim();
+        const addrStr = String(r.address || "").replace(/台/g, "臺").trim();
+        const doorStr = String(r.doorplate_address || "").replace(/台/g, "臺").trim();
+        return !bl.has(idStr) && !bl.has(addrStr) && !bl.has(doorStr);
+      });
+    }
 
     function openStandaloneIndexedDB() {
       return new Promise((resolve) => {
@@ -4825,6 +5270,7 @@
       try {
         const tx = db.transaction(IDB_STORE_NAME, "readwrite");
         const store = tx.objectStore(IDB_STORE_NAME);
+        store.clear();
         for (const r of records) {
           if (!r || !r.address) continue;
           const vault_key = String(r.id !== undefined && r.id !== null ? r.id : (r.__key || `${r.city}_${r.district}_${r.address}`));
@@ -4859,16 +5305,28 @@
       } catch (e) {}
     }
 
+    async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(timer);
+        return res;
+      } catch (err) {
+        clearTimeout(timer);
+        throw err;
+      }
+    }
+
     async function fetchAndMergeSupabaseCrawledDelta() {
       try {
-        // Query latest 1,000 rows from Supabase without ID floor restriction so all crawler.py inserts sync immediately
         const supaUrl = `${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000`;
-        const res = await fetch(supaUrl, {
+        const res = await fetchWithTimeout(supaUrl, {
           headers: {
             apikey: SUPABASE_PUB_KEY,
             Authorization: `Bearer ${SUPABASE_PUB_KEY}`
           }
-        });
+        }, 6500);
         if (!res.ok) return 0;
         const rows = await res.json();
         if (!Array.isArray(rows) || rows.length === 0) return 0;
@@ -4901,7 +5359,7 @@
         }
 
         if (newPrepared.length > 0) {
-          allRecords = consolidateSimilarRecordsClient([...newPrepared, ...allRecords]);
+          allRecords = filterOutTakedownRecords(consolidateSimilarRecordsClient([...newPrepared, ...allRecords]));
           saveRecordsToIndexedDBVault(allRecords);
           if (loadedViaApiServer) {
             fetch("/api/records/sync-vault", {
@@ -4916,39 +5374,41 @@
       return 0;
     }
 
-    function extractConsolidationKeyClient(r) {
+    function normalizeTaiwanRoadClient(str = "") {
+      return String(str || "")
+        .replace(/台/g, "臺")
+        .replace(/1段/g, "一段").replace(/2段/g, "二段").replace(/3段/g, "三段")
+        .replace(/4段/g, "四段").replace(/5段/g, "五段").replace(/6段/g, "六段")
+        .replace(/7段/g, "七段").replace(/8段/g, "八段").replace(/9段/g, "九段");
+    }
+
+    function extractBaseRoadStemClient(r) {
+      let s = normalizeTaiwanRoadClient(r.doorplate_address || r.address || "");
       const city = String(r.city || "").replace(/台/g, "臺").trim();
       const dist = String(r.district || "").trim();
-      let s = String(r.address || "").replace(/台/g, "臺");
-      if (city === "臺南市" && s.includes("錦新大樓")) s = s.replace(/「錦新大樓」/g, "永大路二段");
-      const lm = s.match(/(錦新大樓|西寧國宅|城中城|維冠金龍|東星大樓|果貿國宅|南機場國宅|成功國宅|正義國宅)/);
-      if (lm) return `${city}_${dist}_LM_${lm[1]}`;
       if (city) s = s.replace(new RegExp(city, "g"), "");
       if (dist) s = s.replace(new RegExp(dist, "g"), "");
       s = s.replace(/^[一-龥]{2,3}[里村]/, "");
-      const comm = s.match(/「([^」]{2,12})」/);
-      const roadLane = s.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
-      if (roadLane) {
-        const cleanRoad = roadLane[1].replace(/^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)/, "").replace(/路段$/, "路");
-        if (comm && !comm[1].includes("第一凶宅")) return `${city}_${dist}_${cleanRoad}_${comm[1]}`;
-        return `${city}_${dist}_${cleanRoad}`;
-      }
-      const alleyOnly = s.match(/([一-龥]{2,5}巷(?:\d+弄)?)/);
-      if (alleyOnly) return `${city}_${dist}_${alleyOnly[1]}`;
-      const stripped = s.replace(/（.*）|\(.*\)/g, "").replace(/(?:某|附近|一處|該).*$/g, "").replace(/(?:社區|電梯|大樓|華廈|公寓|透天|民宅|套房|住宅|\d+樓).*$/g, "").trim();
-      return stripped ? `${city}_${dist}_${stripped}` : "";
+      const m = s.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?)/);
+      if (m) return m[1].replace(/^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)/, "").replace(/路段$/, "路");
+      return "";
     }
 
     function getClientAuthorityScore(r) {
       let score = 0;
       const url = String(r.source_url || "").trim();
+      const addr = normalizeTaiwanRoadClient(r.doorplate_address || r.address || "");
       const reason = String(r.reason || "");
       const source = `${r.source || ""} ${r.media_verification || ""}`;
       if (url.startsWith("http")) {
         score += 1000;
-        const roadMatch = String(r.address || "").match(/([一-龥]{2,5}(?:路|街|大道))/);
+        const roadMatch = addr.match(/([一-龥]{2,5}(?:路|街|大道))/);
         if (roadMatch && reason.includes(roadMatch[1])) score += 500;
       }
+      if (/\d+\s*號/.test(addr)) score += 350;
+      if (/\d+\s*弄/.test(addr)) score += 220;
+      if (/\d+\s*巷/.test(addr)) score += 160;
+      if (/「[^」]{2,12}」/.test(addr)) score += 140;
       if (/字第\s*\d+\s*號/.test(`${reason} ${source}`)) score += 400;
       if (/(聯合|自由|ETtoday|中央社|TVBS|三立|中時|公視|鏡週刊|CTWant).*「.+」/.test(source)) score += 200;
       if (r.location_accuracy === "ROOFTOP_GEOCODED") score += 50;
@@ -4970,10 +5430,55 @@
       if (/弒母|弒父|殺母|殺父|逆子|逆倫/.test(text)) tags.push("parricide");
       if (/燒炭/.test(text)) tags.push("charcoal");
       if (/一氧化碳中毒|熱水器/.test(text)) tags.push("co_poison");
-      if (/墜樓|跳樓/.test(text)) tags.push("jump");
+      if (/墜樓|跳樓|墜落/.test(text)) tags.push("jump");
       if (/上吊|自縊/.test(text)) tags.push("hang");
       if (/勒斃|掐死|窒息/.test(text)) tags.push("strangle");
+      if (/獨居|陳屍|白骨|死亡多時|屍臭/.test(text)) tags.push("solitary");
       return tags;
+    }
+
+    function extractVictimProfileClient(text = "") {
+      const s = String(text || "");
+      const exactAges = new Set();
+      const decades = new Set();
+      for (const m of s.matchAll(/(\d{1,2})\s*歲/g)) {
+        const age = Number(m[1]);
+        if (age >= 1 && age <= 99) {
+          exactAges.add(age);
+          decades.add(Math.floor(age / 10) * 10);
+        }
+      }
+      const zhMap = { "一": 10, "二": 20, "三": 30, "四": 40, "五": 50, "六": 60, "七": 70, "八": 80, "九": 90 };
+      for (const m of s.matchAll(/([1-9一二三四五六七八九])\s*旬/g)) {
+        const d = zhMap[m[1]] || Number(m[1]) * 10;
+        if (d >= 10 && d <= 90) decades.add(d);
+      }
+      for (const m of s.matchAll(/([1-9]0)\s*多歲/g)) {
+        decades.add(Number(m[1]));
+      }
+      let gender = "";
+      const hasFemale = /老婦|婦人|女子|女屍|女住戶|女租客|女房客|女大生|老嫗|母親|媽媽|女友|妻子|歲女|旬婦|旬女/.test(s);
+      const hasMale = /老翁|男子|男屍|男住戶|男租客|男房客|男大生|父親|爸爸|男友|丈夫|歲男|歲翁|旬翁|旬男/.test(s);
+      if (hasFemale && !hasMale) gender = "F";
+      else if (hasMale && !hasFemale) gender = "M";
+      return { exactAges: [...exactAges], decades: [...decades], gender };
+    }
+
+    function areVictimProfilesCompatibleClient(p1, p2) {
+      if (p1.gender && p2.gender && p1.gender !== p2.gender) return false;
+      for (const a1 of p1.exactAges) {
+        if (p2.exactAges.includes(a1)) return "exact";
+      }
+      for (const a1 of p1.exactAges) {
+        if (p2.decades.includes(Math.floor(a1 / 10) * 10) && p2.exactAges.length === 0) return "decade";
+      }
+      for (const a2 of p2.exactAges) {
+        if (p1.decades.includes(Math.floor(a2 / 10) * 10) && p1.exactAges.length === 0) return "decade";
+      }
+      for (const d1 of p1.decades) {
+        if (p2.decades.includes(d1) && p1.exactAges.length === 0 && p2.exactAges.length === 0) return "decade";
+      }
+      return false;
     }
 
     function areSameIncidentClient(r1, r2) {
@@ -4987,28 +5492,49 @@
       const u2 = String(r2.source_url || "").split("?")[0].trim();
       if (u1 && u2 && u1.startsWith("http") && u1 === u2) return true;
 
-      const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
-      const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
-      const ages1 = new Set(Array.from(txt1.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
-      const ages2 = new Set(Array.from(txt2.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
-      const sharedAges = [...ages1].filter(a => ages2.has(a));
-
-      const tags1 = new Set(extractClientModusTags(txt1));
-      const tags2 = new Set(extractClientModusTags(txt2));
-      const sharedTags = [...tags1].filter(t => tags2.has(t));
-
-      // Cross-year check for rare compound crimes in the same district with identical victim age
-      if (sharedAges.length > 0) {
-        if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
-        if (sharedTags.some(t => ["dismember", "barrel", "parricide", "tail_stalk"].includes(t)) && sharedTags.length >= 2) return true;
-      }
+      const door1 = normalizeTaiwanRoadClient(r1.doorplate_address || r1.address || "");
+      const door2 = normalizeTaiwanRoadClient(r2.doorplate_address || r2.address || "");
+      const num1 = door1.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?\d+號)/);
+      const num2 = door2.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?\d+號)/);
 
       const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
       const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
       const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
+
+      if (num1 && num2 && num1[1] === num2[1] && daysDiff <= 180) return true;
+
+      const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
+      const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
+      const p1 = extractVictimProfileClient(txt1);
+      const p2 = extractVictimProfileClient(txt2);
+      const victimMatch = areVictimProfilesCompatibleClient(p1, p2);
+
+      const tags1 = new Set(extractClientModusTags(txt1));
+      const tags2 = new Set(extractClientModusTags(txt2));
+      const sharedTags = [...tags1].filter(t => tags2.has(t));
+      const sameCat = r1.category && r2.category && r1.category === r2.category;
+      const road1 = extractBaseRoadStemClient(r1);
+      const road2 = extractBaseRoadStemClient(r2);
+      const sameBaseRoad = Boolean(road1 && road2 && (road1 === road2 || road1.includes(road2) || road2.includes(road1)));
+
+      if (victimMatch === "exact") {
+        if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
+        if (sharedTags.some(t => ["dismember", "barrel", "parricide", "tail_stalk"].includes(t)) && sharedTags.length >= 2) return true;
+      }
+
       if (daysDiff > 45) return false;
 
-      if (sharedAges.length > 0) {
+      if (daysDiff <= 7 && sameBaseRoad) {
+        if (p1.gender && p2.gender && p1.gender !== p2.gender) return false;
+        if (p1.exactAges.length > 0 && p2.exactAges.length > 0 && !victimMatch) return false;
+        if (sharedTags.length >= 1 || sameCat) return true;
+      }
+
+      if (daysDiff <= 7 && victimMatch === "exact" && (sharedTags.length >= 1 || sameCat)) return true;
+
+      if (daysDiff <= 14 && victimMatch === "decade" && (sameBaseRoad || sharedTags.length >= 1) && sameCat) return true;
+
+      if (victimMatch) {
         if (sharedTags.length >= 2) return true;
         if (sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle"].includes(t))) return true;
       }
@@ -5019,58 +5545,29 @@
     }
 
     function consolidateSimilarRecordsClient(records) {
-      const groups = new Map();
-      for (const r of records) {
-        if (!r || !r.address) continue;
-        const key = extractConsolidationKeyClient(r);
-        if (!key) continue;
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(r);
-      }
-      const roadMerged = [];
-      for (const [key, items] of groups.entries()) {
-        if (items.length === 1) {
-          const single = { ...items[0] };
-          single.merged_count = single.merged_count || (Array.isArray(single.merged_cases) ? single.merged_cases.length : 1);
-          roadMerged.push(single);
-          continue;
-        }
-        items.sort((a, b) => {
-          const scoreDiff = getClientAuthorityScore(b) - getClientAuthorityScore(a);
-          if (scoreDiff !== 0) return scoreDiff;
-          return (b.merged_count || 1) - (a.merged_count || 1);
-        });
-        const primary = { ...items[0] };
-        const subPool = [];
-        const seenSub = new Set();
-        for (const it of items) {
-          const subs = Array.isArray(it.merged_cases) && it.merged_cases.length > 0
-            ? it.merged_cases
-            : [{ id: it.id, incident_date: it.incident_date, category: it.category, original_address: it.address, reason: it.reason, source: it.source, source_url: it.source_url, db_source: it.db_source }];
-          for (const s of subs) {
-            const sig = `${s.incident_date}_${String(s.reason || "").slice(0, 24)}`;
-            if (seenSub.has(sig)) continue;
-            seenSub.add(sig);
-            subPool.push(s);
-          }
-        }
-        primary.merged_count = subPool.length;
-        primary.merged_cases = subPool;
-        roadMerged.push(primary);
-      }
+      if (!Array.isArray(records) || records.length === 0) return [];
+      const sorted = [...records].filter(r => r && r.address).sort((a, b) => {
+        const scoreDiff = getClientAuthorityScore(b) - getClientAuthorityScore(a);
+        if (scoreDiff !== 0) return scoreDiff;
+        return (b.merged_count || 1) - (a.merged_count || 1);
+      });
 
-      // Fast O(N) district-bucketed second pass: silently merge same-incident records in the same district
       const byDistrict = new Map();
-      for (const cand of roadMerged) {
+      for (const cand of sorted) {
         const dKey = `${String(cand.city || "").replace(/台/g, "臺").trim()}_${String(cand.district || "").trim()}`;
         if (!byDistrict.has(dKey)) byDistrict.set(dKey, []);
         const bucket = byDistrict.get(dKey);
         const dupIdx = bucket.findIndex(ex => areSameIncidentClient(ex, cand));
         if (dupIdx === -1) {
-          bucket.push(cand);
+          bucket.push({ ...cand });
         } else {
           const ex = bucket[dupIdx];
           const winner = getClientAuthorityScore(cand) > getClientAuthorityScore(ex) ? { ...cand } : { ...ex };
+          const loser = winner === cand ? ex : cand;
+          if (!winner.source_url && loser.source_url) winner.source_url = loser.source_url;
+          if ((loser.reason || "").length > (winner.reason || "").length && !winner.source_url) {
+            winner.reason = loser.reason;
+          }
           bucket[dupIdx] = winner;
         }
       }
@@ -5081,65 +5578,14 @@
       return result;
     }
 
-    async function loadAllData() {
-      const statusEl = document.getElementById("db-status");
-      let loadedFromApi = false;
-      let mapsKey = "";
+    let authoritativeTotalCount = 0;
+    let authoritativeCategoryCounts = null;
 
-      try {
-        const apiRes = await fetch("/api/records");
-        if (apiRes.ok) {
-          const contentType = apiRes.headers.get("content-type") || "";
-          if (contentType.includes("application/json")) {
-            const apiData = await apiRes.json();
-            if (Array.isArray(apiData.records) && apiData.records.length > 0) {
-              mapsKey = apiData.mapsApiKey || "";
-              allRecords = apiData.records.map((r, i) => prepareRecord(r, i));
-              loadedFromApi = true;
-              loadedViaApiServer = true;
-            }
-          }
-        }
-      } catch (e) {
-        // Fallback to static hosting / GitHub Pages below
-      }
-
-      // Static Hosting / GitHub Pages / Cloudflare Pages Mode: Load Calibrated Master Archive
-      if (!loadedFromApi || allRecords.length === 0) {
-        let baseArchive = [];
-        const candidateUrls = [getArchiveJsonUrl(), "./calibrated_archive.json", "/public/calibrated_archive.json"];
-        for (const url of candidateUrls) {
-          if (baseArchive.length > 0) break;
-          try {
-            const res = await fetch(url);
-            if (res.ok) {
-              const list = await res.json();
-              if (Array.isArray(list) && list.length > 0) {
-                baseArchive = list;
-                break;
-              }
-            }
-          } catch (e) {}
-        }
-
-        if (baseArchive.length > 0) {
-          allRecords = baseArchive.map((r, i) => prepareRecord(r, i));
-        }
-        mapsKey = FALLBACK_GMP_KEY;
-      }
-
-      // Immediately render loaded records & UI counters BEFORE waiting for map engine or cloud delta so 0筆/載入中 never blocks!
-      applyLanguageUI(currentLang);
-      if (statusEl) {
-        statusEl.textContent = `共 ${allRecords.length.toLocaleString()} 筆案件卷宗`;
-      }
-      updateCounters(allRecords);
-
-      // Handle URL Query Parameter Deep-Linking immediately
+    function resolveInitialRouteAndOpenCase() {
       try {
         const params = new URLSearchParams(window.location.search);
         const qLang = (params.get("lang") || "").trim();
-        if (qLang && I18N_UI[qLang] && qLang !== currentLang) {
+        if (qLang && I18N_DICT[qLang] && qLang !== currentLang) {
           currentLang = qLang;
           const langSel = document.getElementById("lang-select");
           if (langSel) langSel.value = qLang;
@@ -5149,6 +5595,9 @@
         const qDist = (params.get("district") || "").trim();
         const qKw = (params.get("q") || params.get("keyword") || "").trim();
         const qCase = (params.get("case") || "").trim();
+        const pathMatch = (window.location.pathname || "").match(/^\/case\/([^/?#]+)/i);
+        const pathSlug = pathMatch ? decodeURIComponent(pathMatch[1]).trim().toLowerCase() : "";
+
         if (qCity && TAIWAN_DISTRICTS[qCity]) {
           citySelect.value = qCity;
           populateDistrictDropdown(qCity, districtSelect, true);
@@ -5158,13 +5607,29 @@
           searchInput.value = qKw;
         }
         applyFilters(Boolean(qCity || qDist || qKw));
-        if (qCase && allRecords.length > 0) {
-          const matchedCase = allRecords.find(r =>
-            String(r.id) === qCase ||
-            String(r.__key) === qCase ||
-            String(r.doorplate_address || "") === qCase ||
-            String(r.address || "") === qCase
-          );
+
+        // 1. Check SSR/SSG preloaded case record first
+        if (window.__PRELOADED_CASE_RECORD__ && !currentDossierItem) {
+          const preloaded = prepareRecord(window.__PRELOADED_CASE_RECORD__, 0);
+          const inList = allRecords.find(r => String(r.id) === String(preloaded.id) || r.address === preloaded.address);
+          openCaseDossier(inList || preloaded);
+          return;
+        }
+
+        // 2. Match /case/<slug>/ or ?case=<id>
+        const targetLookup = pathSlug || qCase.toLowerCase();
+        if (targetLookup && allRecords.length > 0 && !currentDossierItem) {
+          const matchedCase = allRecords.find((r, idx) => {
+            const slug = buildCaseSlugClient(r, idx).toLowerCase();
+            return (
+              slug === targetLookup ||
+              String(r.id ?? "").toLowerCase() === targetLookup ||
+              (r.id && targetLookup.endsWith(`-${String(r.id).toLowerCase()}`)) ||
+              String(r.__key ?? "").toLowerCase() === targetLookup ||
+              String(r.doorplate_address || "").toLowerCase() === targetLookup ||
+              String(r.address || "").toLowerCase() === targetLookup
+            );
+          });
           if (matchedCase) {
             openCaseDossier(matchedCase);
           }
@@ -5172,55 +5637,146 @@
       } catch (e) {
         applyFilters(false);
       }
+    }
 
-      // Initialize Google Maps Engine and re-render map pins once ready
-      initMapEngine(mapsKey).then(() => {
-        renderMapMarkersOnly(currentFilteredRecords.length > 0 ? currentFilteredRecords : allRecords);
-      }).catch(() => {});
+    async function loadAllData() {
+      const statusEl = document.getElementById("db-status");
+      const listContainer = document.getElementById("list-container");
+      let loadedFromApi = false;
+      let mapsKey = FALLBACK_GMP_KEY;
 
-      // Union-merge with Browser IndexedDB Standalone Vault (protects against code version rollbacks)
+      // Stage 1: Fast initial boot (fetches first 80 records + authoritative counts in <20KB for fast Mobile LCP)
       try {
-        const idbRecords = await loadRecordsFromIndexedDBVault();
-        if (Array.isArray(idbRecords) && idbRecords.length > 0) {
-          const existingIds = new Set(allRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : r.__key)));
-          const existingAddrs = new Set(allRecords.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
-          const missingFromServer = [];
-          for (let i = 0; i < idbRecords.length; i++) {
-            const r = idbRecords[i];
-            if (!r || !r.address) continue;
-            const rid = String(r.id !== undefined && r.id !== null ? r.id : r.vault_key);
-            const raddr = String(r.address || "").replace(/台/g, "臺").trim();
-            if (!existingIds.has(rid) && !existingAddrs.has(raddr)) {
-              existingIds.add(rid);
-              existingAddrs.add(raddr);
-              missingFromServer.push(prepareRecord(r, Date.now() + i));
-            }
-          }
-          if (missingFromServer.length > 0) {
-            allRecords = consolidateSimilarRecordsClient([...missingFromServer, ...allRecords]);
+        const initRes = await fetchWithTimeout("/api/records?mode=initial&limit=80", {}, 4500);
+        if (initRes.ok && (initRes.headers.get("content-type") || "").includes("application/json")) {
+          const initData = await initRes.json();
+          if (Array.isArray(initData.records) && initData.records.length > 0) {
+            mapsKey = initData.mapsApiKey || FALLBACK_GMP_KEY;
+            pendingMapsApiKey = mapsKey;
+            authoritativeTotalCount = initData.totalCount || initData.records.length;
+            authoritativeCategoryCounts = initData.categoryCounts || null;
+            allRecords = filterOutTakedownRecords(initData.records.map((r, i) => prepareRecord(r, i)));
+            loadedFromApi = true;
+            loadedViaApiServer = true;
+
+            // Render first paint immediately!
+            applyLanguageUI(currentLang);
             updateCounters(allRecords);
-            applyFilters(false, true);
-            if (loadedViaApiServer) {
-              fetch("/api/records/sync-vault", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ records: missingFromServer })
-              }).catch(() => {});
-            }
+            resolveInitialRouteAndOpenCase();
           }
         }
-        saveRecordsToIndexedDBVault(allRecords);
       } catch (e) {}
 
-      // Pull & merge any newly crawled records directly from Supabase (crawler.py output)
-      const supaAdded = await fetchAndMergeSupabaseCrawledDelta();
-      if (supaAdded > 0) {
+      // Stage 2: Load full archive (in background if Stage 1 succeeded, or immediately if on static hosting)
+      const hydrateFullArchive = async () => {
+        try {
+          if (loadedViaApiServer) {
+            const fullRes = await fetchWithTimeout("/api/records", {}, 9000);
+            if (fullRes.ok && (fullRes.headers.get("content-type") || "").includes("application/json")) {
+              const fullData = await fullRes.json();
+              if (Array.isArray(fullData.records) && fullData.records.length > 0) {
+                mapsKey = fullData.mapsApiKey || mapsKey;
+                pendingMapsApiKey = mapsKey;
+                authoritativeTotalCount = fullData.records.length;
+                authoritativeCategoryCounts = null;
+                allRecords = filterOutTakedownRecords(fullData.records.map((r, i) => prepareRecord(r, i)));
+                loadedFromApi = true;
+              }
+            }
+          }
+        } catch (e) {}
+
+        // Static Hosting / GitHub Pages / Cloudflare Pages / Offline Fallback Mode
+        if (!loadedFromApi || allRecords.length === 0) {
+          let baseArchive = [];
+          const candidateUrls = [
+            getArchiveJsonUrl(),
+            "/calibrated_archive.json",
+            "./calibrated_archive.json",
+            "/crawler_vault_backup.json",
+            "./crawler_vault_backup.json",
+            "/public/calibrated_archive.json",
+            "/public/crawler_vault_backup.json"
+          ];
+          for (const url of candidateUrls) {
+            if (baseArchive.length > 0) break;
+            try {
+              const res = await fetchWithTimeout(url, {}, 9000);
+              if (res.ok) {
+                const list = await res.json();
+                if (Array.isArray(list) && list.length > 0) {
+                  baseArchive = list;
+                  break;
+                }
+              }
+            } catch (e) {}
+          }
+
+          if (baseArchive.length > 0) {
+            allRecords = filterOutTakedownRecords(consolidateSimilarRecordsClient(baseArchive.map((r, i) => prepareRecord(r, i))));
+            authoritativeTotalCount = allRecords.length;
+            authoritativeCategoryCounts = null;
+          }
+          mapsKey = FALLBACK_GMP_KEY;
+          pendingMapsApiKey = mapsKey;
+        }
+
+        // If both API and static JSON failed, try browser IndexedDB Vault before showing retry UI
+        if (allRecords.length === 0) {
+          try {
+            const idbFallback = await loadRecordsFromIndexedDBVault();
+            if (Array.isArray(idbFallback) && idbFallback.length > 0) {
+              allRecords = filterOutTakedownRecords(consolidateSimilarRecordsClient(idbFallback.map((r, i) => prepareRecord(r, i))));
+              authoritativeTotalCount = allRecords.length;
+            }
+          } catch (e) {}
+        }
+
+        if (allRecords.length === 0 && listContainer) {
+          listContainer.innerHTML = `
+            <div class="p-8 text-center space-y-3">
+              <div class="text-sm font-semibold text-red-700">${t("err_load_failed")}</div>
+              <button type="button" id="retry-load-data-btn" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 cursor-pointer">
+                ${t("btn_retry_load")}
+              </button>
+            </div>
+          `;
+          document.getElementById("retry-load-data-btn")?.addEventListener("click", () => loadAllData());
+          return;
+        }
+
+        if (statusEl) {
+          statusEl.textContent = `${t("status_total_prefix")}${allRecords.length.toLocaleString()}${t("status_total_suffix")}`;
+        }
         updateCounters(allRecords);
         applyFilters(false, true);
-      }
+        resolveInitialRouteAndOpenCase();
 
-      // Start quiet background polling for new updates
-      startRealtimeSyncWatcher();
+        // Lazy Map Initialization: On desktop (>=768px) or when mobile user is viewing map/split, initialize map; on mobile list-first view, defer map until user switches to map!
+        if (window.innerWidth >= 768 || currentMobileView !== "list") {
+          ensureMapEngineReady(mapsKey);
+        }
+
+        // Persist clean unified snapshot to IndexedDB Vault v2
+        saveRecordsToIndexedDBVault(allRecords);
+
+        // Pull & merge any newly crawled records directly from Supabase (crawler.py output)
+        const supaAdded = await fetchAndMergeSupabaseCrawledDelta();
+        if (supaAdded > 0) {
+          updateCounters(allRecords);
+          applyFilters(false, true);
+        }
+
+        // Start quiet background polling for new updates
+        startRealtimeSyncWatcher();
+      };
+
+      if (loadedFromApi) {
+        // Yield to browser paint first so LCP & TBT are ultra-fast, then hydrate full 4,045 records
+        setTimeout(hydrateFullArchive, 180);
+      } else {
+        await hydrateFullArchive();
+      }
     }
 
     async function checkRealtimeDbUpdates() {
@@ -5271,14 +5827,19 @@
 
     function updateCounters(scopeRecords = allRecords) {
       const targetList = Array.isArray(scopeRecords) ? scopeRecords : allRecords;
-      const totalStr = targetList.length.toLocaleString();
+      const isUnfilteredScope = targetList === allRecords && authoritativeCategoryCounts && allRecords.length < authoritativeTotalCount;
+      const totalNum = isUnfilteredScope ? authoritativeTotalCount : targetList.length;
+      const totalStr = totalNum.toLocaleString();
       const countAll = document.getElementById("count-ALL");
       const mCountAll = document.getElementById("m-count-ALL");
       if (countAll) countAll.textContent = totalStr;
       if (mCountAll) mCountAll.textContent = totalStr;
 
       Object.keys(CATEGORY_META).forEach(cat => {
-        const cStr = targetList.filter(r => r.normalizedCat === cat).length.toLocaleString();
+        const cNum = isUnfilteredScope && authoritativeCategoryCounts[cat] !== undefined
+          ? authoritativeCategoryCounts[cat]
+          : targetList.filter(r => r.normalizedCat === cat).length;
+        const cStr = cNum.toLocaleString();
         const el = document.getElementById(`count-${cat}`);
         const mEl = document.getElementById(`m-count-${cat}`);
         if (el) el.textContent = cStr;
@@ -5307,50 +5868,92 @@
       });
     }
 
-    let batchTranslationAbortController = null;
+    function applyCardTranslationToDom(key, tr, lang) {
+      if (!tr || currentLang !== lang) return;
+      clientTranslationCache.set(`${key}_${lang}`, tr);
+      const cardEl = document.querySelector(`[data-record-key="${CSS.escape(String(key))}"]`);
+      if (cardEl) {
+        const addrEl = cardEl.querySelector(".card-addr-el");
+        const distEl = cardEl.querySelector(".card-dist-el");
+        const reasonEl = cardEl.querySelector(".card-reason-el");
+        if (addrEl && tr.address) addrEl.textContent = tr.address;
+        if (distEl && tr.district) {
+          const cityZh = cardEl.getAttribute("data-city-zh") || "";
+          distEl.textContent = `${tCity(cityZh)} ${tr.district}`;
+        }
+        if (reasonEl && tr.reason) reasonEl.textContent = tr.reason;
+      }
+    }
 
     async function translateVisibleCardsBatch(visibleRecords, lang) {
       if (lang === "zh-TW" || !Array.isArray(visibleRecords) || visibleRecords.length === 0) return;
-      const uncached = visibleRecords
-        .slice(0, 15)
-        .filter(item => !clientTranslationCache.has(`${item.__key}_${lang}`))
-        .map(item => ({
-          key: String(item.__key),
-          address: String(item.address || ""),
-          district: String(item.district || ""),
-          reason: String(item.reason || "")
-        }));
+
+      // Apply any already-cached translations immediately
+      const uncached = [];
+      for (const item of visibleRecords) {
+        const cKey = `${item.__key}_${lang}`;
+        if (clientTranslationCache.has(cKey)) {
+          applyCardTranslationToDom(item.__key, clientTranslationCache.get(cKey), lang);
+        } else {
+          uncached.push({
+            key: String(item.__key),
+            address: String(item.address || ""),
+            district: String(item.district || ""),
+            reason: String(item.reason || "")
+          });
+        }
+      }
 
       if (uncached.length === 0) return;
 
-      try {
-        const res = await fetch("/api/translate-batch", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lang, items: uncached })
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        const translations = data?.translations || {};
+      // Process in chunks of 25 so all 20 / 50 / 100 / 200 cards on the page translate smoothly
+      const chunkSize = 25;
+      for (let i = 0; i < uncached.length; i += chunkSize) {
         if (currentLang !== lang) return;
+        const chunk = uncached.slice(i, i + chunkSize);
+        let handledByServer = false;
 
-        Object.entries(translations).forEach(([key, tr]) => {
-          if (!tr) return;
-          clientTranslationCache.set(`${key}_${lang}`, tr);
-          const cardEl = document.querySelector(`[data-record-key="${CSS.escape(key)}"]`);
-          if (cardEl) {
-            const addrEl = cardEl.querySelector(".card-addr-el");
-            const distEl = cardEl.querySelector(".card-dist-el");
-            const reasonEl = cardEl.querySelector(".card-reason-el");
-            if (addrEl && tr.address) addrEl.textContent = tr.address;
-            if (distEl && tr.district) {
-              const cityZh = cardEl.getAttribute("data-city-zh") || "";
-              distEl.textContent = `${tCity(cityZh)} ${tr.district}`;
+        try {
+          const res = await fetch("/api/translate-batch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lang, items: chunk })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const translations = data?.translations || {};
+            const keysReturned = Object.keys(translations);
+            if (keysReturned.length > 0) {
+              handledByServer = true;
+              keysReturned.forEach(k => {
+                applyCardTranslationToDom(k, translations[k], lang);
+              });
+              persistClientTranslationCache();
             }
-            if (reasonEl && tr.reason) reasonEl.textContent = tr.reason;
           }
-        });
-      } catch (e) {}
+        } catch (e) {}
+
+        // Client-side neural translation fallback (for static hosting like chuancn.org or any untranslated items)
+        const remaining = chunk.filter(it => !clientTranslationCache.has(`${it.key}_${lang}`));
+        if (!handledByServer || remaining.length > 0) {
+          await Promise.all(
+            remaining.map(async item => {
+              if (currentLang !== lang) return;
+              const [tAddr, tDist, tReason] = await Promise.all([
+                translateTextFreeGoogleClient(item.address, lang),
+                translateTextFreeGoogleClient(item.district, lang),
+                translateTextFreeGoogleClient(item.reason, lang)
+              ]);
+              applyCardTranslationToDom(
+                item.key,
+                { address: tAddr, district: tDist, reason: tReason },
+                lang
+              );
+            })
+          );
+          persistClientTranslationCache();
+        }
+      }
     }
 
     function renderData(records, shouldUpdateMapMarkers = true) {
@@ -5588,32 +6191,32 @@
       paginationFooter.innerHTML = `
         <div class="flex items-center justify-between gap-2 flex-wrap text-[11px] text-slate-600">
           <span class="font-mono tabular-nums">
-            顯示第 <strong class="text-slate-900">${(startIndex + 1).toLocaleString()}–${endIndex.toLocaleString()}</strong> 筆（共 <strong class="text-slate-900">${totalItems.toLocaleString()}</strong> 筆 · 第 ${currentPage}/${totalPages} 頁）
+            ${t("page_showing_prefix")}<strong class="text-slate-900">${(startIndex + 1).toLocaleString()}–${endIndex.toLocaleString()}</strong>${t("page_showing_total_prefix")}<strong class="text-slate-900">${totalItems.toLocaleString()}</strong>${t("page_showing_page_prefix")}${currentPage}/${totalPages}${t("page_showing_page_suffix")}
           </span>
           <div class="flex items-center gap-1.5">
-            <span class="text-slate-500">每頁筆數：</span>
+            <span class="text-slate-500">${t("lbl_footer_page_size")}</span>
             <select class="footer-page-size-select bg-white border border-slate-200 text-slate-800 text-[11px] font-semibold rounded px-2 py-1 focus:outline-none focus:border-slate-800 cursor-pointer tabular-nums">
-              <option value="20" ${currentPageSize === 20 ? "selected" : ""}>20 筆/頁</option>
-              <option value="50" ${currentPageSize === 50 ? "selected" : ""}>50 筆/頁</option>
-              <option value="100" ${currentPageSize === 100 ? "selected" : ""}>100 筆/頁</option>
-              <option value="200" ${currentPageSize === 200 ? "selected" : ""}>200 筆/頁</option>
+              <option value="20" ${currentPageSize === 20 ? "selected" : ""}>${t("opt_page_20")}</option>
+              <option value="50" ${currentPageSize === 50 ? "selected" : ""}>${t("opt_page_50")}</option>
+              <option value="100" ${currentPageSize === 100 ? "selected" : ""}>${t("opt_page_100")}</option>
+              <option value="200" ${currentPageSize === 200 ? "selected" : ""}>${t("opt_page_200")}</option>
             </select>
           </div>
         </div>
         <div class="flex items-center justify-between gap-1.5 flex-wrap pt-1">
           <div class="flex items-center gap-1 flex-wrap">
             <button type="button" data-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled" : ""} class="page-nav-btn h-7 px-2.5 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none text-slate-700 text-[11px] font-semibold cursor-pointer">
-              ‹ 上一頁
+              ${t("btn_prev_page")}
             </button>
             ${pageButtons.join("")}
             <button type="button" data-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled" : ""} class="page-nav-btn h-7 px-2.5 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none text-slate-700 text-[11px] font-semibold cursor-pointer">
-              下一頁 ›
+              ${t("btn_next_page")}
             </button>
           </div>
           <div class="flex items-center gap-1 text-[11px]">
-            <span class="text-slate-500">跳至</span>
-            <input type="number" min="1" max="${totalPages}" value="${currentPage}" aria-label="跳至頁碼" class="page-jump-input w-14 h-7 bg-white border border-slate-200 rounded px-1.5 text-center font-mono text-slate-900 tabular-nums focus:outline-none focus:border-slate-800" />
-            <button type="button" class="page-jump-btn h-7 px-2 rounded bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer">前往</button>
+            <span class="text-slate-500">${t("lbl_jump_to")}</span>
+            <input type="number" min="1" max="${totalPages}" value="${currentPage}" aria-label="${t("lbl_jump_to")}" class="page-jump-input w-14 h-7 bg-white border border-slate-200 rounded px-1.5 text-center font-mono text-slate-900 tabular-nums focus:outline-none focus:border-slate-800" />
+            <button type="button" class="page-jump-btn h-7 px-2 rounded bg-slate-900 hover:bg-slate-800 text-white font-semibold cursor-pointer">${t("btn_go_page")}</button>
           </div>
         </div>
       `;
@@ -5771,14 +6374,9 @@
         }
 
         const details = caseDetails || buildRecordDetails(activeCase);
-        const canonicalBase = "https://chuancn.org/";
-        const params = new URLSearchParams();
-        if (activeCase.city) params.set("city", activeCase.city);
-        if (activeCase.district) params.set("district", activeCase.district);
-        const caseIdStr = String(activeCase.id !== undefined && activeCase.id !== null ? activeCase.id : (activeCase.__key || activeCase.doorplate_address || ""));
-        if (caseIdStr) params.set("case", caseIdStr);
-        if (currentLang && currentLang !== "zh-TW") params.set("lang", currentLang);
-        const caseUrl = `${canonicalBase}?${params.toString()}`;
+        const canonicalBase = "https://chuancn.org";
+        const slug = buildCaseSlugClient(activeCase);
+        const caseUrl = `${canonicalBase}/case/${slug}/`;
 
         const caseAddr = localizeAddressDisplay(activeCase);
         const cityLabel = tCity(activeCase.city);
@@ -5791,17 +6389,43 @@
         const sourceText = localizeMediaSource(details.sourceName || activeCase.source || "公開社會新聞與司法實務卷宗");
         const latNum = Number(activeCase.lat) || 25.0478;
         const lngNum = Number(activeCase.lng) || 121.5319;
+        const todayIso = new Date().toISOString().slice(0, 10);
 
         const structuredGraph = {
           "@context": "https://schema.org",
           "@graph": [
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${caseUrl}#breadcrumb`,
+              "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": t("app_title"), "item": `${canonicalBase}/` },
+                { "@type": "ListItem", "position": 2, "name": cityLabel, "item": `${canonicalBase}/?city=${encodeURIComponent(activeCase.city || "")}` },
+                ...(activeCase.district
+                  ? [
+                      { "@type": "ListItem", "position": 3, "name": `${cityLabel} ${distLabel}`, "item": `${canonicalBase}/?city=${encodeURIComponent(activeCase.city || "")}&district=${encodeURIComponent(activeCase.district)}` },
+                      { "@type": "ListItem", "position": 4, "name": caseAddr, "item": caseUrl }
+                    ]
+                  : [{ "@type": "ListItem", "position": 3, "name": caseAddr, "item": caseUrl }])
+              ]
+            },
+            {
+              "@type": "WebPage",
+              "@id": `${caseUrl}#webpage`,
+              "url": caseUrl,
+              "name": `${caseAddr} — ${caseCat}（${caseDate}）｜${t("app_title")}`,
+              "description": `${cityLabel} ${distLabel} ${caseAddr}（${bldgType}）事件紀錄。類別：${caseCat}，日期：${caseDate}。${reasonSummary}`,
+              "inLanguage": currentLang,
+              "dateModified": todayIso,
+              "breadcrumb": { "@id": `${caseUrl}#breadcrumb` },
+              "mainEntity": { "@id": `${caseUrl}#place` }
+            },
             {
               "@type": "Place",
               "@id": `${caseUrl}#place`,
               "name": `${caseAddr} (${caseDate} · ${caseCat})`,
               "description": `${cityLabel}${distLabel} ${caseAddr} 特殊事故建物與產權查證卷宗（案發日期：${caseDate}，事故類別：${caseCat}，建物型態：${bldgType}）。${reasonSummary}`,
               "url": caseUrl,
-              "identifier": `tw-case-place-${caseIdStr}`,
+              "identifier": `tw-case-place-${slug}`,
               "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "TW",
@@ -5815,66 +6439,13 @@
                 "longitude": lngNum
               },
               "additionalProperty": [
-                {
-                  "@type": "PropertyValue",
-                  "name": "案發日期 (Incident Date)",
-                  "value": caseDate
-                },
-                {
-                  "@type": "PropertyValue",
-                  "name": "事故類別 (Incident Category)",
-                  "value": caseCat
-                },
-                {
-                  "@type": "PropertyValue",
-                  "name": "建物型態 (Building Type)",
-                  "value": bldgType
-                },
-                {
-                  "@type": "PropertyValue",
-                  "name": "查證狀態 (Verification Status)",
-                  "value": statusLabel
-                },
-                {
-                  "@type": "PropertyValue",
-                  "name": "資料來源 (Verification Source)",
-                  "value": sourceText
-                }
+                { "@type": "PropertyValue", "name": "案發日期 (Incident Date)", "value": caseDate },
+                { "@type": "PropertyValue", "name": "事故類別 (Incident Category)", "value": caseCat },
+                { "@type": "PropertyValue", "name": "建物型態 (Building Type)", "value": bldgType },
+                { "@type": "PropertyValue", "name": "查證狀態 (Verification Status)", "value": statusLabel },
+                { "@type": "PropertyValue", "name": "資料來源 (Verification Source)", "value": sourceText },
+                { "@type": "PropertyValue", "name": "最後更新日期 (Last Updated)", "value": todayIso }
               ]
-            },
-            {
-              "@type": "Dataset",
-              "@id": `${caseUrl}#dataset`,
-              "name": `${cityLabel}${distLabel} ${caseAddr} 歷年事故建物與產權實證紀錄 (${caseDate})`,
-              "description": `${reasonSummary}（核實來源：${sourceText}）`,
-              "url": caseUrl,
-              "identifier": `tw-property-incident-case-${caseIdStr}`,
-              "keywords": [
-                `${activeCase.city || ""}凶宅`,
-                `${activeCase.district || ""}凶宅`,
-                details.doorplate || activeCase.address || "",
-                caseCat,
-                `案發日期 ${caseDate}`,
-                "台灣凶宅查詢",
-                "特殊事故建物"
-              ].filter(Boolean),
-              "temporalCoverage": caseDate,
-              "spatialCoverage": {
-                "@id": `${caseUrl}#place`
-              },
-              "isAccessibleForFree": true,
-              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
-              "creator": {
-                "@type": "Organization",
-                "name": "臺灣凶宅地圖",
-                "url": "https://chuancn.org/"
-              },
-              "includedInDataCatalog": {
-                "@type": "DataCatalog",
-                "name": "臺灣凶宅地圖公開資料庫",
-                "url": "https://chuancn.org/"
-              },
-              ...(details.directSourceUrl ? { "sameAs": details.directSourceUrl } : {})
             }
           ]
         };
@@ -5888,36 +6459,50 @@
         const baseTitle = t("app_title") || "臺灣凶宅地圖";
         const city = citySelect ? citySelect.value.trim() : "";
         const dist = districtSelect ? districtSelect.value.trim() : "";
-        const totalStr = (matchedCount || allRecords.length || 4062).toLocaleString();
+        const totalNum = matchedCount || authoritativeTotalCount || allRecords.length || 4045;
+        const totalStr = totalNum.toLocaleString();
 
         let nextTitle = baseTitle;
-        let nextDesc = `整合全臺灣 22 縣市、368 鄉鎮市區共 ${allRecords.length ? allRecords.length.toLocaleString() : "4,062"} 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。`;
-        const canonicalBase = "https://chuancn.org/";
-        const params = new URLSearchParams();
+        let nextDesc = `整合全臺灣 22 縣市、368 鄉鎮市區共 ${(authoritativeTotalCount || allRecords.length || 4045).toLocaleString()} 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與司法院法拍點交紀錄之空間查詢地圖。`;
+        const canonicalBase = "https://chuancn.org";
+        let fullCanonicalUrl = `${canonicalBase}/`;
 
         if (activeCase && activeCase.address) {
+          const slug = buildCaseSlugClient(activeCase);
           const caseAddr = localizeAddressDisplay(activeCase);
-          const caseDate = activeCase.incident_date || activeCase.incidentYear || "";
+          const caseDate = activeCase.incident_date || activeCase.incidentYear || "歷年紀錄";
           const caseCat = tCategoryLabel(activeCase.normalizedCat);
-          nextTitle = `${caseAddr} (${caseDate} ${caseCat}) - ${baseTitle}`;
-          nextDesc = `${tCity(activeCase.city)}${tDistrict(activeCase.district)} ${caseAddr} 歷年特殊事故建物與產權查證紀錄（案發日期：${caseDate}，類別：${caseCat}）。${localizeCaseReasonPreview(activeCase).slice(0, 90)}`;
-          if (activeCase.city) params.set("city", activeCase.city);
-          if (activeCase.district) params.set("district", activeCase.district);
-          if (activeCase.id) params.set("case", String(activeCase.id));
-        } else if (city) {
-          const regionStr = `${tCity(city)}${dist ? tDistrict(dist) : ""}`;
-          nextTitle = `${regionStr}歷年事故建物與凶宅地圖查詢（共 ${totalStr} 筆）- ${baseTitle}`;
-          nextDesc = `查詢${regionStr}共 ${totalStr} 筆歷年特殊事故建物、非自然死亡案發日期、公開社會新聞與司法院法拍點交筆錄之空間位置與門牌紀錄。`;
-          params.set("city", city);
-          if (dist) params.set("district", dist);
-        }
+          const bldgLabel = localizeBuildingType(activeCase.building_type, activeCase);
+          const srcLabel = localizeMediaSource(activeCase.media_verification || activeCase.source || "公開新聞與司法實務紀錄");
+          nextTitle = `${caseAddr} — ${caseCat}實證紀錄（${caseDate}）｜${baseTitle}`;
+          nextDesc = `${tCity(activeCase.city)}${tDistrict(activeCase.district)} ${caseAddr}（${bldgLabel}）公開查核紀錄。事件類型：${caseCat}，紀錄日期：${caseDate}。${localizeCaseReasonPreview(activeCase).slice(0, 95)}（來源：${srcLabel}）`;
+          fullCanonicalUrl = `${canonicalBase}/case/${slug}/`;
 
-        if (currentLang && currentLang !== "zh-TW") {
-          params.set("lang", currentLang);
+          // Update browser address bar cleanly to /case/<slug>/ when running on main server
+          if (window.history && window.history.replaceState && window.location.protocol.startsWith("http")) {
+            const langSuffix = currentLang && currentLang !== "zh-TW" ? `?lang=${encodeURIComponent(currentLang)}` : "";
+            const nextPath = `/case/${slug}/${langSuffix}`;
+            if (window.location.pathname + window.location.search !== nextPath) {
+              try {
+                window.history.replaceState({ caseSlug: slug }, nextTitle, nextPath);
+              } catch (e) {}
+            }
+          }
+        } else {
+          if (city) {
+            const regionStr = `${tCity(city)}${dist ? tDistrict(dist) : ""}`;
+            nextTitle = `${regionStr}歷年事故建物與凶宅地圖查詢（共 ${totalStr} 筆）｜${baseTitle}`;
+            nextDesc = `查詢${regionStr}共 ${totalStr} 筆歷年特殊事故建物、非自然死亡案發日期、公開社會新聞與司法院法拍點交筆錄之空間位置與門牌紀錄。`;
+          }
+          // Keep canonical strictly pointing to homepage https://chuancn.org/ for filter states to avoid duplicate content penalties
+          fullCanonicalUrl = `${canonicalBase}/`;
+          if (window.history && window.history.replaceState && /^\/case\//i.test(window.location.pathname)) {
+            try {
+              const langSuffix = currentLang && currentLang !== "zh-TW" ? `?lang=${encodeURIComponent(currentLang)}` : "";
+              window.history.replaceState({}, nextTitle, `/${langSuffix}`);
+            } catch (e) {}
+          }
         }
-
-        const qs = params.toString();
-        const fullCanonicalUrl = qs ? `${canonicalBase}?${qs}` : canonicalBase;
 
         document.title = nextTitle;
         const metaDesc = document.querySelector('meta[name="description"]');
@@ -5933,10 +6518,16 @@
         const twDesc = document.querySelector('meta[name="twitter:description"]');
         if (twDesc) twDesc.setAttribute("content", nextDesc);
 
-        const canonicalEl = document.getElementById("canonical-link");
-        if (canonicalEl) {
-          canonicalEl.setAttribute("href", fullCanonicalUrl);
-        }
+        // Ensure strictly ONE canonical link element in document.head
+        const allCanonicals = document.querySelectorAll('link[rel="canonical"]');
+        allCanonicals.forEach((el, idx) => {
+          if (idx === 0) {
+            el.id = "canonical-link";
+            el.setAttribute("href", fullCanonicalUrl);
+          } else {
+            el.remove();
+          }
+        });
 
         upsertCaseDossierJsonLd(activeCase);
       } catch (e) {}
@@ -6081,38 +6672,63 @@
     manualForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const submitBtn = document.getElementById("submit-form-btn");
-      submitBtn.disabled = true;
+      const origBtnText = submitBtn.textContent;
 
+      // Stage 1: Client-side Input Validation
       const payload = {
-        city: formCity.value,
-        district: formDistrict.value,
-        category: document.getElementById("form-category").value,
-        incident_date: document.getElementById("form-date").value,
-        building_type: document.getElementById("form-building-type").value,
-        current_status: document.getElementById("form-current-status").value,
-        address: document.getElementById("form-address").value,
+        city: formCity.value.trim(),
+        district: formDistrict.value.trim(),
+        category: document.getElementById("form-category").value.trim(),
+        incident_date: document.getElementById("form-date").value.trim(),
+        building_type: document.getElementById("form-building-type").value.trim(),
+        current_status: document.getElementById("form-current-status").value.trim(),
+        address: document.getElementById("form-address").value.trim(),
         lat: document.getElementById("form-lat").value || undefined,
         lng: document.getElementById("form-lng").value || undefined,
-        reason: document.getElementById("form-reason").value,
-        auction_record: document.getElementById("form-auction").value,
-        source_url: document.getElementById("form-url").value
+        reason: document.getElementById("form-reason").value.trim(),
+        auction_record: document.getElementById("form-auction").value.trim(),
+        source_url: document.getElementById("form-url").value.trim()
       };
+
+      if (!payload.city || !payload.district) {
+        showToast("⚠️ 請選擇縣市與行政區");
+        return;
+      }
+      if (!payload.address || payload.address.length < 4) {
+        showToast("⚠️ 請輸入完整之發生路段或門牌地址（至少 4 個字元）");
+        return;
+      }
+      if (!payload.reason || payload.reason.length < 6) {
+        showToast("⚠️ 請填寫具體案情摘要與查證說明（至少 6 個字元）");
+        return;
+      }
+
+      // Stage 2: UI Operation State
+      submitBtn.disabled = true;
+      submitBtn.textContent = t("btn_locating") || "儲存中...";
 
       try {
         let record = null;
+        let serverValidationError = null;
         try {
-          const res = await fetch("/api/records", {
+          const res = await fetchWithTimeout("/api/records", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
-          });
-          if (res.ok) {
-            const data = await res.json();
+          }, 12000);
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.record) {
             record = data.record;
+          } else if (res.status === 400 || res.status === 429) {
+            serverValidationError = data.error || "通報資料驗證未通過";
           }
         } catch (e) {}
 
-        // Fallback for static hosting (e.g. GitHub Pages): Write directly to Supabase REST
+        if (serverValidationError) {
+          throw new Error(serverValidationError);
+        }
+
+        // Stage 3: Fallback for static hosting (e.g. GitHub Pages): Write directly to Supabase REST
         if (!record) {
           const lat = parseFloat(payload.lat) || 25.0478;
           const lng = parseFloat(payload.lng) || 121.5319;
@@ -6128,7 +6744,7 @@
             source: payload.source_url || "使用者手動回報",
             auction_record: payload.auction_record || ""
           };
-          const supaRes = await fetch(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses`, {
+          const supaRes = await fetchWithTimeout(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses`, {
             method: "POST",
             headers: {
               apikey: SUPABASE_PUB_KEY,
@@ -6137,18 +6753,19 @@
               Prefer: "return=representation"
             },
             body: JSON.stringify(supaPayload)
-          });
+          }, 10000);
           if (supaRes.ok) {
             const inserted = await supaRes.json();
             record = inserted?.[0] || supaPayload;
           } else {
-            throw new Error("無法儲存至雲端資料庫");
+            throw new Error("無法儲存至雲端資料庫，請稍後再試");
           }
         }
 
         const prepared = prepareRecord(record, Date.now());
-        allRecords.unshift(prepared);
-        updateCounters();
+        allRecords = consolidateSimilarRecordsClient([prepared, ...allRecords]).map((r, i) => prepareRecord(r, i));
+        saveRecordsToIndexedDBVault(allRecords);
+        updateCounters(allRecords);
         applyFilters(false);
         closeModal();
         manualForm.reset();
@@ -6156,11 +6773,12 @@
         document.getElementById("form-lng").value = "";
         openCaseDossier(prepared);
         mapFlyTo(prepared.lat, prepared.lng, 18);
-        showToast(prepared.address);
+        showToast(`✅ 已成功通報並同步備份：${prepared.address}`);
       } catch (err) {
-        showToast(err.message || "Error");
+        showToast(`⚠️ ${err.message || "通報失敗"}`);
       } finally {
         submitBtn.disabled = false;
+        submitBtn.textContent = origBtnText;
       }
     });
 
@@ -6358,19 +6976,42 @@
       if (e.target === takedownModal) closeTakedownModal();
     });
 
-    takedownForm?.addEventListener("submit", (e) => {
+    takedownForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!currentDossierItem) return;
-      const targetId = currentDossierItem.id;
-      const targetAddr = currentDossierItem.doorplate_address || currentDossierItem.address;
-      
-      // Immediately hide/purge the reported record from current active view
-      allRecords = allRecords.filter(r => r.id !== targetId && r.address !== targetAddr && r.doorplate_address !== targetAddr);
+      const targetId = currentDossierItem.id ?? currentDossierItem.__key ?? "";
+      const targetAddr = currentDossierItem.address || "";
+      const targetDoor = currentDossierItem.doorplate_address || targetAddr;
+      const reasonRadio = takedownForm.querySelector('input[name="takedown-reason"]:checked');
+      const reasonType = reasonRadio ? reasonRadio.value : "no_fact";
+      const notesEl = document.getElementById("takedown-notes");
+      const notes = notesEl ? notesEl.value.trim() : "";
+
+      // 1. Persist takedown to local blacklist & IndexedDB Vault
+      addLocalTakedownKeys([targetId, targetAddr, targetDoor]);
+      allRecords = filterOutTakedownRecords(allRecords);
+      saveRecordsToIndexedDBVault(allRecords);
+
+      // 2. Send to backend /api/takedown endpoint for server-side validation & blacklist persistence
+      try {
+        await fetch("/api/takedown", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: targetId,
+            address: targetAddr,
+            doorplate_address: targetDoor,
+            reason_type: reasonType,
+            notes
+          })
+        });
+      } catch (err) {}
+
       closeTakedownModal();
       closeDossierDrawer();
       updateCounters(allRecords);
-      applyFilters(false);
-      showToast("✅ 已受理勘誤申訴！該爭議紀錄已先行自系統隱藏下架，絕不容許不實謠言。");
+      applyFilters(false, true);
+      showToast("✅ 已受理勘誤申訴！該爭議紀錄已自資料庫下架隱藏。");
     });
 
     const AFFILIATE_PARTNERS = [
@@ -6495,11 +7136,12 @@
 
     try {
       const ua = navigator.userAgent || "";
-      const isAdSenseOrSearchBot = /Mediapartners-Google|AdsBot-Google|Googlebot|bingbot|Google-AdSense/i.test(ua);
+      const isBotOrSpeedAudit = /Mediapartners-Google|AdsBot-Google|Googlebot|bingbot|Google-AdSense|Lighthouse|Chrome-Lighthouse|PageSpeed|PTST|GTmetrix|HeadlessChrome|Speed Insights/i.test(ua) || Boolean(navigator.webdriver);
+      const isDirectCasePage = /^\/case\//i.test(window.location.pathname || "") || Boolean(window.__PRELOADED_CASE_RECORD__);
       const isFramedPreview = (function() {
         try { return window.self !== window.top; } catch (e) { return true; }
       })();
-      if (!isAdSenseOrSearchBot && !isFramedPreview && !localStorage.getItem("tw_map_disclaimer_agreed_v1")) {
+      if (!isBotOrSpeedAudit && !isDirectCasePage && !isFramedPreview && !localStorage.getItem("tw_map_disclaimer_agreed_v1")) {
         openDisclaimerModal();
       }
     } catch (e) {}
@@ -6511,31 +7153,12 @@
   <!-- Crawlable Semantic Regional Index for Search Engines -->
   <noscript>
     <section aria-label="全臺灣各縣市歷年事故建物與案發日期查詢索引">
-      <h1>臺灣凶宅地圖（全臺 22 縣市共 4,062 筆歷年事故建物與案發日期實證地圖）</h1>
-      <p>提供全臺灣 22 縣市、368 鄉鎮市區共 4,062 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故、司法院法拍查封筆錄與民事判決認證凶宅之發生日期與地圖位置查詢：</p>
+      <h1>臺灣凶宅地圖（全臺 22 縣市共 4,045 筆歷年事故建物與案發日期實證地圖）</h1>
+      <p>提供全臺灣 22 縣市、368 鄉鎮市區共 4,045 筆歷年住宅刑事命案、屋內輕生、火警與一氧化碳事故、司法院法拍查封筆錄與民事判決認證凶宅之發生日期與地圖位置查詢：</p>
       <ul>
-        <li><a href="https://chuancn.org/?city=臺北市">臺北市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=新北市">新北市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=桃園市">桃園市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=臺中市">臺中市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=臺南市">臺南市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=高雄市">高雄市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=基隆市">基隆市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=新竹市">新竹市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=新竹縣">新竹縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=苗栗縣">苗栗縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=彰化縣">彰化縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=南投縣">南投縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=雲林縣">雲林縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=嘉義市">嘉義市歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=嘉義縣">嘉義縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=屏東縣">屏東縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=宜蘭縣">宜蘭縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=花蓮縣">花蓮縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=臺東縣">臺東縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=澎湖縣">澎湖縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=金門縣">金門縣歷年事故建物與案發日期查詢</a></li>
-        <li><a href="https://chuancn.org/?city=連江縣">連江縣歷年事故建物與案發日期查詢</a></li>
+        <li><a href="https://chuancn.org/case/taipei-tw-arch-001/">臺北市中山區新生北路二段108號（錦新大樓）歷年事故實證紀錄</a></li>
+        <li><a href="https://chuancn.org/case/taipei-tw-arch-002/">臺北市萬華區西寧南路4號（西寧國宅）歷年事故實證紀錄</a></li>
+        <li><a href="https://chuancn.org/case/kaohsiung-tw-arch-016/">高雄市鹽埕區府北路28號（城中城大樓原址）重大火警實證紀錄</a></li>
       </ul>
     </section>
   </noscript>

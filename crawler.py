@@ -548,8 +548,79 @@ def normalize_supa_row_for_archive(r: dict) -> dict:
     }
 
 
+def _extract_py_modus_tags(text: str) -> set[str]:
+    tags = set()
+    has_blade = bool(re.search(r"割喉|頸部.*刀|中刀|砍殺|持刀|刀傷|刺死|砍死", text))
+    has_fire = bool(re.search(r"縱火|惡火|火警|焚屍|毀屍滅跡|起火|火災|燒死|濃煙.*死|濃煙.*不治", text))
+    if has_blade and has_fire:
+        tags.add("arson_blade")
+    if has_blade:
+        tags.add("blade")
+    if has_fire:
+        tags.add("fire")
+    if re.search(r"尾隨", text):
+        tags.add("tail_stalk")
+    if re.search(r"分屍|肢解", text):
+        tags.add("dismember")
+    if re.search(r"桶屍|水泥封屍", text):
+        tags.add("barrel")
+    if re.search(r"滅門|雙屍|三屍|四屍|一家.*口", text):
+        tags.add("mass_death")
+    if re.search(r"槍擊|行刑式|開槍|中彈|舉槍", text):
+        tags.add("gunshot")
+    if re.search(r"弒母|弒父|殺母|殺父|逆子|逆倫", text):
+        tags.add("parricide")
+    if re.search(r"燒炭", text):
+        tags.add("charcoal")
+    if re.search(r"一氧化碳中毒|熱水器", text):
+        tags.add("co_poison")
+    if re.search(r"墜樓|跳樓|墜落|從.*樓.*墜", text):
+        tags.add("jump")
+    if re.search(r"上吊|自縊", text):
+        tags.add("hang")
+    if re.search(r"勒斃|掐死|窒息", text):
+        tags.add("strangle")
+    return tags
+
+
+def _are_same_incident_py(r1: dict, r2: dict) -> bool:
+    if r1.get("id") is not None and r2.get("id") is not None and str(r1.get("id")) == str(r2.get("id")):
+        return True
+    c1 = str(r1.get("city") or "").replace("台", "臺").strip()
+    c2 = str(r2.get("city") or "").replace("台", "臺").strip()
+    d1 = str(r1.get("district") or "").strip()
+    d2 = str(r2.get("district") or "").strip()
+    if not c1 or c1 != c2 or not d1 or d1 != d2:
+        return False
+    u1 = str(r1.get("source_url") or "").split("?")[0].strip()
+    u2 = str(r2.get("source_url") or "").split("?")[0].strip()
+    if u1 and u2 and u1.startswith("http") and u1 == u2:
+        return True
+
+    d_str1 = str(r1.get("incident_date") or "")[:10]
+    d_str2 = str(r2.get("incident_date") or "")[:10]
+    rk1 = extract_road_consolidation_key(c1, d1, str(r1.get("address") or ""))
+    rk2 = extract_road_consolidation_key(c2, d2, str(r2.get("address") or ""))
+    if rk1 and rk1 == rk2 and d_str1[:7] == d_str2[:7]:
+        return True
+
+    txt1 = f"{r1.get('address') or ''} {r1.get('reason') or ''}".replace("台", "臺")
+    txt2 = f"{r2.get('address') or ''} {r2.get('reason') or ''}".replace("台", "臺")
+    ages1 = {int(m.group(1)) for m in re.finditer(r"(\d{1,2})\s*歲", txt1)}
+    ages2 = {int(m.group(1)) for m in re.finditer(r"(\d{1,2})\s*歲", txt2)}
+    tags1 = _extract_py_modus_tags(txt1)
+    tags2 = _extract_py_modus_tags(txt2)
+    shared_ages = ages1 & ages2
+    shared_tags = tags1 & tags2
+
+    if d_str1 == d_str2 and d_str1:
+        if shared_ages and (shared_tags or r1.get("category") == r2.get("category")):
+            return True
+    return False
+
+
 def sync_supabase_to_website_json_files(supabase: Client):
-    """將 Supabase 最新爬蟲案件自動寫入網站靜態資料庫 calibrated_archive.json 與 public/calibrated_archive.json"""
+    """將 Supabase 最新爬蟲案件自動寫入網站靜態資料庫 calibrated_archive.json、public/calibrated_archive.json 與獨立爬蟲備份檔 crawler_vault_backup.json"""
     try:
         disk_records = []
         if os.path.exists("calibrated_archive.json"):
@@ -559,7 +630,7 @@ def sync_supabase_to_website_json_files(supabase: Client):
         existing_ids = {str(r.get("id")) for r in disk_records if r.get("id") is not None}
         existing_addrs = {str(r.get("address") or "").replace("台", "臺").strip() for r in disk_records if r.get("address")}
 
-        res = supabase.table("haunted_houses").select("*").gt("id", 3123).order("id", desc=True).limit(1000).execute()
+        res = supabase.table("haunted_houses").select("*").order("id", desc=True).limit(1000).execute()
         supa_rows = res.data or []
         new_items = []
         for row in supa_rows:
@@ -569,25 +640,34 @@ def sync_supabase_to_website_json_files(supabase: Client):
                 continue
             if rid in existing_ids or raddr in existing_addrs:
                 continue
+            cand = normalize_supa_row_for_archive(row)
+            if any(_are_same_incident_py(ex, cand) for ex in disk_records) or any(_are_same_incident_py(ex, cand) for ex in new_items):
+                continue
             existing_ids.add(rid)
             existing_addrs.add(raddr)
-            new_items.append(normalize_supa_row_for_archive(row))
+            new_items.append(cand)
+
+        updated = new_items + disk_records
+        with open("calibrated_archive.json", "w", encoding="utf-8") as f:
+            json.dump(updated, f, ensure_ascii=False, indent=2)
+        with open("crawler_vault_backup.json", "w", encoding="utf-8") as f:
+            json.dump(updated, f, ensure_ascii=False, indent=2)
+        os.makedirs("public", exist_ok=True)
+        with open(os.path.join("public", "calibrated_archive.json"), "w", encoding="utf-8") as f:
+            json.dump(updated, f, ensure_ascii=False, indent=2)
+        with open(os.path.join("public", "crawler_vault_backup.json"), "w", encoding="utf-8") as f:
+            json.dump(updated, f, ensure_ascii=False, indent=2)
 
         if new_items:
-            updated = new_items + disk_records
-            with open("calibrated_archive.json", "w", encoding="utf-8") as f:
-                json.dump(updated, f, ensure_ascii=False, indent=2)
-            os.makedirs("public", exist_ok=True)
-            with open(os.path.join("public", "calibrated_archive.json"), "w", encoding="utf-8") as f:
-                json.dump(updated, f, ensure_ascii=False, indent=2)
-            print(f"💾 已同步將 {len(new_items)} 筆新爬蟲案件寫入 calibrated_archive.json 與 public/calibrated_archive.json（網站總計：{len(updated)} 筆）！", flush=True)
+            print(f"💾 已同步將 {len(new_items)} 筆新爬蟲案件寫入 calibrated_archive.json 與獨立備份檔 crawler_vault_backup.json（網站與爬蟲統一總計：{len(updated)} 筆）！", flush=True)
         else:
-            print(f"💾 網站靜態資料庫 calibrated_archive.json 已是最新狀態（共 {len(disk_records)} 筆）。", flush=True)
+            print(f"💾 網站靜態資料庫與獨立爬蟲備份檔已是最新狀態（統一總計 {len(updated)} 筆）。", flush=True)
     except Exception as e:
         print(f"⚠️ 同步寫入 calibrated_archive.json 提示: {e}", flush=True)
 
 
 if __name__ == "__main__":
     main()
+
 
 

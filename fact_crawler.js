@@ -723,7 +723,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
 export function extractModusOperandiTags(text = "") {
   const tags = [];
   const hasBlade = /割喉|頸部.*刀|中刀|砍殺|持刀|刀傷|刺死|砍死/.test(text);
-  const hasFire = /縱火|惡火|火警|焚屍|毀屍滅跡|起火|火災|燒死/.test(text);
+  const hasFire = /縱火|惡火|火警|焚屍|毀屍滅跡|起火|火災|燒死|濃煙.*死|濃煙.*不治/.test(text);
   if (hasBlade && hasFire) tags.push("arson_blade");
   if (hasBlade) tags.push("blade");
   if (hasFire) tags.push("fire");
@@ -735,10 +735,49 @@ export function extractModusOperandiTags(text = "") {
   if (/弒母|弒父|殺母|殺父|逆子|逆倫/.test(text)) tags.push("parricide");
   if (/燒炭/.test(text)) tags.push("charcoal");
   if (/一氧化碳中毒|熱水器/.test(text)) tags.push("co_poison");
-  if (/墜樓|跳樓/.test(text)) tags.push("jump");
+  if (/墜樓|跳樓|墜落|從.*樓.*墜/.test(text)) tags.push("jump");
   if (/上吊|自縊/.test(text)) tags.push("hang");
   if (/勒斃|掐死|窒息/.test(text)) tags.push("strangle");
+  if (/陳屍|倒臥.*身亡|倒臥.*死|白骨|乾屍/.test(text)) tags.push("corpse_found");
   return tags;
+}
+
+export function normalizeTaiwanRoadText(str = "") {
+  const numMap = { "1": "一", "2": "二", "3": "三", "4": "四", "5": "五", "6": "六", "7": "七", "8": "八", "9": "九" };
+  return String(str || "")
+    .replace(/台/g, "臺")
+    .replace(/([1-9])\s*段/g, (_, d) => `${numMap[d] || d}段`);
+}
+
+export function extractBaseRoadStem(addr = "", city = "", dist = "") {
+  let s = normalizeTaiwanRoadText(addr);
+  const cleanCity = normalizeTaiwanRoadText(city);
+  const cleanDist = normalizeTaiwanRoadText(dist);
+  if (cleanCity) s = s.replace(new RegExp(cleanCity, "g"), "");
+  if (cleanDist) s = s.replace(new RegExp(cleanDist, "g"), "");
+  s = s.replace(/^[一-龥]{2,3}[里村]/, "");
+  const m = s.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?)/);
+  if (!m) return "";
+  return m[1].replace(/^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)/, "").replace(/路段$/, "路");
+}
+
+export function extractVictimProfile(text = "") {
+  const norm = normalizeTaiwanRoadText(text);
+  const exactAges = new Set(Array.from(norm.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])).filter(n => n >= 1 && n <= 110));
+  const decades = new Set();
+  for (const a of exactAges) {
+    decades.add(Math.floor(a / 10) * 10);
+  }
+  const decMap = { "一": 10, "二": 20, "三": 30, "四": 40, "五": 50, "六": 60, "七": 70, "八": 80, "九": 90, "1": 10, "2": 20, "3": 30, "4": 40, "5": 50, "6": 60, "7": 70, "8": 80, "9": 90 };
+  for (const m of norm.matchAll(/([一二三四五六七八九1-9])\s*旬/g)) {
+    if (decMap[m[1]]) decades.add(decMap[m[1]]);
+  }
+  for (const m of norm.matchAll(/([1-9]0)\s*多歲/g)) {
+    decades.add(Number(m[1]));
+  }
+  const isElderlyFemale = /老婦|婦人|老嫗|阿嬤/.test(norm);
+  const isElderlyMale = /老翁|翁|阿公/.test(norm);
+  return { exactAges, decades, isElderlyFemale, isElderlyMale };
 }
 
 // Semantic Event Signature Generator to prevent duplicate cases across outlets or different road descriptions in the same district
@@ -746,7 +785,7 @@ export function getSemanticCaseSignatures(record) {
   const sigs = [];
   const city = (record.city || "").replace(/台/g, "臺");
   const dist = (record.district || "").trim();
-  const text = `${record.address || ""} ${record.reason || ""} ${record.source || ""}`.replace(/台/g, "臺");
+  const text = normalizeTaiwanRoadText(`${record.address || ""} ${record.reason || ""} ${record.source || ""}`);
 
   if (record.source_url && record.source_url.startsWith("http")) {
     const cleanUrl = record.source_url.split("?")[0].trim();
@@ -762,14 +801,13 @@ export function getSemanticCaseSignatures(record) {
   // Quoted headline signature
   const titleMatch = (record.source || "").match(/「([^」]{6,})」/) || (record.reason || "").match(/【([^】]{6,})】/);
   if (titleMatch) {
-    const normTitle = titleMatch[1].replace(/台/g, "臺").replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "").slice(0, 18);
+    const normTitle = normalizeTaiwanRoadText(titleMatch[1]).replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "").slice(0, 18);
     if (normTitle.length >= 7) {
       sigs.push(`headline:${normTitle}`);
     }
   }
 
-  const cleanAddr = (record.doorplate_address || record.address || "")
-    .replace(/台/g, "臺")
+  const cleanAddr = normalizeTaiwanRoadText(record.doorplate_address || record.address || "")
     .replace(/\s+/g, "")
     .replace(/（.*）/, "")
     .replace(/\(.*\)/, "");
@@ -779,13 +817,14 @@ export function getSemanticCaseSignatures(record) {
 
   // Road + Year-Month signature
   const ym = (record.incident_date || "").slice(0, 7);
-  const roadMatch = text.match(/([一-龥]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?)/);
-  if (roadMatch && ym.length === 7) {
-    sigs.push(`road_ym:${city}_${dist}_${roadMatch[1]}_${ym}`);
+  const roadStem = extractBaseRoadStem(record.address || text, city, dist);
+  if (roadStem && ym.length === 7) {
+    sigs.push(`road_ym:${city}_${dist}_${roadStem}_${ym}`);
   }
 
   // Victim/Suspect Age + Modus Operandi + District + Year-Month signature (catches same incident even if road differs)
-  const ages = Array.from(text.matchAll(/(\d{1,2})\s*歲/g)).map(m => m[1]);
+  const { exactAges } = extractVictimProfile(text);
+  const ages = [...exactAges];
   const modusTags = extractModusOperandiTags(text);
   const surnameMatch = text.match(/([陳林黃張李王吳劉蔡楊許鄭謝郭洪曾邱廖賴周徐蘇葉莊呂江何蕭羅高潘簡朱鍾連彭游詹胡施沈余盧梁趙顏柯翁魏孫戴范方宋鄧杜傅侯曹薛丁卓馬阮])\s*(?:姓|男|女|婦|翁|嫌)/);
   if (ages.length > 0 && surnameMatch && dist) {
@@ -899,7 +938,7 @@ export const LANDMARK_CANONICAL = {
 export function extractConsolidationKey(r) {
   const city = String(r.city || "").replace(/台/g, "臺").trim();
   const dist = String(r.district || "").trim();
-  let s = String(r.address || "").replace(/台/g, "臺");
+  let s = normalizeTaiwanRoadText(r.address || "");
 
   if (city === "臺南市" && s.includes("錦新大樓")) {
     s = s.replace(/「錦新大樓」/g, "永大路二段");
@@ -916,7 +955,7 @@ export function extractConsolidationKey(r) {
   s = s.replace(/^[一-龥]{2,3}[里村]/, "");
 
   const comm = s.match(/「([^」]{2,12})」/);
-  const roadLane = s.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)/);
+  const roadLane = s.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?(?:\d+號)?)/);
   if (roadLane) {
     const cleanRoad = roadLane[1]
       .replace(/^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)/, "")
@@ -942,42 +981,64 @@ export function extractConsolidationKey(r) {
 export function getRecordAuthorityScore(r) {
   let score = 0;
   const url = String(r.source_url || "").trim();
+  const addr = String(r.address || "");
   const reason = String(r.reason || "");
   const source = `${r.source || ""} ${r.media_verification || ""}`;
   if (url.startsWith("http")) {
     score += 1000;
-    const roadMatch = String(r.address || "").match(/([一-龥]{2,5}(?:路|街|大道))/);
-    if (roadMatch && reason.includes(roadMatch[1])) score += 500;
+    const roadMatch = normalizeTaiwanRoadText(addr).match(/([一-龥]{2,5}(?:路|街|大道))/);
+    if (roadMatch && normalizeTaiwanRoadText(reason).includes(roadMatch[1])) score += 300;
+  }
+  // Prefer records with an explicit news headline bracket 【...】 (not generic 【案發日期)
+  if (/^【[^】]{6,50}】/.test(reason) && !/^【案發日期/.test(reason)) {
+    score += 450;
+  }
+  // Prefer records with specific lane, alley, or doorplate number (巷/弄/號) over bare road name
+  if (/\d+巷|\d+弄|\d+號/.test(addr)) {
+    score += 350;
   }
   if (/字第\s*\d+\s*號/.test(`${reason} ${source}`)) score += 400;
-  if (/(聯合|自由|ETtoday|中央社|TVBS|三立|中時|公視|鏡週刊|CTWant).*「.+」/.test(source)) score += 200;
+  if (/(聯合|自由|ETtoday|中央社|TVBS|三立|中時|公視|鏡週刊|CTWant|華視|民視|壹蘋).*「.+」/.test(source)) score += 200;
   if (r.location_accuracy === "ROOFTOP_GEOCODED") score += 50;
+  score += Math.min(90, Math.floor(reason.length / 4));
   return score;
 }
 
 export function areSameIncidentInDistrict(r1, r2) {
+  if (!r1 || !r2) return false;
+  if (r1.id !== undefined && r2.id !== undefined && String(r1.id) === String(r2.id)) return true;
+
   const c1 = String(r1.city || "").replace(/台/g, "臺").trim();
   const c2 = String(r2.city || "").replace(/台/g, "臺").trim();
   const d1 = String(r1.district || "").trim();
   const d2 = String(r2.district || "").trim();
-  if (!c1 || c1 !== c2 || !d1 || d1 !== d2) return false;
+  if (!c1 || c1 !== c2 || !d1 || d2 !== d1) return false;
 
   const u1 = String(r1.source_url || "").split("?")[0].trim();
   const u2 = String(r2.source_url || "").split("?")[0].trim();
   if (u1 && u2 && u1.startsWith("http") && u1 === u2) return true;
 
-  const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
-  const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
-  const ages1 = new Set(Array.from(txt1.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
-  const ages2 = new Set(Array.from(txt2.matchAll(/(\d{1,2})\s*歲/g)).map(m => Number(m[1])));
-  const sharedAges = [...ages1].filter(a => ages2.has(a));
+  //Landmark canonical match
+  for (const [lmName, lmMeta] of Object.entries(LANDMARK_CANONICAL)) {
+    if (c1 === lmMeta.city && String(r1.address || "").includes(lmName) && String(r2.address || "").includes(lmName)) {
+      return true;
+    }
+  }
+
+  const txt1 = normalizeTaiwanRoadText(`${r1.address || ""} ${r1.reason || ""} ${r1.source || ""}`);
+  const txt2 = normalizeTaiwanRoadText(`${r2.address || ""} ${r2.reason || ""} ${r2.source || ""}`);
+
+  const prof1 = extractVictimProfile(txt1);
+  const prof2 = extractVictimProfile(txt2);
+  const sharedExactAges = [...prof1.exactAges].filter(a => prof2.exactAges.has(a));
+  const sharedDecades = [...prof1.decades].filter(d => prof2.decades.has(d));
 
   const tags1 = new Set(extractModusOperandiTags(txt1));
   const tags2 = new Set(extractModusOperandiTags(txt2));
   const sharedTags = [...tags1].filter(t => tags2.has(t));
 
-  // Cross-year check: if same district + same victim age + rare/compound modus operandi (e.g. 25歲 + 割喉 + 縱火/尾隨), it is the same case even if year was mis-inferred
-  if (sharedAges.length > 0) {
+  // Cross-year check: if same district + same exact victim age + rare/compound modus operandi (e.g. 25歲 + 割喉 + 縱火/尾隨), it is the same case even if year was mis-inferred
+  if (sharedExactAges.length > 0) {
     if (sharedTags.includes("arson_blade") || (sharedTags.includes("blade") && sharedTags.includes("fire"))) return true;
     if (sharedTags.some(t => ["dismember", "barrel", "parricide", "tail_stalk"].includes(t)) && sharedTags.length >= 2) return true;
   }
@@ -985,11 +1046,41 @@ export function areSameIncidentInDistrict(r1, r2) {
   const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
   const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
   const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
+
+  const key1 = extractConsolidationKey(r1);
+  const key2 = extractConsolidationKey(r2);
+  // Exact same road+lane key within 60 days is the same incident
+  if (key1 && key1 === key2 && daysDiff <= 60) {
+    return true;
+  }
+
+  const roadStem1 = extractBaseRoadStem(r1.address || "", c1, d1);
+  const roadStem2 = extractBaseRoadStem(r2.address || "", c2, d2);
+  const sameBaseRoad = Boolean(roadStem1 && roadStem2 && roadStem1 === roadStem2);
+
+  // Within ±7 days in the same district:
+  if (daysDiff <= 7) {
+    // Case 1: Same base road stem (e.g., 基隆路三段155巷 vs 基隆路三段) + same modus or category
+    if (sameBaseRoad && (sharedTags.length >= 1 || r1.category === r2.category)) {
+      return true;
+    }
+    // Case 2: Same exact victim age (e.g. 73歲翁 on 站前路 vs 天倫街 on 2026-10-06) + same modus or category
+    if (sharedExactAges.length > 0 && (sharedTags.length >= 1 || r1.category === r2.category)) {
+      return true;
+    }
+    // Case 3: Same age decade or elderly role (e.g. 7旬/77歲老婦) + shared modus tag
+    if ((sharedDecades.length > 0 || (prof1.isElderlyFemale && prof2.isElderlyFemale) || (prof1.isElderlyMale && prof2.isElderlyMale)) && sharedTags.length >= 1) {
+      return true;
+    }
+  }
+
   if (daysDiff > 45) return false;
 
-  if (sharedAges.length > 0) {
-    if (sharedTags.length >= 2) return true;
-    if (sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle"].includes(t))) return true;
+  // Within ±45 days in the same district:
+  if (sharedExactAges.length > 0) {
+    if (sharedTags.length >= 1 && (sameBaseRoad || sharedTags.some(t => ["arson_blade", "tail_stalk", "dismember", "barrel", "parricide", "gunshot", "mass_death", "strangle", "blade", "fire", "jump", "charcoal", "co_poison", "hang"].includes(t)))) {
+      return true;
+    }
   }
   if (daysDiff <= 30 && sharedTags.some(t => ["arson_blade", "dismember", "barrel", "parricide"].includes(t))) {
     return true;
@@ -997,154 +1088,60 @@ export function areSameIncidentInDistrict(r1, r2) {
   return false;
 }
 
-// Smart Similar Case Consolidation Engine: Silently merges duplicate or same-incident records prioritizing verified news URLs & court case numbers
+// Smart Similar Case Consolidation Engine: Merges duplicate or same-incident records prioritizing verified news URLs, headlines & specific lane/doorplate addresses without collapsing distinct historical incidents from different years
 export function consolidateSimilarRecords(records = []) {
-  const groups = new Map();
-  for (const r of records) {
-    if (!r || !r.address) continue;
-    const key = extractConsolidationKey(r);
-    if (!key) continue;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(r);
-  }
-
-  const roadConsolidated = [];
-  for (const [key, items] of groups.entries()) {
-    let lmMeta = null;
-    for (const [lmName, meta] of Object.entries(LANDMARK_CANONICAL)) {
-      if (key.endsWith(`_LM_${lmName}`)) {
-        lmMeta = meta;
-        break;
-      }
-    }
-
-    const rawPool = [];
-    for (const it of items) {
-      if (Array.isArray(it.merged_cases) && it.merged_cases.length > 1) {
-        for (const sub of it.merged_cases) {
-          rawPool.push({
-            ...it,
-            id: sub.id || it.id,
-            incident_date: sub.incident_date || it.incident_date,
-            category: sub.category || it.category,
-            address: sub.original_address || it.address,
-            reason: sub.reason || it.reason,
-            source: sub.source || it.source,
-            source_url: sub.source_url || it.source_url,
-            db_source: sub.db_source || it.db_source,
-            merged_cases: undefined
-          });
-        }
-      } else {
-        rawPool.push(it);
-      }
-    }
-
-    rawPool.sort((a, b) => {
-      const scoreDiff = getRecordAuthorityScore(b) - getRecordAuthorityScore(a);
-      if (scoreDiff !== 0) return scoreDiff;
-      return String(b.incident_date || "").localeCompare(String(a.incident_date || ""));
-    });
-
-    const uniqueSub = [];
-    const seenSubSig = new Set();
-    for (const it of rawPool) {
-      const cleanReason = String(it.reason || "")
-        .replace(/^【[^】]+】/, "")
-        .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
-        .replace(/（系統已自動?比對整合[\s\S]*$/, "")
-        .replace(/\s+/g, "")
-        .slice(0, 28);
-      const subSig = `${it.incident_date}_${cleanReason}`;
-      if (seenSubSig.has(subSig)) continue;
-      seenSubSig.add(subSig);
-      uniqueSub.push(it);
-    }
-
-    const geocodedMaster = uniqueSub.find(i => i.location_accuracy === "ROOFTOP_GEOCODED") || uniqueSub[0];
-    const primary = { ...uniqueSub[0] };
-    const city = (lmMeta ? lmMeta.city : (primary.city || "")).replace(/台/g, "臺");
-    const dist = lmMeta ? lmMeta.district : (primary.district || "");
-    const bldgType = lmMeta
-      ? lmMeta.building_type
-      : (primary.building_type || (/透天/.test(primary.address) ? "透天厝住宅" : /公寓/.test(primary.address) ? "傳統公寓住宅" : /華廈/.test(primary.address) ? "電梯華廈" : /套房/.test(primary.address) ? "出租套房大樓" : "社區電梯大樓")).replace(/（.*）/, "");
-
-    if (lmMeta) {
-      primary.city = lmMeta.city;
-      primary.district = lmMeta.district;
-      primary.address = lmMeta.address;
-      primary.doorplate_address = lmMeta.doorplate_address;
-      primary.building_type = lmMeta.building_type;
-      primary.lat = lmMeta.lat;
-      primary.lng = lmMeta.lng;
-      primary.location_accuracy = "ROOFTOP_GEOCODED";
-    } else {
-      if (geocodedMaster && geocodedMaster.lat && geocodedMaster.lng) {
-        primary.lat = geocodedMaster.lat;
-        primary.lng = geocodedMaster.lng;
-        primary.location_accuracy = geocodedMaster.location_accuracy || "ROOFTOP_GEOCODED";
-      }
-      const roadPart = key.split("_").slice(2).join("_").replace(/_/g, "");
-      let baseAddr = String(primary.address || "").replace(/台/g, "臺").replace(/某號/g, "");
-      if (/附近|某/.test(baseAddr) || !baseAddr.includes("（")) {
-        baseAddr = `${city}${dist}${roadPart}（${bldgType}）`;
-      }
-      primary.city = city;
-      primary.address = baseAddr;
-      primary.doorplate_address = baseAddr.replace(/（.*）|\(.*\)/g, "").trim();
-      primary.building_type = bldgType;
-    }
-
-    if (uniqueSub.length > 1) {
-      uniqueSub.sort((a, b) => getRecordAuthorityScore(b) - getRecordAuthorityScore(a));
-      primary.incident_date = uniqueSub[0].incident_date || primary.incident_date;
-      primary.merged_count = uniqueSub.length;
-      primary.merged_cases = uniqueSub.map((u, idx) => ({
-        case_index: idx + 1,
-        id: u.id,
-        incident_date: u.incident_date,
-        category: u.category,
-        original_address: String(u.address || "").replace(/某號/g, ""),
-        reason: String(u.reason || "").replace(/（同址／同路段整合紀錄[\s\S]*$/, "").replace(/（系統已自動?比對整合[\s\S]*$/, "").trim().slice(0, 220),
-        source: u.source || u.media_verification || "公開紀錄",
-        source_url: u.source_url || "",
-        db_source: u.db_source || "NEWS_PUBLIC_ARCHIVE"
-      }));
-    } else {
-      primary.merged_count = 1;
-      primary.merged_cases = [{
-        case_index: 1,
-        id: primary.id,
-        incident_date: primary.incident_date,
-        category: primary.category,
-        original_address: primary.address,
-        reason: primary.reason,
-        source: primary.source,
-        source_url: primary.source_url || "",
-        db_source: primary.db_source || "NEWS_PUBLIC_ARCHIVE"
-      }];
-    }
-
-    roadConsolidated.push(primary);
-  }
-
-  // Second pass: Fast O(N) district-bucketed semantic incident deduplication
   const byDistrict = new Map();
-  for (const cand of roadConsolidated) {
-    const dKey = `${String(cand.city || "").replace(/台/g, "臺").trim()}_${String(cand.district || "").trim()}`;
+  for (const raw of records) {
+    if (!raw || !raw.address) continue;
+    const city = String(raw.city || "").replace(/台/g, "臺").trim();
+    const dist = String(raw.district || "").trim();
+    const dKey = `${city}_${dist}`;
     if (!byDistrict.has(dKey)) byDistrict.set(dKey, []);
     const bucket = byDistrict.get(dKey);
-    const matchIdx = bucket.findIndex(existing => areSameIncidentInDistrict(existing, cand));
+
+    const matchIdx = bucket.findIndex(existing => areSameIncidentInDistrict(existing, raw));
     if (matchIdx === -1) {
-      bucket.push(cand);
+      const single = { ...raw, city, district: dist };
+      single.merged_count = single.merged_count || (Array.isArray(single.merged_cases) ? single.merged_cases.length : 1);
+      bucket.push(single);
     } else {
       const existing = bucket[matchIdx];
-      const winner = getRecordAuthorityScore(cand) > getRecordAuthorityScore(existing) ? { ...cand } : { ...existing };
-      const loser = winner === cand ? existing : cand;
-      const mergedSubs = [
-        ...(Array.isArray(winner.merged_cases) ? winner.merged_cases : []),
-        ...(Array.isArray(loser.merged_cases) ? loser.merged_cases : [])
-      ];
+      const candScore = getRecordAuthorityScore(raw);
+      const exScore = getRecordAuthorityScore(existing);
+      const winner = candScore > exScore ? { ...raw, city, district: dist } : { ...existing, city, district: dist };
+      const loser = candScore > exScore ? existing : raw;
+
+      // If loser has a more specific lane/alley/doorplate on the same base road, preserve the more specific address & coordinates
+      const wAddr = String(winner.address || "");
+      const lAddr = String(loser.address || "");
+      if (!/\d+巷|\d+弄|\d+號/.test(wAddr) && /\d+巷|\d+弄|\d+號/.test(lAddr)) {
+        const wStem = extractBaseRoadStem(wAddr, city, dist);
+        const lStem = extractBaseRoadStem(lAddr, city, dist);
+        if (wStem && wStem === lStem) {
+          winner.address = lAddr;
+          winner.doorplate_address = loser.doorplate_address || lAddr.replace(/（.*）|\(.*\)/g, "").trim();
+          if (loser.lat && loser.lng) {
+            winner.lat = loser.lat;
+            winner.lng = loser.lng;
+          }
+        }
+      }
+
+      const subA = Array.isArray(winner.merged_cases) && winner.merged_cases.length > 0
+        ? winner.merged_cases
+        : [{ id: winner.id, incident_date: winner.incident_date, category: winner.category, original_address: winner.address, reason: winner.reason, source: winner.source, source_url: winner.source_url || "", db_source: winner.db_source || "NEWS_PUBLIC_ARCHIVE" }];
+      const subB = Array.isArray(loser.merged_cases) && loser.merged_cases.length > 0
+        ? loser.merged_cases
+        : [{ id: loser.id, incident_date: loser.incident_date, category: loser.category, original_address: loser.address, reason: loser.reason, source: loser.source, source_url: loser.source_url || "", db_source: loser.db_source || "NEWS_PUBLIC_ARCHIVE" }];
+
+      const seenSig = new Set();
+      const mergedSubs = [];
+      for (const s of [...subA, ...subB]) {
+        const sig = `${s.incident_date}_${String(s.reason || "").slice(0, 24)}`;
+        if (seenSig.has(sig)) continue;
+        seenSig.add(sig);
+        mergedSubs.push({ ...s, case_index: mergedSubs.length + 1 });
+      }
       winner.merged_count = mergedSubs.length || 1;
       winner.merged_cases = mergedSubs;
       bucket[matchIdx] = winner;
@@ -1157,4 +1154,5 @@ export function consolidateSimilarRecords(records = []) {
   }
   return consolidated;
 }
+
 

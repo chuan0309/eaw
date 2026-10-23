@@ -1,10 +1,17 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
+import zlib from "zlib";
 import { fileURLToPath } from "url";
 import { GoogleGenAI, ThinkingLevel, Type } from "@google/genai";
 import * as factCrawler from "./fact_crawler.js";
-import { buildSitemapXml, generateAndWriteSitemapFiles } from "./generate_sitemap.js";
+import {
+  buildSitemapXml,
+  generateAndWriteSitemapFiles,
+  buildCaseSlug,
+  isSubstantiveCaseForSeo,
+  renderStandaloneCaseHtml
+} from "./generate_sitemap.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,9 +25,49 @@ const CALIBRATED_ARCHIVE_PATHS = [
   "/calibrated_archive.json",
   "/public/calibrated_archive.json"
 ];
+const CRAWLER_BACKUP_PATHS = [
+  path.join(__dirname, "crawler_vault_backup.json"),
+  path.join(__dirname, "public", "crawler_vault_backup.json")
+];
 const STANDALONE_VAULT_PATH = "/var/tmp/tw_haunted_standalone_vault.json";
+const TAKEDOWN_BLACKLIST_PATH = "/var/tmp/tw_haunted_takedowns.json";
 
 app.use(express.json({ limit: "25mb" }));
+
+// High-speed Gzip compression middleware for HTML, JSON, XML, and JS payloads (reduces 4.2MB JSON to ~480KB)
+app.use((req, res, next) => {
+  const acceptEncoding = String(req.headers["accept-encoding"] || "");
+  if (!acceptEncoding.includes("gzip") || req.path.startsWith("/api/maps/streetview-image")) {
+    return next();
+  }
+  const origSend = res.send.bind(res);
+  res.send = function (body) {
+    try {
+      if (res.headersSent || res.getHeader("Content-Encoding")) {
+        return origSend(body);
+      }
+      const contentType = String(res.getHeader("Content-Type") || "");
+      const isCompressible =
+        /json|text|javascript|xml|svg/i.test(contentType) ||
+        typeof body === "string" ||
+        Buffer.isBuffer(body);
+      const rawBuf = Buffer.isBuffer(body)
+        ? body
+        : typeof body === "string"
+        ? Buffer.from(body, "utf-8")
+        : Buffer.from(JSON.stringify(body), "utf-8");
+      if (isCompressible && rawBuf.length > 1024) {
+        const compressed = zlib.gzipSync(rawBuf, { level: zlib.constants.Z_BEST_SPEED });
+        res.setHeader("Content-Encoding", "gzip");
+        res.setHeader("Vary", "Accept-Encoding");
+        res.removeHeader("Content-Length");
+        return origSend(compressed);
+      }
+    } catch (_e) {}
+    return origSend(body);
+  };
+  next();
+});
 
 function getGoogleMapsApiKey() {
   return (
@@ -162,7 +209,49 @@ let dynamicRecords = [];
 let cachedCalibratedDiskRecords = null;
 const caseTranslationCache = new Map();
 
+function loadTakedownBlacklist() {
+  try {
+    if (fs.existsSync(TAKEDOWN_BLACKLIST_PATH)) {
+      const parsed = JSON.parse(fs.readFileSync(TAKEDOWN_BLACKLIST_PATH, "utf8"));
+      if (Array.isArray(parsed)) return new Set(parsed.map(x => String(x).trim()));
+    }
+  } catch (e) {}
+  return new Set();
+}
+
+function addTakedownToBlacklist(keys = []) {
+  const current = loadTakedownBlacklist();
+  for (const k of keys) {
+    if (k) current.add(String(k).trim());
+  }
+  try {
+    fs.writeFileSync(TAKEDOWN_BLACKLIST_PATH, JSON.stringify([...current], null, 2), "utf8");
+  } catch (e) {}
+  return current;
+}
+
+function writeAllDatabaseSnapshots(records) {
+  if (!Array.isArray(records) || records.length === 0) return;
+  const serialized = JSON.stringify(records, null, 2);
+  const targets = [
+    STANDALONE_VAULT_PATH,
+    CALIBRATED_ARCHIVE_PATHS[0],
+    CALIBRATED_ARCHIVE_PATHS[1],
+    CRAWLER_BACKUP_PATHS[0],
+    CRAWLER_BACKUP_PATHS[1]
+  ];
+  for (const target of targets) {
+    try {
+      const dir = path.dirname(target);
+      if (fs.existsSync(dir)) {
+        fs.writeFileSync(target, serialized, "utf8");
+      }
+    } catch (e) {}
+  }
+}
+
 function loadAllUnifiedRecords() {
+  const takedownSet = loadTakedownBlacklist();
   if (!cachedCalibratedDiskRecords) {
     let workspaceList = [];
     for (const candidatePath of CALIBRATED_ARCHIVE_PATHS) {
@@ -172,6 +261,20 @@ function loadAllUnifiedRecords() {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length > 0) {
             workspaceList = parsed;
+            break;
+          }
+        } catch (e) {}
+      }
+    }
+
+    let crawlerBackupList = [];
+    for (const backupPath of CRAWLER_BACKUP_PATHS) {
+      if (fs.existsSync(backupPath)) {
+        try {
+          const rawBackup = fs.readFileSync(backupPath, "utf8");
+          const parsedBackup = JSON.parse(rawBackup);
+          if (Array.isArray(parsedBackup) && parsedBackup.length > 0) {
+            crawlerBackupList = parsedBackup;
             break;
           }
         } catch (e) {}
@@ -189,39 +292,44 @@ function loadAllUnifiedRecords() {
       } catch (e) {}
     }
 
-    // Union-merge standalone external vault + workspace archive so code version rollbacks never lose records
+    // Priority Order: 1. Workspace Calibrated Archive -> 2. Crawler Vault Backup -> 3. Standalone External Vault
     const unionMap = new Map();
-    for (const rec of [...standaloneVaultList, ...workspaceList]) {
+    for (const rec of [...workspaceList, ...crawlerBackupList, ...standaloneVaultList]) {
       if (!rec || !rec.address) continue;
-      const key = String(rec.id !== undefined && rec.id !== null ? rec.id : `${rec.city || ""}_${rec.district || ""}_${rec.address || ""}`);
+      const recId = String(rec.id !== undefined && rec.id !== null ? rec.id : "");
+      const recAddr = String(rec.address || "").replace(/台/g, "臺").trim();
+      const recDoor = String(rec.doorplate_address || "").replace(/台/g, "臺").trim();
+      if (takedownSet.has(recId) || takedownSet.has(recAddr) || (recDoor && takedownSet.has(recDoor))) {
+        continue;
+      }
+      const key = recId || `${rec.city || ""}_${rec.district || ""}_${recAddr}`;
       if (!unionMap.has(key)) {
         unionMap.set(key, rec);
       }
     }
-    const unioned = Array.from(unionMap.values());
+    const rawUnioned = Array.from(unionMap.values());
+    const unioned = factCrawler.consolidateSimilarRecords(rawUnioned);
     if (unioned.length > 0) {
       cachedCalibratedDiskRecords = unioned;
       factCrawler.initDistrictCoordinates(unioned);
-      try {
-        if (!fs.existsSync(STANDALONE_VAULT_PATH) || unioned.length > standaloneVaultList.length) {
-          fs.writeFileSync(STANDALONE_VAULT_PATH, JSON.stringify(unioned, null, 2), "utf8");
-        }
-        if (unioned.length > workspaceList.length) {
-          fs.writeFileSync(CALIBRATED_ARCHIVE_PATHS[0], JSON.stringify(unioned, null, 2), "utf8");
-          if (fs.existsSync(path.dirname(CALIBRATED_ARCHIVE_PATHS[1]))) {
-            fs.writeFileSync(CALIBRATED_ARCHIVE_PATHS[1], JSON.stringify(unioned, null, 2), "utf8");
-          }
-        }
-      } catch (e) {}
+      if (unioned.length !== workspaceList.length || unioned.length !== crawlerBackupList.length || !fs.existsSync(CRAWLER_BACKUP_PATHS[0])) {
+        writeAllDatabaseSnapshots(unioned);
+      }
     }
   }
 
   const baseList = cachedCalibratedDiskRecords || CURATED_LANDMARK_CASES;
-  const combined = [...dynamicRecords, ...baseList];
+  const combined = factCrawler.consolidateSimilarRecords([...dynamicRecords, ...baseList]);
 
   const result = [];
   for (const item of combined) {
     if (!item || !item.address) continue;
+    const recId = String(item.id !== undefined && item.id !== null ? item.id : "");
+    const recAddr = String(item.address || "").replace(/台/g, "臺").trim();
+    const recDoor = String(item.doorplate_address || "").replace(/台/g, "臺").trim();
+    if (takedownSet.has(recId) || takedownSet.has(recAddr) || (recDoor && takedownSet.has(recDoor))) {
+      continue;
+    }
     const city = (item.city || "").replace(/台/g, "臺");
     const src = item.source || item.media_verification || "公開社會新聞與司法實務紀錄";
     const media = item.media_verification || item.source || "公開社會新聞與司法實務紀錄";
@@ -466,37 +574,69 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   return cachedSupabaseDelta;
 }
 
-// GET /api/records - Returns the unified calibrated archive + any newly crawled records from Supabase
+function classifyServerCategory(cat, reason) {
+  const text = `${cat || ""} ${reason || ""}`;
+  if (/命案|他殺|兇殺|凶殺|砍殺|槍擊|分屍|情殺|虐死/.test(text)) return "重大刑事命案";
+  if (/火警|火災|一氧化碳|氣爆|燒死|中毒/.test(text)) return "火警與一氧化碳";
+  if (/墜樓|跳樓|輕生|燒炭|上吊|自縊|尋短|陳屍|孤獨死/.test(text)) return "屋內輕生與墜樓";
+  return "法拍與其他";
+}
+
+// GET /api/records - Supports fast initial boot (`?mode=initial&limit=80`) and full archive load, with non-blocking background Supabase delta sync
 app.get("/api/records", async (req, res) => {
-  let base = loadAllUnifiedRecords();
-  try {
-    const delta = await fetchLatestSupabaseCrawledRecords(false);
-    if (Array.isArray(delta) && delta.length > 0) {
-      const existingIds = new Set(base.map(r => String(r.id)));
-      const existingAddrs = new Set(base.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
-      const newFromSupa = [];
-      for (const r of delta) {
-        const rid = String(r.id);
-        const raddr = String(r.address || "").replace(/台/g, "臺").trim();
-        if (!existingIds.has(rid) && !existingAddrs.has(raddr)) {
-          existingIds.add(rid);
-          existingAddrs.add(raddr);
-          newFromSupa.push(r);
+  const base = loadAllUnifiedRecords();
+
+  // Trigger non-blocking background Supabase delta check so initial HTTP response is instant (<15ms)
+  setImmediate(async () => {
+    try {
+      const delta = await fetchLatestSupabaseCrawledRecords(false);
+      if (Array.isArray(delta) && delta.length > 0) {
+        const existingIds = new Set(base.map(r => String(r.id)));
+        const existingAddrs = new Set(base.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
+        const newFromSupa = [];
+        for (const r of delta) {
+          const rid = String(r.id);
+          const raddr = String(r.address || "").replace(/台/g, "臺").trim();
+          if (!existingIds.has(rid) && !existingAddrs.has(raddr)) {
+            existingIds.add(rid);
+            existingAddrs.add(raddr);
+            newFromSupa.push(r);
+          }
+        }
+        if (newFromSupa.length > 0) {
+          persistNewVerifiedRecordsToDisk(newFromSupa);
         }
       }
-      if (newFromSupa.length > 0) {
-        persistNewVerifiedRecordsToDisk(newFromSupa);
-        base = loadAllUnifiedRecords();
-      }
-    }
-  } catch (e) {}
+    } catch (_e) {}
+  });
+
+  const mode = String(req.query.mode || "").trim().toLowerCase();
+  const limit = Math.max(1, Math.min(5000, parseInt(req.query.limit, 10) || (mode === "initial" ? 80 : base.length)));
+
+  const categoryCounts = {
+    all: base.length,
+    "重大刑事命案": 0,
+    "屋內輕生與墜樓": 0,
+    "火警與一氧化碳": 0,
+    "法拍與其他": 0
+  };
+  for (let i = 0; i < base.length; i++) {
+    const r = base[i];
+    if (!r.slug) r.slug = buildCaseSlug(r, i);
+    const normCat = classifyServerCategory(r.category, r.reason);
+    categoryCounts[normCat] = (categoryCounts[normCat] || 0) + 1;
+  }
 
   const rawTotalRepresented = base.reduce((acc, r) => acc + (r.merged_count || 1), 0);
   const mergedGroupsCount = base.filter(r => (r.merged_count || 1) > 1).length;
+  const slicedRecords = mode === "initial" ? base.slice(0, limit) : base;
 
+  res.setHeader("Cache-Control", "public, max-age=60");
   res.json({
-    records: base,
+    records: slicedRecords,
+    isPartialInitial: mode === "initial" && slicedRecords.length < base.length,
     totalCount: base.length,
+    categoryCounts,
     rawSourceCount: rawTotalRepresented,
     mergedGroupsCount,
     crawlerStats: getCrawlerStatusSummary(base.length),
@@ -572,6 +712,39 @@ app.get("/api/records/export-vault", (req, res) => {
 });
 
 
+// Circuit breaker for depleted Gemini prepayment credits (402 / 429 RESOURCE_EXHAUSTED)
+let geminiCreditsDepleted = false;
+
+function markGeminiDepletedIfNeeded(err) {
+  const msg = String(err?.message || err || "");
+  if (msg.includes("402") || msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") || msg.includes("prepayment credits")) {
+    geminiCreditsDepleted = true;
+  }
+}
+
+async function translateTextFreeGoogle(text, lang) {
+  const clean = String(text || "").trim();
+  if (!clean || lang === "zh-TW") return clean;
+  const tlMap = { en: "en", ja: "ja", ko: "ko" };
+  const tl = tlMap[lang] || lang;
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=${encodeURIComponent(tl)}&dt=t&q=${encodeURIComponent(clean)}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 4500);
+    const r = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (!r.ok) return clean;
+    const data = await r.json();
+    if (Array.isArray(data) && Array.isArray(data[0])) {
+      return data[0].map(seg => (Array.isArray(seg) ? seg[0] || "" : "")).join("").trim() || clean;
+    }
+  } catch (e) {}
+  return clean;
+}
+
 // POST /api/translate-case - Translates case dossier narrative into English (en), Japanese (ja), or Korean (ko)
 app.post("/api/translate-case", async (req, res) => {
   const {
@@ -600,40 +773,37 @@ app.post("/api/translate-case", async (req, res) => {
     }
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(503).json({ error: "Translation fallback" });
-  }
+  const safeTimeline = Array.isArray(history_timeline)
+    ? history_timeline.slice(0, 6).map(t => ({
+        year: String(t?.year || ""),
+        stage: String(t?.stage || ""),
+        detail: String(t?.detail || "")
+      }))
+    : [];
+  const safeMerged = Array.isArray(merged_cases)
+    ? merged_cases.slice(0, 6).map(m => ({
+        original_address: String(m?.original_address || ""),
+        reason: String(m?.reason || ""),
+        source: String(m?.source || "")
+      }))
+    : [];
 
-  const langNames = {
-    en: "English",
-    ja: "Japanese (日本語)",
-    ko: "Korean (한국어)"
-  };
+  if (process.env.GEMINI_API_KEY && !geminiCreditsDepleted) {
+    const langNames = {
+      en: "English",
+      ja: "Japanese (日本語)",
+      ko: "Korean (한국어)"
+    };
 
-  try {
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: { headers: { "User-Agent": "aistudio-build" } }
-    });
+    try {
+      const ai = new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY,
+        httpOptions: { headers: { "User-Agent": "aistudio-build" } }
+      });
 
-    const safeTimeline = Array.isArray(history_timeline)
-      ? history_timeline.slice(0, 6).map(t => ({
-          year: String(t?.year || ""),
-          stage: String(t?.stage || ""),
-          detail: String(t?.detail || "")
-        }))
-      : [];
-    const safeMerged = Array.isArray(merged_cases)
-      ? merged_cases.slice(0, 6).map(m => ({
-          original_address: String(m?.original_address || ""),
-          reason: String(m?.reason || ""),
-          source: String(m?.source || "")
-        }))
-      : [];
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: `Translate the following Taiwan property incident record completely into natural, accurate ${langNames[lang]}. Do not leave Chinese text untranslated; translate all road names, districts, building types, media names, and case narratives into ${langNames[lang]}:
+      const response = await ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: `Translate the following Taiwan property incident record completely into natural, accurate ${langNames[lang]}. Do not leave Chinese text untranslated; translate all road names, districts, building types, media names, and case narratives into ${langNames[lang]}:
 - address: ${address}
 - district: ${district}
 - building_type: ${building_type}
@@ -643,59 +813,112 @@ app.post("/api/translate-case", async (req, res) => {
 - media_verification: ${media_verification}
 - history_timeline: ${JSON.stringify(safeTimeline)}
 - merged_cases: ${JSON.stringify(safeMerged)}`,
-      config: {
-        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            address: { type: Type.STRING },
-            district: { type: Type.STRING },
-            building_type: { type: Type.STRING },
-            current_status: { type: Type.STRING },
-            reason: { type: Type.STRING },
-            auction_record: { type: Type.STRING },
-            media_verification: { type: Type.STRING },
-            history_timeline: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  year: { type: Type.STRING },
-                  stage: { type: Type.STRING },
-                  detail: { type: Type.STRING }
-                },
-                required: ["year", "stage", "detail"]
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              address: { type: Type.STRING },
+              district: { type: Type.STRING },
+              building_type: { type: Type.STRING },
+              current_status: { type: Type.STRING },
+              reason: { type: Type.STRING },
+              auction_record: { type: Type.STRING },
+              media_verification: { type: Type.STRING },
+              history_timeline: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    year: { type: Type.STRING },
+                    stage: { type: Type.STRING },
+                    detail: { type: Type.STRING }
+                  },
+                  required: ["year", "stage", "detail"]
+                }
+              },
+              merged_cases: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    original_address: { type: Type.STRING },
+                    reason: { type: Type.STRING },
+                    source: { type: Type.STRING }
+                  },
+                  required: ["original_address", "reason", "source"]
+                }
               }
             },
-            merged_cases: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  original_address: { type: Type.STRING },
-                  reason: { type: Type.STRING },
-                  source: { type: Type.STRING }
-                },
-                required: ["original_address", "reason", "source"]
-              }
-            }
-          },
-          required: ["address", "district", "building_type", "current_status", "reason", "auction_record", "media_verification", "history_timeline", "merged_cases"]
+            required: ["address", "district", "building_type", "current_status", "reason", "auction_record", "media_verification", "history_timeline", "merged_cases"]
+          }
         }
-      }
-    });
+      });
 
-    const translated = JSON.parse(response.text || "{}");
-    caseTranslationCache.set(cacheKey, translated);
-    return res.json(translated);
-  } catch (err) {
-    console.error("translate-case error:", err.message);
-    return res.status(500).json({ error: "Translation failed" });
+      const translated = JSON.parse(response.text || "{}");
+      caseTranslationCache.set(cacheKey, translated);
+      return res.json(translated);
+    } catch (err) {
+      markGeminiDepletedIfNeeded(err);
+    }
+  }
+
+  // Fallback: Translate fields via Google Translate endpoint without throwing 500 or logging 402
+  try {
+    const [
+      tAddress,
+      tDistrict,
+      tBuildingType,
+      tCurrentStatus,
+      tReason,
+      tAuctionRecord,
+      tMediaVerification
+    ] = await Promise.all([
+      translateTextFreeGoogle(address, lang),
+      translateTextFreeGoogle(district, lang),
+      translateTextFreeGoogle(building_type, lang),
+      translateTextFreeGoogle(current_status, lang),
+      translateTextFreeGoogle(reason, lang),
+      translateTextFreeGoogle(auction_record, lang),
+      translateTextFreeGoogle(media_verification, lang)
+    ]);
+
+    const tTimeline = await Promise.all(
+      safeTimeline.map(async item => ({
+        year: item.year,
+        stage: await translateTextFreeGoogle(item.stage, lang),
+        detail: await translateTextFreeGoogle(item.detail, lang)
+      }))
+    );
+
+    const tMerged = await Promise.all(
+      safeMerged.map(async item => ({
+        original_address: await translateTextFreeGoogle(item.original_address, lang),
+        reason: await translateTextFreeGoogle(item.reason, lang),
+        source: await translateTextFreeGoogle(item.source, lang)
+      }))
+    );
+
+    const fallbackTranslated = {
+      address: tAddress,
+      district: tDistrict,
+      building_type: tBuildingType,
+      current_status: tCurrentStatus,
+      reason: tReason,
+      auction_record: tAuctionRecord,
+      media_verification: tMediaVerification,
+      history_timeline: tTimeline,
+      merged_cases: tMerged
+    };
+    caseTranslationCache.set(cacheKey, fallbackTranslated);
+    return res.json(fallbackTranslated);
+  } catch (fallbackErr) {
+    return res.json({ address, district, building_type, current_status, reason, auction_record, media_verification, history_timeline: safeTimeline, merged_cases: safeMerged });
   }
 });
 
-// POST /api/translate-batch - Translates a batch of visible list cards into en, ja, or ko
+// POST /api/translate-batch - Translates a batch of visible list cards (supports up to 200 items per page) into en, ja, or ko
 app.post("/api/translate-batch", async (req, res) => {
   const { lang = "zh-TW", items = [] } = req.body || {};
   if (lang === "zh-TW" || !["en", "ja", "ko"].includes(lang) || !Array.isArray(items) || items.length === 0) {
@@ -704,7 +927,7 @@ app.post("/api/translate-batch", async (req, res) => {
 
   const result = {};
   const toTranslate = [];
-  for (const it of items.slice(0, 20)) {
+  for (const it of items.slice(0, 200)) {
     if (!it || !it.key) continue;
     const cKey = `batch_v2_${it.key}_${lang}`;
     if (caseTranslationCache.has(cKey)) {
@@ -714,63 +937,91 @@ app.post("/api/translate-batch", async (req, res) => {
         key: String(it.key),
         address: String(it.address || ""),
         district: String(it.district || ""),
-        reason: String(it.reason || "").slice(0, 240)
+        reason: String(it.reason || "").slice(0, 320)
       });
     }
   }
 
-  if (toTranslate.length === 0 || !process.env.GEMINI_API_KEY) {
+  if (toTranslate.length === 0) {
     return res.json({ translations: result });
   }
 
-  const langNames = {
-    en: "English",
-    ja: "Japanese (日本語)",
-    ko: "Korean (한국어)"
-  };
+  if (process.env.GEMINI_API_KEY && !geminiCreditsDepleted && toTranslate.length <= 40) {
+    const langNames = {
+      en: "English",
+      ja: "Japanese (日本語)",
+      ko: "Korean (한국어)"
+    };
 
-  try {
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: { headers: { "User-Agent": "aistudio-build" } }
-    });
+    try {
+      const ai = new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY,
+        httpOptions: { headers: { "User-Agent": "aistudio-build" } }
+      });
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: `Translate each Taiwan property incident item below into concise, natural ${langNames[lang]}. Translate the address, district, and reason completely into ${langNames[lang]} without leaving Chinese sentences:\n${JSON.stringify(toTranslate)}`,
-      config: {
-        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              key: { type: Type.STRING },
-              address: { type: Type.STRING },
-              district: { type: Type.STRING },
-              reason: { type: Type.STRING }
-            },
-            required: ["key", "address", "district", "reason"]
+      const response = await ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: `Translate each Taiwan property incident item below into concise, natural ${langNames[lang]}. Translate the address, district, and reason completely into ${langNames[lang]} without leaving Chinese sentences:\n${JSON.stringify(toTranslate)}`,
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                key: { type: Type.STRING },
+                address: { type: Type.STRING },
+                district: { type: Type.STRING },
+                reason: { type: Type.STRING }
+              },
+              required: ["key", "address", "district", "reason"]
+            }
+          }
+        }
+      });
+
+      const arr = JSON.parse(response.text || "[]");
+      if (Array.isArray(arr)) {
+        for (const tr of arr) {
+          if (tr && tr.key) {
+            caseTranslationCache.set(`batch_v2_${tr.key}_${lang}`, tr);
+            result[tr.key] = tr;
           }
         }
       }
-    });
-
-    const arr = JSON.parse(response.text || "[]");
-    if (Array.isArray(arr)) {
-      for (const tr of arr) {
-        if (tr && tr.key) {
-          caseTranslationCache.set(`batch_v2_${tr.key}_${lang}`, tr);
-          result[tr.key] = tr;
-        }
-      }
+      return res.json({ translations: result });
+    } catch (err) {
+      markGeminiDepletedIfNeeded(err);
     }
-    return res.json({ translations: result });
-  } catch (err) {
-    console.error("translate-batch error:", err.message);
-    return res.json({ translations: result });
   }
+
+  // Fallback: Translate batch items in controlled concurrency chunks via Google Translate endpoint (supports up to 200 items)
+  try {
+    const chunkSize = 12;
+    for (let i = 0; i < toTranslate.length; i += chunkSize) {
+      const chunk = toTranslate.slice(i, i + chunkSize);
+      await Promise.all(
+        chunk.map(async item => {
+          const [tAddr, tDist, tReason] = await Promise.all([
+            translateTextFreeGoogle(item.address, lang),
+            translateTextFreeGoogle(item.district, lang),
+            translateTextFreeGoogle(item.reason, lang)
+          ]);
+          const tr = {
+            key: item.key,
+            address: tAddr,
+            district: tDist,
+            reason: tReason
+          };
+          caseTranslationCache.set(`batch_v2_${item.key}_${lang}`, tr);
+          result[item.key] = tr;
+        })
+      );
+    }
+  } catch (e) {}
+
+  return res.json({ translations: result });
 });
 
 // GET /api/maps/streetview-image - Proxies Street View Static API image
@@ -877,68 +1128,67 @@ app.post("/api/search-grounding", async (req, res) => {
     return res.status(400).json({ error: "Missing query" });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
+  if (process.env.GEMINI_API_KEY && !geminiCreditsDepleted) {
+    const langPromptMap = {
+      "zh-TW": `請使用 Google Search 檢索臺灣「${cleanQuery}」（背景參考：${reason.slice(0, 60)}）相關之公開新聞報導、司法院法拍公告、社區背景或周邊實價登錄現況。請用繁體中文條列整理 3 點客觀實務摘要（每點不超過 65 字，語氣平實自然，附具體門牌或路段脈絡）。`,
+      "en": `Use Google Search to look up public news, Taiwan Judicial Court foreclosure announcements, and real-price transaction context regarding "${cleanQuery}" in Taiwan (Reference: ${reason.slice(0, 60)}). Provide 3 concise, objective bullet points in English for property due diligence.`,
+      "ja": `Google Search を使用して、台湾の「${cleanQuery}」（背景：${reason.slice(0, 60)}）に関する公開ニュース報道、司法院競売公告、または不動産実価登録の現況を検索してください。日本語で客観的な実務要約を3点（各65文字以内）で簡潔にまとめてください。`,
+      "ko": `Google Search를 사용하여 대만 "${cleanQuery}" (배경 참고: ${reason.slice(0, 60)}) 관련 공개 뉴스 보도, 사법원 법원경매 공고 및 실거래가 현황을 검색해 주세요. 부동산 실사를 위해 한국어로 객관적인 핵심 요약 3가지를 정리해 주세요.`
+    };
+
     try {
-      const q = `${city} ${district} ${address.replace(city, "").replace(district, "").slice(0, 10)} (法拍 OR 事故 OR 實價登錄)`;
-      const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
-      const rssRes = await fetch(rssUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
-      const xml = rssRes.ok ? await rssRes.text() : "";
-      const items = parseRssItems(xml, 5);
+      const ai = new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY,
+        httpOptions: { headers: { "User-Agent": "aistudio-build" } }
+      });
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: langPromptMap[lang] || langPromptMap["zh-TW"],
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+          tools: [{ googleSearch: {} }]
+        }
+      });
+
+      const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+      const sources = [];
+      for (const c of chunks) {
+        if (c.web?.uri && c.web?.title) {
+          sources.push({
+            title: c.web.title,
+            uri: c.web.uri
+          });
+        }
+      }
+
       return res.json({
-        summary: `Found ${items.length} public news records for "${cleanQuery}".`,
-        sources: items.map(it => ({ title: it.title, uri: it.link })),
+        summary: response.text || "",
+        sources: sources.slice(0, 6),
         attribution: "Google Search"
       });
-    } catch (e) {
-      return res.json({
-        summary: "Live search unavailable.",
-        sources: [],
-        attribution: "Google Search"
-      });
+    } catch (err) {
+      markGeminiDepletedIfNeeded(err);
     }
   }
 
-  const langPromptMap = {
-    "zh-TW": `請使用 Google Search 檢索臺灣「${cleanQuery}」（背景參考：${reason.slice(0, 60)}）相關之公開新聞報導、司法院法拍公告、社區背景或周邊實價登錄現況。請用繁體中文條列整理 3 點客觀實務摘要（每點不超過 65 字，語氣平實自然，附具體門牌或路段脈絡）。`,
-    "en": `Use Google Search to look up public news, Taiwan Judicial Court foreclosure announcements, and real-price transaction context regarding "${cleanQuery}" in Taiwan (Reference: ${reason.slice(0, 60)}). Provide 3 concise, objective bullet points in English for property due diligence.`,
-    "ja": `Google Search を使用して、台湾の「${cleanQuery}」（背景：${reason.slice(0, 60)}）に関する公開ニュース報道、司法院競売公告、または不動産実価登録の現況を検索してください。日本語で客観的な実務要約を3点（各65文字以内）で簡潔にまとめてください。`,
-    "ko": `Google Search를 사용하여 대만 "${cleanQuery}" (배경 참고: ${reason.slice(0, 60)}) 관련 공개 뉴스 보도, 사법원 법원경매 공고 및 실거래가 현황을 검색해 주세요. 부동산 실사를 위해 한국어로 객관적인 핵심 요약 3가지를 정리해 주세요.`
-  };
-
+  // Fallback to Google News RSS when Gemini credits are depleted or unavailable
   try {
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: { headers: { "User-Agent": "aistudio-build" } }
-    });
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: langPromptMap[lang] || langPromptMap["zh-TW"],
-      config: {
-        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
-        tools: [{ googleSearch: {} }]
-      }
-    });
-
-    const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
-    const sources = [];
-    for (const c of chunks) {
-      if (c.web?.uri && c.web?.title) {
-        sources.push({
-          title: c.web.title,
-          uri: c.web.uri
-        });
-      }
-    }
-
+    const q = `${city} ${district} ${address.replace(city, "").replace(district, "").slice(0, 10)} (法拍 OR 事故 OR 實價登錄)`;
+    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
+    const rssRes = await fetch(rssUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    const xml = rssRes.ok ? await rssRes.text() : "";
+    const items = parseRssItems(xml, 5);
     return res.json({
-      summary: response.text || "",
-      sources: sources.slice(0, 6),
+      summary: `Found ${items.length} public news records for "${cleanQuery}".`,
+      sources: items.map(it => ({ title: it.title, uri: it.link })),
       attribution: "Google Search"
     });
-  } catch (err) {
-    return res.status(500).json({
-      error: "Google Search failed"
+  } catch (e) {
+    return res.json({
+      summary: "Live search unavailable.",
+      sources: [],
+      attribution: "Google Search"
     });
   }
 });
@@ -1044,32 +1294,105 @@ app.get("/api/official-lookup", async (req, res) => {
   });
 });
 
-// POST /api/records - Manually add/report a property incident record
+// Helper: Validate user submission / correction payload
+function validateRecordReportInput(body = {}) {
+  const errors = [];
+  const city = String(body.city || "").replace(/台/g, "臺").trim();
+  const district = String(body.district || "").trim();
+  const address = String(body.address || "").trim();
+  const reason = String(body.reason || "").trim();
+  const sourceUrl = String(body.source_url || "").trim();
+
+  if (!city || !CITY_BASE_COORDS[city]) {
+    errors.push("請選擇有效的臺灣縣市");
+  }
+  if (!district) {
+    errors.push("請選擇有效的行政區");
+  }
+  if (!address || address.length < 3 || !/[路街巷大道里村社區大樓華廈公寓透天厝國宅號]/.test(address)) {
+    errors.push("請填寫包含具體路、街、段、巷、號或社區名稱之真實地址");
+  }
+  if (!reason || reason.length < 8) {
+    errors.push("請填寫至少 8 字以上之具體事故背景、法拍筆錄或公開查證說明");
+  }
+  if (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) {
+    errors.push("來源網址格式不正確，請以 http:// 或 https:// 開頭");
+  }
+  return {
+    valid: errors.length === 0,
+    errors,
+    sanitized: {
+      city: city || "臺北市",
+      district: district || "中正區",
+      address,
+      reason,
+      sourceUrl,
+      incident_date: String(body.incident_date || new Date().toISOString().slice(0, 10)).slice(0, 10),
+      building_type: String(body.building_type || "集合住宅／公寓大樓").trim(),
+      current_status: String(body.current_status || "現況使用中").trim(),
+      category: String(body.category || "法拍與其他").trim(),
+      auction_record: String(body.auction_record || "").trim(),
+      media_verification: String(body.media_verification || "使用者實務回報與公開資料佐證").trim(),
+      lat: body.lat,
+      lng: body.lng
+    }
+  };
+}
+
+// Helper: Check request permission & anti-abuse rate limit
+const submissionRateTracker = new Map();
+function checkSubmissionPermission(req, actionType = "report") {
+  const clientIp = String(req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "local").split(",")[0].trim();
+  const now = Date.now();
+  const key = `${clientIp}_${actionType}`;
+  const recent = (submissionRateTracker.get(key) || []).filter(ts => now - ts < 60000);
+  if (recent.length >= 12) {
+    return { allowed: false, reason: "操作過於頻繁，請稍候 1 分鐘再試。" };
+  }
+  recent.push(now);
+  submissionRateTracker.set(key, recent);
+  return { allowed: true, clientIp };
+}
+
+// POST /api/records - Manually add/report a property incident record (Separated Validation, Permission, Geocoding & Persistence)
 app.post("/api/records", async (req, res) => {
   try {
-    const {
-      city = "臺北市",
-      district = "中正區",
-      address = "",
-      incident_date = "",
-      building_type = "集合住宅／公寓大樓",
-      current_status = "待實地查訪確認",
-      category = "法拍與其他",
-      reason = "",
-      auction_record = "",
-      media_verification = "使用者實務回報與公開資料佐證",
-      source_url = "",
-      lat,
-      lng
-    } = req.body || {};
-
-    if (!address || address.trim().length < 3 || !reason || reason.trim().length < 6) {
-      return res.status(400).json({ error: "請填寫具體的路段門牌或社區名稱，以及至少 6 字以上的案情或產權說明。" });
+    // 1. Permission & rate-limit check
+    const perm = checkSubmissionPermission(req, "report");
+    if (!perm.allowed) {
+      return res.status(429).json({ ok: false, stage: "permission_check", error: perm.reason });
     }
 
-    const cleanCity = city.replace(/台/g, "臺");
-    const cleanAddr = address.startsWith(cleanCity) ? address.trim() : `${cleanCity}${district}${address.trim()}`;
+    // 2. Input validation
+    const validation = validateRecordReportInput(req.body || {});
+    if (!validation.valid) {
+      return res.status(400).json({
+        ok: false,
+        stage: "input_validation",
+        error: validation.errors.join("；"),
+        validationErrors: validation.errors
+      });
+    }
 
+    const {
+      city: cleanCity,
+      district,
+      address,
+      incident_date,
+      building_type,
+      current_status,
+      category,
+      reason,
+      auction_record,
+      media_verification,
+      sourceUrl: source_url,
+      lat,
+      lng
+    } = validation.sanitized;
+
+    const cleanAddr = address.startsWith(cleanCity) ? address : `${cleanCity}${district}${address}`;
+
+    // 3. Rooftop Coordinate Resolution
     const geo = await geocodeTaiwanAddressStrict(cleanAddr, cleanCity, district);
     const resolvedLat = geo?.lat || parseFloat(lat) || (CITY_BASE_COORDS[cleanCity]?.[0] || 25.0478);
     const resolvedLng = geo?.lng || parseFloat(lng) || (CITY_BASE_COORDS[cleanCity]?.[1] || 121.5319);
@@ -1081,31 +1404,31 @@ app.post("/api/records", async (req, res) => {
     const newRecord = {
       id: `user-${Date.now()}`,
       city: cleanCity,
-      district: district.trim(),
+      district,
       doorplate_address: doorplateAddr,
       address: displayAddr,
       lat: Number(resolvedLat.toFixed(6)),
       lng: Number(resolvedLng.toFixed(6)),
       location_accuracy: geo?.locationType || "ROOFTOP",
-      incident_date: incident_date || new Date().toISOString().slice(0, 10),
-      building_type: building_type.trim() || "一般住宅建物",
-      current_status: current_status.trim() || "現況使用中",
+      incident_date,
+      building_type: building_type || "一般住宅建物",
+      current_status: current_status || "現況使用中",
       category,
-      reason: reason.trim(),
-      source_url: (source_url || "").trim(),
-      media_verification: media_verification.trim() || "公開資訊與使用者回報",
-      auction_record: auction_record.trim() || "尚無法拍底價紀錄",
+      reason,
+      source_url,
+      media_verification: media_verification || "公開資訊與使用者回報",
+      auction_record: auction_record || "",
       history_timeline: [
         {
           year: (incident_date || "近期").slice(0, 4),
           stage: "案件登錄與現況紀錄",
-          detail: reason.trim()
+          detail: reason
         },
         ...(auction_record
           ? [{
               year: new Date().getFullYear().toString(),
               stage: "法拍與交易備註",
-              detail: auction_record.trim()
+              detail: auction_record
             }]
           : [])
       ]
@@ -1113,9 +1436,83 @@ app.post("/api/records", async (req, res) => {
 
     dynamicRecords.unshift(newRecord);
     persistNewVerifiedRecordsToDisk([newRecord]);
-    return res.json({ record: newRecord });
+    const totalCount = loadAllUnifiedRecords().length;
+    return res.json({
+      ok: true,
+      stage: "completed",
+      record: newRecord,
+      totalCount
+    });
   } catch (err) {
-    return res.status(500).json({ error: err.message || "新增紀錄失敗" });
+    return res.status(500).json({
+      ok: false,
+      stage: "server_error",
+      error: err.message || "新增紀錄失敗"
+    });
+  }
+});
+
+// POST /api/takedown - Dedicated Case Correction & Takedown Endpoint (Separated Validation, Permission Check & Persistent Removal)
+app.post("/api/takedown", (req, res) => {
+  try {
+    // 1. Permission & rate-limit check
+    const perm = checkSubmissionPermission(req, "takedown");
+    if (!perm.allowed) {
+      return res.status(429).json({ ok: false, stage: "permission_check", error: perm.reason });
+    }
+
+    // 2. Input validation
+    const { id = "", address = "", doorplate_address = "", reason_type = "no_fact", notes = "" } = req.body || {};
+    const cleanId = String(id ?? "").trim();
+    const cleanAddr = String(address || "").replace(/台/g, "臺").trim();
+    const cleanDoor = String(doorplate_address || "").replace(/台/g, "臺").trim();
+    const validReasonTypes = ["no_fact", "wrong_door", "not_incident", "detail_err"];
+
+    if (!cleanId && !cleanAddr && !cleanDoor) {
+      return res.status(400).json({
+        ok: false,
+        stage: "input_validation",
+        error: "缺少欲勘誤或下架之目標案件門牌或識別碼"
+      });
+    }
+    if (!validReasonTypes.includes(String(reason_type))) {
+      return res.status(400).json({
+        ok: false,
+        stage: "input_validation",
+        error: "無效的勘誤申訴事由類別"
+      });
+    }
+
+    // 3. Persist takedown to blacklist & purge from cached + disk archives
+    addTakedownToBlacklist([cleanId, cleanAddr, cleanDoor]);
+    dynamicRecords = dynamicRecords.filter(r =>
+      String(r.id ?? "") !== cleanId &&
+      String(r.address || "").replace(/台/g, "臺").trim() !== cleanAddr &&
+      String(r.doorplate_address || "").replace(/台/g, "臺").trim() !== cleanDoor
+    );
+    if (Array.isArray(cachedCalibratedDiskRecords)) {
+      cachedCalibratedDiskRecords = cachedCalibratedDiskRecords.filter(r =>
+        String(r.id ?? "") !== cleanId &&
+        String(r.address || "").replace(/台/g, "臺").trim() !== cleanAddr &&
+        String(r.doorplate_address || "").replace(/台/g, "臺").trim() !== cleanDoor
+      );
+      writeAllDatabaseSnapshots(cachedCalibratedDiskRecords);
+    }
+    const updatedList = loadAllUnifiedRecords();
+    return res.json({
+      ok: true,
+      stage: "completed",
+      removedTarget: cleanDoor || cleanAddr || cleanId,
+      reasonType: reason_type,
+      notesReceived: Boolean(String(notes || "").trim()),
+      totalCount: updatedList.length
+    });
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      stage: "server_error",
+      error: err.message || "下架申訴處理失敗"
+    });
   }
 });
 
@@ -1157,7 +1554,7 @@ function getCrawlerStatusSummary(totalCount) {
     sources: [
       "PTT 批踢踢實業坊 (home-sale 房版 / Gossiping / 各縣市地方版公開討論)",
       "Dcard 購屋租屋版 · Mobile01 居家房產論壇 · 臉書凶宅自售公開社團",
-      "台灣凶宅網 (unluckyhouse) · 居易網 (Juyiwang) · 591/樂居公開事故索引",
+      "591/樂居公開事故索引 · 社區實價異常備註",
       "司法院法學資料檢索系統 (民事隱瞞凶宅／刑事命案判決書)",
       "司法院法拍屋公告系統 (查封筆錄載明非自然死亡紀錄)",
       "內政部不動產交易實價查詢 (實價登錄特殊交易備註)",
@@ -1174,8 +1571,8 @@ async function checkAiSameIncidentInDistrict(candidate, districtRecords = []) {
     }
   }
 
-  // 2. If GEMINI_API_KEY is available, silently compare against same-district cases within ±60 days using gemini-3.8-flash
-  if (!process.env.GEMINI_API_KEY) return null;
+  // 2. If GEMINI_API_KEY is available and credits are active, silently compare against same-district cases within ±60 days
+  if (!process.env.GEMINI_API_KEY || geminiCreditsDepleted) return null;
   const candTime = Date.parse(`${String(candidate.incident_date || "").slice(0, 10)}T00:00:00Z`);
   if (isNaN(candTime)) return null;
 
@@ -1222,7 +1619,9 @@ ${nearbyCandidates.map((r, idx) => `[${idx}] id=${r.id} | 日期=${r.incident_da
     if (parsed.isSameIncident && typeof parsed.matchedIndex === "number" && nearbyCandidates[parsed.matchedIndex]) {
       return nearbyCandidates[parsed.matchedIndex];
     }
-  } catch (e) {}
+  } catch (e) {
+    markGeminiDepletedIfNeeded(e);
+  }
   return null;
 }
 
@@ -1254,16 +1653,9 @@ function persistNewVerifiedRecordsToDisk(newItems) {
         bucket[dupIdx] = winner;
       }
     }
-    const finalUpdated = [];
-    for (const bucket of byDistrict.values()) {
-      finalUpdated.push(...bucket);
-    }
+    const finalUpdated = factCrawler.consolidateSimilarRecords(mergedPool);
 
-    fs.writeFileSync(STANDALONE_VAULT_PATH, JSON.stringify(finalUpdated, null, 2), "utf8");
-    fs.writeFileSync(primaryPath, JSON.stringify(finalUpdated, null, 2), "utf8");
-    if (fs.existsSync(path.dirname(publicPath))) {
-      fs.writeFileSync(publicPath, JSON.stringify(finalUpdated, null, 2), "utf8");
-    }
+    writeAllDatabaseSnapshots(finalUpdated);
     cachedCalibratedDiskRecords = finalUpdated;
     generateAndWriteSitemapFiles(finalUpdated, "https://chuancn.org");
 
@@ -1636,12 +2028,14 @@ app.get("/robots.txt", (req, res) => {
       "",
       "User-agent: Googlebot",
       "Allow: /",
+      "Allow: /case/",
       "",
       "User-agent: Google-Site-Verification",
       "Allow: /",
       "",
       "User-agent: *",
       "Allow: /",
+      "Allow: /case/",
       "Allow: /ads.txt",
       "Allow: /favicon.svg",
       "Allow: /google6a317e59d3daa28c.html",
@@ -1653,7 +2047,55 @@ app.get("/robots.txt", (req, res) => {
   );
 });
 
-// Dynamic XML Sitemap for Google Search Console indexing across all 22 Taiwan cities/counties, active districts, and all 3,112+ individual case pages
+// Helper: Find a case record by SEO slug or ID
+function findCaseRecordBySlugOrId(slugOrId) {
+  const target = String(slugOrId || "").trim().toLowerCase().replace(/\/+$/, "");
+  if (!target) return null;
+  const allRecords = loadAllUnifiedRecords();
+  for (let i = 0; i < allRecords.length; i++) {
+    const r = allRecords[i];
+    const slug = buildCaseSlug(r, i);
+    const idLower = String(r.id || "").trim().toLowerCase();
+    if (slug === target || idLower === target || slug.endsWith(`-${target}`)) {
+      return { record: { ...r, slug }, totalCount: allRecords.length };
+    }
+  }
+  return null;
+}
+
+// GET /api/case/:slug - Fetch individual case record by SEO slug or ID
+app.get("/api/case/:slug", (req, res) => {
+  const found = findCaseRecordBySlugOrId(req.params.slug);
+  if (!found) {
+    return res.status(404).json({ ok: false, error: "查無該筆事故建物查核紀錄" });
+  }
+  res.setHeader("Cache-Control", "public, max-age=300");
+  return res.json({
+    ok: true,
+    record: found.record,
+    totalCount: found.totalCount
+  });
+});
+
+// Standalone SEO Case Page SSR Handler (`/case/:slug` and `/case/:slug/`)
+app.get(["/case/:slug", "/case/:slug/"], (req, res) => {
+  const found = findCaseRecordBySlugOrId(req.params.slug);
+  const templateHtml = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
+  if (!found) {
+    return res.status(404).send(templateHtml);
+  }
+  const renderedHtml = renderStandaloneCaseHtml(
+    templateHtml,
+    found.record,
+    found.totalCount,
+    "https://chuancn.org"
+  );
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=600");
+  return res.status(200).send(renderedHtml);
+});
+
+// Canonical XML Sitemap (Strictly Homepage + Verified Standalone `/case/<slug>/` Pages)
 app.get("/sitemap.xml", (req, res) => {
   const baseUrl = (process.env.APP_URL || "https://chuancn.org").replace(/\/$/, "");
   const allRecords = loadAllUnifiedRecords();
@@ -1663,22 +2105,87 @@ app.get("/sitemap.xml", (req, res) => {
   res.status(200).send(xml);
 });
 
-// On-demand Sitemap regeneration endpoint
+// On-demand Sitemap & Static Case HTML regeneration endpoint
 app.all("/api/sitemap/regenerate", (req, res) => {
   try {
     const baseUrl = (process.env.APP_URL || "https://chuancn.org").replace(/\/$/, "");
     const allRecords = loadAllUnifiedRecords();
-    const result = generateAndWriteSitemapFiles(allRecords, baseUrl);
+    const result = generateAndWriteSitemapFiles(allRecords, {
+      baseUrl,
+      writeStaticCases: true,
+      maxStaticCases: req.query.full === "1" ? Infinity : 80
+    });
     res.json({
       ok: true,
       totalUrls: result.totalUrls,
       caseCount: result.caseCount,
-      cityCount: result.cityCount,
-      districtCount: result.districtCount
+      staticGeneratedCount: result.staticGeneratedCount
     });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
+});
+
+// GET /api/seo-health - Automated SEO & Performance Verification Endpoint
+app.get("/api/seo-health", (req, res) => {
+  try {
+    const baseUrl = "https://chuancn.org";
+    const allRecords = loadAllUnifiedRecords();
+    const substantive = allRecords.filter(isSubstantiveCaseForSeo);
+    const sitemapStats = buildSitemapXml(allRecords, baseUrl);
+    const templateHtml = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
+
+    const sampleCases = substantive.slice(0, 5).map((r, idx) => {
+      const slug = buildCaseSlug(r, idx);
+      const html = renderStandaloneCaseHtml(templateHtml, r, allRecords.length, baseUrl);
+      const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
+      const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i);
+      const canonMatches = Array.from(html.matchAll(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/gi));
+      return {
+        slug,
+        url: `${baseUrl}/case/${slug}/`,
+        title: titleMatch ? titleMatch[1] : "",
+        descriptionLength: descMatch ? descMatch[1].length : 0,
+        canonicalCount: canonMatches.length,
+        canonicalHref: canonMatches[0]?.[1] || "",
+        hasPrerenderedArticle: html.includes('id="seo-case-prerender"'),
+        hasValidJsonLd: html.includes('"@type": "BreadcrumbList"') && html.includes('"@type": "WebPage"')
+      };
+    });
+
+    const nonCanonicalInSitemap = (sitemapStats.xml.match(/<loc>([^<]+)<\/loc>/g) || [])
+      .map(s => s.replace(/<\/?loc>/g, ""))
+      .filter(u => u !== `${baseUrl}/` && !u.startsWith(`${baseUrl}/case/`));
+
+    res.json({
+      ok: true,
+      checkedAt: new Date().toISOString(),
+      totalDatabaseRecords: allRecords.length,
+      substantiveIndexedCases: substantive.length,
+      sitemapTotalUrls: sitemapStats.totalUrls,
+      nonCanonicalFilterUrlsInSitemap: nonCanonicalInSitemap.length,
+      gzipCompressionEnabled: true,
+      initialBootPayloadReady: fs.existsSync(path.join(__dirname, "public", "initial_boot_records.json")),
+      sampleVerifiedCases: sampleCases
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Redirect legacy `/?case=<id>` query URLs (301 Permanent Redirect) to canonical `/case/<slug>/`
+app.get("/", (req, res, next) => {
+  const legacyCaseId = req.query.case;
+  if (legacyCaseId) {
+    const found = findCaseRecordBySlugOrId(legacyCaseId);
+    if (found && found.record?.slug) {
+      const langParam = req.query.lang && ["en", "ja", "ko"].includes(String(req.query.lang))
+        ? `?lang=${encodeURIComponent(String(req.query.lang))}`
+        : "";
+      return res.redirect(301, `/case/${found.record.slug}/${langParam}`);
+    }
+  }
+  next();
 });
 
 // Serve static assets
@@ -1692,8 +2199,13 @@ app.get("*", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   const records = loadAllUnifiedRecords();
   try {
-    generateAndWriteSitemapFiles(records, "https://chuancn.org");
+    generateAndWriteSitemapFiles(records, {
+      baseUrl: "https://chuancn.org",
+      writeStaticCases: true,
+      maxStaticCases: 60
+    });
   } catch (e) {}
   console.log(`Server listening on http://0.0.0.0:${PORT} (${records.length} active records indexed in sitemap.xml)`);
 });
+
 

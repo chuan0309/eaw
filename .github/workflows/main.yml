@@ -44,19 +44,20 @@ jobs:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: python -u crawler.py
 
-      - name: 5. 更新 Sitemap 並自動提交推送至網站儲存庫 (觸發 Cloudflare Pages 部署)
+      - name: 5. 更新 Sitemap 與獨立爬蟲備份並自動提交推送至網站儲存庫 (觸發 Cloudflare Pages 部署)
         run: |
           if [ -f generate_sitemap.js ] && command -v node >/dev/null 2>&1; then
             node generate_sitemap.js || true
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add calibrated_archive.json public/calibrated_archive.json sitemap.xml public/sitemap.xml ads.txt public/ads.txt || true
+          git add calibrated_archive.json public/calibrated_archive.json crawler_vault_backup.json public/crawler_vault_backup.json sitemap.xml public/sitemap.xml ads.txt public/ads.txt || true
           if ! git diff --staged --quiet; then
-            git commit -m "chore(crawler): auto-sync newly crawled cases to calibrated_archive.json & sitemap.xml"
+            git commit -m "chore(crawler): auto-sync newly crawled cases to calibrated_archive.json, crawler_vault_backup.json & sitemap.xml"
             git pull --rebase origin main || true
             git push origin HEAD:main
-            echo "✅ 已成功將最新爬蟲資料寫入 calibrated_archive.json 與 sitemap.xml 並推送至網站！"
+            echo "✅ 已成功將最新爬蟲資料寫入 calibrated_archive.json、獨立備份檔 crawler_vault_backup.json 與 sitemap.xml 並推送至網站！"
           else
             echo "ℹ️ 本輪無新增靜態檔案變更需提交。"
           fi
+

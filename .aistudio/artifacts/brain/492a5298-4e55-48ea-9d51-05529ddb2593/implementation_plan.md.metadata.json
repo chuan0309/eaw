@@ -1,6 +1,6 @@
 {
-  "summary":  "Implementation plan for silent background semantic & AI-assisted duplicate case deduplication (prioritizing URL/judgment-verified records) and complete removal of internal verification/date-inference explanation text from the website UI and dataset.",
-  "updatedAt":  "2026-10-22T11:39:52.508019609Z",
+  "summary":  "臺灣凶宅地圖（chuancn.org）整體 SEO 架構、獨立案件頁面（SSR + SSG 雙軌輸出）、Sitemap/Canonical 一致性、JSON-LD 結構化資料、行動裝置 PageSpeed 效能優化與四語系（中/英/日/韓）完整翻譯修復計畫。",
+  "updatedAt":  "2026-10-23T08:39:33.459338152Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

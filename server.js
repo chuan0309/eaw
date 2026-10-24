@@ -100,33 +100,73 @@ const CITY_BASE_COORDS = {
   "臺東縣": [22.7583, 121.1444],
   "澎湖縣": [23.5711, 119.5793],
   "金門縣": [24.4493, 118.3767],
-  "連江縣": [26.1605, 119.9519]
+  "連江縣": [26.1605, 119.9519],
+  // Japan (JP)
+  "東京都": [35.6895, 139.6917],
+  "大阪府": [34.6937, 135.5023],
+  "神奈川県": [35.4478, 139.6425],
+  "愛知県": [35.1802, 136.9066],
+  "福岡県": [33.5902, 130.4017],
+  "北海道": [43.0642, 141.3469],
+  "京都府": [35.0116, 135.7681],
+  "兵庫県": [34.6913, 135.1830],
+  "埼玉県": [35.8569, 139.6489],
+  "千葉県": [35.6051, 140.1233],
+  // South Korea (KR)
+  "首爾特別市": [37.5665, 126.9780],
+  "釜山廣域市": [35.1796, 129.0756],
+  "仁川廣域市": [37.4563, 126.7052],
+  "京畿道": [37.2752, 127.0095],
+  "大邱廣域市": [35.8714, 128.6014],
+  "大田廣域市": [36.3504, 127.3845],
+  "光州廣域市": [35.1595, 126.8526],
+  "濟州特別自治道": [33.4996, 126.5312]
 };
 
-// 臺灣各縣市對應之司法院地方法院管轄與地政機關資訊
+// 臺灣、日本、韓國各行政區對應之管轄法院與不動產實價機關資訊
 const OFFICIAL_JURISDICTION_MAP = {
-  "臺北市": { courtName: "臺灣臺北／士林地方法院", courtCode: "TPD / SLD", landOffice: "臺北市政府地政局（臺北地政雲）", lvrCode: "A" },
-  "新北市": { courtName: "臺灣新北地方法院", courtCode: "PCD", landOffice: "新北市政府地政局（新北不動產愛連網）", lvrCode: "F" },
-  "桃園市": { courtName: "臺灣桃園地方法院", courtCode: "TYD", landOffice: "桃園市政府地政局（桃園住宅及不動產資訊桃寶網）", lvrCode: "H" },
-  "臺中市": { courtName: "臺灣臺中地方法院", courtCode: "TCD", landOffice: "臺中市政府地政局（158空間資訊網）", lvrCode: "B" },
-  "臺南市": { courtName: "臺灣臺南地方法院", courtCode: "TND", landOffice: "臺南市政府地政局", lvrCode: "D" },
-  "高雄市": { courtName: "臺灣高雄／橋頭地方法院", courtCode: "KSD / CTD", landOffice: "高雄市政府地政局（高雄實價網）", lvrCode: "E" },
-  "基隆市": { courtName: "臺灣基隆地方法院", courtCode: "KLD", landOffice: "基隆市政府地政處", lvrCode: "C" },
-  "新竹市": { courtName: "臺灣新竹地方法院", courtCode: "SCD", landOffice: "新竹市政府地政處（新竹市幸福宜居網）", lvrCode: "O" },
-  "新竹縣": { courtName: "臺灣新竹地方法院", courtCode: "SCD", landOffice: "新竹縣政府地政處", lvrCode: "J" },
-  "苗栗縣": { courtName: "臺灣苗栗地方法院", courtCode: "MLD", landOffice: "苗栗縣政府地政處", lvrCode: "K" },
-  "彰化縣": { courtName: "臺灣彰化地方法院", courtCode: "CHD", landOffice: "彰化縣政府地政處", lvrCode: "N" },
-  "南投縣": { courtName: "臺灣南投地方法院", courtCode: "NTD", landOffice: "南投縣政府地政處", lvrCode: "M" },
-  "雲林縣": { courtName: "臺灣雲林地方法院", courtCode: "ULD", landOffice: "雲林縣政府地政處", lvrCode: "P" },
-  "嘉義市": { courtName: "臺灣嘉義地方法院", courtCode: "CYD", landOffice: "嘉義市政府地政處", lvrCode: "I" },
-  "嘉義縣": { courtName: "臺灣嘉義地方法院", courtCode: "CYD", landOffice: "嘉義縣政府地政處", lvrCode: "Q" },
-  "屏東縣": { courtName: "臺灣屏東地方法院", courtCode: "PTD", landOffice: "屏東縣政府地政處", lvrCode: "T" },
-  "宜蘭縣": { courtName: "臺灣宜蘭地方法院", courtCode: "ILD", landOffice: "宜蘭縣政府地政處", lvrCode: "G" },
-  "花蓮縣": { courtName: "臺灣花蓮地方法院", courtCode: "HLD", landOffice: "花蓮縣政府地政處", lvrCode: "U" },
-  "臺東縣": { courtName: "臺灣臺東地方法院", courtCode: "TTD", landOffice: "臺東縣政府地政處", lvrCode: "V" },
-  "澎湖縣": { courtName: "臺灣澎湖地方法院", courtCode: "PHD", landOffice: "澎湖縣政府地政處", lvrCode: "X" },
-  "金門縣": { courtName: "福建金門地方法院", courtCode: "KMD", landOffice: "金門縣地政局", lvrCode: "W" },
-  "連江縣": { courtName: "福建連江地方法院", courtCode: "LCD", landOffice: "連江縣地政局", lvrCode: "Z" }
+  "臺北市": { courtName: "臺灣臺北／士林地方法院", courtCode: "TPD / SLD", landOffice: "臺北市政府地政局（臺北地政雲）", lvrCode: "A", country: "TW" },
+  "新北市": { courtName: "臺灣新北地方法院", courtCode: "PCD", landOffice: "新北市政府地政局（新北不動產愛連網）", lvrCode: "F", country: "TW" },
+  "桃園市": { courtName: "臺灣桃園地方法院", courtCode: "TYD", landOffice: "桃園市政府地政局（桃園住宅及不動產資訊桃寶網）", lvrCode: "H", country: "TW" },
+  "臺中市": { courtName: "臺灣臺中地方法院", courtCode: "TCD", landOffice: "臺中市政府地政局（158空間資訊網）", lvrCode: "B", country: "TW" },
+  "臺南市": { courtName: "臺灣臺南地方法院", courtCode: "TND", landOffice: "臺南市政府地政局", lvrCode: "D", country: "TW" },
+  "高雄市": { courtName: "臺灣高雄／橋頭地方法院", courtCode: "KSD / CTD", landOffice: "高雄市政府地政局（高雄實價網）", lvrCode: "E", country: "TW" },
+  "基隆市": { courtName: "臺灣基隆地方法院", courtCode: "KLD", landOffice: "基隆市政府地政處", lvrCode: "C", country: "TW" },
+  "新竹市": { courtName: "臺灣新竹地方法院", courtCode: "SCD", landOffice: "新竹市政府地政處（新竹市幸福宜居網）", lvrCode: "O", country: "TW" },
+  "新竹縣": { courtName: "臺灣新竹地方法院", courtCode: "SCD", landOffice: "新竹縣政府地政處", lvrCode: "J", country: "TW" },
+  "苗栗縣": { courtName: "臺灣苗栗地方法院", courtCode: "MLD", landOffice: "苗栗縣政府地政處", lvrCode: "K", country: "TW" },
+  "彰化縣": { courtName: "臺灣彰化地方法院", courtCode: "CHD", landOffice: "彰化縣政府地政處", lvrCode: "N", country: "TW" },
+  "南投縣": { courtName: "臺灣南投地方法院", courtCode: "NTD", landOffice: "南投縣政府地政處", lvrCode: "M", country: "TW" },
+  "雲林縣": { courtName: "臺灣雲林地方法院", courtCode: "ULD", landOffice: "雲林縣政府地政處", lvrCode: "P", country: "TW" },
+  "嘉義市": { courtName: "臺灣嘉義地方法院", courtCode: "CYD", landOffice: "嘉義市政府地政處", lvrCode: "I", country: "TW" },
+  "嘉義縣": { courtName: "臺灣嘉義地方法院", courtCode: "CYD", landOffice: "嘉義縣政府地政處", lvrCode: "Q", country: "TW" },
+  "屏東縣": { courtName: "臺灣屏東地方法院", courtCode: "PTD", landOffice: "屏東縣政府地政處", lvrCode: "T", country: "TW" },
+  "宜蘭縣": { courtName: "臺灣宜蘭地方法院", courtCode: "ILD", landOffice: "宜蘭縣政府地政處", lvrCode: "G", country: "TW" },
+  "花蓮縣": { courtName: "臺灣花蓮地方法院", courtCode: "HLD", landOffice: "花蓮縣政府地政處", lvrCode: "U", country: "TW" },
+  "臺東縣": { courtName: "臺灣臺東地方法院", courtCode: "TTD", landOffice: "臺東縣政府地政處", lvrCode: "V", country: "TW" },
+  "澎湖縣": { courtName: "臺灣澎湖地方法院", courtCode: "PHD", landOffice: "澎湖縣政府地政處", lvrCode: "X", country: "TW" },
+  "金門縣": { courtName: "福建金門地方法院", courtCode: "KMD", landOffice: "金門縣地政局", lvrCode: "W", country: "TW" },
+  "連江縣": { courtName: "福建連江地方法院", courtCode: "LCD", landOffice: "連江縣地政局", lvrCode: "Z", country: "TW" },
+  // Japan (JP)
+  "東京都": { courtName: "東京地方裁判所（民事執行センター BIT）", courtCode: "TOKYO-DC", landOffice: "国土交通省 不動産情報ライブラリ／東京都都市整備局", lvrCode: "JP-13", country: "JP" },
+  "大阪府": { courtName: "大阪地方裁判所（不動産競売 BIT）", courtCode: "OSAKA-DC", landOffice: "国土交通省 不動産情報ライブラリ／大阪府建築振興課", lvrCode: "JP-27", country: "JP" },
+  "神奈川県": { courtName: "横浜地方裁判所（不動産競売 BIT）", courtCode: "YOKOHAMA-DC", landOffice: "国土交通省 不動産情報ライブラリ／神奈川県県土整備局", lvrCode: "JP-14", country: "JP" },
+  "愛知県": { courtName: "名古屋地方裁判所（不動産競売 BIT）", courtCode: "NAGOYA-DC", landOffice: "国土交通省 不動産情報ライブラリ／愛知県都市・交通局", lvrCode: "JP-23", country: "JP" },
+  "福岡県": { courtName: "福岡地方裁判所（不動産競売 BIT）", courtCode: "FUKUOKA-DC", landOffice: "国土交通省 不動産情報ライブラリ／福岡県建築都市部", lvrCode: "JP-40", country: "JP" },
+  "北海道": { courtName: "札幌地方裁判所（不動産競売 BIT）", courtCode: "SAPPORO-DC", landOffice: "国土交通省 不動産情報ライブラリ／北海道建設部", lvrCode: "JP-01", country: "JP" },
+  "京都府": { courtName: "京都地方裁判所（不動産競売 BIT）", courtCode: "KYOTO-DC", landOffice: "国土交通省 不動産情報ライブラリ／京都府建設交通部", lvrCode: "JP-26", country: "JP" },
+  "兵庫県": { courtName: "神戸地方裁判所（不動産競売 BIT）", courtCode: "KOBE-DC", landOffice: "国土交通省 不動産情報ライブラリ／兵庫県まちづくり部", lvrCode: "JP-28", country: "JP" },
+  "埼玉県": { courtName: "さいたま地方裁判所（不動産競売 BIT）", courtCode: "SAITAMA-DC", landOffice: "国土交通省 不動産情報ライブラリ／埼玉県都市整備部", lvrCode: "JP-11", country: "JP" },
+  "千葉県": { courtName: "千葉地方裁判所（不動産競売 BIT）", courtCode: "CHIBA-DC", landOffice: "国土交通省 不動産情報ライブラリ／千葉県県土整備部", lvrCode: "JP-12", country: "JP" },
+  // South Korea (KR)
+  "首爾特別市": { courtName: "서울중앙/동부/남부/북부/서부지방법원 (首爾地方法院)", courtCode: "SEOUL-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-11", country: "KR" },
+  "釜山廣域市": { courtName: "부산지방법원 / 동부·서부지원 (釜山地方法院)", courtCode: "BUSAN-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-26", country: "KR" },
+  "仁川廣域市": { courtName: "인천지방법원 / 부천지원 (仁川地方法院)", courtCode: "INCHEON-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-28", country: "KR" },
+  "京畿道": { courtName: "수원지방법원 / 의정부지방법원 (水原／議政府地方法院)", courtCode: "GYEONGGI-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-41", country: "KR" },
+  "大邱廣域市": { courtName: "대구지방법원 / 서부지원 (大邱地方法院)", courtCode: "DAEGU-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-27", country: "KR" },
+  "大田廣域市": { courtName: "대전지방법원 (大田地方法院)", courtCode: "DAEJEON-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-30", country: "KR" },
+  "光州廣域市": { courtName: "광주지방법원 (光州地方法院)", courtCode: "GWANGJU-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-29", country: "KR" },
+  "濟州特別自治道": { courtName: "제주지방법원 (濟州地方法院)", courtCode: "JEJU-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-50", country: "KR" }
 };
 
 // 具真實公開新聞、司法院法拍與判決認證之臺灣指標性法定凶宅建物
@@ -207,7 +247,14 @@ const CURATED_LANDMARK_CASES = [
 
 let dynamicRecords = [];
 let cachedCalibratedDiskRecords = null;
+let cachedUnifiedFinalResult = null;
+let cachedUnifiedStats = null;
 const caseTranslationCache = new Map();
+
+function invalidateUnifiedRecordsCache() {
+  cachedUnifiedFinalResult = null;
+  cachedUnifiedStats = null;
+}
 
 function loadTakedownBlacklist() {
   try {
@@ -227,12 +274,13 @@ function addTakedownToBlacklist(keys = []) {
   try {
     fs.writeFileSync(TAKEDOWN_BLACKLIST_PATH, JSON.stringify([...current], null, 2), "utf8");
   } catch (e) {}
+  invalidateUnifiedRecordsCache();
   return current;
 }
 
 function writeAllDatabaseSnapshots(records) {
   if (!Array.isArray(records) || records.length === 0) return;
-  const serialized = JSON.stringify(records, null, 2);
+  const serialized = JSON.stringify(records);
   const targets = [
     STANDALONE_VAULT_PATH,
     CALIBRATED_ARCHIVE_PATHS[0],
@@ -251,6 +299,10 @@ function writeAllDatabaseSnapshots(records) {
 }
 
 function loadAllUnifiedRecords() {
+  if (cachedUnifiedFinalResult && dynamicRecords.length === 0) {
+    return cachedUnifiedFinalResult;
+  }
+
   const takedownSet = loadTakedownBlacklist();
   if (!cachedCalibratedDiskRecords) {
     let workspaceList = [];
@@ -268,16 +320,18 @@ function loadAllUnifiedRecords() {
     }
 
     let crawlerBackupList = [];
-    for (const backupPath of CRAWLER_BACKUP_PATHS) {
-      if (fs.existsSync(backupPath)) {
-        try {
-          const rawBackup = fs.readFileSync(backupPath, "utf8");
-          const parsedBackup = JSON.parse(rawBackup);
-          if (Array.isArray(parsedBackup) && parsedBackup.length > 0) {
-            crawlerBackupList = parsedBackup;
-            break;
-          }
-        } catch (e) {}
+    if (workspaceList.length === 0) {
+      for (const backupPath of CRAWLER_BACKUP_PATHS) {
+        if (fs.existsSync(backupPath)) {
+          try {
+            const rawBackup = fs.readFileSync(backupPath, "utf8");
+            const parsedBackup = JSON.parse(rawBackup);
+            if (Array.isArray(parsedBackup) && parsedBackup.length > 0) {
+              crawlerBackupList = parsedBackup;
+              break;
+            }
+          } catch (e) {}
+        }
       }
     }
 
@@ -292,7 +346,6 @@ function loadAllUnifiedRecords() {
       } catch (e) {}
     }
 
-    // Priority Order: 1. Workspace Calibrated Archive -> 2. Crawler Vault Backup -> 3. Standalone External Vault
     const unionMap = new Map();
     for (const rec of [...workspaceList, ...crawlerBackupList, ...standaloneVaultList]) {
       if (!rec || !rec.address) continue;
@@ -308,21 +361,28 @@ function loadAllUnifiedRecords() {
       }
     }
     const rawUnioned = Array.from(unionMap.values());
-    const unioned = factCrawler.consolidateSimilarRecords(rawUnioned);
+    const hadShortNarrative = rawUnioned.some(r => String(r?.reason || "").trim().length < 185);
+    const needsReConsolidation = hadShortNarrative || (workspaceList.length > 0 && rawUnioned.length !== workspaceList.length);
+    const unioned = needsReConsolidation
+      ? factCrawler.consolidateSimilarRecords(rawUnioned)
+      : rawUnioned;
     if (unioned.length > 0) {
       cachedCalibratedDiskRecords = unioned;
       factCrawler.initDistrictCoordinates(unioned);
-      if (unioned.length !== workspaceList.length || unioned.length !== crawlerBackupList.length || !fs.existsSync(CRAWLER_BACKUP_PATHS[0])) {
+      if (needsReConsolidation) {
         writeAllDatabaseSnapshots(unioned);
       }
     }
   }
 
   const baseList = cachedCalibratedDiskRecords || CURATED_LANDMARK_CASES;
-  const combined = factCrawler.consolidateSimilarRecords([...dynamicRecords, ...baseList]);
+  const combined = dynamicRecords.length > 0
+    ? factCrawler.consolidateSimilarRecords([...dynamicRecords, ...baseList])
+    : baseList;
 
   const result = [];
-  for (const item of combined) {
+  for (let i = 0; i < combined.length; i++) {
+    const item = combined[i];
     if (!item || !item.address) continue;
     const recId = String(item.id !== undefined && item.id !== null ? item.id : "");
     const recAddr = String(item.address || "").replace(/台/g, "臺").trim();
@@ -330,17 +390,23 @@ function loadAllUnifiedRecords() {
     if (takedownSet.has(recId) || takedownSet.has(recAddr) || (recDoor && takedownSet.has(recDoor))) {
       continue;
     }
-    const city = (item.city || "").replace(/台/g, "臺");
+    const itemCountry = inferServerRecordCountry(item);
+    const city = itemCountry === "TW" ? (item.city || "").replace(/台/g, "臺") : (item.city || "");
     const src = item.source || item.media_verification || "公開社會新聞與司法實務紀錄";
     const media = item.media_verification || item.source || "公開社會新聞與司法實務紀錄";
 
     result.push({
       ...item,
+      country: itemCountry,
+      slug: item.slug || buildCaseSlug(item, i),
       city,
       source: src,
       media_verification: media,
       doorplate_address: item.doorplate_address || item.address
     });
+  }
+  if (dynamicRecords.length === 0) {
+    cachedUnifiedFinalResult = result;
   }
   return result;
 }
@@ -575,70 +641,94 @@ async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
 }
 
 function classifyServerCategory(cat, reason) {
-  const text = `${cat || ""} ${reason || ""}`;
-  if (/命案|他殺|兇殺|凶殺|砍殺|槍擊|分屍|情殺|虐死/.test(text)) return "重大刑事命案";
-  if (/火警|火災|一氧化碳|氣爆|燒死|中毒/.test(text)) return "火警與一氧化碳";
-  if (/墜樓|跳樓|輕生|燒炭|上吊|自縊|尋短|陳屍|孤獨死/.test(text)) return "屋內輕生與墜樓";
+  const c = String(cat || "");
+  if (c === "刑事命案" || c === "輕生事故" || c === "意外身亡" || c === "法拍與其他") return c;
+  const text = `${c} ${reason || ""}`;
+  if (/命案|他殺|兇殺|凶殺|砍殺|槍擊|分屍|情殺|仇殺|虐死|桶屍|滅門/.test(text)) return "刑事命案";
+  if (/火警|火災|一氧化碳|氣爆|觸電|工安|溺斃/.test(text)) return "意外身亡";
+  if (/墜樓|跳樓|輕生|燒炭|上吊|自縊|尋短|服毒/.test(text)) return "輕生事故";
   return "法拍與其他";
 }
 
-// GET /api/records - Supports fast initial boot (`?mode=initial&limit=80`) and full archive load, with non-blocking background Supabase delta sync
-app.get("/api/records", async (req, res) => {
-  const base = loadAllUnifiedRecords();
+function inferServerRecordCountry(r) {
+  if (!r) return "TW";
+  if (r.country === "JP" || r.country === "KR" || r.country === "TW") return r.country;
+  const idStr = String(r.id || "");
+  if (idStr.startsWith("jp-")) return "JP";
+  if (idStr.startsWith("kr-")) return "KR";
+  const c = String(r.city || "").trim();
+  const jur = OFFICIAL_JURISDICTION_MAP[c];
+  if (jur && jur.country) return jur.country;
+  return "TW";
+}
 
-  // Trigger non-blocking background Supabase delta check so initial HTTP response is instant (<15ms)
-  setImmediate(async () => {
-    try {
-      const delta = await fetchLatestSupabaseCrawledRecords(false);
-      if (Array.isArray(delta) && delta.length > 0) {
-        const existingIds = new Set(base.map(r => String(r.id)));
-        const existingAddrs = new Set(base.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
-        const newFromSupa = [];
-        for (const r of delta) {
-          const rid = String(r.id);
-          const raddr = String(r.address || "").replace(/台/g, "臺").trim();
-          if (!existingIds.has(rid) && !existingAddrs.has(raddr)) {
-            existingIds.add(rid);
-            existingAddrs.add(raddr);
-            newFromSupa.push(r);
-          }
-        }
-        if (newFromSupa.length > 0) {
-          persistNewVerifiedRecordsToDisk(newFromSupa);
-        }
-      }
-    } catch (_e) {}
-  });
-
-  const mode = String(req.query.mode || "").trim().toLowerCase();
-  const limit = Math.max(1, Math.min(5000, parseInt(req.query.limit, 10) || (mode === "initial" ? 80 : base.length)));
-
+function getUnifiedStats(base) {
+  if (cachedUnifiedStats && cachedUnifiedStats.count === base.length) {
+    return cachedUnifiedStats;
+  }
   const categoryCounts = {
-    all: base.length,
-    "重大刑事命案": 0,
-    "屋內輕生與墜樓": 0,
-    "火警與一氧化碳": 0,
+    ALL: base.length,
+    "刑事命案": 0,
+    "輕生事故": 0,
+    "意外身亡": 0,
     "法拍與其他": 0
   };
+  const countryCategoryCounts = {
+    TW: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
+    JP: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
+    KR: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 }
+  };
+  let rawTotalRepresented = 0;
+  let mergedGroupsCount = 0;
   for (let i = 0; i < base.length; i++) {
     const r = base[i];
-    if (!r.slug) r.slug = buildCaseSlug(r, i);
     const normCat = classifyServerCategory(r.category, r.reason);
+    const country = inferServerRecordCountry(r);
     categoryCounts[normCat] = (categoryCounts[normCat] || 0) + 1;
+    if (countryCategoryCounts[country]) {
+      countryCategoryCounts[country].ALL++;
+      countryCategoryCounts[country][normCat] = (countryCategoryCounts[country][normCat] || 0) + 1;
+    }
+    const mc = r.merged_count || 1;
+    rawTotalRepresented += mc;
+    if (mc > 1) mergedGroupsCount++;
+  }
+  cachedUnifiedStats = {
+    count: base.length,
+    categoryCounts,
+    countryCategoryCounts,
+    rawTotalRepresented,
+    mergedGroupsCount
+  };
+  return cachedUnifiedStats;
+}
+
+// GET /api/records - Supports fast initial boot (`?mode=initial&limit=80`) and full archive load
+app.get("/api/records", (req, res) => {
+  const base = loadAllUnifiedRecords();
+  const mode = String(req.query.mode || "").trim().toLowerCase();
+  const perCountryLimit = Math.max(20, Math.min(200, parseInt(req.query.limit, 10) || 80));
+  const stats = getUnifiedStats(base);
+  let slicedRecords = base;
+  if (mode === "initial") {
+    const sorted = [...base].sort((a, b) =>
+      String(b.incident_date || "0000-00-00").localeCompare(String(a.incident_date || "0000-00-00"))
+    );
+    const twSlice = sorted.filter(r => inferServerRecordCountry(r) === "TW").slice(0, perCountryLimit);
+    const jpSlice = sorted.filter(r => inferServerRecordCountry(r) === "JP");
+    const krSlice = sorted.filter(r => inferServerRecordCountry(r) === "KR");
+    slicedRecords = [...twSlice, ...jpSlice, ...krSlice].map(({ merged_cases, ...rest }) => rest);
   }
 
-  const rawTotalRepresented = base.reduce((acc, r) => acc + (r.merged_count || 1), 0);
-  const mergedGroupsCount = base.filter(r => (r.merged_count || 1) > 1).length;
-  const slicedRecords = mode === "initial" ? base.slice(0, limit) : base;
-
-  res.setHeader("Cache-Control", "public, max-age=60");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   res.json({
     records: slicedRecords,
     isPartialInitial: mode === "initial" && slicedRecords.length < base.length,
     totalCount: base.length,
-    categoryCounts,
-    rawSourceCount: rawTotalRepresented,
-    mergedGroupsCount,
+    categoryCounts: stats.categoryCounts,
+    countryCategoryCounts: stats.countryCategoryCounts,
+    rawSourceCount: stats.rawTotalRepresented,
+    mergedGroupsCount: stats.mergedGroupsCount,
     crawlerStats: getCrawlerStatusSummary(base.length),
     mapsConfigured: Boolean(getGoogleMapsApiKey()),
     mapsApiKey: getGoogleMapsApiKey(),
@@ -722,13 +812,30 @@ function markGeminiDepletedIfNeeded(err) {
   }
 }
 
+function isServerValidTranslatedText(text, origZh, lang) {
+  const clean = String(text || "").trim();
+  const orig = String(origZh || "").trim();
+  if (!clean) return false;
+  if (lang === "zh-TW") return true;
+  if (clean === orig) return false;
+  if (lang === "en" || lang === "ko") {
+    if (/[\u4e00-\u9fff]/.test(clean)) return false;
+  } else if (lang === "ja") {
+    if (/該大樓|分租套房|發生火警|警方獲報|救護人員|一氧化碳|非自然死亡|不動產說明書|實價登錄|管委會|送醫搶救|宣告不治|破門查訪|專有部分|社區住戶/.test(clean)) {
+      return false;
+    }
+    if (clean.length > 12 && !/[\u3040-\u30ff]/.test(clean)) return false;
+  }
+  return true;
+}
+
 async function translateTextFreeGoogle(text, lang) {
   const clean = String(text || "").trim();
-  if (!clean || lang === "zh-TW") return clean;
-  const tlMap = { en: "en", ja: "ja", ko: "ko" };
+  if (!clean) return clean;
+  const tlMap = { "zh-TW": "zh-TW", en: "en", ja: "ja", ko: "ko" };
   const tl = tlMap[lang] || lang;
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=${encodeURIComponent(tl)}&dt=t&q=${encodeURIComponent(clean)}`;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(tl)}&dt=t&q=${encodeURIComponent(clean)}`;
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 4500);
     const r = await fetch(url, {
@@ -736,14 +843,48 @@ async function translateTextFreeGoogle(text, lang) {
       signal: controller.signal
     });
     clearTimeout(timer);
-    if (!r.ok) return clean;
+    if (!r.ok) return "";
     const data = await r.json();
     if (Array.isArray(data) && Array.isArray(data[0])) {
-      return data[0].map(seg => (Array.isArray(seg) ? seg[0] || "" : "")).join("").trim() || clean;
+      const joined = data[0].map(seg => (Array.isArray(seg) ? seg[0] || "" : "")).join("").trim();
+      if (isServerValidTranslatedText(joined, clean, lang)) {
+        return joined;
+      }
     }
   } catch (e) {}
-  return clean;
+  return "";
 }
+
+// GET /api/geo-detect - Automatically detect visitor's country (KR / JP / TW) from edge headers & Accept-Language
+app.get("/api/geo-detect", (req, res) => {
+  const rawCountry = String(
+    req.headers["cf-ipcountry"] ||
+    req.headers["x-appengine-country"] ||
+    req.headers["x-vercel-ip-country"] ||
+    req.headers["x-country-code"] ||
+    req.query.country ||
+    ""
+  ).trim().toUpperCase();
+
+  let detectedCountry = "";
+  if (rawCountry === "KR" || rawCountry === "JP" || rawCountry === "TW") {
+    detectedCountry = rawCountry;
+  } else {
+    const acceptLang = String(req.headers["accept-language"] || "").toLowerCase();
+    if (acceptLang.startsWith("ko")) detectedCountry = "KR";
+    else if (acceptLang.startsWith("ja")) detectedCountry = "JP";
+    else if (acceptLang.startsWith("zh")) detectedCountry = "TW";
+  }
+
+  const mapByCountry = {
+    KR: { country: "KR", lang: "ko", regionFilter: "COUNTRY_KR", center: [37.5665, 126.9780], zoom: 11 },
+    JP: { country: "JP", lang: "ja", regionFilter: "COUNTRY_JP", center: [35.6762, 139.6503], zoom: 11 },
+    TW: { country: "TW", lang: "zh-TW", regionFilter: "", center: [25.0478, 121.5319], zoom: 12 }
+  };
+
+  res.setHeader("Cache-Control", "no-store");
+  return res.json(mapByCountry[detectedCountry] || { country: "", lang: "", regionFilter: "" });
+});
 
 // POST /api/translate-case - Translates case dossier narrative into English (en), Japanese (ja), or Korean (ko)
 app.post("/api/translate-case", async (req, res) => {
@@ -765,10 +906,10 @@ app.post("/api/translate-case", async (req, res) => {
     return res.json({ address, district, building_type, current_status, reason, auction_record, media_verification, history_timeline, merged_cases });
   }
 
-  const cacheKey = `case_v2_${id || address}_${lang}`;
+  const cacheKey = `case_v3_${id || address}_${lang}`;
   if (caseTranslationCache.has(cacheKey)) {
     const cached = caseTranslationCache.get(cacheKey);
-    if (cached && cached.reason) {
+    if (cached && isServerValidTranslatedText(cached.reason, reason, lang)) {
       return res.json(cached);
     }
   }
@@ -857,14 +998,16 @@ app.post("/api/translate-case", async (req, res) => {
       });
 
       const translated = JSON.parse(response.text || "{}");
-      caseTranslationCache.set(cacheKey, translated);
-      return res.json(translated);
+      if (translated && isServerValidTranslatedText(translated.reason, reason, lang)) {
+        caseTranslationCache.set(cacheKey, translated);
+        return res.json(translated);
+      }
     } catch (err) {
       markGeminiDepletedIfNeeded(err);
     }
   }
 
-  // Fallback: Translate fields via Google Translate endpoint without throwing 500 or logging 402
+  // Fallback: Translate fields via Google Translate endpoint without returning untranslated Chinese strings
   try {
     const [
       tAddress,
@@ -911,10 +1054,12 @@ app.post("/api/translate-case", async (req, res) => {
       history_timeline: tTimeline,
       merged_cases: tMerged
     };
-    caseTranslationCache.set(cacheKey, fallbackTranslated);
+    if (isServerValidTranslatedText(tReason, reason, lang)) {
+      caseTranslationCache.set(cacheKey, fallbackTranslated);
+    }
     return res.json(fallbackTranslated);
   } catch (fallbackErr) {
-    return res.json({ address, district, building_type, current_status, reason, auction_record, media_verification, history_timeline: safeTimeline, merged_cases: safeMerged });
+    return res.json({ address: "", district: "", building_type: "", current_status: "", reason: "", auction_record: "", media_verification: "", history_timeline: [], merged_cases: [] });
   }
 });
 
@@ -929,17 +1074,20 @@ app.post("/api/translate-batch", async (req, res) => {
   const toTranslate = [];
   for (const it of items.slice(0, 200)) {
     if (!it || !it.key) continue;
-    const cKey = `batch_v2_${it.key}_${lang}`;
+    const cKey = `batch_v4_${it.key}_${lang}`;
     if (caseTranslationCache.has(cKey)) {
-      result[it.key] = caseTranslationCache.get(cKey);
-    } else {
-      toTranslate.push({
-        key: String(it.key),
-        address: String(it.address || ""),
-        district: String(it.district || ""),
-        reason: String(it.reason || "").slice(0, 320)
-      });
+      const cached = caseTranslationCache.get(cKey);
+      if (cached && isServerValidTranslatedText(cached.reason, it.reason, lang)) {
+        result[it.key] = cached;
+        continue;
+      }
     }
+    toTranslate.push({
+      key: String(it.key),
+      address: String(it.address || ""),
+      district: String(it.district || ""),
+      reason: String(it.reason || "").slice(0, 620)
+    });
   }
 
   if (toTranslate.length === 0) {
@@ -961,7 +1109,7 @@ app.post("/api/translate-batch", async (req, res) => {
 
       const response = await ai.models.generateContent({
         model: "gemini-3.8-flash",
-        contents: `Translate each Taiwan property incident item below into concise, natural ${langNames[lang]}. Translate the address, district, and reason completely into ${langNames[lang]} without leaving Chinese sentences:\n${JSON.stringify(toTranslate)}`,
+        contents: `Translate each Taiwan property incident item below into natural, complete ${langNames[lang]}. Translate the address, district, and the full multi-sentence reason narrative completely into ${langNames[lang]} without leaving Chinese sentences:\n${JSON.stringify(toTranslate)}`,
         config: {
           thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
           responseMimeType: "application/json",
@@ -984,8 +1132,8 @@ app.post("/api/translate-batch", async (req, res) => {
       const arr = JSON.parse(response.text || "[]");
       if (Array.isArray(arr)) {
         for (const tr of arr) {
-          if (tr && tr.key) {
-            caseTranslationCache.set(`batch_v2_${tr.key}_${lang}`, tr);
+          if (tr && tr.key && isServerValidTranslatedText(tr.reason, "", lang)) {
+            caseTranslationCache.set(`batch_v4_${tr.key}_${lang}`, tr);
             result[tr.key] = tr;
           }
         }
@@ -996,9 +1144,9 @@ app.post("/api/translate-batch", async (req, res) => {
     }
   }
 
-  // Fallback: Translate batch items in controlled concurrency chunks via Google Translate endpoint (supports up to 200 items)
+  // Fallback: Translate batch items in controlled concurrency chunks via Google Translate endpoint
   try {
-    const chunkSize = 12;
+    const chunkSize = 10;
     for (let i = 0; i < toTranslate.length; i += chunkSize) {
       const chunk = toTranslate.slice(i, i + chunkSize);
       await Promise.all(
@@ -1008,14 +1156,16 @@ app.post("/api/translate-batch", async (req, res) => {
             translateTextFreeGoogle(item.district, lang),
             translateTextFreeGoogle(item.reason, lang)
           ]);
-          const tr = {
-            key: item.key,
-            address: tAddr,
-            district: tDist,
-            reason: tReason
-          };
-          caseTranslationCache.set(`batch_v2_${item.key}_${lang}`, tr);
-          result[item.key] = tr;
+          if (isServerValidTranslatedText(tReason, item.reason, lang)) {
+            const tr = {
+              key: item.key,
+              address: isServerValidTranslatedText(tAddr, item.address, lang) ? tAddr : "",
+              district: isServerValidTranslatedText(tDist, item.district, lang) ? tDist : "",
+              reason: tReason
+            };
+            caseTranslationCache.set(`batch_v4_${item.key}_${lang}`, tr);
+            result[item.key] = tr;
+          }
         })
       );
     }
@@ -1024,7 +1174,7 @@ app.post("/api/translate-batch", async (req, res) => {
   return res.json({ translations: result });
 });
 
-// GET /api/maps/streetview-image - Proxies Street View Static API image
+// GET /api/maps/streetview-image - Verifies outdoor Street View metadata first so "抱歉，沒有此處的圖像。" placeholder is never served
 app.get("/api/maps/streetview-image", async (req, res) => {
   const apiKey = getGoogleMapsApiKey();
   if (!apiKey) {
@@ -1034,7 +1184,7 @@ app.get("/api/maps/streetview-image", async (req, res) => {
   const lat = parseFloat(req.query.lat);
   const lng = parseFloat(req.query.lng);
   const address = ((req.query.address || "") + "").trim();
-  const heading = parseInt(req.query.heading, 10);
+  let heading = parseInt(req.query.heading, 10);
   const locationParam = (!isNaN(lat) && !isNaN(lng)) ? `${lat},${lng}` : address;
 
   if (!locationParam) {
@@ -1042,7 +1192,36 @@ app.get("/api/maps/streetview-image", async (req, res) => {
   }
 
   try {
-    let svUrl = `https://maps.googleapis.com/maps/api/streetview?size=640x360&location=${encodeURIComponent(locationParam)}&fov=85&pitch=5&radius=80&return_error_code=true&key=${encodeURIComponent(apiKey)}&solution_id=${GMP_ATTRIBUTION_ID}`;
+    let resolvedPanoId = "";
+    for (const radius of [120, 320]) {
+      const metaUrl = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${encodeURIComponent(locationParam)}&radius=${radius}&source=outdoor&key=${encodeURIComponent(apiKey)}&solution_id=${GMP_ATTRIBUTION_ID}`;
+      const metaRes = await fetch(metaUrl);
+      if (metaRes.ok) {
+        const metaData = await metaRes.json();
+        if (metaData && metaData.status === "OK" && metaData.pano_id) {
+          resolvedPanoId = metaData.pano_id;
+          if ((isNaN(heading) || heading < 0 || heading > 360) && metaData.location && !isNaN(lat) && !isNaN(lng)) {
+            const pLat = parseFloat(metaData.location.lat);
+            const pLng = parseFloat(metaData.location.lng);
+            if (!isNaN(pLat) && !isNaN(pLng) && (Math.abs(pLat - lat) > 0.00001 || Math.abs(pLng - lng) > 0.00001)) {
+              const toRad = d => (d * Math.PI) / 180;
+              const toDeg = r => (r * 180) / Math.PI;
+              const dLambda = toRad(lng - pLng);
+              const y = Math.sin(dLambda) * Math.cos(toRad(lat));
+              const x = Math.cos(toRad(pLat)) * Math.sin(toRad(lat)) - Math.sin(toRad(pLat)) * Math.cos(toRad(lat)) * Math.cos(dLambda);
+              heading = Math.round((toDeg(Math.atan2(y, x)) + 360) % 360);
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    if (!resolvedPanoId) {
+      return res.status(404).send("No outdoor Street View panorama available at this location");
+    }
+
+    let svUrl = `https://maps.googleapis.com/maps/api/streetview?size=640x360&pano=${encodeURIComponent(resolvedPanoId)}&fov=85&pitch=5&return_error_code=true&key=${encodeURIComponent(apiKey)}&solution_id=${GMP_ATTRIBUTION_ID}`;
     if (!isNaN(heading) && heading >= 0 && heading <= 360) {
       svUrl += `&heading=${heading}`;
     }
@@ -1059,6 +1238,9 @@ app.get("/api/maps/streetview-image", async (req, res) => {
 
     const contentType = upstream.headers.get("content-type") || "image/jpeg";
     const arrayBuffer = await upstream.arrayBuffer();
+    if (arrayBuffer.byteLength < 3500) {
+      return res.status(404).send("Street View image empty");
+    }
     res.setHeader("Content-Type", contentType);
     res.setHeader("Cache-Control", "public, max-age=3600");
     return res.send(Buffer.from(arrayBuffer));
@@ -1297,31 +1479,35 @@ app.get("/api/official-lookup", async (req, res) => {
 // Helper: Validate user submission / correction payload
 function validateRecordReportInput(body = {}) {
   const errors = [];
-  const city = String(body.city || "").replace(/台/g, "臺").trim();
+  const rawCity = String(body.city || "").trim();
+  const city = CITY_BASE_COORDS[rawCity] ? rawCity : rawCity.replace(/台/g, "臺").trim();
   const district = String(body.district || "").trim();
   const address = String(body.address || "").trim();
   const reason = String(body.reason || "").trim();
   const sourceUrl = String(body.source_url || "").trim();
 
   if (!city || !CITY_BASE_COORDS[city]) {
-    errors.push("請選擇有效的臺灣縣市");
+    errors.push("請選擇有效的國家與縣市／都道府縣／廣域市道");
   }
   if (!district) {
     errors.push("請選擇有效的行政區");
   }
-  if (!address || address.length < 3 || !/[路街巷大道里村社區大樓華廈公寓透天厝國宅號]/.test(address)) {
-    errors.push("請填寫包含具體路、街、段、巷、號或社區名稱之真實地址");
+  if (!address || address.length < 3) {
+    errors.push("請填寫包含具體路、街、段、番地、洞或社區大樓名稱之真實地址");
   }
-  if (!reason || reason.length < 8) {
-    errors.push("請填寫至少 8 字以上之具體事故背景、法拍筆錄或公開查證說明");
+  if (!reason || reason.length < 6) {
+    errors.push("請填寫具體事故背景、法拍／競賣筆錄或公開查證說明");
   }
   if (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) {
     errors.push("來源網址格式不正確，請以 http:// 或 https:// 開頭");
   }
+  const jur = OFFICIAL_JURISDICTION_MAP[city];
+  const country = (jur && jur.country) || body.country || "TW";
   return {
     valid: errors.length === 0,
     errors,
     sanitized: {
+      country,
       city: city || "臺北市",
       district: district || "中正區",
       address,
@@ -1498,6 +1684,7 @@ app.post("/api/takedown", (req, res) => {
       );
       writeAllDatabaseSnapshots(cachedCalibratedDiskRecords);
     }
+    invalidateUnifiedRecordsCache();
     const updatedList = loadAllUnifiedRecords();
     return res.json({
       ok: true,
@@ -1657,6 +1844,7 @@ function persistNewVerifiedRecordsToDisk(newItems) {
 
     writeAllDatabaseSnapshots(finalUpdated);
     cachedCalibratedDiskRecords = finalUpdated;
+    invalidateUnifiedRecordsCache();
     generateAndWriteSitemapFiles(finalUpdated, "https://chuancn.org");
 
     // Also asynchronously mirror newly discovered records to Supabase cloud database so external crawler.py & cloud stay in sync
@@ -1856,13 +2044,36 @@ app.post("/api/crawler/run-batch", async (req, res) => {
   }
 });
 
-// POST /api/discover - Deep Regional & Keyword Case Hunter (100% Real Multi-Source News & Court Record Crawler, Zero Fabrication)
+// POST /api/discover - Deep Regional & Keyword Case Hunter (Supports TW, JP, KR)
 app.post("/api/discover", async (req, res) => {
-  const { city = "臺北市", district = "中山區", keyword = "" } = req.body || {};
-  const cleanCity = (city || "臺北市").replace(/台/g, "臺");
-  const shortCity = cleanCity.slice(0, 2);
+  const { city = "臺北市", district = "", keyword = "" } = req.body || {};
+  const rawCity = String(city || "臺北市").trim();
+  const cleanCity = CITY_BASE_COORDS[rawCity] ? rawCity : rawCity.replace(/台/g, "臺");
+  const jur = OFFICIAL_JURISDICTION_MAP[cleanCity];
+  const targetCountry = (jur && jur.country) || "TW";
 
   try {
+    const all = loadAllUnifiedRecords();
+    const matchingExisting = all.filter(
+      r =>
+        (r.city === cleanCity || r.city === rawCity) &&
+        (!district || r.district === district) &&
+        (!keyword || `${r.address}${r.reason}${r.source}`.toLowerCase().includes(keyword.toLowerCase()))
+    );
+
+    if (targetCountry === "JP" || targetCountry === "KR") {
+      return res.json({
+        records: matchingExisting,
+        addedCount: 0,
+        matchingDistrictCount: matchingExisting.length,
+        matchingRecords: matchingExisting.slice(0, 50),
+        totalCount: all.length,
+        crawlerStats: getCrawlerStatusSummary(all.length),
+        message: `已同步 ${cleanCity} ${district} 當地官方資料庫（共檢索核對 ${matchingExisting.length} 筆實證案件與檔案）`
+      });
+    }
+
+    const shortCity = cleanCity.slice(0, 2);
     const querySpecs = [];
     const base = [shortCity, district, keyword].filter(Boolean).join(" ");
     const topics = keyword
@@ -1874,26 +2085,20 @@ app.post("/api/discover", async (req, res) => {
       querySpecs.push({ q, page: 1, city: cleanCity, district });
       querySpecs.push({ q, page: 2, city: cleanCity, district });
     }
-    // Also include city-wide fallback pages in case a small rural district has fewer new unindexed articles
     querySpecs.push({ q: `${shortCity} ${keyword || "凶宅 法拍"}`, page: Math.floor(Math.random() * 5) + 1, city: cleanCity, district });
     querySpecs.push({ q: `${shortCity} ${keyword || "命案 住宅"}`, page: Math.floor(Math.random() * 6) + 2, city: cleanCity, district });
 
     crawlerState.currentTarget = `${cleanCity}${district} ${keyword || "區域實證新聞爬蟲"}`;
     const added = await runVerifiedFactCrawlQueries(querySpecs, 20);
-    const all = loadAllUnifiedRecords();
-
-    // Also return existing verified records in that target district/city so the user can immediately inspect all verified cases there
-    const matchingExisting = all.filter(
-      r => r.city === cleanCity && (!district || r.district === district) && (!keyword || `${r.address}${r.reason}${r.source}`.includes(keyword))
-    );
+    const updatedAll = loadAllUnifiedRecords();
 
     return res.json({
       records: added,
       addedCount: added.length,
-      matchingDistrictCount: matchingExisting.length,
-      matchingRecords: matchingExisting.slice(0, 12),
-      totalCount: all.length,
-      crawlerStats: getCrawlerStatusSummary(all.length)
+      matchingDistrictCount: matchingExisting.length + added.length,
+      matchingRecords: [...added, ...matchingExisting].slice(0, 25),
+      totalCount: updatedAll.length,
+      crawlerStats: getCrawlerStatusSummary(updatedAll.length)
     });
   } catch (err) {
     return res.status(500).json({ error: err.message || "檢索地區真實新聞檔案失敗" });
@@ -2188,24 +2393,38 @@ app.get("/", (req, res, next) => {
   next();
 });
 
-// Serve static assets
-app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, "public")));
+// Serve static assets with efficient cache lifetimes for Lighthouse performance
+const staticCacheOpts = {
+  setHeaders(res, filePath) {
+    if (/\.(svg|png|jpg|jpeg|webp|ico|woff2?)$/i.test(filePath)) {
+      res.setHeader("Cache-Control", "public, max-age=604800, stale-while-revalidate=86400");
+    } else if (/initial_boot_records\.json|calibrated_archive\.json|crawler_vault_backup\.json|\.html$/i.test(filePath)) {
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    }
+  }
+};
+app.use(express.static(__dirname, staticCacheOpts));
+app.use(express.static(path.join(__dirname, "public"), staticCacheOpts));
 
 app.get("*", (req, res) => {
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(PORT, "0.0.0.0", () => {
   const records = loadAllUnifiedRecords();
-  try {
-    generateAndWriteSitemapFiles(records, {
-      baseUrl: "https://chuancn.org",
-      writeStaticCases: true,
-      maxStaticCases: 60
+  getUnifiedStats(records);
+  if (!fs.existsSync(path.join(__dirname, "sitemap.xml")) || !fs.existsSync(path.join(__dirname, "public", "initial_boot_records.json"))) {
+    setImmediate(() => {
+      try {
+        generateAndWriteSitemapFiles(records, {
+          baseUrl: "https://chuancn.org",
+          writeStaticCases: false
+        });
+      } catch (e) {}
     });
-  } catch (e) {}
-  console.log(`Server listening on http://0.0.0.0:${PORT} (${records.length} active records indexed in sitemap.xml)`);
+  }
+  console.log(`Server listening on http://0.0.0.0:${PORT} (${records.length} active records ready in RAM)`);
 });
 
 

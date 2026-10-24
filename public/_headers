@@ -9,3 +9,19 @@
 /favicon.svg
   Content-Type: image/svg+xml
   Cache-Control: public, max-age=86400
+
+/initial_boot_records.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/calibrated_archive.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/crawler_vault_backup.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+

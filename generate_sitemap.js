@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { enrichCaseNarrativeAndTimeline } from "./fact_crawler.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,7 +34,27 @@ export const CITY_SLUG_MAP = {
   "台東縣": "taitung",
   "澎湖縣": "penghu",
   "金門縣": "kinmen",
-  "連江縣": "lienchiang"
+  "連江縣": "lienchiang",
+  // Japan (JP)
+  "東京都": "tokyo",
+  "大阪府": "osaka",
+  "神奈川県": "kanagawa",
+  "愛知県": "aichi",
+  "福岡県": "fukuoka",
+  "北海道": "hokkaido",
+  "京都府": "kyoto",
+  "兵庫県": "hyogo",
+  "埼玉県": "saitama",
+  "千葉県": "chiba",
+  // South Korea (KR)
+  "首爾特別市": "seoul",
+  "釜山廣域市": "busan",
+  "仁川廣域市": "incheon",
+  "京畿道": "gyeonggi",
+  "大邱廣域市": "daegu",
+  "大田廣域市": "daejeon",
+  "光州廣域市": "gwangju",
+  "濟州特別自治道": "jeju"
 };
 
 export function escapeXml(str) {
@@ -138,12 +159,13 @@ export function buildCaseSeoMetadata(record, baseUrl = DEFAULT_BASE_URL) {
   const lastUpdated = new Date().toISOString().slice(0, 10);
 
   // Neutral, fact-based title & description reflecting the exact case
-  const title = `${displayAddr}｜${category}（${incidentDate}）事故建物公開查核檔案 - 臺灣凶宅地圖`;
+  const title = `${displayAddr}｜${category}（${incidentDate}）事故建物公開查核檔案 - 凶宅地圖`;
   const reasonSnippet = rawReason.length > 115 ? `${rawReason.slice(0, 115)}…` : rawReason;
   const description = `【${city}${district}公開查核紀錄】門牌位置：${doorplate}。事件分類：${category}，紀錄日期：${incidentDate}。查核來源：${sourceName}（${statusText}）。案情摘要：${reasonSnippet}`;
 
   const lat = parseFloat(record.lat);
   const lng = parseFloat(record.lng);
+  const countryCode = record.country || (/東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県/.test(city) ? "JP" : /首爾|釜山|仁川|京畿道|大邱|大田|光州|濟州/.test(city) ? "KR" : "TW");
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -152,13 +174,13 @@ export function buildCaseSeoMetadata(record, baseUrl = DEFAULT_BASE_URL) {
         "@type": "WebSite",
         "@id": `${cleanBase}/#website`,
         "url": `${cleanBase}/`,
-        "name": "臺灣凶宅地圖",
+        "name": "凶宅地圖",
         "inLanguage": ["zh-TW", "en", "ja", "ko"]
       },
       {
         "@type": "Organization",
         "@id": `${cleanBase}/#organization`,
-        "name": "臺灣凶宅地圖公開實證資料庫",
+        "name": "凶宅地圖公開實證資料庫",
         "url": `${cleanBase}/`,
         "logo": `${cleanBase}/og-banner.png`
       },
@@ -169,7 +191,7 @@ export function buildCaseSeoMetadata(record, baseUrl = DEFAULT_BASE_URL) {
           {
             "@type": "ListItem",
             "position": 1,
-            "name": "臺灣凶宅地圖首頁",
+            "name": "凶宅地圖首頁",
             "item": `${cleanBase}/`
           },
           {
@@ -202,7 +224,7 @@ export function buildCaseSeoMetadata(record, baseUrl = DEFAULT_BASE_URL) {
           "name": displayAddr,
           "address": {
             "@type": "PostalAddress",
-            "addressCountry": "TW",
+            "addressCountry": countryCode,
             "addressRegion": city,
             "addressLocality": district || city,
             "streetAddress": doorplate
@@ -402,9 +424,9 @@ export function buildSitemapXml(records = [], baseUrl = DEFAULT_BASE_URL) {
 
 function loadDefaultArchiveRecords(rootDir = __dirname) {
   const candidateFiles = [
-    path.join(rootDir, "public", "verified_cases.json"),
     path.join(rootDir, "calibrated_archive.json"),
-    path.join(rootDir, "public", "calibrated_archive.json")
+    path.join(rootDir, "public", "calibrated_archive.json"),
+    path.join(rootDir, "public", "verified_cases.json")
   ];
   for (const file of candidateFiles) {
     if (fs.existsSync(file)) {
@@ -441,17 +463,27 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
       : optionsOrBaseUrl || {};
 
   const baseUrl = opts.baseUrl || DEFAULT_BASE_URL;
-  const writeStaticCases = opts.writeStaticCases !== false;
+  const writeStaticCases = opts.writeStaticCases === true;
   const maxStaticCases = typeof opts.maxStaticCases === "number" ? opts.maxStaticCases : 60;
 
   const rawRecords = Array.isArray(customRecords) && customRecords.length > 0
     ? customRecords
     : loadDefaultArchiveRecords(rootDir);
 
-  const records = rawRecords.map((r, idx) => ({
-    ...r,
-    slug: buildCaseSlug(r, idx)
-  }));
+  const records = rawRecords.map((r, idx) => {
+    const enriched = enrichCaseNarrativeAndTimeline({ ...r });
+    return {
+      ...enriched,
+      slug: buildCaseSlug(enriched, idx)
+    };
+  });
+
+  // Pre-sort archive in exact default UI order (incident_date descending) so Stage 1 (top 80) and Stage 2 (full archive) have identical Page 1 order
+  records.sort((a, b) => {
+    const da = String(a.incident_date || "0000-00-00");
+    const db = String(b.incident_date || "0000-00-00");
+    return db.localeCompare(da);
+  });
 
   const stats = buildSitemapXml(records, baseUrl);
   const rootSitemapPath = path.join(rootDir, "sitemap.xml");
@@ -465,16 +497,58 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   fs.writeFileSync(rootSitemapPath, stats.xml, "utf-8");
   fs.writeFileSync(publicSitemapPath, stats.xml, "utf-8");
 
-  // Write fast initial boot JSON (first 80 records + authoritative totalCount) for static hosting & fast mobile LCP
-  const bootPayload = {
-    totalCount: records.length,
-    generatedAt: new Date().toISOString(),
-    records: records.slice(0, 80)
+  // Compute authoritative category counts and countryCategoryCounts matching frontend CATEGORY_META keys
+  const categoryCounts = {
+    ALL: records.length,
+    "刑事命案": 0,
+    "輕生事故": 0,
+    "意外身亡": 0,
+    "法拍與其他": 0
   };
-  const bootPath = path.join(publicDir, "initial_boot_records.json");
-  fs.writeFileSync(bootPath, JSON.stringify(bootPayload), "utf-8");
+  const countryCategoryCounts = {
+    TW: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
+    JP: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
+    KR: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 }
+  };
+  for (const r of records) {
+    const cat = String(r.category || "");
+    const reason = String(r.reason || "");
+    const combined = `${cat} ${reason}`;
+    let norm = "法拍與其他";
+    if (cat === "刑事命案" || /兇殺|他殺|命案|分屍|槍擊|情殺|仇殺|砍殺|虐死|桶屍|滅門/.test(combined)) norm = "刑事命案";
+    else if (cat === "意外身亡" || /火警|火災|一氧化碳|氣爆|觸電|工安|溺斃/.test(combined)) norm = "意外身亡";
+    else if (cat === "輕生事故" || /輕生|跳樓|墜樓|燒炭|自縊|上吊|尋短|服毒/.test(combined)) norm = "輕生事故";
+    categoryCounts[norm] = (categoryCounts[norm] || 0) + 1;
 
-  // Write standalone static HTML pages (`/public/case/<slug>/index.html`)
+    const cCode = (r.country === "JP" || r.country === "KR" || r.country === "TW")
+      ? r.country
+      : (/東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県/.test(String(r.city || ""))
+        ? "JP"
+        : (/首爾|釜山|仁川|京畿道|大邱|大田|光州|濟州/.test(String(r.city || "")) ? "KR" : "TW"));
+    r.country = cCode;
+    if (countryCategoryCounts[cCode]) {
+      countryCategoryCounts[cCode].ALL++;
+      countryCategoryCounts[cCode][norm] = (countryCategoryCounts[cCode][norm] || 0) + 1;
+    }
+  }
+
+  // Write fast initial boot JSON (top Taiwan records + all JP/KR records + authoritative totalCount, categoryCounts & countryCategoryCounts) to both root and /public
+  const jpKrRecords = records.filter(r => r.country === "JP" || r.country === "KR");
+  const twTopRecords = records.filter(r => r.country === "TW").slice(0, 80);
+  const slimBootRecords = [...twTopRecords, ...jpKrRecords].map(({ merged_cases, ...rest }) => rest);
+  const bootPayloadStr = JSON.stringify({
+    totalCount: records.length,
+    categoryCounts,
+    countryCategoryCounts,
+    generatedAt: new Date().toISOString(),
+    records: slimBootRecords
+  });
+  const bootPath = path.join(publicDir, "initial_boot_records.json");
+  const rootBootPath = path.join(rootDir, "initial_boot_records.json");
+  fs.writeFileSync(bootPath, bootPayloadStr, "utf-8");
+  fs.writeFileSync(rootBootPath, bootPayloadStr, "utf-8");
+
+  // Write standalone static HTML pages (`/public/case/<slug>/index.html`) ONLY when explicitly requested via writeStaticCases: true
   let staticGeneratedCount = 0;
   const indexHtmlPath = path.join(rootDir, "index.html");
   if (writeStaticCases && fs.existsSync(indexHtmlPath)) {
@@ -502,13 +576,14 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   };
 }
 
-// Run directly if invoked via CLI: `node generate_sitemap.js [--full-ssg]`
+// Run directly if invoked via CLI: `node generate_sitemap.js [--with-static-cases] [--full-ssg]`
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
   const baseUrl = process.env.APP_URL || DEFAULT_BASE_URL;
   const fullSsg = process.argv.includes("--full-ssg");
+  const withStaticCases = process.argv.includes("--with-static-cases") || fullSsg;
   const result = generateAndWriteSitemapFiles(__dirname, {
     baseUrl,
-    writeStaticCases: true,
+    writeStaticCases: withStaticCases,
     maxStaticCases: fullSsg ? Infinity : 80
   });
   console.log(

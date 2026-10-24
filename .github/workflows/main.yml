@@ -51,7 +51,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add calibrated_archive.json public/calibrated_archive.json crawler_vault_backup.json public/crawler_vault_backup.json sitemap.xml public/sitemap.xml ads.txt public/ads.txt || true
+          git add calibrated_archive.json public/calibrated_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json sitemap.xml public/sitemap.xml ads.txt public/ads.txt || true
           if ! git diff --staged --quiet; then
             git commit -m "chore(crawler): auto-sync newly crawled cases to calibrated_archive.json, crawler_vault_backup.json & sitemap.xml"
             git pull --rebase origin main || true

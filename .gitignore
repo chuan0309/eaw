@@ -1,0 +1,7 @@
+node_modules/
+.aistudio/
+.gmp_cache/
+public/assets/
+public/case/
+*.log
+.DS_Store

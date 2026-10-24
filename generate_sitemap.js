@@ -532,10 +532,11 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
     }
   }
 
-  // Write fast initial boot JSON (top Taiwan records + all JP/KR records + authoritative totalCount, categoryCounts & countryCategoryCounts) to both root and /public
-  const jpKrRecords = records.filter(r => r.country === "JP" || r.country === "KR");
+  // Write fast initial boot JSON (top 80 per country + authoritative totalCount, categoryCounts & countryCategoryCounts) to both root and /public
   const twTopRecords = records.filter(r => r.country === "TW").slice(0, 80);
-  const slimBootRecords = [...twTopRecords, ...jpKrRecords].map(({ merged_cases, ...rest }) => rest);
+  const jpTopRecords = records.filter(r => r.country === "JP").slice(0, 80);
+  const krTopRecords = records.filter(r => r.country === "KR").slice(0, 80);
+  const slimBootRecords = [...twTopRecords, ...jpTopRecords, ...krTopRecords].map(({ merged_cases, ...rest }) => rest);
   const bootPayloadStr = JSON.stringify({
     totalCount: records.length,
     categoryCounts,

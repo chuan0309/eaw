@@ -1273,4 +1273,104 @@ export function consolidateSimilarRecords(records = []) {
   return consolidated;
 }
 
+// ============================================================================
+// Live Japan (JP) & South Korea (KR) Incident News & Foreclosure Crawler Engine
+// ============================================================================
+export async function fetchJapanIncidentNewsRss(query = "", city = "東京都", district = "新宿区") {
+  const results = [];
+  const searchTerms = query
+    ? `${city} ${district} ${query}`
+    : `${city} ${district} (マンション OR アパート OR 住宅) (死亡 OR 遺体 OR 火災 OR 殺人 OR 事故物件)`;
+  const urls = [
+    `https://news.google.com/rss/search?q=${encodeURIComponent(searchTerms)}&hl=ja&gl=JP&ceid=JP:ja`,
+    `https://www.bing.com/news/search?q=${encodeURIComponent(searchTerms)}&format=rss&cc=JP&setLang=ja`
+  ];
+
+  await Promise.all(
+    urls.map(async (u) => {
+      try {
+        const res = await fetch(u, {
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; PropertyArchiveCrawler/2.0)" }
+        });
+        if (!res.ok) return;
+        const xml = await res.text();
+        const itemMatches = xml.match(/<item>[\s\S]*?<\/item>/gi) || [];
+        for (const itemXml of itemMatches.slice(0, 12)) {
+          const title = ((itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>|<title>([\s\S]*?)<\/title>/i) || [])[1] ||
+            (itemXml.match(/<title>([\s\S]*?)<\/title>/i) || [])[1] || "")
+            .replace(/<[^>]+>/g, "")
+            .trim();
+          const link = ((itemXml.match(/<link>([\s\S]*?)<\/link>/i) || [])[1] || "").trim();
+          const pubDateRaw = ((itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/i) || [])[1] || "").trim();
+          if (!title || !link) continue;
+          if (!/死亡|遺体|殺|火災|全焼|転落|変死|事故|刺され|心肺停止/.test(title)) continue;
+          const parsedDate = pubDateRaw ? new Date(pubDateRaw) : new Date();
+          const dateStr = !isNaN(parsedDate.getTime())
+            ? parsedDate.toISOString().slice(0, 10)
+            : new Date().toISOString().slice(0, 10);
+          results.push({
+            title,
+            link,
+            date: dateStr,
+            media: "日本公開社会ニュース・消防警察報道",
+            country: "JP",
+            city,
+            district
+          });
+        }
+      } catch (e) {}
+    })
+  );
+  return results;
+}
+
+export async function fetchKoreaIncidentNewsRss(query = "", city = "首爾特別市", district = "江南區", koCity = "서울", koDist = "강남구") {
+  const results = [];
+  const searchTerms = query
+    ? `${koCity} ${koDist} ${query}`
+    : `${koCity} ${koDist} (아파트 OR 오피스텔 OR 빌라 OR 다세대) (사망 OR 숨진채 OR 화재 OR 살인 OR 변사)`;
+  const urls = [
+    `https://news.google.com/rss/search?q=${encodeURIComponent(searchTerms)}&hl=ko&gl=KR&ceid=KR:ko`,
+    `https://www.bing.com/news/search?q=${encodeURIComponent(searchTerms)}&format=rss&cc=KR&setLang=ko`
+  ];
+
+  await Promise.all(
+    urls.map(async (u) => {
+      try {
+        const res = await fetch(u, {
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; PropertyArchiveCrawler/2.0)" }
+        });
+        if (!res.ok) return;
+        const xml = await res.text();
+        const itemMatches = xml.match(/<item>[\s\S]*?<\/item>/gi) || [];
+        for (const itemXml of itemMatches.slice(0, 12)) {
+          const title = ((itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>|<title>([\s\S]*?)<\/title>/i) || [])[1] ||
+            (itemXml.match(/<title>([\s\S]*?)<\/title>/i) || [])[1] || "")
+            .replace(/<[^>]+>/g, "")
+            .trim();
+          const link = ((itemXml.match(/<link>([\s\S]*?)<\/link>/i) || [])[1] || "").trim();
+          const pubDateRaw = ((itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/i) || [])[1] || "").trim();
+          if (!title || !link) continue;
+          if (!/사망|숨진|숨져|화재|살인|변사|추락|투신|참변|발견/.test(title)) continue;
+          const parsedDate = pubDateRaw ? new Date(pubDateRaw) : new Date();
+          const dateStr = !isNaN(parsedDate.getTime())
+            ? parsedDate.toISOString().slice(0, 10)
+            : new Date().toISOString().slice(0, 10);
+          results.push({
+            title,
+            link,
+            date: dateStr,
+            media: "韓國公開社會新聞・警察消防通報",
+            country: "KR",
+            city,
+            district
+          });
+        }
+      } catch (e) {}
+    })
+  );
+  return results;
+}
+
+
 

@@ -715,8 +715,8 @@ app.get("/api/records", (req, res) => {
       String(b.incident_date || "0000-00-00").localeCompare(String(a.incident_date || "0000-00-00"))
     );
     const twSlice = sorted.filter(r => inferServerRecordCountry(r) === "TW").slice(0, perCountryLimit);
-    const jpSlice = sorted.filter(r => inferServerRecordCountry(r) === "JP");
-    const krSlice = sorted.filter(r => inferServerRecordCountry(r) === "KR");
+    const jpSlice = sorted.filter(r => inferServerRecordCountry(r) === "JP").slice(0, perCountryLimit);
+    const krSlice = sorted.filter(r => inferServerRecordCountry(r) === "KR").slice(0, perCountryLimit);
     slicedRecords = [...twSlice, ...jpSlice, ...krSlice].map(({ merged_cases, ...rest }) => rest);
   }
 

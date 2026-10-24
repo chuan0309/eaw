@@ -1,5 +1,145 @@
 [
   {
+    "id": 17876,
+    "city": "桃園市",
+    "district": "新屋區",
+    "doorplate_address": "桃園市新屋區信義街",
+    "address": "桃園市新屋區信義街（社區電梯大樓）",
+    "lat": 24.970807,
+    "lng": 121.100253,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-04-04",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "居民於新屋溪流域發生溺水死亡事故，經查該住戶登記地址位於信義街附近，屬非自然死亡範疇。",
+    "source": "聯合報社會版報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5DempIbTNFeEpsSGp0eDREUFc1VC1aYTJ0X3RUZFVybUZtSmFLU0xYQ3FxTGstSVVXbEUyR0h1WDQ1NGV0MUI2ZEtnXzVXcnNY0gFWQVVfeXFMUEZLQWdGNVlZVWgwV0V3Q0ZwV29ESVE4QldjMUl5R0NRc0RsWVZCRXA2WE55TnhDSmNWcGt5WEtULTRONzlkc3dFdkp1REl0UG9GMTNwYXc?oc=5",
+    "media_verification": "聯合報社會版報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2026-04-04",
+        "stage": "案發與公開查證紀錄",
+        "detail": "婦人出門未歸，警消搜尋兩日後發現已冰冷氣絕。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 17875,
+    "city": "桃園市",
+    "district": "新屋區",
+    "doorplate_address": "桃園市新屋區中山路",
+    "address": "桃園市新屋區中山路（透天厝住宅）",
+    "lat": 24.972763,
+    "lng": 121.104745,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2021-08-02",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "刑事命案",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "新屋區海邊防風林附近發生女子陳屍案件，經警方調查該區域周邊住宅曾涉及相關社會案件調查，該案涉及非自然死亡，經媒體報導確認。",
+    "source": "自由時報社會版報導",
+    "source_url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBEaDI1aTdwOGVOdURycWxoVWdGM0JLWk9JdTRNTVByT2tuRVRjMzNqVko3ckVmdnY2WGY5RFhhbWJlUXN4NXJzOFhQYmxfT1M5RnJMd1gyeEdhbENWbUc2OEExek56aGVq?oc=5",
+    "media_verification": "自由時報社會版報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2021-08-02",
+        "stage": "案發與公開查證紀錄",
+        "detail": "女子陳屍於新屋防風林，警方介入調查並封鎖現場。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 17874,
+    "city": "高雄市",
+    "district": "新興區",
+    "doorplate_address": "高雄市新興區自立一路",
+    "address": "高雄市新興區自立一路（傳統公寓住宅）",
+    "lat": 22.620906,
+    "lng": 120.304325,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2023-11-18",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "意外身亡",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "自立一路某傳統公寓住宅深夜發生火警，消防隊撲滅火勢後於屋內發現一人葬身火海，符合內政部住宅火警致死之凶宅定義。",
+    "source": "高雄市政府消防局火災勘查紀錄、新聞報導",
+    "source_url": "",
+    "media_verification": "高雄市政府消防局火災勘查紀錄、新聞報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2023-11-18",
+        "stage": "火警發生",
+        "detail": "公寓住宅深夜起火，釀成一人死亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 17873,
+    "city": "高雄市",
+    "district": "新興區",
+    "doorplate_address": "高雄市新興區民主橫路",
+    "address": "高雄市新興區民主橫路（社區電梯大樓）",
+    "lat": 22.634317,
+    "lng": 120.301203,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-09-20",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "旅館或出租套房退房時房務人員敲門無回應，警員破門發現住客陳屍床上，符合非自然死亡法定凶宅要件。",
+    "source": "壹蘋新聞網報導",
+    "source_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XdFdDZk9mWE9MTi1fbjl6WFFYVU5VdlRGSGlQN1lCRVk4SFdVNjE3UUlGTUoyRFdBQjNFTU84OWY4TVlUcDg4SnlwUFZFOEE1VThGclRwclpMcWpFRDlNMUZ2UVI4c1llZDF3SlRIZU1xbXN1cXpDcDh4MFZrYTQ?oc=5",
+    "media_verification": "壹蘋新聞網報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2026-09-20",
+        "stage": "現場勘驗",
+        "detail": "房務人員察覺異狀報警，警方進房後確認住客已無生命跡象。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
+    "id": 17872,
+    "city": "高雄市",
+    "district": "新興區",
+    "doorplate_address": "高雄市新興區六合橫路",
+    "address": "高雄市新興區六合橫路（社區電梯大樓）",
+    "lat": 22.632713,
+    "lng": 120.307953,
+    "location_accuracy": "ROOFTOP_GEOCODED",
+    "incident_date": "2026-08-08",
+    "building_type": "住宅建物",
+    "current_status": "現況使用中",
+    "category": "輕生事故",
+    "db_source": "NEWS_PUBLIC_ARCHIVE",
+    "reason": "高雄市新興區發生男公關失聯多日，房東破門驚見房客陳屍屋內，經警消勘驗確認非自然死亡。",
+    "source": "Yahoo新聞/TVBS新聞網/創新聞報導",
+    "source_url": "https://news.google.com/rss/articles/CBMixgJBVV95cUxQSnY3c1A4eTNWeHEyRmVUYXBfM2p6XzlNZWM5bkd5UnhNOWtSamZiVTBWd01nSnByNlZ0TUFuelJkenZETm9OUGhHanVPbVM0ZVYwWWItRWxvV3lvN19vUXNCbkhndWNHME5NT2JuR3ZFVlBlRFpaT054TFRxbFZXZlVhYjJuUzRtTzhqOGZyLXdlbm1Fc0hTT2FwVnVYd3R1VGhYaFNGcld6emxmckV6TUtfeGpKa0ZMZTgtWHd2UEdmSVFSSWNyTzhWXy0wRWV0Z3RxVURCYWFhT0FnbUlNdGM1Wm5UWnMweFJHRGdWUDFIbVBZNmwtTmkyNVJFV3NOOFlhQklsZ2IzQTdGVmZTOV90c1NlekZBSXdLVGpsNzBaMHE3bzIxTlJMbExFTTNpWXd0eFliN2J1cGRkLUhyOGI0Y2o1dw?oc=5",
+    "media_verification": "Yahoo新聞/TVBS新聞網/創新聞報導",
+    "auction_record": "",
+    "history_timeline": [
+      {
+        "year": "2026-08-08",
+        "stage": "案發與相驗",
+        "detail": "房東破門發現住戶陳屍租屋處，轄區警方報請檢察官相驗確認非自然死亡。"
+      }
+    ],
+    "merged_count": 1
+  },
+  {
     "id": 17773,
     "city": "臺中市",
     "district": "東勢區",

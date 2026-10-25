@@ -369,9 +369,147 @@ export function renderStandaloneCaseHtml(templateHtml, record, totalRecordCount 
 }
 
 /**
+ * Authentic Multi-Language SEO Metadata Definitions for Independent Subdirectory Routes:
+ * - `/` and `/zh-tw/`: 凶宅地圖、事故物件查詢
+ * - `/ja/`: 事故物件マップ、心理的瑕疵、殺人・自殺・火災の物件検索 (Never literal "凶宅")
+ * - `/ko/`: 사고 매물 지도、흉가、사건·사고 부동산 검색
+ * - `/en/`: Stigmatized Property Map & Incident Real Estate Search
+ */
+export const I18N_SEO_PAGES = {
+  "zh-root": {
+    langAttr: "zh-Hant-TW",
+    appLang: "zh-TW",
+    subPath: "/",
+    ogLocale: "zh_TW",
+    siteName: "凶宅地圖",
+    title: "凶宅地圖｜台灣・日本・韓國事故物件查詢與公開法院法拍實證資料庫",
+    description: "整合台灣、日本與韓國超過 12,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災）與法院法拍點交紀錄之空間查詢資料庫。",
+    keywords: "凶宅地圖, 事故物件查詢, 台灣凶宅查詢, 凶宅名單, 法拍凶宅, 事故建物資料庫, 大島てる, 事故物件マップ, 사고 매물 지도"
+  },
+  "zh-tw": {
+    langAttr: "zh-Hant-TW",
+    appLang: "zh-TW",
+    subPath: "/zh-tw/",
+    ogLocale: "zh_TW",
+    siteName: "凶宅地圖",
+    title: "凶宅地圖｜台灣・日本・韓國事故物件查詢與公開法院法拍實證資料庫",
+    description: "整合台灣、日本與韓國超過 12,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災）與法院法拍點交紀錄之空間查詢資料庫。",
+    keywords: "凶宅地圖, 事故物件查詢, 台灣凶宅查詢, 凶宅名單, 法拍凶宅, 事故建物資料庫"
+  },
+  ja: {
+    langAttr: "ja",
+    appLang: "ja",
+    subPath: "/ja/",
+    ogLocale: "ja_JP",
+    siteName: "事故物件マップ",
+    title: "事故物件マップ｜心理的瑕疵、殺人・自殺・火災の物件検索データベース",
+    description: "日本全国の事故物件マップ、心理的瑕疵、殺人・自殺・火災の物件検索データベース。大島てる・JikoDB・裁判所競売BIT（3点セット）・警察庁e-Stat統計を統合し、町丁目・番地レベルの正確な座標で検索可能。",
+    keywords: "事故物件マップ, 心理的瑕疵, 殺人・自殺・火災の物件検索, 事故物件 検索, 大島てる, JikoDB, 競売BIT, 告知事項"
+  },
+  ko: {
+    langAttr: "ko",
+    appLang: "ko",
+    subPath: "/ko/",
+    ogLocale: "ko_KR",
+    siteName: "사고 매물 지도",
+    title: "사고 매물 지도｜흉가、사건·사고 부동산 검색 및 법원경매 검증 데이터베이스",
+    description: "대한민국·일본·대만 사고 매물 지도, 흉가, 사건·사고 부동산 검색 플랫폼. 대법원 법원경매 매각물건명세서·현황조사서, 경찰청(KNPA·CCJS) 범죄통계 및 국토교통부 실거래가 데이터를 결합해 정확한 도로명주소 좌표를 제공합니다.",
+    keywords: "사고 매물 지도, 흉가, 사건·사고 부동산 검색, 사고뭉치 매물, 법원경매 사고매물, 오피스텔 사건사고 검색"
+  },
+  en: {
+    langAttr: "en",
+    appLang: "en",
+    subPath: "/en/",
+    ogLocale: "en_US",
+    siteName: "Stigmatized Property Map",
+    title: "Stigmatized Property Map | Taiwan, Japan & Korea Incident Real Estate Search",
+    description: "Interactive stigmatized property map and incident real estate search covering over 12,000 verified court foreclosure and unnatural death records across Taiwan, Japan (Oshimateru/BIT), and South Korea.",
+    keywords: "Stigmatized Property Map, Jiko Bukken Map, Oshimateru, Incident Real Estate Search, Taiwan Japan Korea Foreclosure Map"
+  }
+};
+
+/**
+ * Pre-renders localized HTML for `/`, `/zh-tw/`, `/ja/`, `/ko/`, `/en/` with:
+ * - Authentic localized `<title>`, `<meta name="description">`, `<meta name="keywords">`, OpenGraph (`og:title`, `og:description`, `og:url`, `og:locale`)
+ * - Full `<link rel="alternate" hreflang="..." />` tags (`zh-Hant`, `zh-TW`, `ja`, `ko`, `en`, `x-default`)
+ */
+export function buildLocalizedIndexHtml(templateHtml, pageKey = "zh-root", baseUrl = DEFAULT_BASE_URL) {
+  const cleanBase = String(baseUrl || DEFAULT_BASE_URL).replace(/\/$/, "");
+  const cfg = I18N_SEO_PAGES[pageKey] || I18N_SEO_PAGES["zh-root"];
+  const canonicalUrl = `${cleanBase}${cfg.subPath}`;
+  let html = String(templateHtml || "");
+
+  html = html.replace(/<html\s+lang=["'][^"']*["']/i, `<html lang="${escapeHtml(cfg.langAttr)}"`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(cfg.title)}</title>`);
+  html = html.replace(
+    /<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta name="description" content="${escapeHtml(cfg.description)}" />`
+  );
+  html = html.replace(
+    /<meta\s+name=["']keywords["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta name="keywords" content="${escapeHtml(cfg.keywords)}" />`
+  );
+  html = html.replace(
+    /<link\s+rel=["']canonical["'][^>]*>/gi,
+    `<link rel="canonical" id="canonical-link" href="${escapeHtml(canonicalUrl)}" />`
+  );
+
+  const hreflangBlock = [
+    `<link rel="alternate" hreflang="zh-Hant" href="${cleanBase}/" />`,
+    `<link rel="alternate" hreflang="zh-TW" href="${cleanBase}/zh-tw/" />`,
+    `<link rel="alternate" hreflang="ja" href="${cleanBase}/ja/" />`,
+    `<link rel="alternate" hreflang="ko" href="${cleanBase}/ko/" />`,
+    `<link rel="alternate" hreflang="en" href="${cleanBase}/en/" />`,
+    `<link rel="alternate" hreflang="x-default" href="${cleanBase}/" />`
+  ].join("\n  ");
+
+  if (/<link\s+rel=["']alternate["']\s+hreflang=/i.test(html)) {
+    html = html.replace(
+      /(?:\s*<link\s+rel=["']alternate["']\s+hreflang=["'][^"']+["']\s+href=["'][^"']+["']\s*\/?>)+/i,
+      `\n  ${hreflangBlock}`
+    );
+  } else {
+    html = html.replace(
+      /(<link\s+rel=["']canonical["'][^>]*>)/i,
+      `$1\n  ${hreflangBlock}`
+    );
+  }
+
+  html = html.replace(
+    /<meta\s+property=["']og:site_name["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta property="og:site_name" content="${escapeHtml(cfg.siteName)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property=["']og:url["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta property="og:url" content="${escapeHtml(canonicalUrl)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property=["']og:title["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta property="og:title" content="${escapeHtml(cfg.title)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property=["']og:description["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta property="og:description" content="${escapeHtml(cfg.description)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property=["']og:locale["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta property="og:locale" content="${escapeHtml(cfg.ogLocale)}" />`
+  );
+  html = html.replace(
+    /<meta\s+name=["']twitter:title["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta name="twitter:title" content="${escapeHtml(cfg.title)}" />`
+  );
+  html = html.replace(
+    /<meta\s+name=["']twitter:description["']\s+content=["'][^"']*["']\s*\/?>/i,
+    `<meta name="twitter:description" content="${escapeHtml(cfg.description)}" />`
+  );
+
+  return html;
+}
+
+/**
  * Builds a strict, canonical-only XML Sitemap:
- * - Only includes the homepage (`https://chuancn.org/`) and verified standalone case pages (`https://chuancn.org/case/<slug>/`)
- * - Excludes `?city=`, `?district=`, `?lang=`, and `?case=` query URLs to prevent duplicate/thin content penalties
+ * - Includes `/`, `/zh-tw/`, `/ja/`, `/ko/`, `/en/` and verified standalone case pages (`https://chuancn.org/case/<slug>/`)
  */
 export function buildSitemapXml(records = [], baseUrl = DEFAULT_BASE_URL) {
   const cleanBase = String(baseUrl || DEFAULT_BASE_URL).replace(/\/$/, "");
@@ -380,16 +518,29 @@ export function buildSitemapXml(records = [], baseUrl = DEFAULT_BASE_URL) {
   const urlEntries = [];
   const seenLocs = new Set();
 
-  function pushUrl(loc, lastmod, changefreq, priority) {
+  const xhtmlAlternates = [
+    `    <xhtml:link rel="alternate" hreflang="zh-Hant" href="${cleanBase}/" />`,
+    `    <xhtml:link rel="alternate" hreflang="zh-TW" href="${cleanBase}/zh-tw/" />`,
+    `    <xhtml:link rel="alternate" hreflang="ja" href="${cleanBase}/ja/" />`,
+    `    <xhtml:link rel="alternate" hreflang="ko" href="${cleanBase}/ko/" />`,
+    `    <xhtml:link rel="alternate" hreflang="en" href="${cleanBase}/en/" />`,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${cleanBase}/" />`
+  ].join("\n");
+
+  function pushUrl(loc, lastmod, changefreq, priority, includeHreflang = false) {
     if (!loc || seenLocs.has(loc)) return;
     seenLocs.add(loc);
     urlEntries.push(
-      `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${escapeXml(lastmod)}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`
+      `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${escapeXml(lastmod)}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>${includeHreflang ? "\n" + xhtmlAlternates : ""}\n  </url>`
     );
   }
 
-  // 1. Canonical Homepage
-  pushUrl(`${cleanBase}/`, today, "daily", "1.0");
+  // 1. Canonical Multi-Language Homepages (/, /zh-tw/, /ja/, /ko/, /en/)
+  pushUrl(`${cleanBase}/`, today, "daily", "1.0", true);
+  pushUrl(`${cleanBase}/zh-tw/`, today, "daily", "0.9", true);
+  pushUrl(`${cleanBase}/ja/`, today, "daily", "1.0", true);
+  pushUrl(`${cleanBase}/ko/`, today, "daily", "1.0", true);
+  pushUrl(`${cleanBase}/en/`, today, "daily", "0.9", true);
 
   // 2. Substantive, Verified Standalone Case Pages (/case/<slug>/)
   let substantiveCaseCount = 0;
@@ -399,14 +550,14 @@ export function buildSitemapXml(records = [], baseUrl = DEFAULT_BASE_URL) {
     const slug = buildCaseSlug(r, i);
     const caseLoc = `${cleanBase}/case/${slug}/`;
     const lastmod = normalizeLastModDate(r.incident_date, today);
-    pushUrl(caseLoc, lastmod, "monthly", "0.8");
+    pushUrl(caseLoc, lastmod, "monthly", "0.8", false);
     substantiveCaseCount++;
   }
 
   const xml = [
     `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<!-- Generated by generate_sitemap.js | Canonical URLs Only: ${urlEntries.length} (Homepage + ${substantiveCaseCount} Verified Case Pages) -->`,
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+    `<!-- Generated by generate_sitemap.js | Canonical URLs Only: ${urlEntries.length} (5 Multi-Language Homepages + ${substantiveCaseCount} Verified Case Pages) -->`,
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`,
     urlEntries.join("\n"),
     `</urlset>`,
     ``
@@ -445,7 +596,8 @@ function loadDefaultArchiveRecords(rootDir = __dirname) {
  * Generates and writes:
  * 1. `/sitemap.xml` and `/public/sitemap.xml` (canonical URLs only)
  * 2. `/public/initial_boot_records.json` (first 80 records + authoritative counts for fast mobile LCP)
- * 3. Static HTML case pages under `/public/case/<slug>/index.html`
+ * 3. Pre-rendered multi-language subdirectory pages: `/zh-tw/index.html`, `/ja/index.html`, `/ko/index.html`, `/en/index.html`
+ * 4. Static HTML case pages under `/public/case/<slug>/index.html`
  */
 export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsOrBaseUrl = {}) {
   let rootDir = __dirname;
@@ -549,9 +701,22 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   fs.writeFileSync(bootPath, bootPayloadStr, "utf-8");
   fs.writeFileSync(rootBootPath, bootPayloadStr, "utf-8");
 
-  // Write standalone static HTML pages (`/public/case/<slug>/index.html`) ONLY when explicitly requested via writeStaticCases: true
+  // Write standalone multi-language subdirectory HTML pages (/zh-tw/index.html, /ja/index.html, /ko/index.html, /en/index.html)
   let staticGeneratedCount = 0;
   const indexHtmlPath = path.join(rootDir, "index.html");
+  if (fs.existsSync(indexHtmlPath)) {
+    const baseTemplateHtml = fs.readFileSync(indexHtmlPath, "utf-8");
+    for (const subDir of ["zh-tw", "ja", "ko", "en"]) {
+      const localizedHtml = buildLocalizedIndexHtml(baseTemplateHtml, subDir, baseUrl);
+      const rootSubDir = path.join(rootDir, subDir);
+      const pubSubDir = path.join(publicDir, subDir);
+      fs.mkdirSync(rootSubDir, { recursive: true });
+      fs.mkdirSync(pubSubDir, { recursive: true });
+      fs.writeFileSync(path.join(rootSubDir, "index.html"), localizedHtml, "utf-8");
+      fs.writeFileSync(path.join(pubSubDir, "index.html"), localizedHtml, "utf-8");
+    }
+  }
+
   if (writeStaticCases && fs.existsSync(indexHtmlPath)) {
     const templateHtml = fs.readFileSync(indexHtmlPath, "utf-8");
     const substantiveList = records.filter(isSubstantiveCaseForSeo);
@@ -570,6 +735,7 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   return {
     ...stats,
     totalRecords: records.length,
+    countryCategoryCounts,
     staticGeneratedCount,
     rootSitemapPath,
     publicSitemapPath,
@@ -589,7 +755,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename
   });
   console.log(
     `[Sitemap & SSG Generator] Complete:\n` +
-      `  - Total Records          : ${result.totalRecords.toLocaleString()}\n` +
+      `  - Total Records          : ${result.totalRecords.toLocaleString()} (TW: ${result.countryCategoryCounts?.TW?.ALL || 0}, JP: ${result.countryCategoryCounts?.JP?.ALL || 0}, KR: ${result.countryCategoryCounts?.KR?.ALL || 0})\n` +
       `  - Canonical Case URLs    : ${result.substantiveCaseCount.toLocaleString()}\n` +
       `  - Total Sitemap URLs     : ${result.totalUrls.toLocaleString()}\n` +
       `  - Static Case HTML Pages : ${result.staticGeneratedCount.toLocaleString()}`

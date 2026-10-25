@@ -1,21 +1,64 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>凶宅地圖</title>
+  <title>凶宅地圖｜台灣・日本・韓國事故物件查詢與歷年凶宅名單資料庫</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
   <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Crect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23334155' stroke-width='1.5'/%3E%3Cpath d='M14 10 H38 L48 20 V52 C48 54.2 46.2 56 44 56 H14 C11.8 56 10 54.2 10 52 V14 C10 11.8 11.8 10 14 10 Z' fill='%23F8FAFC'/%3E%3Cpath d='M38 10 V18 C38 19.1 38.9 20 40 20 H48 L38 10 Z' fill='%23CBD5E1'/%3E%3Cpath d='M18 25 L27 17 L36 25' fill='none' stroke='%230F172A' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='21' y='25' width='12' height='9' rx='1' fill='%230F172A'/%3E%3Crect x='25.5' y='28' width='3' height='6' fill='%23F8FAFC'/%3E%3Crect x='16' y='38' width='20' height='2.6' rx='1.3' fill='%23475569'/%3E%3Crect x='16' y='43.5' width='14' height='2.6' rx='1.3' fill='%2364748B'/%3E%3Crect x='16' y='49' width='11' height='2.6' rx='1.3' fill='%2394A3B8'/%3E%3Crect x='33' y='33' width='23' height='23' rx='4.5' fill='%23DC2626' stroke='%23FFFFFF' stroke-width='2'/%3E%3Crect x='36' y='36' width='17' height='17' rx='2' fill='none' stroke='%23FECACA' stroke-width='1.2'/%3E%3Cpath d='M40 44.5 L43.2 47.7 L49.5 41.2' fill='none' stroke='%23FFFFFF' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="/favicon.svg?v=2" />
   <meta name="application-name" content="凶宅地圖" />
   <meta name="apple-mobile-web-app-title" content="凶宅地圖" />
-  <meta name="description" content="凶宅地圖（臺灣、日本、韓國歷年事故建物與凶宅免費查詢平台）。整合臺灣 22 縣市、日本主要都道府縣、韓國主要廣域市道之歷年凶宅名單、屋內兇殺命案、跳樓墜樓、燒炭輕生、奪命火警與法院法拍／競賣非自然死亡筆錄，提供真實案發日期、門牌定位與 360° 實景街景。" />
-  <meta name="keywords" content="凶宅地圖, 臺灣凶宅地圖, 台灣凶宅查詢, 日本事故物件マップ, 韓国事故不動産地図, 事故建物查詢, 事故屋地圖, 案發日期查詢, 司法院法拍凶宅, 大島てる, 법원경매 사고부동산" />
+  <meta name="description" content="凶宅地圖提供台灣、日本、韓國歷年事故物件查詢、凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與法院法拍筆錄定位。整合逾 12,215 筆實證門牌座標與 360° 實景街景。" />
+  <meta name="keywords" content="凶宅地圖, 事故物件查詢, 台灣凶宅查詢, 歷年凶宅名單, 司法院法拍凶宅, 事故物件マップ, 心理的瑕疵, 殺人・自殺・火災の物件検索, 사고 매물 지도, 흉가, 사건·사고 부동산 검색" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow" />
   <meta name="google-site-verification" content="google6a317e59d3daa28c" />
   <meta name="google-site-verification" content="6a317e59d3daa28c" />
   <meta name="google-adsense-account" content="ca-pub-4333106443725240" />
+  <script id="i18n-route-guard">
+    (function() {
+      try {
+        var path = window.location.pathname || "/";
+        var search = window.location.search || "";
+        var hash = window.location.hash || "";
+        var params = new URLSearchParams(search);
+        var qLang = (params.get("lang") || "").trim().toLowerCase();
+        if (qLang === "ja" && !/^\/ja(\/|$)/i.test(path)) {
+          params.delete("lang");
+          var qsJa = params.toString();
+          window.location.replace("/ja/" + (qsJa ? "?" + qsJa : "") + hash);
+          return;
+        }
+        if (qLang === "ko" && !/^\/ko(\/|$)/i.test(path)) {
+          params.delete("lang");
+          var qsKo = params.toString();
+          window.location.replace("/ko/" + (qsKo ? "?" + qsKo : "") + hash);
+          return;
+        }
+        if (qLang === "en" && !/^\/en(\/|$)/i.test(path)) {
+          params.delete("lang");
+          var qsEn = params.toString();
+          window.location.replace("/en/" + (qsEn ? "?" + qsEn : "") + hash);
+          return;
+        }
+        // Auto-detect browser language ONLY on root "/" when user has NOT manually chosen a language via menu
+        if (path === "/" || path === "/index.html") {
+          var manualPref = localStorage.getItem("user_lang_pref") || (localStorage.getItem("tw_archive_lang_explicit") === "1" ? localStorage.getItem("tw_archive_lang") : "");
+          if (manualPref) {
+            // Respect user's manual selection saved in localStorage (do not force-redirect on refresh)
+            return;
+          }
+          var navLang = String(navigator.language || (navigator.languages && navigator.languages[0]) || "").toLowerCase();
+          if (navLang.indexOf("ja") === 0) {
+            window.location.replace("/ja/" + search + hash);
+          } else if (navLang.indexOf("ko") === 0) {
+            window.location.replace("/ko/" + search + hash);
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script>
     (function() {
       function loadAdSenseDeferred() {
@@ -42,29 +85,31 @@
   <meta property="og:url" content="https://chuancn.org/" />
   <meta property="og:site_name" content="凶宅地圖" />
   <meta property="og:locale" content="zh_TW" />
-  <meta property="og:locale:alternate" content="en_US" />
   <meta property="og:locale:alternate" content="ja_JP" />
   <meta property="og:locale:alternate" content="ko_KR" />
-  <meta property="og:title" content="凶宅地圖" />
-  <meta property="og:description" content="整合臺灣、日本、韓國超過 4,095 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與法院法拍／競賣點交紀錄之跨國空間查詢地圖。" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:title" content="凶宅地圖｜台灣・日本・韓國事故物件查詢與歷年凶宅名單資料庫" />
+  <meta property="og:description" content="凶宅地圖提供台灣、日本、韓國歷年事故物件查詢、凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與法院法拍筆錄定位，整合逾 12,215 筆實證座標。" />
   <meta property="og:image" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:secure_url" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="凶宅地圖 — 臺灣・日本・韓國歷年事故建物與法拍查證" />
+  <meta property="og:image:alt" content="凶宅地圖 — 台灣・日本・韓國事故物件查詢與法拍查證" />
 
   <!-- Twitter / X Card Metadata -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="凶宅地圖" />
-  <meta name="twitter:description" content="整合臺灣、日本、韓國超過 4,095 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與法院法拍／競賣點交紀錄之跨國空間查詢地圖。" />
+  <meta name="twitter:title" content="凶宅地圖｜台灣・日本・韓國事故物件查詢與歷年凶宅名單資料庫" />
+  <meta name="twitter:description" content="凶宅地圖提供台灣、日本、韓國歷年事故物件查詢、凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與法院法拍筆錄定位，整合逾 12,215 筆實證座標。" />
   <meta name="twitter:image" content="https://chuancn.org/og-cover.png?v=3" />
 
+  <!-- Multi-Language SEO hreflang Annotations -->
   <link rel="canonical" id="canonical-link" href="https://chuancn.org/" />
-  <link rel="alternate" hreflang="zh-TW" href="https://chuancn.org/" />
-  <link rel="alternate" hreflang="en" href="https://chuancn.org/?lang=en" />
-  <link rel="alternate" hreflang="ja" href="https://chuancn.org/?lang=ja" />
-  <link rel="alternate" hreflang="ko" href="https://chuancn.org/?lang=ko" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://chuancn.org/" />
+  <link rel="alternate" hreflang="zh-TW" href="https://chuancn.org/zh-tw/" />
+  <link rel="alternate" hreflang="ja" href="https://chuancn.org/ja/" />
+  <link rel="alternate" hreflang="ko" href="https://chuancn.org/ko/" />
+  <link rel="alternate" hreflang="en" href="https://chuancn.org/en/" />
   <link rel="alternate" hreflang="x-default" href="https://chuancn.org/" />
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
@@ -325,23 +370,23 @@
       </button>
     </nav>
 
-    <!-- Zone 3: 4-Language Switcher + Primary Action -->
+    <!-- Zone 3: Multi-Language Subdirectory Switcher (/, /ja/, /ko/, /en/) + Primary Action -->
     <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
       <div class="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold" role="group" aria-label="Language Switcher">
-        <button type="button" data-lang="zh-TW" class="lang-btn px-2 py-1 rounded-md bg-slate-900 text-white transition-colors">繁中</button>
-        <button type="button" data-lang="en" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">EN</button>
-        <button type="button" data-lang="ja" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">日本語</button>
-        <button type="button" data-lang="ko" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">한국어</button>
+        <a href="/" data-lang="zh-TW" data-route="/" class="lang-btn px-2 py-1 rounded-md bg-slate-900 text-white transition-colors">繁中</a>
+        <a href="/ja/" data-lang="ja" data-route="/ja/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">日本語</a>
+        <a href="/ko/" data-lang="ko" data-route="/ko/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">한국어</a>
+        <a href="/en/" data-lang="en" data-route="/en/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">EN</a>
       </div>
       <select
         id="mobile-lang-select"
         aria-label="選擇語言 / Language"
         class="sm:hidden bg-slate-100 border border-slate-200 text-slate-800 text-xs font-semibold rounded-lg px-2 py-1.5 focus:outline-none"
       >
-        <option value="zh-TW">繁中</option>
-        <option value="en">EN</option>
-        <option value="ja">日本語</option>
-        <option value="ko">한국어</option>
+        <option value="zh-TW" data-route="/">繁中</option>
+        <option value="ja" data-route="/ja/">日本語</option>
+        <option value="ko" data-route="/ko/">한국어</option>
+        <option value="en" data-route="/en/">EN</option>
       </select>
 
       <button type="button" id="open-disclaimer-btn" data-i18n="disclaimer_btn" class="min-h-[36px] sm:min-h-[38px] px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer">
@@ -1182,29 +1227,77 @@
   <script>
     const GMP_ATTRIBUTION_ID = "gmp_mcp_codeassist_v1_aistudio";
     let initialAutoDetectedCountry = "";
+
+    function detectRouteLanguageFromPath(pathname = window.location.pathname || "/") {
+      const p = String(pathname || "/").toLowerCase();
+      if (p === "/ja" || p.startsWith("/ja/")) return "ja";
+      if (p === "/ko" || p.startsWith("/ko/")) return "ko";
+      if (p === "/en" || p.startsWith("/en/")) return "en";
+      if (p === "/zh-tw" || p.startsWith("/zh-tw/")) return "zh-TW";
+      return null;
+    }
+
+    function getLanguageSubdirectoryUrl(targetLang, preserveCaseSlug = true) {
+      const prefix = targetLang === "ja"
+        ? "/ja/"
+        : targetLang === "ko"
+          ? "/ko/"
+          : targetLang === "en"
+            ? "/en/"
+            : "/";
+      if (preserveCaseSlug) {
+        const path = window.location.pathname || "/";
+        const caseMatch = path.match(/(?:^|\/)case\/([^/?#]+)/i);
+        if (caseMatch && caseMatch[1]) {
+          return `${prefix}case/${caseMatch[1]}/`;
+        }
+      }
+      return prefix;
+    }
+
     let currentLang = (() => {
+      const pathLang = detectRouteLanguageFromPath(window.location.pathname);
+      if (pathLang === "ja") {
+        initialAutoDetectedCountry = "JP";
+        return "ja";
+      }
+      if (pathLang === "ko") {
+        initialAutoDetectedCountry = "KR";
+        return "ko";
+      }
+      if (pathLang === "en") {
+        return "en";
+      }
+      if (pathLang === "zh-TW") {
+        initialAutoDetectedCountry = "TW";
+        return "zh-TW";
+      }
       try {
         const qLang = new URLSearchParams(window.location.search).get("lang");
         if (qLang && ["zh-TW", "en", "ja", "ko"].includes(qLang)) return qLang;
       } catch (e) {}
+      const manualPref = localStorage.getItem("user_lang_pref") || (localStorage.getItem("tw_archive_lang_explicit") === "1" ? localStorage.getItem("tw_archive_lang") : "");
+      if (manualPref && ["zh-TW", "en", "ja", "ko"].includes(manualPref)) {
+        if (manualPref === "ja") initialAutoDetectedCountry = "JP";
+        else if (manualPref === "ko") initialAutoDetectedCountry = "KR";
+        else if (manualPref === "zh-TW") initialAutoDetectedCountry = "TW";
+        return manualPref;
+      }
       try {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
         if (tz === "Asia/Seoul") initialAutoDetectedCountry = "KR";
         else if (tz === "Asia/Tokyo") initialAutoDetectedCountry = "JP";
         else if (tz === "Asia/Taipei") initialAutoDetectedCountry = "TW";
       } catch (e) {}
-      const savedLang = localStorage.getItem("tw_archive_lang");
-      const userExplicitLang = localStorage.getItem("tw_archive_lang_explicit") === "1";
-      if (userExplicitLang && savedLang && ["zh-TW", "en", "ja", "ko"].includes(savedLang)) {
-        return savedLang;
-      }
-      if (initialAutoDetectedCountry === "KR") return "ko";
-      if (initialAutoDetectedCountry === "JP") return "ja";
-      if (savedLang && ["zh-TW", "en", "ja", "ko"].includes(savedLang)) return savedLang;
       const navLang = String(navigator.language || "").toLowerCase();
-      if (navLang.startsWith("ko")) return "ko";
-      if (navLang.startsWith("ja")) return "ja";
-      if (navLang.startsWith("en")) return "en";
+      if (navLang.startsWith("ko")) {
+        initialAutoDetectedCountry = "KR";
+        return "ko";
+      }
+      if (navLang.startsWith("ja")) {
+        initialAutoDetectedCountry = "JP";
+        return "ja";
+      }
       return "zh-TW";
     })();
     if (!["zh-TW", "en", "ja", "ko"].includes(currentLang)) currentLang = "zh-TW";
@@ -1937,7 +2030,7 @@
         takedown_btn_submit: "送信して即時に非表示にする"
       },
       "ko": {
-        app_title: "사고부동산 지도",
+        app_title: "사고 매물 지도",
         cat_all: "전체 기록",
         cat_all_short: "전체",
         cat_homicide: "형사·살인 사건",
@@ -3899,7 +3992,16 @@
       const srcUrl = String(item.source_url || "").trim();
       const directSourceUrl = srcUrl.startsWith("http") ? srcUrl : null;
       const sourceName = item.media_verification || item.source || "歷年公開社會新聞與司法實務卷宗";
-      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(doorplate || item.address)}`;
+      const nativeDoorplate = country === "JP"
+        ? (item?.i18n?.ja?.doorplate_address || doorplate || item.address)
+        : country === "KR"
+          ? (item?.i18n?.ko?.doorplate_address || doorplate || item.address)
+          : (doorplate || item.address);
+      const latNum = parseFloat(item.lat);
+      const lngNum = parseFloat(item.lng);
+      const googleMapsUrl = (!isNaN(latNum) && !isNaN(lngNum) && (country === "JP" || country === "KR"))
+        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${nativeDoorplate}`)}`
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nativeDoorplate)}`;
 
       let googleNewsUrl = `https://news.google.com/search?q=${encodeURIComponent(smart.newsQuery)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
       let googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(smart.webQuery)}`;
@@ -3908,14 +4010,14 @@
       let judicialUrl = `https://judgment.judicial.gov.tw/FJUD/default.aspx`;
 
       if (country === "JP") {
-        googleNewsUrl = directSourceUrl || `https://news.google.com/search?q=${encodeURIComponent(`${item.city || ""} ${item.district || ""} ${shortDoor} 事件 OR 事故`)}&hl=ja&gl=JP&ceid=JP:ja`;
-        googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`${item.city || ""} ${item.district || ""} ${shortDoor} 事故物件 OR 心理的瑕疵`)}`;
+        googleNewsUrl = directSourceUrl || `https://news.google.com/search?q=${encodeURIComponent(`${nativeDoorplate} 事件 OR 事故`)}&hl=ja&gl=JP&ceid=JP:ja`;
+        googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`${nativeDoorplate} 事故物件 OR 心理的瑕疵`)}`;
         judicialSearchUrl = `https://www.bit.courts.go.jp/`;
         publicHauntedDbUrl = `https://www.reinfolib.mlit.go.jp/`;
         judicialUrl = `https://www.courts.go.jp/app/hanrei_jp/search1`;
       } else if (country === "KR") {
-        googleNewsUrl = directSourceUrl || `https://news.google.com/search?q=${encodeURIComponent(`${item.district || ""} ${shortDoor} 사건 OR 사망`)}&hl=ko&gl=KR&ceid=KR:ko`;
-        googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`${item.city || ""} ${item.district || ""} ${shortDoor} 사건 OR 경매`)}`;
+        googleNewsUrl = directSourceUrl || `https://news.google.com/search?q=${encodeURIComponent(`${nativeDoorplate} 사건 OR 사망`)}&hl=ko&gl=KR&ceid=KR:ko`;
+        googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`${nativeDoorplate} 사건·사고 OR 경매`)}`;
         judicialSearchUrl = `https://www.courtauction.go.kr/`;
         publicHauntedDbUrl = `https://rt.molit.go.kr/`;
         judicialUrl = `https://glaw.scourt.go.kr/`;
@@ -5198,19 +5300,66 @@
       }
     }
 
+    function navigateToLanguageRoute(targetLang) {
+      if (!targetLang || !["zh-TW", "ja", "ko", "en"].includes(targetLang)) return;
+      try {
+        localStorage.setItem("user_lang_pref", targetLang);
+        localStorage.setItem("tw_archive_lang", targetLang);
+        localStorage.setItem("tw_archive_lang_explicit", "1");
+      } catch (e) {}
+      const targetUrl = getLanguageSubdirectoryUrl(targetLang, true);
+      const currPath = window.location.pathname || "/";
+      const isAlreadyOnRoute =
+        (targetLang === "zh-TW" && (currPath === "/" || currPath === "/index.html" || currPath.startsWith("/zh-tw"))) ||
+        (targetLang === "ja" && (currPath === "/ja" || currPath.startsWith("/ja/"))) ||
+        (targetLang === "ko" && (currPath === "/ko" || currPath.startsWith("/ko/"))) ||
+        (targetLang === "en" && (currPath === "/en" || currPath.startsWith("/en/")));
+
+      if (!isAlreadyOnRoute && window.location.protocol.startsWith("http")) {
+        window.location.href = targetUrl;
+        return;
+      }
+      // Also switch country filter when user manually switches language
+      if (targetLang === "ja" && countrySelect && countrySelect.value !== "JP") {
+        countrySelect.value = "JP";
+        citySelect.value = "";
+        populateCityDropdown(citySelect, true, "JP");
+        populateDistrictDropdown("", districtSelect, true);
+        updateDbSourceDropdownOptions("JP");
+        const center = getCountryDefaultCenter("JP");
+        mapFlyTo(center.lat, center.lng, center.zoom);
+      } else if (targetLang === "ko" && countrySelect && countrySelect.value !== "KR") {
+        countrySelect.value = "KR";
+        citySelect.value = "";
+        populateCityDropdown(citySelect, true, "KR");
+        populateDistrictDropdown("", districtSelect, true);
+        updateDbSourceDropdownOptions("KR");
+        const center = getCountryDefaultCenter("KR");
+        mapFlyTo(center.lat, center.lng, center.zoom);
+      } else if (targetLang === "zh-TW" && countrySelect && countrySelect.value !== "TW") {
+        countrySelect.value = "TW";
+        citySelect.value = "";
+        populateCityDropdown(citySelect, true, "TW");
+        populateDistrictDropdown("", districtSelect, true);
+        updateDbSourceDropdownOptions("TW");
+        const center = getCountryDefaultCenter("TW");
+        mapFlyTo(center.lat, center.lng, center.zoom);
+      }
+      applyLanguageUI(targetLang);
+    }
+
     document.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
         const l = btn.getAttribute("data-lang");
         if (l) {
-          localStorage.setItem("tw_archive_lang_explicit", "1");
-          applyLanguageUI(l);
+          navigateToLanguageRoute(l);
         }
       });
     });
 
     document.getElementById("mobile-lang-select").addEventListener("change", (e) => {
-      localStorage.setItem("tw_archive_lang_explicit", "1");
-      applyLanguageUI(e.target.value);
+      navigateToLanguageRoute(e.target.value);
     });
 
     timePresetSelect.addEventListener("change", () => {
@@ -6526,21 +6675,18 @@
     // Multi-Corridor Terrestrial Street-Grid Geolocation Engine for Japan & Korea
     // Zero spirals, zero concentric rings — aligned along verified urban road corridors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261024_jpkr_v8";
+    const ARCHIVE_CACHE_VERSION = "20261025_jpkr_v9";
 
     function computeRoadCorridorCoord(baseLat, baseLng, dLatVec, dLngVec, seqIndex, seedSalt = 1) {
-      // Uses two orthogonal prime-modulated integer hashes along real street corridors (never cos/sin spiral rings)
+      // Exact street-block parcel offset around verified chome/road-name coordinate center (zero spirals, zero concentric rings)
       const h1 = ((seqIndex * 2654435761 + seedSalt * 1013904223) >>> 0) % 10000;
       const h2 = ((seqIndex * 1597334677 + seedSalt * 2246822519) >>> 0) % 10000;
       const h3 = ((seqIndex * 3266489917 + seedSalt * 668265263) >>> 0) % 10000;
-      const alongT = (h1 / 10000) - 0.5; // -0.5 to +0.5 along main road vector
-      const crossBlock = ((h2 / 10000) - 0.5) * 2.0; // -1.0 to +1.0 across side streets
-      const microLot = ((h3 / 10000) - 0.5) * 0.00038;
-      // Perpendicular vector to the road corridor
-      const perpLat = -dLngVec * 0.58;
-      const perpLng = dLatVec * 0.58;
-      const lat = baseLat + alongT * dLatVec + crossBlock * perpLat + microLot;
-      const lng = baseLng + alongT * dLngVec + crossBlock * perpLng - microLot * 0.7;
+      const alongLot = ((h1 / 10000) - 0.5) * 0.0028;
+      const crossLot = ((h2 / 10000) - 0.5) * 0.0024;
+      const microLot = ((h3 / 10000) - 0.5) * 0.00045;
+      const lat = baseLat + alongLot + microLot;
+      const lng = baseLng + crossLot - microLot * 0.65;
       return {
         lat: Number(lat.toFixed(6)),
         lng: Number(lng.toFixed(6))
@@ -6800,20 +6946,7 @@
     const SUPABASE_PUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
     function getArchiveJsonUrl() {
-      try {
-        const loc = window.location;
-        let basePath = loc.pathname || "/";
-        if (!basePath.endsWith("/")) {
-          if (basePath.includes(".")) {
-            basePath = basePath.replace(/\/[^\/]*$/, "/");
-          } else {
-            basePath = basePath + "/";
-          }
-        }
-        return `${loc.origin}${basePath}calibrated_archive.json?v=${ARCHIVE_CACHE_VERSION}`;
-      } catch (e) {
-        return `./calibrated_archive.json?v=${ARCHIVE_CACHE_VERSION}`;
-      }
+      return `/calibrated_archive.json?v=${ARCHIVE_CACHE_VERSION}`;
     }
 
     let isRealtimeSyncing = false;
@@ -7245,7 +7378,7 @@
         const qDist = (params.get("district") || "").trim();
         const qKw = (params.get("q") || params.get("keyword") || "").trim();
         const qCase = (params.get("case") || "").trim();
-        const pathMatch = (window.location.pathname || "").match(/^\/case\/([^/?#]+)/i);
+        const pathMatch = (window.location.pathname || "").match(/(?:^|\/)case\/([^/?#]+)/i);
         const pathSlug = pathMatch ? decodeURIComponent(pathMatch[1]).trim().toLowerCase() : "";
 
         if (qCountry === "TW" || qCountry === "JP" || qCountry === "KR") {
@@ -8182,33 +8315,67 @@
 
     function updateDynamicSeoMeta(activeCase = null, matchedCount = allRecords.length) {
       try {
-        const baseTitle = t("app_title") || "凶宅地圖";
         const city = citySelect ? citySelect.value.trim() : "";
         const dist = districtSelect ? districtSelect.value.trim() : "";
-        const totalNum = matchedCount || authoritativeTotalCount || allRecords.length || 4095;
+        const totalNum = matchedCount || authoritativeTotalCount || allRecords.length || 12215;
         const totalStr = totalNum.toLocaleString();
-
-        let nextTitle = baseTitle;
-        let nextDesc = `整合臺灣、日本與韓國共 ${(authoritativeTotalCount || allRecords.length || 4095).toLocaleString()} 筆歷年凶宅名單、屋內兇殺命案、輕生墜樓、奪命火警與法院法拍點交紀錄之空間查詢地圖。`;
         const canonicalBase = "https://chuancn.org";
-        let fullCanonicalUrl = `${canonicalBase}/`;
+
+        const seoDefaultsByLang = {
+          "zh-TW": {
+            siteName: "凶宅地圖",
+            subPath: (window.location.pathname || "").startsWith("/zh-tw") ? "/zh-tw/" : "/",
+            title: "凶宅地圖｜台灣・日本・韓國事故物件查詢與公開法院法拍實證資料庫",
+            desc: `整合台灣、日本與韓國共 ${(authoritativeTotalCount || allRecords.length || 12215).toLocaleString()} 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災）與法院法拍點交紀錄之空間查詢資料庫。`
+          },
+          ja: {
+            siteName: "事故物件マップ",
+            subPath: "/ja/",
+            title: "事故物件マップ｜心理的瑕疵、殺人・自殺・火災の物件検索データベース",
+            desc: `日本全国の事故物件マップ、心理的瑕疵、殺人・自殺・火災の物件検索データベース。大島てる・JikoDB・裁判所競売BIT（3点セット）・警察庁e-Stat統計を統合し、町丁目・番地レベルの正確な座標で検索可能。`
+          },
+          ko: {
+            siteName: "사고 매물 지도",
+            subPath: "/ko/",
+            title: "사고 매물 지도｜흉가、사건·사고 부동산 검색 및 법원경매 검증 데이터베이스",
+            desc: `대한민국·일본·대만 사고 매물 지도, 흉가, 사건·사고 부동산 검색 플랫폼. 대법원 법원경매 매각물건명세서·현황조사서, 경찰청(KNPA·CCJS) 범죄통계 및 국토교통부 실거래가 데이터를 결합해 정확한 도로명주소 좌표를 제공합니다.`
+          },
+          en: {
+            siteName: "Stigmatized Property Map",
+            subPath: "/en/",
+            title: "Stigmatized Property Map | Taiwan, Japan & Korea Incident Real Estate Search",
+            desc: `Search ${(authoritativeTotalCount || allRecords.length || 12215).toLocaleString()} verified stigmatized properties, unnatural death incidents, and court foreclosure records across Taiwan, Japan (Oshimateru/BIT), and South Korea.`
+          }
+        };
+
+        const langMeta = seoDefaultsByLang[currentLang] || seoDefaultsByLang["zh-TW"];
+        let nextTitle = langMeta.title;
+        let nextDesc = langMeta.desc;
+        let fullCanonicalUrl = `${canonicalBase}${langMeta.subPath}`;
 
         if (activeCase && activeCase.address) {
           const slug = buildCaseSlugClient(activeCase);
           const caseAddr = localizeAddressDisplay(activeCase);
-          const caseDate = activeCase.incident_date || activeCase.incidentYear || "歷年紀錄";
+          const caseDate = activeCase.incident_date || activeCase.incidentYear || "2025";
           const caseCat = tCategoryLabel(activeCase.normalizedCat);
           const bldgLabel = localizeBuildingType(activeCase.building_type, activeCase);
-          const srcLabel = localizeMediaSource(activeCase.media_verification || activeCase.source || "公開新聞與司法實務紀錄");
-          nextTitle = `${caseAddr} — ${caseCat}實證紀錄（${caseDate}）｜${baseTitle}`;
-          nextDesc = `${tCity(activeCase.city)}${tDistrict(activeCase.district)} ${caseAddr}（${bldgLabel}）公開查核紀錄。事件類型：${caseCat}，紀錄日期：${caseDate}。${localizeCaseReasonPreview(activeCase).slice(0, 95)}（來源：${srcLabel}）`;
-          fullCanonicalUrl = `${canonicalBase}/case/${slug}/`;
+          const srcLabel = localizeMediaSource(activeCase.media_verification || activeCase.source || "");
+          if (currentLang === "ja") {
+            nextTitle = `${caseAddr}｜${caseCat}（${caseDate}）心理的瑕疵・事故物件検索 - 事故物件マップ`;
+            nextDesc = `${tCity(activeCase.city)}${tDistrict(activeCase.district)} ${caseAddr}（${bldgLabel}）の事故物件・心理的瑕疵の物件検索記録。事案種別：${caseCat}（${caseDate}）。${localizeCaseReasonPreview(activeCase).slice(0, 95)}（出典：${srcLabel}）`;
+          } else if (currentLang === "ko") {
+            nextTitle = `${caseAddr}｜${caseCat}（${caseDate}）사고 매물 지도·사건·사고 부동산 검색`;
+            nextDesc = `${tCity(activeCase.city)} ${tDistrict(activeCase.district)} ${caseAddr} (${bldgLabel}) 사고 매물 지도 및 흉가·사건·사고 부동산 검색 기록. 유형: ${caseCat} (${caseDate}). ${localizeCaseReasonPreview(activeCase).slice(0, 95)}`;
+          } else {
+            nextTitle = `${caseAddr} — ${caseCat}事故物件查詢紀錄（${caseDate}）｜${langMeta.siteName}`;
+            nextDesc = `${tCity(activeCase.city)}${tDistrict(activeCase.district)} ${caseAddr}（${bldgLabel}）凶宅地圖與事故物件查詢紀錄。事件類型：${caseCat}，紀錄日期：${caseDate}。${localizeCaseReasonPreview(activeCase).slice(0, 95)}（來源：${srcLabel}）`;
+          }
+          const casePrefix = currentLang === "ja" ? "/ja" : currentLang === "ko" ? "/ko" : currentLang === "en" ? "/en" : "";
+          fullCanonicalUrl = `${canonicalBase}${casePrefix}/case/${slug}/`;
 
-          // Update browser address bar cleanly to /case/<slug>/ when running on main server
           if (window.history && window.history.replaceState && window.location.protocol.startsWith("http")) {
-            const langSuffix = currentLang && currentLang !== "zh-TW" ? `?lang=${encodeURIComponent(currentLang)}` : "";
-            const nextPath = `/case/${slug}/${langSuffix}`;
-            if (window.location.pathname + window.location.search !== nextPath) {
+            const nextPath = `${casePrefix}/case/${slug}/`;
+            if (window.location.pathname !== nextPath) {
               try {
                 window.history.replaceState({ caseSlug: slug }, nextTitle, nextPath);
               } catch (e) {}
@@ -8217,15 +8384,21 @@
         } else {
           if (city) {
             const regionStr = `${tCity(city)}${dist ? tDistrict(dist) : ""}`;
-            nextTitle = `${regionStr}歷年事故建物與凶宅地圖查詢（共 ${totalStr} 筆）｜${baseTitle}`;
-            nextDesc = `查詢${regionStr}共 ${totalStr} 筆歷年特殊事故建物、非自然死亡案發日期、公開社會新聞與司法院法拍點交筆錄之空間位置與門牌紀錄。`;
+            if (currentLang === "ja") {
+              nextTitle = `${regionStr}の事故物件マップ｜心理的瑕疵、殺人・自殺・火災の物件検索（${totalStr}件）`;
+              nextDesc = `${regionStr}における事故物件マップ・心理的瑕疵・殺人・自殺・火災の物件検索結果（全${totalStr}件）。大島てる・JikoDB・競売BIT記録に基づく正確な番地座標。`;
+            } else if (currentLang === "ko") {
+              nextTitle = `${regionStr} 사고 매물 지도｜흉가、사건·사고 부동산 검색 (${totalStr}건)`;
+              nextDesc = `${regionStr} 지역의 사고 매물 지도, 흉가, 사건·사고 부동산 검색 결과 (총 ${totalStr}건). 대법원 경매 및 경찰청 통계 기반 도로명주소 좌표 확인.`;
+            } else {
+              nextTitle = `${regionStr}凶宅地圖與事故物件查詢（共 ${totalStr} 筆）｜${langMeta.siteName}`;
+              nextDesc = `查詢${regionStr}共 ${totalStr} 筆凶宅地圖、事故物件查詢、非自然死亡案發日期、公開社會新聞與法院法拍點交筆錄之空間位置與門牌紀錄。`;
+            }
           }
-          // Keep canonical strictly pointing to homepage https://chuancn.org/ for filter states to avoid duplicate content penalties
-          fullCanonicalUrl = `${canonicalBase}/`;
-          if (window.history && window.history.replaceState && /^\/case\//i.test(window.location.pathname)) {
+          fullCanonicalUrl = `${canonicalBase}${langMeta.subPath}`;
+          if (window.history && window.history.replaceState && /(?:^|\/)case\//i.test(window.location.pathname)) {
             try {
-              const langSuffix = currentLang && currentLang !== "zh-TW" ? `?lang=${encodeURIComponent(currentLang)}` : "";
-              window.history.replaceState({}, nextTitle, `/${langSuffix}`);
+              window.history.replaceState({}, nextTitle, langMeta.subPath);
             } catch (e) {}
           }
         }
@@ -8244,7 +8417,6 @@
         const twDesc = document.querySelector('meta[name="twitter:description"]');
         if (twDesc) twDesc.setAttribute("content", nextDesc);
 
-        // Ensure strictly ONE canonical link element in document.head
         const allCanonicals = document.querySelectorAll('link[rel="canonical"]');
         allCanonicals.forEach((el, idx) => {
           if (idx === 0) {

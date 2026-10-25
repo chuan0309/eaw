@@ -10,7 +10,8 @@ import {
   generateAndWriteSitemapFiles,
   buildCaseSlug,
   isSubstantiveCaseForSeo,
-  renderStandaloneCaseHtml
+  renderStandaloneCaseHtml,
+  buildLocalizedIndexHtml
 } from "./generate_sitemap.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -1249,45 +1250,141 @@ app.get("/api/maps/streetview-image", async (req, res) => {
   }
 });
 
-// POST /api/maps/geocode-search - Search any Taiwan address, doorplate, or community using Google Places API (New) & 2-step Rooftop Geocoding API
-app.post("/api/maps/geocode-search", async (req, res) => {
+// Multi-country precision geocoder for Taiwan (TW), Japan (JP - GSI Japan + Google Maps), and South Korea (KR - Google Maps + Nominatim)
+async function geocodeMultiCountryAddress(rawQuery, countryHint = "", city = "", district = "", lang = "zh-TW") {
+  const q = String(rawQuery || "").trim();
+  if (!q) return null;
   const apiKey = getGoogleMapsApiKey();
+
+  const inferredCountry =
+    countryHint === "JP" || countryHint === "KR" || countryHint === "TW"
+      ? countryHint
+      : /[가-힣]|서울|부산|인천|대구|대전|광주|제주|경기도|강남|송파|마포|해운대|분당/.test(q + city + district)
+      ? "KR"
+      : /[ぁ-んァ-ヶ]|東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県|丁目|番地|新宿|渋谷|池袋|六本木|歌舞伎町/.test(q + city + district)
+      ? "JP"
+      : "TW";
+
+  if (inferredCountry === "TW") {
+    const normalizedTw = q.includes("臺") || q.includes("台") || /Taiwan|Taipei/i.test(q) ? q : `臺灣 ${city}${district}${q}`;
+    return geocodeTaiwanAddressStrict(normalizedTw, city || "臺北市", district || "", lang);
+  }
+
+  // 1. Japan (JP): First query official Geospatial Information Authority of Japan (GSI / 国土地理院 AddressSearch API) for free exact chome/banchi coordinates
+  if (inferredCountry === "JP") {
+    try {
+      const jpQuery = `${city}${district}${q}`.replace(/^日本\s*/, "").trim();
+      const gsiRes = await fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(jpQuery)}`);
+      if (gsiRes.ok) {
+        const gsiData = await gsiRes.json();
+        if (Array.isArray(gsiData) && gsiData.length > 0 && Array.isArray(gsiData[0]?.geometry?.coordinates)) {
+          const [lng, lat] = gsiData[0].geometry.coordinates;
+          if (lat >= 24 && lat <= 46 && lng >= 122 && lng <= 149) {
+            return {
+              lat: Number(Number(lat).toFixed(6)),
+              lng: Number(Number(lng).toFixed(6)),
+              formattedAddress: gsiData[0]?.properties?.title || jpQuery,
+              locationType: "ROOFTOP_GSI_JP",
+              country: "JP"
+            };
+          }
+        }
+      }
+    } catch (_e) {}
+  }
+
+  // 2. Google Maps Geocoding API with country/region bias for JP or KR
+  if (apiKey) {
+    try {
+      const regionCode = inferredCountry.toLowerCase();
+      const fullQ = `${city} ${district} ${q}`.trim();
+      const gUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullQ)}&region=${regionCode}&components=country:${inferredCountry}&language=${encodeURIComponent(lang === "zh-TW" ? (inferredCountry === "JP" ? "ja" : "ko") : lang)}&key=${encodeURIComponent(apiKey)}`;
+      const gRes = await fetch(gUrl);
+      if (gRes.ok) {
+        const gData = await gRes.json();
+        if (gData.status === "OK" && Array.isArray(gData.results) && gData.results.length > 0) {
+          const best = gData.results[0];
+          const lat = best.geometry?.location?.lat;
+          const lng = best.geometry?.location?.lng;
+          if (typeof lat === "number" && typeof lng === "number") {
+            return {
+              lat: Number(lat.toFixed(6)),
+              lng: Number(lng.toFixed(6)),
+              formattedAddress: best.formatted_address || fullQ,
+              placeId: best.place_id || "",
+              locationType: best.geometry?.location_type || "ROOFTOP",
+              country: inferredCountry
+            };
+          }
+        }
+      }
+    } catch (_e) {}
+  }
+
+  // 3. OpenStreetMap Nominatim fallback for KR / JP road-name & chome addresses
+  try {
+    const cc = inferredCountry.toLowerCase();
+    const nomQ = `${city} ${district} ${q}`.trim();
+    const nomUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(nomQ)}&countrycodes=${cc}&format=json&limit=1`;
+    const nomRes = await fetch(nomUrl, {
+      headers: { "User-Agent": "ChuanCnPropertySafetyArchive/2.0 (https://chuancn.org)" }
+    });
+    if (nomRes.ok) {
+      const nomData = await nomRes.json();
+      if (Array.isArray(nomData) && nomData.length > 0) {
+        const lat = parseFloat(nomData[0].lat);
+        const lng = parseFloat(nomData[0].lon);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          return {
+            lat: Number(lat.toFixed(6)),
+            lng: Number(lng.toFixed(6)),
+            formattedAddress: nomData[0].display_name || nomQ,
+            locationType: "ROOFTOP_OSM",
+            country: inferredCountry
+          };
+        }
+      }
+    }
+  } catch (_e) {}
+
+  return null;
+}
+
+// POST /api/maps/geocode-search - Search Taiwan, Japan, or South Korea address, doorplate, or community
+app.post("/api/maps/geocode-search", async (req, res) => {
   const query = ((req.body?.query || "") + "").trim();
   const lang = ((req.body?.lang || "zh-TW") + "").trim();
+  const country = ((req.body?.country || "") + "").trim().toUpperCase();
 
   if (!query) {
     return res.status(400).json({ error: "Missing query" });
   }
-  if (!apiKey) {
-    return res.status(503).json({ error: "Missing Google Maps API Key" });
-  }
 
   try {
-    const normalizedQuery = query.includes("臺") || query.includes("台") || /Taiwan|Taipei/i.test(query) ? query : `臺灣 ${query}`;
     const [places, geocodeResult] = await Promise.all([
-      searchPlacesNew(normalizedQuery, null, null, 50000, 5, lang),
-      geocodeTaiwanAddressStrict(normalizedQuery, "臺北市", "", lang)
+      searchPlacesNew(query, null, null, 50000, 5, lang),
+      geocodeMultiCountryAddress(query, country, "", "", lang)
     ]);
 
     return res.json({
       query,
       geocodeResult,
       places,
-      attribution: "Google Maps"
+      attribution: "Google Maps & Official Cadastre"
     });
   } catch (err) {
     return res.status(500).json({ error: err.message || "Geocode search failed" });
   }
 });
 
-// POST /api/maps/recalibrate-case - Re-calibrates a single case's doorplate & rooftop coordinate on demand
+// POST /api/maps/recalibrate-case - Re-calibrates a single case's doorplate & rooftop coordinate on demand (TW / JP / KR)
 app.post("/api/maps/recalibrate-case", async (req, res) => {
-  const { id, city = "", district = "", address = "", lang = "zh-TW" } = req.body || {};
+  const { id, country = "", city = "", district = "", address = "", lang = "zh-TW" } = req.body || {};
   if (!address) {
     return res.status(400).json({ error: "Missing address" });
   }
 
-  const geo = await geocodeTaiwanAddressStrict(address, city, district, lang);
+  const geo = await geocodeMultiCountryAddress(address, country, city, district, lang);
   if (!geo) {
     return res.status(404).json({ error: "Could not resolve rooftop coordinate" });
   }
@@ -2282,25 +2379,37 @@ app.get("/api/case/:slug", (req, res) => {
   });
 });
 
-// Standalone SEO Case Page SSR Handler (`/case/:slug` and `/case/:slug/`)
-app.get(["/case/:slug", "/case/:slug/"], (req, res) => {
-  const found = findCaseRecordBySlugOrId(req.params.slug);
-  const templateHtml = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
-  if (!found) {
-    return res.status(404).send(templateHtml);
+// Standalone SEO Case Page SSR Handler (`/case/:slug`, `/ja/case/:slug`, `/ko/case/:slug`, `/zh-tw/case/:slug`, `/en/case/:slug`)
+app.get(
+  [
+    "/case/:slug",
+    "/case/:slug/",
+    "/:lang(zh-tw|ja|ko|en)/case/:slug",
+    "/:lang(zh-tw|ja|ko|en)/case/:slug/"
+  ],
+  (req, res) => {
+    const found = findCaseRecordBySlugOrId(req.params.slug);
+    const langParam = String(req.params.lang || "").toLowerCase();
+    const baseTemplate = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
+    const localizedTemplate = langParam
+      ? buildLocalizedIndexHtml(baseTemplate, langParam, "https://chuancn.org")
+      : baseTemplate;
+    if (!found) {
+      return res.status(404).send(localizedTemplate);
+    }
+    const renderedHtml = renderStandaloneCaseHtml(
+      localizedTemplate,
+      found.record,
+      found.totalCount,
+      "https://chuancn.org"
+    );
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=600");
+    return res.status(200).send(renderedHtml);
   }
-  const renderedHtml = renderStandaloneCaseHtml(
-    templateHtml,
-    found.record,
-    found.totalCount,
-    "https://chuancn.org"
-  );
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.setHeader("Cache-Control", "public, max-age=600");
-  return res.status(200).send(renderedHtml);
-});
+);
 
-// Canonical XML Sitemap (Strictly Homepage + Verified Standalone `/case/<slug>/` Pages)
+// Canonical XML Sitemap (Multi-Language Homepages + Verified Standalone `/case/<slug>/` Pages)
 app.get("/sitemap.xml", (req, res) => {
   const baseUrl = (process.env.APP_URL || "https://chuancn.org").replace(/\/$/, "");
   const allRecords = loadAllUnifiedRecords();
@@ -2340,6 +2449,19 @@ app.get("/api/seo-health", (req, res) => {
     const sitemapStats = buildSitemapXml(allRecords, baseUrl);
     const templateHtml = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
 
+    const i18nPages = ["zh-root", "zh-tw", "ja", "ko", "en"].map(key => {
+      const html = buildLocalizedIndexHtml(templateHtml, key, baseUrl);
+      const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
+      const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i);
+      const hreflangCount = (html.match(/rel=["']alternate["']\s+hreflang=/gi) || []).length;
+      return {
+        routeKey: key,
+        title: titleMatch ? titleMatch[1] : "",
+        description: descMatch ? descMatch[1] : "",
+        hreflangCount
+      };
+    });
+
     const sampleCases = substantive.slice(0, 5).map((r, idx) => {
       const slug = buildCaseSlug(r, idx);
       const html = renderStandaloneCaseHtml(templateHtml, r, allRecords.length, baseUrl);
@@ -2358,17 +2480,13 @@ app.get("/api/seo-health", (req, res) => {
       };
     });
 
-    const nonCanonicalInSitemap = (sitemapStats.xml.match(/<loc>([^<]+)<\/loc>/g) || [])
-      .map(s => s.replace(/<\/?loc>/g, ""))
-      .filter(u => u !== `${baseUrl}/` && !u.startsWith(`${baseUrl}/case/`));
-
     res.json({
       ok: true,
       checkedAt: new Date().toISOString(),
       totalDatabaseRecords: allRecords.length,
       substantiveIndexedCases: substantive.length,
       sitemapTotalUrls: sitemapStats.totalUrls,
-      nonCanonicalFilterUrlsInSitemap: nonCanonicalInSitemap.length,
+      i18nPages,
       gzipCompressionEnabled: true,
       initialBootPayloadReady: fs.existsSync(path.join(__dirname, "public", "initial_boot_records.json")),
       sampleVerifiedCases: sampleCases
@@ -2378,19 +2496,32 @@ app.get("/api/seo-health", (req, res) => {
   }
 });
 
-// Redirect legacy `/?case=<id>` query URLs (301 Permanent Redirect) to canonical `/case/<slug>/`
-app.get("/", (req, res, next) => {
+// Multi-Language SEO Subdirectory SSR Handlers (`/`, `/zh-tw/`, `/ja/`, `/ko/`, `/en/`)
+app.get(["/", "/zh-tw", "/zh-tw/", "/ja", "/ja/", "/ko", "/ko/", "/en", "/en/"], (req, res, next) => {
   const legacyCaseId = req.query.case;
   if (legacyCaseId) {
     const found = findCaseRecordBySlugOrId(legacyCaseId);
     if (found && found.record?.slug) {
-      const langParam = req.query.lang && ["en", "ja", "ko"].includes(String(req.query.lang))
-        ? `?lang=${encodeURIComponent(String(req.query.lang))}`
-        : "";
-      return res.redirect(301, `/case/${found.record.slug}/${langParam}`);
+      return res.redirect(301, `/case/${found.record.slug}/`);
     }
   }
-  next();
+  const cleanPath = req.path.toLowerCase();
+  if (cleanPath === "/zh-tw" || cleanPath === "/ja" || cleanPath === "/ko" || cleanPath === "/en") {
+    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    return res.redirect(301, `${cleanPath}/${qs}`);
+  }
+
+  let pageKey = "zh-root";
+  if (cleanPath.startsWith("/zh-tw")) pageKey = "zh-tw";
+  else if (cleanPath.startsWith("/ja")) pageKey = "ja";
+  else if (cleanPath.startsWith("/ko")) pageKey = "ko";
+  else if (cleanPath.startsWith("/en")) pageKey = "en";
+
+  const baseTemplate = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
+  const localizedHtml = buildLocalizedIndexHtml(baseTemplate, pageKey, "https://chuancn.org");
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  return res.status(200).send(localizedHtml);
 });
 
 // Serve static assets with efficient cache lifetimes for Lighthouse performance

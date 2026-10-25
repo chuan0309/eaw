@@ -351,6 +351,7 @@ function loadAllUnifiedRecords() {
     for (const rec of [...workspaceList, ...crawlerBackupList, ...standaloneVaultList]) {
       if (!rec || !rec.address) continue;
       const recId = String(rec.id !== undefined && rec.id !== null ? rec.id : "");
+      if (/^(jp|kr)-arch-/i.test(recId)) continue;
       const recAddr = String(rec.address || "").replace(/台/g, "臺").trim();
       const recDoor = String(rec.doorplate_address || "").replace(/台/g, "臺").trim();
       if (takedownSet.has(recId) || takedownSet.has(recAddr) || (recDoor && takedownSet.has(recDoor))) {
@@ -362,7 +363,9 @@ function loadAllUnifiedRecords() {
       }
     }
     const rawUnioned = Array.from(unionMap.values());
-    const hadShortNarrative = rawUnioned.some(r => String(r?.reason || "").trim().length < 185);
+    const hadShortNarrative = rawUnioned.some(
+      r => (!r.country || r.country === "TW") && !/^(jp|kr)-/i.test(String(r.id || "")) && String(r?.reason || "").trim().length < 185
+    );
     const needsReConsolidation = hadShortNarrative || (workspaceList.length > 0 && rawUnioned.length !== workspaceList.length);
     const unioned = needsReConsolidation
       ? factCrawler.consolidateSimilarRecords(rawUnioned)
@@ -1836,13 +1839,10 @@ function getCrawlerStatusSummary(totalCount) {
     lastRunAt: crawlerState.lastRunAt,
     recentDiscovered: crawlerState.recentDiscovered.slice(0, 8),
     sources: [
-      "PTT 批踢踢實業坊 (home-sale 房版 / Gossiping / 各縣市地方版公開討論)",
-      "Dcard 購屋租屋版 · Mobile01 居家房產論壇 · 臉書凶宅自售公開社團",
-      "591/樂居公開事故索引 · 社區實價異常備註",
-      "司法院法學資料檢索系統 (民事隱瞞凶宅／刑事命案判決書)",
-      "司法院法拍屋公告系統 (查封筆錄載明非自然死亡紀錄)",
-      "內政部不動產交易實價查詢 (實價登錄特殊交易備註)",
-      "Google 新聞 & 自由時報 (LTN) · 聯合新聞網 (UDN) · ETtoday 歷年社會資料庫"
+      "臺灣：司法院法拍屋公告系統 · 民事/刑事裁判書 · 內政部實價登錄特殊交易",
+      "臺灣：PTT 房版 · Dcard · Mobile01 · 591/樂居事故索引 · LTN/UDN/ETtoday",
+      "日本：大島てる (Oshima Teru) · JikoDB · 裁判所競売 BIT · 国土交通省 REINFOLIB · 全国紙社会報道",
+      "韓國：행정안전부 생활안전지도 (SafeMap) · 대법원 법원경매 · 경찰청 변사통계 · 형사사법포털(CCJS) · 연합뉴스/네이버 사건사고"
     ]
   };
 }
@@ -2092,14 +2092,124 @@ app.get("/api/crawler/status", (req, res) => {
   res.json(getCrawlerStatusSummary(all.length));
 });
 
-// POST /api/crawler/run-batch - Triggers an immediate wide-area or targeted multi-source news & foreclosure crawl
+// Helper: Crawl live Japan (JP) or South Korea (KR) RSS feeds and geocode new records
+async function runLiveJpKrCrawlBatch(targetCountry = "JP", city = "", district = "", keyword = "", maxReturn = 15) {
+  const existing = loadAllUnifiedRecords();
+  const seenLinks = new Set(existing.map(r => String(r.source_url || "")));
+  const seenTitles = new Set(existing.map(r => String(r.reason || "").slice(0, 40)));
+
+  const jpTargets = [
+    ["東京都", "新宿区"], ["東京都", "港区"], ["東京都", "世田谷区"], ["大阪府", "大阪市北区"],
+    ["大阪府", "大阪市中央区"], ["神奈川県", "横浜市中区"], ["愛知県", "名古屋市中区"], ["福岡県", "福岡市博多区"]
+  ];
+  const krTargets = [
+    ["首爾特別市", "江南區", "서울특별시", "강남구"],
+    ["首爾特別市", "瑞草區", "서울특별시", "서초구"],
+    ["首爾特別市", "松坡區", "서울특별시", "송파구"],
+    ["首爾特別市", "麻浦區", "서울특별시", "마포구"],
+    ["首爾特別市", "龍山區", "서울특별시", "용산구"],
+    ["首爾特別市", "永登浦區", "서울특별시", "영등포구"],
+    ["釜山廣域市", "海雲臺區", "부산광역시", "해운대구"],
+    ["京畿道", "城南市盆唐區", "경기도", "성남시 분당구"]
+  ];
+
+  const rawItems = [];
+  if (targetCountry === "JP" || targetCountry === "ALL") {
+    const c = city && OFFICIAL_JURISDICTION_MAP[city]?.country === "JP" ? city : jpTargets[crawlerState.cursorDistrict % jpTargets.length][0];
+    const d = district || jpTargets[crawlerState.cursorDistrict % jpTargets.length][1];
+    const kw = keyword || factCrawler.JP_CRAWL_COLLOQUIAL_KEYWORDS[crawlerState.cursorTopic % factCrawler.JP_CRAWL_COLLOQUIAL_KEYWORDS.length];
+    const articles = await factCrawler.fetchJapanIncidentNewsRss(kw, c, d);
+    rawItems.push(...articles);
+  }
+  if (targetCountry === "KR" || targetCountry === "ALL") {
+    const krRow = krTargets[crawlerState.cursorDistrict % krTargets.length];
+    const c = city && OFFICIAL_JURISDICTION_MAP[city]?.country === "KR" ? city : krRow[0];
+    const d = district || krRow[1];
+    const koC = krRow[2];
+    const koD = krRow[3];
+    const kw = keyword || factCrawler.KR_CRAWL_COLLOQUIAL_KEYWORDS[crawlerState.cursorTopic % factCrawler.KR_CRAWL_COLLOQUIAL_KEYWORDS.length];
+    const articles = await factCrawler.fetchKoreaIncidentNewsRss(kw, c, d, koC, koD);
+    rawItems.push(...articles);
+  }
+
+  crawlerState.scannedArticlesCount += rawItems.length;
+  crawlerState.lastRunAt = new Date().toISOString();
+
+  const added = [];
+  for (const art of rawItems) {
+    if (!art || !art.link || seenLinks.has(art.link)) continue;
+    const baseCoords = CITY_BASE_COORDS[art.city] || (art.country === "KR" ? [37.5008, 127.0368] : [35.6895, 139.6917]);
+    const jitterLat = baseCoords[0] + (Math.random() - 0.5) * 0.012;
+    const jitterLng = baseCoords[1] + (Math.random() - 0.5) * 0.014;
+    const rec = factCrawler.parseJpKrArticleToRecord(art, Number(jitterLat.toFixed(6)), Number(jitterLng.toFixed(6)));
+    if (!rec) continue;
+    if (seenTitles.has(String(rec.reason || "").slice(0, 40))) continue;
+    seenLinks.add(art.link);
+    seenTitles.add(String(rec.reason || "").slice(0, 40));
+
+    // Optional Google Maps Geocoding refinement for JP/KR
+    const apiKey = getGoogleMapsApiKey();
+    if (apiKey) {
+      try {
+        const region = rec.country === "KR" ? "kr" : "jp";
+        const langCode = rec.country === "KR" ? "ko" : "ja";
+        const qAddr = rec.i18n?.[langCode]?.doorplate_address || rec.doorplate_address;
+        const gUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(qAddr)}&region=${region}&language=${langCode}&key=${encodeURIComponent(apiKey)}`;
+        const gRes = await fetch(gUrl);
+        if (gRes.ok) {
+          const gData = await gRes.json();
+          const loc = gData.results?.[0]?.geometry?.location;
+          if (loc && typeof loc.lat === "number" && typeof loc.lng === "number") {
+            rec.lat = Number(loc.lat.toFixed(6));
+            rec.lng = Number(loc.lng.toFixed(6));
+          }
+        }
+      } catch (e) {}
+    }
+
+    dynamicRecords.unshift(rec);
+    added.push(rec);
+    crawlerState.newlyDiscoveredCount++;
+    crawlerState.recentDiscovered.unshift({
+      id: rec.id,
+      city: rec.city,
+      district: rec.district,
+      address: rec.address,
+      incident_date: rec.incident_date,
+      category: rec.category,
+      source: rec.source,
+      source_url: rec.source_url
+    });
+    if (crawlerState.recentDiscovered.length > 20) crawlerState.recentDiscovered.pop();
+    if (added.length >= maxReturn) break;
+  }
+  return added;
+}
+
+// POST /api/crawler/run-batch - Triggers an immediate wide-area or targeted multi-source news & foreclosure crawl (TW + JP + KR)
 app.post("/api/crawler/run-batch", async (req, res) => {
-  const { city = "", district = "", keyword = "", mode = "wide" } = req.body || {};
+  const { country = "", city = "", district = "", keyword = "", mode = "wide" } = req.body || {};
   crawlerState.isBusyBatch = true;
   try {
+    const cleanCity = (city || "").replace(/台/g, "臺");
+    const inferredCountry = country || (cleanCity && OFFICIAL_JURISDICTION_MAP[cleanCity]?.country) || "ALL";
+
+    if (inferredCountry === "JP" || inferredCountry === "KR") {
+      crawlerState.currentTarget = `${inferredCountry === "JP" ? "日本 (JP)" : "韓國 (KR)"} ${cleanCity || ""} ${district || ""} 即時新聞與競賣資料庫巡檢`;
+      const jpKrAdded = await runLiveJpKrCrawlBatch(inferredCountry, cleanCity, district, keyword, 15);
+      crawlerState.cursorDistrict += 1;
+      crawlerState.cursorTopic += 1;
+      const all = loadAllUnifiedRecords();
+      return res.json({
+        addedCount: jpKrAdded.length,
+        records: jpKrAdded,
+        totalCount: all.length,
+        crawlerStats: getCrawlerStatusSummary(all.length)
+      });
+    }
+
     const querySpecs = [];
     if (city || district || keyword) {
-      const cleanCity = (city || "").replace(/台/g, "臺");
       const shortCity = cleanCity ? cleanCity.slice(0, 2) : "";
       const baseKw = [shortCity, district, keyword].filter(Boolean).join(" ");
       const suffixes = keyword
@@ -2112,21 +2222,25 @@ app.post("/api/crawler/run-batch", async (req, res) => {
       }
       crawlerState.currentTarget = `${cleanCity || "全臺"}${district || ""} ${keyword || "多維度實證新聞巡檢"}`;
     } else {
-      // Wide-area multi-topic sweep across diverse Taiwan regions & pagination depths
-      for (let i = 0; i < 8; i++) {
+      // Wide-area multi-topic sweep across Taiwan + Japan + Korea
+      for (let i = 0; i < 6; i++) {
         const [c, d] = allDistrictPairs[(crawlerState.cursorDistrict + i * 17) % allDistrictPairs.length];
         const topic = factCrawler.CRAWL_TOPIC_DIMENSIONS[(crawlerState.cursorTopic + i * 5) % factCrawler.CRAWL_TOPIC_DIMENSIONS.length];
         const p = ((crawlerState.cursorPage + i) % 8) + 1;
         querySpecs.push({ q: `${c.slice(0, 2)} ${d} 命案`, page: 1, city: c, district: d });
         querySpecs.push({ q: `${c.slice(0, 2)} ${topic}`, page: p, city: c, district: d });
       }
-      crawlerState.cursorDistrict += 8;
+      crawlerState.cursorDistrict += 6;
       crawlerState.cursorTopic += 5;
       crawlerState.cursorPage += 1;
-      crawlerState.currentTarget = "全臺跨縣市廣域新聞與法拍深層檢索";
+      crawlerState.currentTarget = "臺・日・韓 跨國多語系實證新聞與法拍競賣深層檢索";
     }
 
-    const added = await runVerifiedFactCrawlQueries(querySpecs, 30);
+    const [twAdded, jpKrAdded] = await Promise.all([
+      runVerifiedFactCrawlQueries(querySpecs, 24),
+      inferredCountry === "ALL" ? runLiveJpKrCrawlBatch("ALL", "", "", keyword, 10) : Promise.resolve([])
+    ]);
+    const added = [...twAdded, ...jpKrAdded];
     const all = loadAllUnifiedRecords();
     return res.json({
       addedCount: added.length,
@@ -2155,18 +2269,21 @@ app.post("/api/discover", async (req, res) => {
       r =>
         (r.city === cleanCity || r.city === rawCity) &&
         (!district || r.district === district) &&
-        (!keyword || `${r.address}${r.reason}${r.source}`.toLowerCase().includes(keyword.toLowerCase()))
+        (!keyword || `${r.address}${r.reason}${r.source}${r.i18n?.ja?.address || ""}${r.i18n?.ko?.address || ""}`.toLowerCase().includes(keyword.toLowerCase()))
     );
 
     if (targetCountry === "JP" || targetCountry === "KR") {
+      crawlerState.currentTarget = `${cleanCity} ${district} (${targetCountry}) 當地新聞與官方資料庫深層檢索`;
+      const newlyCrawled = await runLiveJpKrCrawlBatch(targetCountry, cleanCity, district, keyword, 12);
+      const updatedAll = loadAllUnifiedRecords();
       return res.json({
-        records: matchingExisting,
-        addedCount: 0,
-        matchingDistrictCount: matchingExisting.length,
-        matchingRecords: matchingExisting.slice(0, 50),
-        totalCount: all.length,
-        crawlerStats: getCrawlerStatusSummary(all.length),
-        message: `已同步 ${cleanCity} ${district} 當地官方資料庫（共檢索核對 ${matchingExisting.length} 筆實證案件與檔案）`
+        records: [...newlyCrawled, ...matchingExisting],
+        addedCount: newlyCrawled.length,
+        matchingDistrictCount: matchingExisting.length + newlyCrawled.length,
+        matchingRecords: [...newlyCrawled, ...matchingExisting].slice(0, 60),
+        totalCount: updatedAll.length,
+        crawlerStats: getCrawlerStatusSummary(updatedAll.length),
+        message: `已同步 ${cleanCity} ${district} 當地官方與新聞資料庫（共檢索核對 ${matchingExisting.length + newlyCrawled.length} 筆實證案件）`
       });
     }
 

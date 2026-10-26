@@ -674,9 +674,9 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
 
     const cCode = (r.country === "JP" || r.country === "KR" || r.country === "TW")
       ? r.country
-      : (/東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県/.test(String(r.city || ""))
+      : (/東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県|広島県|宮城県|静岡県|茨城県|沖縄県/.test(String(r.city || ""))
         ? "JP"
-        : (/首爾|釜山|仁川|京畿道|大邱|大田|光州|濟州/.test(String(r.city || "")) ? "KR" : "TW"));
+        : (/首爾|釜山|仁川|京畿道|大邱|大田|光州|蔚山|江原|忠清|全北|慶尚|濟州/.test(String(r.city || "")) ? "KR" : "TW"));
     r.country = cCode;
     if (countryCategoryCounts[cCode]) {
       countryCategoryCounts[cCode].ALL++;

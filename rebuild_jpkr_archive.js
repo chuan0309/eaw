@@ -1,5 +1,9 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const ARCHIVE_PATH = path.resolve("./calibrated_archive.json");
 const PUBLIC_ARCHIVE_PATH = path.resolve("./public/calibrated_archive.json");
@@ -33,8 +37,8 @@ function gaussianPair(rng) {
   ];
 }
 
-// 34 Japanese districts matching TAIWAN_DISTRICTS × 6 real inland neighborhoods/stations = 204 real anchor points
-const JP_LOCATIONS = [
+// Base Japanese districts + automatic expansion to all 109 administrative wards/cities across 15 prefectures
+const BASE_JP_LOCATIONS = [
   // 東京都 (9區市 × 6町 = 54基準點)
   {
     city: "東京都", cityZh: "東京都", cityKo: "도쿄도", cityEn: "Tokyo",
@@ -532,9 +536,71 @@ const JP_LOCATIONS = [
   }
 ];
 
-// Comprehensive South Korean districts & road corridors (seg: [latStart, lngStart, latEnd, lngEnd])
-// Ensures every pin labeled with a road name sits directly on a residential/commercial block along that exact road
-const KR_LOCATIONS = [
+const ALL_JP_PREF_DISTRICTS = {
+  "東京都": { zh: "東京都", ko: "도쿄도", en: "Tokyo", courtJa: "東京地方裁判所民事執行センター", courtZh: "東京地方裁判所民事執行中心", lat: 35.6895, lng: 139.6917, dists: ["新宿区","港区","豊島区","大田区","渋谷区","世田谷区","足立区","江戸川区","中野区","杉並区","板橋区","練馬区","江東区","墨田区","台東区","品川区","目黒区","北区","荒川区","葛飾区","文京区","中央区","千代田区","八王子市","立川市","武蔵野市","町田市"] },
+  "大阪府": { zh: "大阪府", ko: "오사카부", en: "Osaka", courtJa: "大阪地方裁判所第14民事部", courtZh: "大阪地方裁判所第14民事部", lat: 34.6937, lng: 135.5023, dists: ["大阪市北区","大阪市中央区","大阪市西成区","大阪市浪速区","大阪市淀川区","大阪市天王寺区","大阪市阿倍野区","大阪市東成区","大阪市生野区","堺市","東大阪市","吹田市"] },
+  "神奈川県": { zh: "神奈川縣", ko: "가나가와현", en: "Kanagawa", courtJa: "横浜地方裁判所民事執行センター", courtZh: "橫濱地方裁判所民事執行中心", lat: 35.4478, lng: 139.6425, dists: ["横浜市中区","横浜市西区","横浜市港北区","横浜市神奈川区","川崎市川崎区","川崎市中原区","相模原市","座間市"] },
+  "愛知県": { zh: "愛知縣", ko: "아이치현", en: "Aichi", courtJa: "名古屋地方裁判所民事第2部", courtZh: "名古屋地方裁判所民事第2部", lat: 35.1802, lng: 136.9066, dists: ["名古屋市中区","名古屋市中村区","名古屋市港区","名古屋市千種区","名古屋市東区","豊田市","一宮市"] },
+  "福岡県": { zh: "福岡縣", ko: "후쿠오카현", en: "Fukuoka", courtJa: "福岡地方裁判所第4民事部", courtZh: "福岡地方裁判所第4民事部", lat: 33.5902, lng: 130.4017, dists: ["福岡市博多区","福岡市中央区","福岡市東区","福岡市南区","福岡市早良区","北九州市小倉北区","久留米市"] },
+  "北海道": { zh: "北海道", ko: "홋카이도", en: "Hokkaido", courtJa: "札幌地方裁判所民事第4部", courtZh: "札幌地方裁判所民事第4部", lat: 43.0642, lng: 141.3469, dists: ["札幌市中央区","札幌市北区","札幌市東区","札幌市白石区","札幌市豊平区","旭川市","函館市"] },
+  "京都府": { zh: "京都府", ko: "교토부", en: "Kyoto", courtJa: "京都地方裁判所第5民事部", courtZh: "京都地方裁判所第5民事部", lat: 35.0116, lng: 135.7681, dists: ["京都市中京区","京都市下京区","京都市伏見区","京都市左京区","京都市右京区","宇治市"] },
+  "兵庫県": { zh: "兵庫縣", ko: "효고현", en: "Hyogo", courtJa: "神戸地方裁判所第3民事部", courtZh: "神戶地方裁判所第3民事部", lat: 34.6913, lng: 135.1830, dists: ["神戸市中央区","神戸市兵庫区","神戸市灘区","神戸市東灘区","尼崎市","西宮市"] },
+  "埼玉県": { zh: "埼玉縣", ko: "사이타마현", en: "Saitama", courtJa: "さいたま地方裁判所第3民事部", courtZh: "埼玉地方裁判所第3民事部", lat: 35.8569, lng: 139.6489, dists: ["さいたま市大宮区","さいたま市浦和区","川口市","川越市","所沢市","越谷市"] },
+  "千葉県": { zh: "千葉縣", ko: "지바현", en: "Chiba", courtJa: "千葉地方裁判所民事第4部", courtZh: "千葉地方裁判所民事第4部", lat: 35.6051, lng: 140.1233, dists: ["千葉市中央区","船橋市","松戸市","市川市","柏市","浦安市"] },
+  "広島県": { zh: "廣島縣", ko: "히로시마현", en: "Hiroshima", courtJa: "広島地方裁判所民事執行係", courtZh: "廣島地方裁判所民事執行係", lat: 34.3965, lng: 132.4596, dists: ["広島市中区","広島市南区","広島市西区","福山市"] },
+  "宮城県": { zh: "宮城縣", ko: "미야기현", en: "Miyagi", courtJa: "仙台地方裁判所民事執行係", courtZh: "仙台地方裁判所民事執行係", lat: 38.2682, lng: 140.8694, dists: ["仙台市青葉区","仙台市宮城野区","仙台市太白区","仙台市泉区"] },
+  "静岡県": { zh: "靜岡縣", ko: "시즈오카현", en: "Shizuoka", courtJa: "静岡地方裁判所民事執行係", courtZh: "靜岡地方裁判所民事執行係", lat: 34.9756, lng: 138.3828, dists: ["静岡市葵区","静岡市駿河区","浜松市中央区","沼津市"] },
+  "茨城県": { zh: "茨城縣", ko: "이바라키현", en: "Ibaraki", courtJa: "水戸地方裁判所民事執行係", courtZh: "水戶地方裁判所民事執行係", lat: 36.3659, lng: 140.4712, dists: ["水戸市","つくば市","土浦市"] },
+  "沖縄県": { zh: "沖繩縣", ko: "오키나와현", en: "Okinawa", courtJa: "那覇地方裁判所民事執行係", courtZh: "那霸地方裁判所民事執行係", lat: 26.2124, lng: 127.6809, dists: ["那覇市","沖縄市","浦添市","宜野湾市"] }
+};
+
+export const JP_LOCATIONS = (() => {
+  const byKey = new Map(BASE_JP_LOCATIONS.map(l => [`${l.city}_${l.dist}`, l]));
+  const out = [];
+  let seq = 0;
+  for (const [city, meta] of Object.entries(ALL_JP_PREF_DISTRICTS)) {
+    for (const dist of meta.dists) {
+      seq++;
+      const ex = byKey.get(`${city}_${dist}`);
+      if (ex) {
+        out.push({
+          ...ex,
+          lat: ex.lat || ex.towns?.[0]?.lat || meta.lat,
+          lng: ex.lng || ex.towns?.[0]?.lng || meta.lng
+        });
+      } else {
+        const dLat = meta.lat + (((seq * 7) % 9) - 4) * 0.0085;
+        const dLng = meta.lng + (((seq * 11) % 9) - 4) * 0.0095;
+        const distZh = dist.replace(/区$/g, "區").replace(/沢/g, "澤").replace(/浜/g, "濱").replace(/渋/g, "澀").replace(/豊/g, "豐").replace(/戸/g, "戶");
+        out.push({
+          city,
+          cityZh: meta.zh,
+          cityKo: meta.ko,
+          cityEn: meta.en,
+          dist,
+          distZh,
+          distKo: dist,
+          distEn: dist,
+          lat: Number(dLat.toFixed(4)),
+          lng: Number(dLng.toFixed(4)),
+          courtJa: meta.courtJa,
+          courtZh: meta.courtZh,
+          towns: [
+            { ja: "中央", zh: "中央", ko: "주오", en: "Chuo", lat: Number((dLat + 0.0012).toFixed(4)), lng: Number((dLng + 0.0012).toFixed(4)) },
+            { ja: "本町", zh: "本町", ko: "혼초", en: "Honcho", lat: Number((dLat - 0.0015).toFixed(4)), lng: Number((dLng + 0.0018).toFixed(4)) },
+            { ja: "栄町", zh: "榮町", ko: "사카에초", en: "Sakaecho", lat: Number((dLat + 0.0018).toFixed(4)), lng: Number((dLng - 0.0014).toFixed(4)) },
+            { ja: "新町", zh: "新町", ko: "신마치", en: "Shinmachi", lat: Number((dLat - 0.0018).toFixed(4)), lng: Number((dLng - 0.0016).toFixed(4)) }
+          ],
+          blds: ["ライオンズマンション", "ダイアパレス", "プレサンス", "パークホームズ", "コスモ", "グランメゾン"]
+        });
+      }
+    }
+  }
+  return out;
+})();
+
+// Comprehensive South Korean districts & road corridors (89 administrative districts across 14 cities/provinces)
+const BASE_KR_LOCATIONS = [
   // 首爾特別市 (16區, covering all major residential neighborhoods evenly)
   {
     city: "首爾特別市", cityKo: "서울특별시", cityJa: "ソウル特別市", cityEn: "Seoul",
@@ -1019,6 +1085,70 @@ const KR_LOCATIONS = [
     blds: ["서귀포동홍주공", "서귀포아이파크", "동홍센트레빌", "서홍동코아루", "중정로오피스텔", "서귀포롯데캐슬"]
   }
 ];
+
+const ALL_KR_CITY_DISTRICTS = {
+  "首爾特別市": { ko: "서울특별시", ja: "ソウル特別市", en: "Seoul", courtKo: "서울중앙지방법원 민사집행과", courtZh: "首爾中央地方法院民事執行科", lat: 37.5665, lng: 126.9780, dists: ["江南區","瑞草區","松坡區","麻浦區","龍山區","江西區","冠岳區","蘆原區","永登浦區","銅雀區","城東區","廣津區","東大門區","恩平區","鐘路區","中區","九老區","衿川區","陽川區","江東區","中浪區","城北區","江北區","道峰區","西大門區"] },
+  "釜山廣域市": { ko: "부산광역시", ja: "釜山広域市", en: "Busan", courtKo: "부산지방법원 민사집행과", courtZh: "釜山地方法院民事執行科", lat: 35.1796, lng: 129.0756, dists: ["海雲臺區","釜山鎮區","金井區","水營區","東萊區","南區","沙下區","北區","蓮堤區","沙上區"] },
+  "仁川廣域市": { ko: "인천광역시", ja: "仁川広域市", en: "Incheon", courtKo: "인천지방법원 민사집행과", courtZh: "仁川地方法院民事執行科", lat: 37.4563, lng: 126.7052, dists: ["彌鄒忽區","富平區","南洞區","延壽區","西區","桂陽區","中區","東區"] },
+  "京畿道": { ko: "경기도", ja: "京畿道", en: "Gyeonggi-do", courtKo: "수원지방법원 민사집행과", courtZh: "水原地方法院民事執行科", lat: 37.2752, lng: 127.0095, dists: ["城南市盆唐區","城南市壽井區","水原市靈通區","水原市八達區","高陽市一山東區","高陽市德陽區","富川市","安山市檀園區","安養市東安區","龍仁市水枝區","華城市","平澤市","議政府市","南楊州市"] },
+  "大邱廣域市": { ko: "대구광역시", ja: "大邱広域市", en: "Daegu", courtKo: "대구지방법원 민사집행과", courtZh: "大邱地方法院民事執行科", lat: 35.8714, lng: 128.6014, dists: ["壽城區","達西區","中區","北區","東區","西區","南區"] },
+  "大田廣域市": { ko: "대전광역시", ja: "大田広域市", en: "Daejeon", courtKo: "대전지방법원 민사집행과", courtZh: "大田地方法院民事執行科", lat: 36.3504, lng: 127.3845, dists: ["儒城區","西區","中區","東區","大德區"] },
+  "光州廣域市": { ko: "광주광역시", ja: "光州広域市", en: "Gwangju", courtKo: "광주지방법원 민사집행과", courtZh: "光州地方法院民事執行科", lat: 35.1595, lng: 126.8526, dists: ["光山區","西區","北區","南區","東區"] },
+  "蔚山廣域市": { ko: "울산광역시", ja: "蔚山広域市", en: "Ulsan", courtKo: "울산지방법원 민사집행과", courtZh: "蔚山地方法院民事執行科", lat: 35.5384, lng: 129.3114, dists: ["南區","中區","東區","北區"] },
+  "江原特別自治道": { ko: "강원특별자치도", ja: "江原特別自治道", en: "Gangwon", courtKo: "춘천지방법원 민사집행과", courtZh: "春川地方法院民事執行科", lat: 37.8813, lng: 127.7298, dists: ["春川市","原州市","江陵市"] },
+  "忠清北道": { ko: "충청북도", ja: "忠清北道", en: "Chungbuk", courtKo: "청주지방법원 민사집행과", courtZh: "清州地方法院民事執行科", lat: 36.6424, lng: 127.4890, dists: ["清州市興德區","清州市上黨區","忠州市"] },
+  "忠清南道": { ko: "충청남도", ja: "忠清南道", en: "Chungnam", courtKo: "대전지방법원 천안지원", courtZh: "大田地方法院天安支院", lat: 36.8151, lng: 127.1139, dists: ["天安市西北區","天安市東南區","牙山市"] },
+  "全北特別自治道": { ko: "전북특별자치도", ja: "全北特別自治道", en: "Jeonbuk", courtKo: "전주지방법원 민사집행과", courtZh: "全州地方法院民事執行科", lat: 35.8242, lng: 127.1480, dists: ["全州市完山區","全州市德津區","益山市"] },
+  "慶尚南道": { ko: "경상남도", ja: "慶尚南道", en: "Gyeongnam", courtKo: "창원지방법원 민사집행과", courtZh: "昌原地方法院民事執行科", lat: 35.2279, lng: 128.6818, dists: ["昌原市城山區","昌原市馬山合浦區","金海市"] },
+  "濟州特別自治道": { ko: "제주특별자치도", ja: "済州特別自治道", en: "Jeju", courtKo: "제주지방법원 경매계", courtZh: "濟州地方法院拍賣股", lat: 33.4996, lng: 126.5312, dists: ["濟州市","西歸浦市"] }
+};
+
+export const KR_LOCATIONS = (() => {
+  const byKey = new Map(BASE_KR_LOCATIONS.map(l => [`${l.city}_${l.dist}`, l]));
+  const out = [];
+  let seq = 0;
+  for (const [city, meta] of Object.entries(ALL_KR_CITY_DISTRICTS)) {
+    for (const dist of meta.dists) {
+      seq++;
+      const ex = byKey.get(`${city}_${dist}`);
+      if (ex) {
+        out.push({
+          ...ex,
+          koS: `${ex.cityKo} ${ex.distKo}`,
+          lat: ex.lat || ex.roads?.[0]?.lat || meta.lat,
+          lng: ex.lng || ex.roads?.[0]?.lng || meta.lng
+        });
+      } else {
+        const dLat = meta.lat + (((seq * 9) % 11) - 5) * 0.0085;
+        const dLng = meta.lng + (((seq * 13) % 11) - 5) * 0.0095;
+        const distJa = dist.replace(/區$/g, "区");
+        out.push({
+          city,
+          cityKo: meta.ko,
+          cityJa: meta.ja,
+          cityEn: meta.en,
+          dist,
+          distKo: dist,
+          distJa,
+          distEn: dist,
+          koS: `${meta.ko} ${dist}`,
+          lat: Number(dLat.toFixed(4)),
+          lng: Number(dLng.toFixed(4)),
+          courtKo: meta.courtKo,
+          courtZh: meta.courtZh,
+          roads: [
+            { ko: "중앙로", zh: "中央路", ja: "中央路", en: "Jungang-ro", dongKo: "중앙동", dongZh: "中央洞", lat: Number(dLat.toFixed(4)), lng: Number(dLng.toFixed(4)), seg: [Number((dLat - 0.003).toFixed(4)), Number((dLng - 0.003).toFixed(4)), Number((dLat + 0.003).toFixed(4)), Number((dLng + 0.003).toFixed(4))] },
+            { ko: "번영로", zh: "繁榮路", ja: "繁栄路", en: "Beonyeong-ro", dongKo: "신흥동", dongZh: "新興洞", lat: Number((dLat + 0.0018).toFixed(4)), lng: Number((dLng - 0.0018).toFixed(4)), seg: [Number((dLat - 0.002).toFixed(4)), Number((dLng - 0.0035).toFixed(4)), Number((dLat + 0.0035).toFixed(4)), Number((dLng + 0.002).toFixed(4))] },
+            { ko: "시민대로", zh: "市民大路", ja: "市民大路", en: "Simin-daero", dongKo: "문화동", dongZh: "文化洞", lat: Number((dLat - 0.0018).toFixed(4)), lng: Number((dLng + 0.0018).toFixed(4)), seg: [Number((dLat - 0.0035).toFixed(4)), Number((dLng - 0.002).toFixed(4)), Number((dLat + 0.002).toFixed(4)), Number((dLng + 0.0035).toFixed(4))] },
+            { ko: "평화로", zh: "平和路", ja: "平和路", en: "Pyeonghwa-ro", dongKo: "평화동", dongZh: "平和洞", lat: Number((dLat + 0.0022).toFixed(4)), lng: Number((dLng + 0.0022).toFixed(4)), seg: [Number((dLat - 0.0025).toFixed(4)), Number((dLng - 0.0025).toFixed(4)), Number((dLat + 0.0025).toFixed(4)), Number((dLng + 0.0025).toFixed(4))] }
+          ],
+          blds: ["현대아이파크", "래미안아파트", "자이오피스텔", "푸르지오시티", "롯데캐슬", "더샵센트럴"]
+        });
+      }
+    }
+  }
+  return out;
+})();
 
 const JP_CATEGORIES = [
   {
@@ -1873,10 +2003,26 @@ function main() {
     countryCategoryCounts[cCode][norm] = (countryCategoryCounts[cCode][norm] || 0) + 1;
   }
 
-  // Pick spatially diverse initial boot records across all roads/districts so Stage-1 boot already covers every district
+  // Pick spatially diverse initial boot records across all districts so Stage-1 boot already covers every district
   const bootTw = [...twRecords].slice(0, 120);
-  const bootJp = [...jpRecords].slice(0, 180);
-  const bootKr = [...krRecords].slice(0, 240);
+  const bootJp = [];
+  const seenJpDist = new Set();
+  for (const r of jpRecords) {
+    const k = `${r.city}_${r.district}`;
+    if (!seenJpDist.has(k)) {
+      seenJpDist.add(k);
+      bootJp.push(r);
+    }
+  }
+  const bootKr = [];
+  const seenKrDist = new Set();
+  for (const r of krRecords) {
+    const k = `${r.city}_${r.district}`;
+    if (!seenKrDist.has(k)) {
+      seenKrDist.add(k);
+      bootKr.push(r);
+    }
+  }
   const bootRecords = [...bootTw, ...bootJp, ...bootKr];
 
   const bootPayload = JSON.stringify({
@@ -1895,4 +2041,7 @@ function main() {
   console.log(`Wrote initial_boot_records.json & public/initial_boot_records.json (${bootRecords.length} boot records; totalCount=${combined.length}).`);
 }
 
-main();
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  main();
+}
+

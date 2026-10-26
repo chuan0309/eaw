@@ -13,6 +13,7 @@ import {
   renderStandaloneCaseHtml,
   buildLocalizedIndexHtml
 } from "./generate_sitemap.js";
+import { JP_LOCATIONS, KR_LOCATIONS } from "./rebuild_jpkr_archive.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -102,7 +103,7 @@ const CITY_BASE_COORDS = {
   "澎湖縣": [23.5711, 119.5793],
   "金門縣": [24.4493, 118.3767],
   "連江縣": [26.1605, 119.9519],
-  // Japan (JP)
+  // Japan (JP - 15 Prefectures)
   "東京都": [35.6895, 139.6917],
   "大阪府": [34.6937, 135.5023],
   "神奈川県": [35.4478, 139.6425],
@@ -113,7 +114,12 @@ const CITY_BASE_COORDS = {
   "兵庫県": [34.6913, 135.1830],
   "埼玉県": [35.8569, 139.6489],
   "千葉県": [35.6051, 140.1233],
-  // South Korea (KR)
+  "広島県": [34.3965, 132.4596],
+  "宮城県": [38.2682, 140.8694],
+  "静岡県": [34.9756, 138.3828],
+  "茨城県": [36.3659, 140.4712],
+  "沖縄県": [26.2124, 127.6809],
+  // South Korea (KR - 14 Metropolitan Cities & Provinces)
   "首爾特別市": [37.5665, 126.9780],
   "釜山廣域市": [35.1796, 129.0756],
   "仁川廣域市": [37.4563, 126.7052],
@@ -121,6 +127,12 @@ const CITY_BASE_COORDS = {
   "大邱廣域市": [35.8714, 128.6014],
   "大田廣域市": [36.3504, 127.3845],
   "光州廣域市": [35.1595, 126.8526],
+  "蔚山廣域市": [35.5384, 129.3114],
+  "江原特別自治道": [37.8813, 127.7298],
+  "忠清北道": [36.6424, 127.4890],
+  "忠清南道": [36.8151, 127.1139],
+  "全北特別自治道": [35.8242, 127.1480],
+  "慶尚南道": [35.2279, 128.6818],
   "濟州特別自治道": [33.4996, 126.5312]
 };
 
@@ -148,7 +160,7 @@ const OFFICIAL_JURISDICTION_MAP = {
   "澎湖縣": { courtName: "臺灣澎湖地方法院", courtCode: "PHD", landOffice: "澎湖縣政府地政處", lvrCode: "X", country: "TW" },
   "金門縣": { courtName: "福建金門地方法院", courtCode: "KMD", landOffice: "金門縣地政局", lvrCode: "W", country: "TW" },
   "連江縣": { courtName: "福建連江地方法院", courtCode: "LCD", landOffice: "連江縣地政局", lvrCode: "Z", country: "TW" },
-  // Japan (JP)
+  // Japan (JP - 15 Prefectures)
   "東京都": { courtName: "東京地方裁判所（民事執行センター BIT）", courtCode: "TOKYO-DC", landOffice: "国土交通省 不動産情報ライブラリ／東京都都市整備局", lvrCode: "JP-13", country: "JP" },
   "大阪府": { courtName: "大阪地方裁判所（不動産競売 BIT）", courtCode: "OSAKA-DC", landOffice: "国土交通省 不動産情報ライブラリ／大阪府建築振興課", lvrCode: "JP-27", country: "JP" },
   "神奈川県": { courtName: "横浜地方裁判所（不動産競売 BIT）", courtCode: "YOKOHAMA-DC", landOffice: "国土交通省 不動産情報ライブラリ／神奈川県県土整備局", lvrCode: "JP-14", country: "JP" },
@@ -159,7 +171,12 @@ const OFFICIAL_JURISDICTION_MAP = {
   "兵庫県": { courtName: "神戸地方裁判所（不動産競売 BIT）", courtCode: "KOBE-DC", landOffice: "国土交通省 不動産情報ライブラリ／兵庫県まちづくり部", lvrCode: "JP-28", country: "JP" },
   "埼玉県": { courtName: "さいたま地方裁判所（不動産競売 BIT）", courtCode: "SAITAMA-DC", landOffice: "国土交通省 不動産情報ライブラリ／埼玉県都市整備部", lvrCode: "JP-11", country: "JP" },
   "千葉県": { courtName: "千葉地方裁判所（不動産競売 BIT）", courtCode: "CHIBA-DC", landOffice: "国土交通省 不動産情報ライブラリ／千葉県県土整備部", lvrCode: "JP-12", country: "JP" },
-  // South Korea (KR)
+  "広島県": { courtName: "広島地方裁判所（不動産競売 BIT）", courtCode: "HIROSHIMA-DC", landOffice: "国土交通省 不動産情報ライブラリ／広島県土木建築局", lvrCode: "JP-34", country: "JP" },
+  "宮城県": { courtName: "仙台地方裁判所（不動産競売 BIT）", courtCode: "SENDAI-DC", landOffice: "国土交通省 不動産情報ライブラリ／宮城県土木部", lvrCode: "JP-04", country: "JP" },
+  "静岡県": { courtName: "静岡地方裁判所（不動産競売 BIT）", courtCode: "SHIZUOKA-DC", landOffice: "国土交通省 不動産情報ライブラリ／静岡県くらし・環境部", lvrCode: "JP-22", country: "JP" },
+  "茨城県": { courtName: "水戸地方裁判所（不動産競売 BIT）", courtCode: "MITO-DC", landOffice: "国土交通省 不動産情報ライブラリ／茨城県土木部", lvrCode: "JP-08", country: "JP" },
+  "沖縄県": { courtName: "那覇地方裁判所（不動産競売 BIT）", courtCode: "NAHA-DC", landOffice: "国土交通省 不動産情報ライブラリ／沖縄県土木建築部", lvrCode: "JP-47", country: "JP" },
+  // South Korea (KR - 14 Metropolitan Cities & Provinces)
   "首爾特別市": { courtName: "서울중앙/동부/남부/북부/서부지방법원 (首爾地方法院)", courtCode: "SEOUL-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-11", country: "KR" },
   "釜山廣域市": { courtName: "부산지방법원 / 동부·서부지원 (釜山地方法院)", courtCode: "BUSAN-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-26", country: "KR" },
   "仁川廣域市": { courtName: "인천지방법원 / 부천지원 (仁川地方法院)", courtCode: "INCHEON-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-28", country: "KR" },
@@ -167,6 +184,12 @@ const OFFICIAL_JURISDICTION_MAP = {
   "大邱廣域市": { courtName: "대구지방법원 / 서부지원 (大邱地方法院)", courtCode: "DAEGU-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-27", country: "KR" },
   "大田廣域市": { courtName: "대전지방법원 (大田地方法院)", courtCode: "DAEJEON-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-30", country: "KR" },
   "光州廣域市": { courtName: "광주지방법원 (光州地方法院)", courtCode: "GWANGJU-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-29", country: "KR" },
+  "蔚山廣域市": { courtName: "울산지방법원 (蔚山地方法院)", courtCode: "ULSAN-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-31", country: "KR" },
+  "江原特別自治道": { courtName: "춘천지방법원 (春川地方法院)", courtCode: "GANGWON-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-42", country: "KR" },
+  "忠清北道": { courtName: "청주지방법원 (清州地方法院)", courtCode: "CHUNGBUK-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-43", country: "KR" },
+  "忠清南道": { courtName: "대전지방법원 천안지원 (大田地院天安支院)", courtCode: "CHUNGNAM-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-44", country: "KR" },
+  "全北特別自治道": { courtName: "전주지방법원 (全州地方法院)", courtCode: "JEONBUK-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-45", country: "KR" },
+  "慶尚南道": { courtName: "창원지방법원 (昌原地方法院)", courtCode: "GYEONGNAM-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-48", country: "KR" },
   "濟州特別自治道": { courtName: "제주지방법원 (濟州地方法院)", courtCode: "JEJU-DC", landOffice: "국토교통부 실거래가 공개시스템 (國土交通部實價公開系統)", lvrCode: "KR-50", country: "KR" }
 };
 
@@ -2098,32 +2121,30 @@ async function runLiveJpKrCrawlBatch(targetCountry = "JP", city = "", district =
   const seenLinks = new Set(existing.map(r => String(r.source_url || "")));
   const seenTitles = new Set(existing.map(r => String(r.reason || "").slice(0, 40)));
 
-  const jpTargets = [
-    ["東京都", "新宿区"], ["東京都", "港区"], ["東京都", "世田谷区"], ["大阪府", "大阪市北区"],
-    ["大阪府", "大阪市中央区"], ["神奈川県", "横浜市中区"], ["愛知県", "名古屋市中区"], ["福岡県", "福岡市博多区"]
-  ];
-  const krTargets = [
-    ["首爾特別市", "江南區", "서울특별시", "강남구"],
-    ["首爾特別市", "瑞草區", "서울특별시", "서초구"],
-    ["首爾特別市", "松坡區", "서울특별시", "송파구"],
-    ["首爾特別市", "麻浦區", "서울특별시", "마포구"],
-    ["首爾特別市", "龍山區", "서울특별시", "용산구"],
-    ["首爾特別市", "永登浦區", "서울특별시", "영등포구"],
-    ["釜山廣域市", "海雲臺區", "부산광역시", "해운대구"],
-    ["京畿道", "城南市盆唐區", "경기도", "성남시 분당구"]
-  ];
+  const jpTargets = JP_LOCATIONS.map(l => [l.city, l.dist, l.lat, l.lng]);
+  const krTargets = KR_LOCATIONS.map(l => {
+    const parts = String(l.koS || "").split(/\s+/);
+    return [l.city, l.dist, parts[0] || "서울특별시", parts.slice(1).join(" ") || "강남구", l.lat, l.lng];
+  });
 
   const rawItems = [];
   if (targetCountry === "JP" || targetCountry === "ALL") {
-    const c = city && OFFICIAL_JURISDICTION_MAP[city]?.country === "JP" ? city : jpTargets[crawlerState.cursorDistrict % jpTargets.length][0];
-    const d = district || jpTargets[crawlerState.cursorDistrict % jpTargets.length][1];
+    const matchedJp = (city && district)
+      ? jpTargets.find(t => t[0] === city && t[1] === district)
+      : (city ? jpTargets.find(t => t[0] === city) : null);
+    const jpRow = matchedJp || jpTargets[crawlerState.cursorDistrict % jpTargets.length];
+    const c = jpRow[0];
+    const d = district || jpRow[1];
     const kw = keyword || factCrawler.JP_CRAWL_COLLOQUIAL_KEYWORDS[crawlerState.cursorTopic % factCrawler.JP_CRAWL_COLLOQUIAL_KEYWORDS.length];
     const articles = await factCrawler.fetchJapanIncidentNewsRss(kw, c, d);
     rawItems.push(...articles);
   }
   if (targetCountry === "KR" || targetCountry === "ALL") {
-    const krRow = krTargets[crawlerState.cursorDistrict % krTargets.length];
-    const c = city && OFFICIAL_JURISDICTION_MAP[city]?.country === "KR" ? city : krRow[0];
+    const matchedKr = (city && district)
+      ? krTargets.find(t => t[0] === city && t[1] === district)
+      : (city ? krTargets.find(t => t[0] === city) : null);
+    const krRow = matchedKr || krTargets[crawlerState.cursorDistrict % krTargets.length];
+    const c = krRow[0];
     const d = district || krRow[1];
     const koC = krRow[2];
     const koD = krRow[3];

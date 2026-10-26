@@ -1,63 +1,45 @@
-name: 24H 全自動臺灣368鄉鎮凶宅普查與純文字AI引擎
+name: Multi-Country Haunted Property Crawlers (臺灣・日本・韓國 分別獨立爬蟲)
 
 on:
   schedule:
-    # 每小時整點自動執行一次，日夜不停歇擴充至萬筆以上
-    - cron: '0 * * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 permissions:
   contents: write
 
 jobs:
-  crawl_and_update_db:
+  crawl-taiwan-japan-korea:
     runs-on: ubuntu-latest
-    steps:
-      - name: 1. 檢出專案程式碼
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: 2. 安裝 Python 3.11
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: 3. 安裝所需套件
+      - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            pip install "google-genai>=1.0.0" "supabase>=2.4.0" "requests>=2.31.0"
-          fi
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
 
-      - name: 4. 啟動全臺368鄉鎮普查並寫入 Supabase 與網站靜態資料庫
+      - name: 1. Run Taiwan Independent Crawler (crawler_tw.py)
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
-          OPENAI_API_KEYS: ${{ secrets.OPENAI_API_KEYS }}
-          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-        run: python -u crawler.py
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python crawler_tw.py
 
-      - name: 5. 更新 Sitemap 與獨立爬蟲備份並自動提交推送至網站儲存庫 (觸發 Cloudflare Pages 部署)
+      - name: 2. Run Japan Independent Crawler (crawler_jp.py)
+        run: python crawler_jp.py
+
+      - name: 3. Run South Korea Independent Crawler (crawler_kr.py)
+        run: python crawler_kr.py
+
+      - name: Commit and Push updated archive
         run: |
-          if [ -f generate_sitemap.js ] && command -v node >/dev/null 2>&1; then
-            node generate_sitemap.js || true
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add calibrated_archive.json public/calibrated_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json sitemap.xml public/sitemap.xml ads.txt public/ads.txt || true
-          if ! git diff --staged --quiet; then
-            git commit -m "chore(crawler): auto-sync newly crawled cases to calibrated_archive.json, crawler_vault_backup.json & sitemap.xml"
-            git pull --rebase origin main || true
-            git push origin HEAD:main
-            echo "✅ 已成功將最新爬蟲資料寫入 calibrated_archive.json、獨立備份檔 crawler_vault_backup.json 與 sitemap.xml 並推送至網站！"
-          else
-            echo "ℹ️ 本輪無新增靜態檔案變更需提交。"
-          fi
-
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add calibrated_archive.json
+          git diff --staged --quiet || (git commit -m "Auto-update: TW + JP + KR independent crawlers [skip ci]" && git pull --rebase origin main && git push)

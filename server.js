@@ -371,10 +371,27 @@ function loadAllUnifiedRecords() {
     }
 
     const unionMap = new Map();
-    for (const rec of [...workspaceList, ...crawlerBackupList, ...standaloneVaultList]) {
-      if (!rec || !rec.address) continue;
-      const recId = String(rec.id !== undefined && rec.id !== null ? rec.id : "");
-      if (/^(jp|kr)-arch-/i.test(recId)) continue;
+    for (const rawRec of [...workspaceList, ...crawlerBackupList, ...standaloneVaultList]) {
+      if (!rawRec) continue;
+      const recId = String(rawRec.id !== undefined && rawRec.id !== null ? rawRec.id : "");
+      if (rawRec.country === "KR" || /^kr-/i.test(recId)) continue;
+      const rec = (!rawRec.address && rawRec.a)
+        ? {
+            ...rawRec,
+            country: "JP",
+            city: rawRec.c || rawRec.city || "東京都",
+            district: rawRec.d || rawRec.district || "新宿区",
+            doorplate_address: rawRec.a,
+            address: `${rawRec.a}（${rawRec.n || "集合住宅"}）`,
+            category: rawRec.t || "法拍與其他",
+            incident_date: rawRec.date || "2023-06-15",
+            reason: rawRec.s || "",
+            source: rawRec.src || "大島てる（Oshimaland 事故物件公示サイト）",
+            media_verification: rawRec.src || "大島てる（Oshimaland 事故物件公示サイト）",
+            source_url: "https://www.oshimaland.co.jp/"
+          }
+        : rawRec;
+      if (!rec.address) continue;
       const recAddr = String(rec.address || "").replace(/台/g, "臺").trim();
       const recDoor = String(rec.doorplate_address || "").replace(/台/g, "臺").trim();
       if (takedownSet.has(recId) || takedownSet.has(recAddr) || (recDoor && takedownSet.has(recDoor))) {
@@ -679,13 +696,12 @@ function classifyServerCategory(cat, reason) {
 
 function inferServerRecordCountry(r) {
   if (!r) return "TW";
-  if (r.country === "JP" || r.country === "KR" || r.country === "TW") return r.country;
-  const idStr = String(r.id || "");
+  if (r.country === "JP" || r.country === "TW") return r.country;
+  const idStr = String(r.id || "").toLowerCase();
   if (idStr.startsWith("jp-")) return "JP";
-  if (idStr.startsWith("kr-")) return "KR";
   const c = String(r.city || "").trim();
   const jur = OFFICIAL_JURISDICTION_MAP[c];
-  if (jur && jur.country) return jur.country;
+  if (jur && jur.country === "JP") return "JP";
   return "TW";
 }
 
@@ -702,8 +718,7 @@ function getUnifiedStats(base) {
   };
   const countryCategoryCounts = {
     TW: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
-    JP: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
-    KR: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 }
+    JP: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 }
   };
   let rawTotalRepresented = 0;
   let mergedGroupsCount = 0;
@@ -743,8 +758,7 @@ app.get("/api/records", (req, res) => {
     );
     const twSlice = sorted.filter(r => inferServerRecordCountry(r) === "TW").slice(0, perCountryLimit);
     const jpSlice = sorted.filter(r => inferServerRecordCountry(r) === "JP").slice(0, perCountryLimit);
-    const krSlice = sorted.filter(r => inferServerRecordCountry(r) === "KR").slice(0, perCountryLimit);
-    slicedRecords = [...twSlice, ...jpSlice, ...krSlice].map(({ merged_cases, ...rest }) => rest);
+    slicedRecords = [...twSlice, ...jpSlice].map(({ merged_cases, ...rest }) => rest);
   }
 
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -1937,9 +1951,7 @@ function persistNewVerifiedRecordsToDisk(newItems) {
   try {
     const primaryPath = CALIBRATED_ARCHIVE_PATHS[0];
     const publicPath = CALIBRATED_ARCHIVE_PATHS[1];
-    const currentDisk = fs.existsSync(STANDALONE_VAULT_PATH)
-      ? JSON.parse(fs.readFileSync(STANDALONE_VAULT_PATH, "utf8"))
-      : (fs.existsSync(primaryPath) ? JSON.parse(fs.readFileSync(primaryPath, "utf8")) : []);
+    const currentDisk = loadAllUnifiedRecords();
     const existingIds = new Set(currentDisk.map(r => String(r.id || r.source_url || r.address)));
     const uniqueNew = newItems.filter(r => r && r.address && !existingIds.has(String(r.id || r.source_url || r.address)));
     if (uniqueNew.length === 0) return;

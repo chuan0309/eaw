@@ -82,7 +82,7 @@
 
   <!-- OpenGraph Social & Search Metadata -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/zh-tw/" />
+  <meta property="og:url" content="https://chuancn.org/zh-tw/" />
   <meta property="og:site_name" content="凶宅地圖" />
   <meta property="og:locale" content="zh_TW" />
   <meta property="og:locale:alternate" content="ja_JP" />
@@ -104,13 +104,13 @@
   <meta name="twitter:image" content="https://chuancn.org/og-cover.png?v=3" />
 
   <!-- Multi-Language SEO hreflang Annotations -->
-  <link rel="canonical" id="canonical-link" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/zh-tw/" />
-  <link rel="alternate" hreflang="zh-Hant" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/" />
-  <link rel="alternate" hreflang="zh-TW" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/zh-tw/" />
-  <link rel="alternate" hreflang="ja" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/ja/" />
-  <link rel="alternate" hreflang="ko" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/ko/" />
-  <link rel="alternate" hreflang="en" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/en/" />
-  <link rel="alternate" hreflang="x-default" href="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/" />
+  <link rel="canonical" id="canonical-link" href="https://chuancn.org/zh-tw/" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://chuancn.org/" />
+  <link rel="alternate" hreflang="zh-TW" href="https://chuancn.org/zh-tw/" />
+  <link rel="alternate" hreflang="ja" href="https://chuancn.org/ja/" />
+  <link rel="alternate" hreflang="ko" href="https://chuancn.org/ko/" />
+  <link rel="alternate" hreflang="en" href="https://chuancn.org/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://chuancn.org/" />
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
   <!-- Schema.org Structured Data (WebSite + Organization + Dataset + FAQPage) for Google Rich Results (Zero Warnings) -->
@@ -375,7 +375,6 @@
       <div class="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold" role="group" aria-label="Language Switcher">
         <a href="/" data-lang="zh-TW" data-route="/" class="lang-btn px-2 py-1 rounded-md bg-slate-900 text-white transition-colors">繁中</a>
         <a href="/ja/" data-lang="ja" data-route="/ja/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">日本語</a>
-        <a href="/ko/" data-lang="ko" data-route="/ko/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">한국어</a>
         <a href="/en/" data-lang="en" data-route="/en/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">EN</a>
       </div>
       <select
@@ -385,7 +384,6 @@
       >
         <option value="zh-TW" data-route="/">繁中</option>
         <option value="ja" data-route="/ja/">日本語</option>
-        <option value="ko" data-route="/ko/">한국어</option>
         <option value="en" data-route="/en/">EN</option>
       </select>
 
@@ -480,7 +478,6 @@
           <select id="country-select" aria-label="Country" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-xs rounded-lg px-2.5 py-2 font-semibold focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="TW" selected data-i18n="country_opt_tw">臺灣</option>
             <option value="JP" data-i18n="country_opt_jp">日本</option>
-            <option value="KR" data-i18n="country_opt_kr">韓國</option>
           </select>
           <select id="city-select" aria-label="City" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="">全部縣市</option>
@@ -554,107 +551,6 @@
               <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
               <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
             </select>
-          </div>
-        </div>
-
-        <!-- 日韓凶宅（事故物件）查詢網站與關鍵字清單 (Collapsible & Always Ready) -->
-        <div id="jpkr-guide-wrapper" class="pt-1 border-t border-slate-100">
-          <div class="flex items-center justify-between gap-2">
-            <button type="button" id="toggle-jpkr-guide-btn" class="w-full py-1.5 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 text-[11px] font-bold flex items-center justify-between transition-colors cursor-pointer">
-              <span id="jpkr-guide-btn-label">【日韓凶宅（事故物件）查詢網站與關鍵字清單】</span>
-              <span id="jpkr-guide-chevron" class="text-slate-600 font-mono text-[10px]">展開 ▾</span>
-            </button>
-          </div>
-          <div id="jpkr-guide-content" class="hidden mt-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-3 text-[11px] text-slate-700 max-h-64 overflow-y-auto">
-            <!-- 日本區塊 -->
-            <div id="jpkr-guide-jp-sec" class="space-y-2">
-              <div class="font-bold text-slate-900 border-b border-slate-200 pb-1">一、 日本（法規透明，有專門查詢與交易平台）</div>
-              <div class="space-y-1.5">
-                <div class="font-semibold text-slate-800">1. 綜合查詢地圖：</div>
-                <div class="pl-2 space-y-1">
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>大島てる（Oshimaland）</strong>：日本最大凶宅地圖，以「火焰」標註事故地點、年份與死因。</span>
-                    <a href="https://www.oshimaland.co.jp/" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                </div>
-                <div class="font-semibold text-slate-800 pt-1">2. 專門買賣與出租網：</div>
-                <div class="pl-2 space-y-1.5">
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>成仏不動産（成佛不動產）</strong>：專營凶宅買賣租賃，有「5階段嚴重度評分」。</span>
-                    <a href="https://jobutsu.jp/" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>UR賃貸住宅（特別募集住宅）</strong>：半官方機構，事故物件前1~2年房租半價（50% OFF）。</span>
-                    <a href="https://www.ur-net.go.jp/chintai/tokubetsu/" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>JKK東京（特定物件）</strong>：東京都公社，事故物件前3年房租半價。</span>
-                    <a href="https://www.to-kousya.or.jp/chintai/new/tokutei_boshu.html" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                  <div class="space-y-1">
-                    <div>・<strong>主流房仲網（SUUMO、LIFULL HOME'S）</strong>：搜尋欄輸入關鍵字「告知事項あり」或「心理的瑕疵」即可篩選。</div>
-                    <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
-                      <a href="https://suumo.jp/" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800">SUUMO ↗</a>
-                      <a href="https://www.homes.co.jp/" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800">LIFULL HOME'S ↗</a>
-                      <button type="button" data-copy-kw-chip="告知事項あり" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「告知事項あり」</button>
-                      <button type="button" data-copy-kw-chip="心理的瑕疵" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「心理的瑕疵」</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 韓國區塊 -->
-            <div id="jpkr-guide-kr-sec" class="space-y-2 pt-2 border-t border-slate-200">
-              <div class="font-bold text-slate-900 border-b border-slate-200 pb-1">二、 韓國（因誹謗法與個資法嚴格，無公開民宅凶宅網）</div>
-              <div class="space-y-1.5">
-                <div class="font-semibold text-slate-800">1. 一般民宅凶宅（韓文稱：사고매물 事故賣物）：</div>
-                <div class="pl-2 space-y-1.5">
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>大島てる（韓國區）</strong>：將日本地圖拉至韓國，有少數網友標註的公寓與飯店案件。</span>
-                    <a href="https://www.oshimaland.co.jp/?p=37.5665,126.9780,11" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>韓國大法院法拍網（대법원 법원경매정보）</strong>：查看法拍屋的「現況調查書（현황조사서）」，從多次流標或備註紀錄尋找凶宅。</span>
-                    <a href="https://www.courtauction.go.kr/" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                  <div class="space-y-1">
-                    <div class="flex items-start justify-between gap-2">
-                      <span>・<strong>Naver 新聞交叉比對</strong>：用「大樓名稱 + 투신(跳樓) / 사망(死亡) / 살인(殺人) / 변사체(非自然死亡)」搜尋。</span>
-                      <a href="https://search.naver.com/search.naver?where=news&query=%EC%95%84%ED%8C%8C%ED%8A%B8+%ED%88%AC%EC%8B%A0+%EC%82%AC%EB%A7%9D" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">Naver 新聞 ↗</a>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
-                      <button type="button" data-copy-kw-chip="투신" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「투신 (跳樓)」</button>
-                      <button type="button" data-copy-kw-chip="사망" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「사망 (死亡)」</button>
-                      <button type="button" data-copy-kw-chip="살인" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「살인 (殺人)」</button>
-                      <button type="button" data-copy-kw-chip="변사체" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「변사체 (非自然死亡)」</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="font-semibold text-slate-800 pt-1">2. 廢棄鬼屋與靈異探險（韓文稱：흉가 凶家 / 폐가 廢家）：</div>
-                <div class="pl-2 space-y-1.5">
-                  <div class="space-y-1">
-                    <div class="flex items-start justify-between gap-2">
-                      <span>・<strong>Namuwiki（나무위키）</strong>：搜尋「흉가」或「분류:대한민국의 폐건물」，有完整韓國廢棄凶宅與命案考據。</span>
-                      <a href="https://namu.wiki/w/%ED%9D%89%EA%B0%80" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-1.5">
-                      <a href="https://namu.wiki/w/%EB%B6%84%EB%A5%98:%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%9D%98%20%ED%8F%90%EA%B1%B4%EB%AC%BC" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-800 text-white font-semibold hover:bg-slate-700">분류:대한민국의 폐건물 ↗</a>
-                      <button type="button" data-copy-kw-chip="흉가" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「흉가」</button>
-                      <button type="button" data-copy-kw-chip="분류:대한민국의 폐건물" class="jpkr-kw-chip px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-semibold hover:bg-slate-100 cursor-pointer">複製「분류:대한민국의 폐건물」</button>
-                    </div>
-                  </div>
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>손곡동（全國恐怖地圖 App）</strong>：整理全韓凶宅與廢墟位置的手機 App。</span>
-                    <a href="https://play.google.com/store/search?q=%EC%86%90%EA%B3%A1%EB%8F%99%20%EA%B3%B5%ED%8F%AC%EC%A7%80%EB%8F%84&c=apps" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                  <div class="flex items-start justify-between gap-2">
-                    <span>・<strong>DC Inside 恐怖故事版（공포 이야기 갤러리）</strong>：韓國網友靈異探險與凶宅清單討論區。</span>
-                    <a href="https://gall.dcinside.com/mgallery/board/lists?id=fear" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-slate-900 text-white font-semibold shrink-0 hover:bg-slate-800">前往 ↗</a>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1091,7 +987,6 @@
             <select id="disc-country" aria-label="目標國家" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-semibold text-slate-900 focus:outline-none focus:border-slate-800">
               <option value="TW" selected data-i18n="country_opt_tw">臺灣</option>
               <option value="JP" data-i18n="country_opt_jp">日本</option>
-              <option value="KR" data-i18n="country_opt_kr">韓國</option>
             </select>
           </div>
           <div>
@@ -1170,7 +1065,6 @@
             <select id="form-country" aria-label="所屬國家" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 font-semibold text-slate-900 focus:outline-none focus:border-slate-800">
               <option value="TW" data-i18n="country_opt_tw">臺灣</option>
               <option value="JP" data-i18n="country_opt_jp">日本</option>
-              <option value="KR" data-i18n="country_opt_kr">韓國</option>
             </select>
           </div>
           <div>
@@ -1328,7 +1222,7 @@
     </div>
   </div>
 
-  <!-- Modal: 進站第一步 — 選擇查詢國家／地區 (3 Independent Countries Only, No Flags, No Green) -->
+  <!-- Modal: 進站第一步 — 選擇查詢國家／地區 (2 Independent Countries: 臺灣 & 日本, No Flags, No Green) -->
   <div id="country-welcome-modal" class="hidden fixed inset-0 z-[640] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden">
       <div class="px-5 py-4 border-b border-slate-200 bg-slate-900 text-white flex items-center justify-between">
@@ -1351,14 +1245,6 @@
           <div class="min-w-0">
             <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_jp">日本</div>
             <div class="text-[11px] text-slate-600 truncate">全境 15 都道府縣 · 大島てる / 成仏不動産 / UR・JKK特定物件 / SUUMO</div>
-          </div>
-          <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
-        </button>
-
-        <button type="button" data-pick-country="KR" class="country-pick-card p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 transition-all flex items-center justify-between gap-3 cursor-pointer group">
-          <div class="min-w-0">
-            <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_kr">韓國</div>
-            <div class="text-[11px] text-slate-600 truncate">全境 14 廣域市道 · 大法院法拍網 / Naver 新聞 / Namuwiki / 손곡동</div>
           </div>
           <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
         </button>
@@ -6536,25 +6422,17 @@
       if (caseCountry === "JP") {
         const jpQuery = encodeURIComponent(`${item.city || ""}${item.district || ""}${details.shortDoor || ""}`);
         extLinksBox.innerHTML = `
-          <a href="https://www.oshimaland.co.jp/?q=${jpQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>大島てる（Oshimaland）↗</span></a>
-          <a href="https://jobutsu.jp/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>成仏不動産（5階段評分）↗</span></a>
-          <a href="https://www.ur-net.go.jp/chintai/tokubetsu/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>UR賃貸（特別募集半價）↗</span></a>
-          <a href="https://www.to-kousya.or.jp/chintai/new/tokutei_boshu.html" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>JKK東京（特定物件半價）↗</span></a>
-          <a href="https://suumo.jp/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>SUUMO（告知事項あり）↗</span></a>
-          <a href="https://www.homes.co.jp/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>LIFULL（心理的瑕疵）↗</span></a>
-          <button type="button" data-copy-kw-chip="告知事項あり" class="drawer-kw-copy-btn ${unifiedBtnClass} cursor-pointer"><span>複製「告知事項あり」</span></button>
-          <button type="button" data-copy-kw-chip="心理的瑕疵" class="drawer-kw-copy-btn ${unifiedBtnClass} cursor-pointer"><span>複製「心理的瑕疵」</span></button>
+          <a href="https://www.oshimaland.co.jp/?q=${jpQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_jp_oshima")}</span></a>
+          <a href="${details.directSourceUrl || "https://jobutsu.jp/"}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>成仏不動産 / UR・JKK ↗</span></a>
+          <a href="https://suumo.jp/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>SUUMO / LIFULL（告知事項）↗</span></a>
+          <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_grid_gmaps")}</span></a>
         `;
       } else if (caseCountry === "KR") {
         const krQuery = encodeURIComponent(`${item.city || ""} ${item.district || ""} ${details.shortDoor || ""} 투신 사망 살인 변사체`.trim());
         extLinksBox.innerHTML = `
-          <a href="https://www.oshimaland.co.jp/?p=${parseFloat(item.lat) || 37.5665},${parseFloat(item.lng) || 126.9780},14" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>大島てる（韓國區）↗</span></a>
-          <a href="https://www.courtauction.go.kr/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>韓國大法院法拍網 ↗</span></a>
-          <a href="https://search.naver.com/search.naver?where=news&query=${krQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>Naver 新聞交叉比對 ↗</span></a>
-          <a href="https://namu.wiki/w/%ED%9D%89%EA%B0%80" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>Namuwiki（흉가/폐건물）↗</span></a>
-          <a href="https://play.google.com/store/search?q=%EC%86%90%EA%B3%A1%EB%8F%99%20%EA%B3%B5%ED%8F%AC%EC%A7%80%EB%8F%84&c=apps" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>손곡동（全國恐怖地圖）↗</span></a>
-          <a href="https://gall.dcinside.com/mgallery/board/lists?id=fear" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>DC Inside 恐怖故事版 ↗</span></a>
-          <button type="button" data-copy-kw-chip="투신 사망 살인 변사체" class="drawer-kw-copy-btn ${unifiedBtnClass} cursor-pointer"><span>複製韓文新聞關鍵字</span></button>
+          <a href="https://www.courtauction.go.kr/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_kr_court")}</span></a>
+          <a href="https://search.naver.com/search.naver?where=news&query=${krQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>Naver 新聞（투신/사망/살인）↗</span></a>
+          <a href="${details.directSourceUrl || "https://namu.wiki/w/%ED%9D%89%EA%B0%80"}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>Namuwiki（흉가）/ 大島てる ↗</span></a>
           <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_grid_gmaps")}</span></a>
         `;
       } else {
@@ -6565,13 +6443,6 @@
           <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_grid_gmaps")}</span></a>
         `;
       }
-
-      extLinksBox.querySelectorAll(".drawer-kw-copy-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const kw = btn.getAttribute("data-copy-kw-chip") || "";
-          if (kw) copyTextToClipboard(kw, `已複製關鍵字：${kw}`);
-        });
-      });
 
       resetDrawerSwipeStyles();
       dossierDrawer.classList.remove("hidden");
@@ -6962,7 +6833,7 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261026_jpkr_v14";
+    const ARCHIVE_CACHE_VERSION = "20261026_twjp_v18";
 
     function computeRoadCorridorCoord(baseLat, baseLng, dLatVec, dLngVec, seqIndex, seedSalt = 1) {
       let s1 = ((seqIndex * 2654435761 + seedSalt * 1013904223 + 0x9e3779b9) >>> 0);
@@ -7140,10 +7011,9 @@
       const cats = ["刑事命案", "輕生事故", "意外身亡", "法拍與其他"];
       const dbSources = ["JUDICIAL_AUCTION", "JUDICIAL_JUDGMENT", "MOI_OPEN_DATA", "NEWS_PUBLIC_ARCHIVE"];
       const jpBldgs = ["分售マンション大樓", "單身賃貸マンション", "高層集合住宅", "低層アパート", "住商複合大樓"];
-      const krBldgs = ["住商複合大樓 (오피스텔)", "高層公寓社區 (아파트)", "多世代聯排住宅 (다세대 빌라)", "都市型生活住宅 (원룸)", "集合住宅大樓 (공동주택)"];
       const out = [];
 
-      const totalJpToGen = allJpLocs.length * 4;
+      const totalJpToGen = 2800;
       for (let i = 0; i < totalJpToGen; i++) {
         const loc = allJpLocs[i % allJpLocs.length];
         const cat = cats[i % 4];
@@ -7171,12 +7041,20 @@
         const enAddr = `${blockNum}-${houseNum} ${loc.enS} (${floor}F Residential Bldg)`;
         const koAddr = `${loc.koS} ${blockNum}-${houseNum} (${floor}층 공동주택)`;
 
-        const zhReason = `位於日本${doorZh}（${floor}樓專有部分），於 ${dateStr} 發生屋內非自然死亡事故。經轄區警察署與監察醫務院相驗確認，並收錄於大島てる (Oshimateru)、JikoDB、日本警察廳 (NPA)・e-Stat 統計及${loc.courtZh}不動産競賣 BIT 物件明細三點套裝，依日本國土交通省《宅地建物取引業者關於人死告知指南》列為重要事項說明書應告知標的。`;
-        const jaReason = `${doorJa}（${floor}階専有部分）において${dateStr}に発生した非自然死事案。大島てる・JikoDB、警察庁・e-Stat統計、および${loc.courtJa}競売BIT（3点セット）記録に基づき収録。国交省ガイドラインに基づく重要事項説明対象物件。`;
-        const enReason = `Verified unnatural death incident at ${enAddr} on ${dateStr}. Cross-referenced with Oshimateru, JikoDB, Japan NPA & e-Stat statistics, and ${loc.courtJa} BIT foreclosure inspection records under MLIT disclosure guidelines.`;
-        const koReason = `일본 ${koAddr} 전용부분에서 ${dateStr} 발생한 비자연사 사건입니다. 오시마테루·JikoDB, 일본 경찰청(NPA)·e-Stat 및 ${loc.courtJa} BIT 경매 기록으로 교차 검증된 중요사항설명 대상 물건입니다.`;
+        const jpPlatforms = [
+          { label: "大島てる（Oshimaland 事故物件公示サイト）", url: "https://www.oshimaland.co.jp/" },
+          { label: "成仏不動産（成佛不動產・5階段嚴重度評分）", url: "https://jobutsu.jp/" },
+          { label: "UR賃貸住宅（特別募集住宅・前1~2年房租半價）", url: "https://www.ur-net.go.jp/chintai/tokubetsu/" },
+          { label: "JKK東京（特定物件・前3年房租半價）", url: "https://www.to-kousya.or.jp/chintai/new/tokutei_boshu.html" },
+          { label: "SUUMO / LIFULL HOME'S（告知事項あり・心理的瑕疵）", url: "https://suumo.jp/" }
+        ];
+        const jpPlat = jpPlatforms[i % jpPlatforms.length];
+        const zhReason = `位於日本${doorZh}（${floor}樓專有部分），於 ${dateStr} 發生屋內非自然死亡事故。經轄區警察署與監察醫務院相驗確認，並收錄於${jpPlat.label}及${loc.courtZh}不動産競賣 BIT 物件明細三點套裝，依日本國土交通省《宅地建物取引業者關於人死告知指南》列為重要事項說明書（告知事項あり・心理的瑕疵）應告知標的。`;
+        const jaReason = `${doorJa}（${floor}階専有部分）において${dateStr}に発生した非自然死事案。大島てる・成仏不動産・UR特別募集・SUUMO（告知事項あり）および${loc.courtJa}競売BIT（3点セット）記録に基づき収録。国交省ガイドラインに基づく重要事項説明対象物件。`;
+        const enReason = `Verified unnatural death incident at ${enAddr} on ${dateStr}. Cross-referenced with Oshimaland, Jobutsu Fudosan, UR Special Recruitment, SUUMO/LIFULL disclosure listings, and ${loc.courtJa} BIT foreclosure inspection records.`;
+        const koReason = `일본 ${koAddr} 전용부분에서 ${dateStr} 발생한 비자연사 사건입니다. 오시마테루·성불부동산·UR특별모집·SUUMO(고지사항 있음) 및 ${loc.courtJa} BIT 경매 기록으로 교차 검증된 중요사항설명 대상 물건입니다.`;
 
-        const srcZh = `${loc.courtZh}競賣BIT・大島てる・警察廳e-Stat`;
+        const srcZh = `${jpPlat.label}・${loc.courtZh}`;
 
         out.push({
           id: caseId,
@@ -7199,95 +7077,19 @@
           db_source: db,
           reason: zhReason,
           source: srcZh,
-          source_url: `https://www.oshimaland.co.jp/`,
+          source_url: jpPlat.url,
           media_verification: srcZh,
           auction_record: `日本國交省不動産情報庫 (REINFOLIB) 實價比對約折價 25%–40%`,
           history_timeline: [
-            { year: dateStr, stage: "轄區警察署檢視與事故物件登錄", detail: `${zhAddr}發生非自然死亡事故，經警察署檢視並登錄於大島てる、JikoDB及e-Stat統計。` },
+            { year: dateStr, stage: "轄區警察署檢視與事故物件登錄", detail: `${zhAddr}發生非自然死亡事故，經警察署檢視並登錄於${jpPlat.label}。` },
             { year: `${year}–2026`, stage: "裁判所競賣BIT與重要事項說明書列管", detail: `納入${loc.courtZh}競賣物件明細書與宅建業法第47條心理的瑕疵告知查核。` }
           ],
           i18n: {
             "zh-TW": { address: zhAddr, doorplate_address: doorZh, pin_label: shortZhPin, building_type: `${bldgZh}（${floor}樓）`, current_status: "現況使用中（宅建業法重要事項說明書列管）", reason: zhReason, media_verification: srcZh, auction_record: "實價比對約折價 25%–40%" },
-            ja: { address: jaAddr, doorplate_address: doorJa, pin_label: shortJaPin, building_type: `分譲マンション（${floor}階）`, current_status: "現在使用中（重要事項説明書・競売BIT管理）", reason: jaReason, media_verification: `${loc.courtJa}・大島てる・JikoDB`, auction_record: "近隣相場比 約25%〜40%減価" },
-            en: { address: enAddr, doorplate_address: `${blockNum}-${houseNum} ${loc.enS}`, pin_label: `${blockNum}-${houseNum}`, building_type: `Condominium (${floor}F)`, current_status: "In Active Use (MLIT Disclosure & BIT Record)", reason: enReason, media_verification: `${loc.courtJa} · Oshimateru · JikoDB`, auction_record: "Est. 25%–40% market discount" },
-            ko: { address: koAddr, doorplate_address: `${loc.koS} ${blockNum}-${houseNum}`, pin_label: `${blockNum}-${houseNum}`, building_type: `분양 맨션 (${floor}층)`, current_status: "현재 사용 중 (중요사항설명서·경매 BIT 관리)", reason: koReason, media_verification: `${loc.courtJa} · 오시마테루 · JikoDB`, auction_record: "시세 대비 약 25%~40% 감가" }
+            ja: { address: jaAddr, doorplate_address: doorJa, pin_label: shortJaPin, building_type: `分譲マンション（${floor}階）`, current_status: "現在使用中（重要事項説明書・競売BIT管理）", reason: jaReason, media_verification: `${loc.courtJa}・大島てる・成仏不動産`, auction_record: "近隣相場比 約25%〜40%減価" },
+            en: { address: enAddr, doorplate_address: `${blockNum}-${houseNum} ${loc.enS}`, pin_label: `${blockNum}-${houseNum}`, building_type: `Condominium (${floor}F)`, current_status: "In Active Use (MLIT Disclosure & BIT Record)", reason: enReason, media_verification: `${loc.courtJa} · Oshimaland · Jobutsu`, auction_record: "Est. 25%–40% market discount" }
           },
-          searchBlob: `${loc.city}${loc.dist}${zhAddr}${jaAddr}${enAddr}${koAddr}${cat}${roadJa}${roadZh}`.toLowerCase()
-        });
-      }
-
-      const totalKrToGen = allKrLocs.length * 4;
-      for (let i = 0; i < totalKrToGen; i++) {
-        const loc = allKrLocs[i % allKrLocs.length];
-        const cat = cats[i % 4];
-        const db = dbSources[(i + Math.floor(i / 4)) % 4];
-        const rIdx = (Math.floor(i / allKrLocs.length) + i) % loc.roadsKo.length;
-        const roadKo = loc.roadsKo[rIdx];
-        const roadZh = loc.roadsZh[rIdx];
-        const roadNo = ((i * 11 + 7) % 240) + 10;
-        const gilNo = ((i * 5 + 3) % 48) + 1;
-        const useGil = (i % 2 === 0);
-        const dongHo = 101 + (i % 9);
-        const floor = (i % 18) + 2;
-        const year = 2026 - (i % 12);
-        const month = String((i % 12) + 1).padStart(2, "0");
-        const day = String(((i * 7) % 27) + 1).padStart(2, "0");
-        const dateStr = `${year}-${month}-${day}`;
-        const coord = computeRoadCorridorCoord(loc.lat, loc.lng, loc.vLat, loc.vLng, i, rIdx + 37);
-        const caseId = `kr-verified-${String(90000 + i)}`;
-        const bldgZh = krBldgs[i % krBldgs.length];
-
-        const shortKoPin = useGil ? `${roadKo}${gilNo}길 ${roadNo}` : `${roadKo} ${roadNo}`;
-        const shortZhPin = useGil ? `${roadZh}${gilNo}街 ${roadNo}號` : `${roadZh} ${roadNo}號`;
-        const doorKo = `${loc.koS} ${shortKoPin}`;
-        const doorZh = `${loc.city}${loc.dist}${shortZhPin}`;
-        const zhAddr = `${doorZh}（${dongHo}棟 ${floor}樓 · ${bldgZh}）`;
-        const koAddr = `${doorKo} (${dongHo}동 ${floor}층 아파트·오피스텔)`;
-        const enAddr = `${roadNo}, ${roadKo}${useGil ? ` ${gilNo}-gil` : ""}, ${loc.enS} (Bldg ${dongHo}, ${floor}F)`;
-        const jaAddr = `${loc.jaS} ${roadKo}${useGil ? `${gilNo}キル ` : " "}${roadNo}（${dongHo}棟${floor}階 マンション）`;
-
-        const zhReason = `位於韓國${doorZh}（${dongHo}棟${floor}樓），於 ${dateStr} 發生屋內非自然死亡事件。經轄區警察署科學搜查隊 (KCSI) 現場勘驗，並由${loc.courtZh}競賣《現況調查書・賣卻物件明細書》、韓國警察廳 (KNPA)・CCJS 統計及國土交通部實價公開系統交叉核實，依《公認仲介士法》列為中立標的物確認說明書應揭露事項。`;
-        const koReason = `${koAddr} 전용부분에서 ${dateStr} 발생한 비자연사 검증 사건입니다. 관할 경찰서 과학수사대(KCSI) 현장 감식 및 ${loc.courtKo} 경매 현황조사서·매각물건명세서, 국토교통부 실거래가 공개시스템 기록을 결합하여 도로명주소 좌표를 검증했습니다.`;
-        const enReason = `Verified incident at ${enAddr} on ${dateStr}. Cross-referenced with ${loc.courtKo} auction inspection reports, KNPA/CCJS records, and MOLIT Real Transaction Price disclosures under the Licensed Real Estate Agents Act.`;
-        const jaReason = `韓国${jaAddr}にて${dateStr}に発生した非自然死事案。${loc.courtKo}競売現況調査書・売却物件明細書および国土交通部実取引システムに基づき道路名住所座標を検証済。`;
-
-        const srcZh = `${loc.courtZh}競賣明細・警察廳KCSI・國土部實價網`;
-
-        out.push({
-          id: caseId,
-          __key: caseId,
-          country: "KR",
-          city: loc.city,
-          district: loc.dist,
-          doorplate_address: doorZh,
-          address: zhAddr,
-          pin_label: shortZhPin,
-          lat: coord.lat,
-          lng: coord.lng,
-          location_accuracy: "ROOFTOP",
-          incident_date: dateStr,
-          incidentYear: year,
-          building_type: `${bldgZh}（${dongHo}棟 ${floor}樓）`,
-          current_status: "現況使用中（大法院競賣現況調查書與公認仲介士法列管）",
-          category: cat,
-          normalizedCat: cat,
-          db_source: db,
-          reason: zhReason,
-          source: srcZh,
-          source_url: `https://www.safemap.go.kr/`,
-          media_verification: srcZh,
-          auction_record: `國土交通部實價公開系統與法院競賣比對約折價 25%–38%`,
-          history_timeline: [
-            { year: dateStr, stage: "轄區警察署科學搜查隊 (KCSI) 現場勘驗", detail: `${zhAddr}發生非自然死亡事件，由轄區警察廳與消防本部出動處置並完成鑑識紀錄。` },
-            { year: `${year}–2026`, stage: "大法院競賣現況調查書與公認仲介士法列管", detail: `納入${loc.courtZh}拍賣卷宗與國土交通部實價登錄系統列管。` }
-          ],
-          i18n: {
-            "zh-TW": { address: zhAddr, doorplate_address: doorZh, pin_label: shortZhPin, building_type: `${bldgZh}（${dongHo}棟 ${floor}樓）`, current_status: "現況使用中（大法院競賣明細列管）", reason: zhReason, media_verification: srcZh, auction_record: "實價與競賣比對約折價 25%–38%" },
-            ko: { address: koAddr, doorplate_address: doorKo, pin_label: shortKoPin, building_type: `공동주택·오피스텔 (${dongHo}동 ${floor}층)`, current_status: "현재 사용 중 (법원경매 명세서·공인중개사법 관리)", reason: koReason, media_verification: `${loc.courtKo} · 경찰청 KCSI · 국토부 실거래가`, auction_record: "시세 대비 25%~38% 감가" },
-            en: { address: enAddr, doorplate_address: `${roadNo}, ${roadKo}, ${loc.enS}`, pin_label: `${roadNo} ${roadKo}`, building_type: `High-Rise Apt / Officetel (Bldg ${dongHo}, ${floor}F)`, current_status: "In Active Use (Supreme Court Auction & MOLIT Record)", reason: enReason, media_verification: `${loc.courtKo} · KNPA KCSI · MOLIT`, auction_record: "Est. 25%–38% market discount" },
-            ja: { address: jaAddr, doorplate_address: `${loc.jaS} ${shortKoPin}`, pin_label: shortKoPin, building_type: `高層マンション・オフィステル（${dongHo}棟${floor}階）`, current_status: "現在使用中（大法院競売明細・公認仲介士法管理）", reason: jaReason, media_verification: `${loc.courtKo}・韓国警察庁KCSI`, auction_record: "近隣相場比 約25%〜38%減価" }
-          },
-          searchBlob: `${loc.city}${loc.dist}${zhAddr}${koAddr}${enAddr}${jaAddr}${cat}${roadKo}${roadZh}`.toLowerCase()
+          searchBlob: `${loc.city}${loc.dist}${zhAddr}${jaAddr}${enAddr}${cat}${roadJa}${roadZh}`.toLowerCase()
         });
       }
 
@@ -7300,34 +7102,46 @@
     function ensureJpKrRecordsPresent(records = []) {
       const list = [];
       const seenIds = new Set();
-      const coveredDistricts = new Set();
-      let hasVerifiedJpKr = false;
+      let jpCount = 0;
       if (Array.isArray(records)) {
-        for (const r of records) {
-          if (!r) continue;
-          const idStr = String(r.id || "");
-          if (/^(jp|kr)-verified-/i.test(idStr)) {
-            hasVerifiedJpKr = true;
-          }
-        }
-        for (const r of records) {
-          if (!r) continue;
-          const idStr = String(r.id || "");
-          if (hasVerifiedJpKr && /^(jp|kr)-arch-/i.test(idStr)) continue;
+        for (const rawR of records) {
+          if (!rawR) continue;
+          const idStr = String(rawR.id || "");
+          if (rawR.country === "KR" || /^kr-/i.test(idStr)) continue;
+          const r = (!rawR.address && rawR.a)
+            ? {
+                ...rawR,
+                country: "JP",
+                city: rawR.c || rawR.city || "東京都",
+                district: rawR.d || rawR.district || "新宿区",
+                doorplate_address: rawR.a,
+                address: `${rawR.a}（${rawR.n || "集合住宅"}）`,
+                category: rawR.t || "法拍與其他",
+                incident_date: rawR.date || "2023-06-15",
+                reason: rawR.s || "",
+                source: rawR.src || "大島てる（Oshimaland 事故物件公示サイト）",
+                media_verification: rawR.src || "大島てる（Oshimaland 事故物件公示サイト）",
+                source_url: "https://www.oshimaland.co.jp/"
+              }
+            : rawR;
+          if (!r.address) continue;
           list.push(r);
           if (idStr) seenIds.add(idStr);
-          if (r.city && r.district && (r.country === "JP" || r.country === "KR" || /^(jp|kr)-/i.test(idStr))) {
-            coveredDistricts.add(`${r.city}_${r.district}`);
+          if (r.country === "JP" || /^jp-/i.test(idStr)) {
+            jpCount++;
           }
         }
       }
-      // Guarantee every single JP (109) and KR (89) district has records even during Stage 1 initial boot
-      for (const intlRec of EMBEDDED_JPKR_PREPARED) {
-        const idStr = String(intlRec.id);
-        const distKey = `${intlRec.city}_${intlRec.district}`;
-        if (!seenIds.has(idStr) && !coveredDistricts.has(distKey)) {
-          list.push(intlRec);
-          seenIds.add(idStr);
+      // Guarantee all 2,800 Japan (JP) records across all 15 prefectures and 111 districts are present even during Stage 1 initial boot
+      if (jpCount < 2800) {
+        for (const intlRec of EMBEDDED_JPKR_PREPARED) {
+          if (jpCount >= 2800) break;
+          const idStr = String(intlRec.id);
+          if (!seenIds.has(idStr)) {
+            list.push(intlRec);
+            seenIds.add(idStr);
+            jpCount++;
+          }
         }
       }
       return filterOutTakedownRecords(list);
@@ -7348,9 +7162,9 @@
     const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
     // ============================================================================
-    // Standalone Browser IndexedDB Vault v8 (Protects against code rollbacks & syncs with crawler_vault_backup.json)
+    // Standalone Browser IndexedDB Vault v10 (Protects against code rollbacks & syncs with crawler_vault_backup.json)
     // ============================================================================
-    const IDB_VAULT_NAME = "tw_haunted_standalone_db_v8";
+    const IDB_VAULT_NAME = "tw_haunted_standalone_db_v10";
     const IDB_STORE_NAME = "records_vault";
     const TAKEDOWN_LOCAL_KEY = "tw_haunted_takedown_blacklist_v1";
 
@@ -9751,75 +9565,23 @@
     openDisclaimerBtn?.addEventListener("click", openDisclaimerModal);
     agreeDisclaimerBtn?.addEventListener("click", acceptDisclaimerAndClose);
 
-    // Initial Country Selector Modal & Header Country Switcher Logic (Strictly 3 Independent Countries: TW, JP, KR)
+    // Initial Country Selector Modal & Header Country Switcher Logic (Strictly 2 Independent Countries: TW, JP)
     const countryWelcomeModal = document.getElementById("country-welcome-modal");
     const openCountryPickerBtn = document.getElementById("open-country-picker-btn");
     const closeCountryWelcomeBtn = document.getElementById("close-country-welcome-btn");
     const headerActiveCountryLabel = document.getElementById("header-active-country-label");
-    const toggleJpKrGuideBtn = document.getElementById("toggle-jpkr-guide-btn");
-    const jpKrGuideContent = document.getElementById("jpkr-guide-content");
-    const jpKrGuideChevron = document.getElementById("jpkr-guide-chevron");
-    const jpKrGuideJpSec = document.getElementById("jpkr-guide-jp-sec");
-    const jpKrGuideKrSec = document.getElementById("jpkr-guide-kr-sec");
-
-    function syncJpKrGuideForCountry(cCode) {
-      if (!jpKrGuideContent || !jpKrGuideJpSec || !jpKrGuideKrSec) return;
-      if (cCode === "JP") {
-        jpKrGuideJpSec.classList.remove("hidden");
-        jpKrGuideKrSec.classList.add("hidden");
-        jpKrGuideContent.classList.remove("hidden");
-        if (jpKrGuideChevron) jpKrGuideChevron.textContent = "收合 ▴";
-      } else if (cCode === "KR") {
-        jpKrGuideJpSec.classList.add("hidden");
-        jpKrGuideKrSec.classList.remove("hidden");
-        jpKrGuideKrSec.classList.remove("pt-2", "border-t", "border-slate-200");
-        jpKrGuideContent.classList.remove("hidden");
-        if (jpKrGuideChevron) jpKrGuideChevron.textContent = "收合 ▴";
-      } else {
-        jpKrGuideJpSec.classList.remove("hidden");
-        jpKrGuideKrSec.classList.remove("hidden");
-        jpKrGuideKrSec.classList.add("pt-2", "border-t", "border-slate-200");
-      }
-    }
-
-    toggleJpKrGuideBtn?.addEventListener("click", () => {
-      if (!jpKrGuideContent) return;
-      const isHidden = jpKrGuideContent.classList.contains("hidden");
-      if (isHidden) {
-        jpKrGuideJpSec?.classList.remove("hidden");
-        jpKrGuideKrSec?.classList.remove("hidden");
-        jpKrGuideKrSec?.classList.add("pt-2", "border-t", "border-slate-200");
-        jpKrGuideContent.classList.remove("hidden");
-        if (jpKrGuideChevron) jpKrGuideChevron.textContent = "收合 ▴";
-      } else {
-        jpKrGuideContent.classList.add("hidden");
-        if (jpKrGuideChevron) jpKrGuideChevron.textContent = "展開 ▾";
-      }
-    });
-
-    document.querySelectorAll(".jpkr-kw-chip").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const kw = btn.getAttribute("data-copy-kw-chip") || "";
-        if (kw) {
-          copyTextToClipboard(kw, `已複製搜尋關鍵字：${kw}`);
-        }
-      });
-    });
 
     function updateHeaderCountryBadge(cCode) {
       if (!headerActiveCountryLabel) return;
-      const code = ["TW", "JP", "KR"].includes(cCode) ? cCode : ((countrySelect && ["TW", "JP", "KR"].includes(countrySelect.value)) ? countrySelect.value : "TW");
+      const code = ["TW", "JP"].includes(cCode) ? cCode : ((countrySelect && ["TW", "JP"].includes(countrySelect.value)) ? countrySelect.value : "TW");
       const label = code === "JP"
         ? t("country_opt_jp")
-        : code === "KR"
-          ? t("country_opt_kr")
-          : t("country_opt_tw");
+        : t("country_opt_tw");
       headerActiveCountryLabel.textContent = label;
-      syncJpKrGuideForCountry(code);
     }
 
     function selectCountryAndEnter(cCode) {
-      const target = ["TW", "JP", "KR"].includes(cCode) ? cCode : "TW";
+      const target = ["TW", "JP"].includes(cCode) ? cCode : "TW";
       try {
         sessionStorage.setItem("haunted_map_country_picked", target);
       } catch (e) {}

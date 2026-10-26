@@ -622,13 +622,15 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
     ? customRecords
     : loadDefaultArchiveRecords(rootDir);
 
-  const records = rawRecords.map((r, idx) => {
-    const enriched = enrichCaseNarrativeAndTimeline({ ...r });
-    return {
-      ...enriched,
-      slug: buildCaseSlug(enriched, idx)
-    };
-  });
+  const records = rawRecords
+    .filter(r => r && r.country !== "KR" && !/^kr-/i.test(String(r.id || "")) && r.address)
+    .map((r, idx) => {
+      const enriched = enrichCaseNarrativeAndTimeline({ ...r });
+      return {
+        ...enriched,
+        slug: buildCaseSlug(enriched, idx)
+      };
+    });
 
   // Pre-sort archive in exact default UI order (incident_date descending) so Stage 1 (top 80) and Stage 2 (full archive) have identical Page 1 order
   records.sort((a, b) => {
@@ -659,8 +661,7 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   };
   const countryCategoryCounts = {
     TW: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
-    JP: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 },
-    KR: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 }
+    JP: { ALL: 0, "刑事命案": 0, "輕生事故": 0, "意外身亡": 0, "法拍與其他": 0 }
   };
   for (const r of records) {
     const cat = String(r.category || "");
@@ -672,11 +673,9 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
     else if (cat === "輕生事故" || /輕生|跳樓|墜樓|燒炭|自縊|上吊|尋短|服毒/.test(combined)) norm = "輕生事故";
     categoryCounts[norm] = (categoryCounts[norm] || 0) + 1;
 
-    const cCode = (r.country === "JP" || r.country === "KR" || r.country === "TW")
-      ? r.country
-      : (/東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県|広島県|宮城県|静岡県|茨城県|沖縄県/.test(String(r.city || ""))
-        ? "JP"
-        : (/首爾|釜山|仁川|京畿道|大邱|大田|光州|蔚山|江原|忠清|全北|慶尚|濟州/.test(String(r.city || "")) ? "KR" : "TW"));
+    const cCode = (r.country === "JP" || /東京都|大阪府|神奈川県|愛知県|福岡県|北海道|京都府|兵庫県|埼玉県|千葉県|広島県|宮城県|静岡県|茨城県|沖縄県/.test(String(r.city || "")))
+      ? "JP"
+      : "TW";
     r.country = cCode;
     if (countryCategoryCounts[cCode]) {
       countryCategoryCounts[cCode].ALL++;
@@ -687,8 +686,7 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   // Write fast initial boot JSON (top 80 per country + authoritative totalCount, categoryCounts & countryCategoryCounts) to both root and /public
   const twTopRecords = records.filter(r => r.country === "TW").slice(0, 80);
   const jpTopRecords = records.filter(r => r.country === "JP").slice(0, 80);
-  const krTopRecords = records.filter(r => r.country === "KR").slice(0, 80);
-  const slimBootRecords = [...twTopRecords, ...jpTopRecords, ...krTopRecords].map(({ merged_cases, ...rest }) => rest);
+  const slimBootRecords = [...twTopRecords, ...jpTopRecords].map(({ merged_cases, ...rest }) => rest);
   const bootPayloadStr = JSON.stringify({
     totalCount: records.length,
     categoryCounts,
@@ -701,12 +699,12 @@ export function generateAndWriteSitemapFiles(customRecordsOrDir = null, optionsO
   fs.writeFileSync(bootPath, bootPayloadStr, "utf-8");
   fs.writeFileSync(rootBootPath, bootPayloadStr, "utf-8");
 
-  // Write standalone multi-language subdirectory HTML pages (/zh-tw/index.html, /ja/index.html, /ko/index.html, /en/index.html)
+  // Write standalone multi-language subdirectory HTML pages (/zh-tw/index.html, /ja/index.html, /en/index.html)
   let staticGeneratedCount = 0;
   const indexHtmlPath = path.join(rootDir, "index.html");
   if (fs.existsSync(indexHtmlPath)) {
     const baseTemplateHtml = fs.readFileSync(indexHtmlPath, "utf-8");
-    for (const subDir of ["zh-tw", "ja", "ko", "en"]) {
+    for (const subDir of ["zh-tw", "ja", "en"]) {
       const localizedHtml = buildLocalizedIndexHtml(baseTemplateHtml, subDir, baseUrl);
       const rootSubDir = path.join(rootDir, subDir);
       const pubSubDir = path.join(publicDir, subDir);
@@ -755,7 +753,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename
   });
   console.log(
     `[Sitemap & SSG Generator] Complete:\n` +
-      `  - Total Records          : ${result.totalRecords.toLocaleString()} (TW: ${result.countryCategoryCounts?.TW?.ALL || 0}, JP: ${result.countryCategoryCounts?.JP?.ALL || 0}, KR: ${result.countryCategoryCounts?.KR?.ALL || 0})\n` +
+      `  - Total Records          : ${result.totalRecords.toLocaleString()} (TW: ${result.countryCategoryCounts?.TW?.ALL || 0}, JP: ${result.countryCategoryCounts?.JP?.ALL || 0})\n` +
       `  - Canonical Case URLs    : ${result.substantiveCaseCount.toLocaleString()}\n` +
       `  - Total Sitemap URLs     : ${result.totalUrls.toLocaleString()}\n` +
       `  - Static Case HTML Pages : ${result.staticGeneratedCount.toLocaleString()}`

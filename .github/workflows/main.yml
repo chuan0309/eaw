@@ -1,4 +1,4 @@
-name: Multi-Country Haunted Property Crawlers (臺灣・日本・韓國 分別獨立爬蟲)
+name: Taiwan & Japan Haunted Property Crawlers (臺灣・日本 分別獨立爬蟲)
 
 on:
   schedule:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  crawl-taiwan-japan-korea:
+  crawl-taiwan-japan:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,12 +34,9 @@ jobs:
       - name: 2. Run Japan Independent Crawler (crawler_jp.py)
         run: python crawler_jp.py
 
-      - name: 3. Run South Korea Independent Crawler (crawler_kr.py)
-        run: python crawler_kr.py
-
       - name: Commit and Push updated archive
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add calibrated_archive.json
-          git diff --staged --quiet || (git commit -m "Auto-update: TW + JP + KR independent crawlers [skip ci]" && git pull --rebase origin main && git push)
+          git add calibrated_archive.json public/calibrated_archive.json initial_boot_records.json public/initial_boot_records.json
+          git diff --staged --quiet || (git commit -m "Auto-update: TW + JP independent crawlers [skip ci]" && git pull --rebase origin main && git push)

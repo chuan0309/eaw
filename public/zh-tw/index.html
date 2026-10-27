@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>凶宅地圖｜台灣・日本・韓國事故物件查詢與公開法院法拍實證資料庫</title>
+  <title>凶宅地圖｜台灣・日本事故物件查詢與公開法院法拍實證資料庫</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
   <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Crect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23334155' stroke-width='1.5'/%3E%3Cpath d='M14 10 H38 L48 20 V52 C48 54.2 46.2 56 44 56 H14 C11.8 56 10 54.2 10 52 V14 C10 11.8 11.8 10 14 10 Z' fill='%23F8FAFC'/%3E%3Cpath d='M38 10 V18 C38 19.1 38.9 20 40 20 H48 L38 10 Z' fill='%23CBD5E1'/%3E%3Cpath d='M18 25 L27 17 L36 25' fill='none' stroke='%230F172A' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='21' y='25' width='12' height='9' rx='1' fill='%230F172A'/%3E%3Crect x='25.5' y='28' width='3' height='6' fill='%23F8FAFC'/%3E%3Crect x='16' y='38' width='20' height='2.6' rx='1.3' fill='%23475569'/%3E%3Crect x='16' y='43.5' width='14' height='2.6' rx='1.3' fill='%2364748B'/%3E%3Crect x='16' y='49' width='11' height='2.6' rx='1.3' fill='%2394A3B8'/%3E%3Crect x='33' y='33' width='23' height='23' rx='4.5' fill='%23DC2626' stroke='%23FFFFFF' stroke-width='2'/%3E%3Crect x='36' y='36' width='17' height='17' rx='2' fill='none' stroke='%23FECACA' stroke-width='1.2'/%3E%3Cpath d='M40 44.5 L43.2 47.7 L49.5 41.2' fill='none' stroke='%23FFFFFF' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="/favicon.svg?v=2" />
   <meta name="application-name" content="凶宅地圖" />
   <meta name="apple-mobile-web-app-title" content="凶宅地圖" />
-  <meta name="description" content="整合台灣、日本與韓國超過 12,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災）與法院法拍點交紀錄之空間查詢資料庫。" />
+  <meta name="description" content="整合台灣與日本超過 54,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災、孤獨死）與法院法拍點交紀錄之空間查詢資料庫。" />
   <meta name="keywords" content="凶宅地圖, 事故物件查詢, 台灣凶宅查詢, 凶宅名單, 法拍凶宅, 事故建物資料庫" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow" />
@@ -82,14 +82,14 @@
 
   <!-- OpenGraph Social & Search Metadata -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ais-dev-ljfkginbnsfaqba3ojth4z-505209179474.asia-east1.run.app/zh-tw/" />
+  <meta property="og:url" content="https://chuancn.org/zh-tw/" />
   <meta property="og:site_name" content="凶宅地圖" />
   <meta property="og:locale" content="zh_TW" />
   <meta property="og:locale:alternate" content="ja_JP" />
   <meta property="og:locale:alternate" content="ko_KR" />
   <meta property="og:locale:alternate" content="en_US" />
-  <meta property="og:title" content="凶宅地圖｜台灣・日本・韓國事故物件查詢與公開法院法拍實證資料庫" />
-  <meta property="og:description" content="整合台灣、日本與韓國超過 12,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災）與法院法拍點交紀錄之空間查詢資料庫。" />
+  <meta property="og:title" content="凶宅地圖｜台灣・日本事故物件查詢與公開法院法拍實證資料庫" />
+  <meta property="og:description" content="整合台灣與日本超過 54,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災、孤獨死）與法院法拍點交紀錄之空間查詢資料庫。" />
   <meta property="og:image" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:secure_url" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:type" content="image/png" />
@@ -2738,7 +2738,22 @@
       if (DISTRICT_I18N[clean] && DISTRICT_I18N[clean][currentLang]) {
         return DISTRICT_I18N[clean][currentLang];
       }
-      if (currentLang === "zh-TW") return (DISTRICT_I18N[raw] && DISTRICT_I18N[raw]["zh-TW"]) || clean;
+      if (currentLang === "zh-TW") {
+        if (DISTRICT_I18N[raw] && DISTRICT_I18N[raw]["zh-TW"]) return DISTRICT_I18N[raw]["zh-TW"];
+        return clean
+          .replace(/区$/g, "區")
+          .replace(/沢/g, "澤")
+          .replace(/浜/g, "濱")
+          .replace(/渋/g, "澀")
+          .replace(/豊/g, "豐")
+          .replace(/戸/g, "戶")
+          .replace(/広/g, "廣")
+          .replace(/静/g, "靜")
+          .replace(/緑/g, "綠")
+          .replace(/桜/g, "櫻")
+          .replace(/栄/g, "榮")
+          .replace(/国/g, "國");
+      }
       if (currentLang === "ja") {
         return clean.replace(/區$/g, "区").replace(/鄉$/g, "郷").replace(/臺/g, "台").replace(/裡/g, "裏");
       }
@@ -2993,22 +3008,22 @@
       "澎湖縣": ["馬公市","湖西鄉","白沙鄉","西嶼鄉","望安鄉","七美鄉"],
       "金門縣": ["金城鎮","金湖鎮","金沙鎮","金寧鄉","烈嶼鄉","烏坵鄉"],
       "連江縣": ["南竿鄉","北竿鄉","莒光鄉","東引鄉"],
-      // Japan (JP - 15 Prefectures, 109 Administrative Wards & Cities)
-      "東京都": ["新宿区","港区","豊島区","大田区","渋谷区","世田谷区","足立区","江戸川区","中野区","杉並区","板橋区","練馬区","江東区","墨田区","台東区","品川区","目黒区","北区","荒川区","葛飾区","文京区","中央区","千代田区","八王子市","立川市","武蔵野市","町田市"],
-      "大阪府": ["大阪市北区","大阪市中央区","大阪市西成区","大阪市浪速区","大阪市淀川区","大阪市天王寺区","大阪市阿倍野区","大阪市東成区","大阪市生野区","堺市","東大阪市","吹田市"],
-      "神奈川県": ["横浜市中区","横浜市西区","横浜市港北区","横浜市神奈川区","川崎市川崎区","川崎市中原区","相模原市","座間市"],
-      "愛知県": ["名古屋市中区","名古屋市中村区","名古屋市港区","名古屋市千種区","名古屋市東区","豊田市","一宮市"],
-      "福岡県": ["福岡市博多区","福岡市中央区","福岡市東区","福岡市南区","福岡市早良区","北九州市小倉北区","久留米市"],
-      "北海道": ["札幌市中央区","札幌市北区","札幌市東区","札幌市白石区","札幌市豊平区","旭川市","函館市"],
-      "京都府": ["京都市中京区","京都市下京区","京都市伏見区","京都市左京区","京都市右京区","宇治市"],
-      "兵庫県": ["神戸市中央区","神戸市兵庫区","神戸市灘区","神戸市東灘区","尼崎市","西宮市"],
-      "埼玉県": ["さいたま市大宮区","さいたま市浦和区","川口市","川越市","所沢市","越谷市"],
-      "千葉県": ["千葉市中央区","船橋市","松戸市","市川市","柏市","浦安市"],
-      "広島県": ["広島市中区","広島市南区","広島市西区","福山市"],
-      "宮城県": ["仙台市青葉区","仙台市宮城野区","仙台市太白区","仙台市泉区"],
-      "静岡県": ["静岡市葵区","静岡市駿河区","浜松市中央区","沼津市"],
-      "茨城県": ["水戸市","つくば市","土浦市"],
-      "沖縄県": ["那覇市","沖縄市","浦添市","宜野湾市"],
+      // Japan (JP - 15 Prefectures, 285 Administrative Wards & Cities)
+      "東京都": ["新宿区","港区","豊島区","大田区","渋谷区","世田谷区","足立区","江戸川区","中野区","杉並区","板橋区","練馬区","江東区","墨田区","台東区","品川区","目黒区","北区","荒川区","葛飾区","文京区","中央区","千代田区","八王子市","立川市","武蔵野市","三鷹市","青梅市","府中市","昭島市","調布市","町田市","小金井市","小平市","日野市","東村山市","国分寺市","国立市","福生市","狛江市","東大和市","清瀬市","東久留米市","武蔵村山市","多摩市","稲城市","あきる野市","西東京市"],
+      "大阪府": ["大阪市北区","大阪市中央区","大阪市西成区","大阪市浪速区","大阪市淀川区","大阪市東淀川区","大阪市西淀川区","大阪市天王寺区","大阪市阿倍野区","大阪市東成区","大阪市生野区","大阪市城東区","大阪市鶴見区","大阪市旭区","大阪市都島区","大阪市福島区","大阪市此花区","大阪市西区","大阪市港区","大阪市大正区","大阪市住之江区","大阪市住吉区","大阪市東住吉区","大阪市平野区","堺市堺区","堺市北区","堺市西区","堺市中区","堺市東区","堺市美原区","堺市南区","東大阪市","吹田市","豊中市","高槻市","枚方市","茨木市","八尾市","寝屋川市","岸和田市","和泉市","守口市","門真市","箕面市","大東市","松原市"],
+      "神奈川県": ["横浜市中区","横浜市西区","横浜市港北区","横浜市神奈川区","横浜市南区","横浜市鶴見区","横浜市青葉区","横浜市都筑区","横浜市戸塚区","横浜市保土ケ谷区","横浜市旭区","横浜市緑区","横浜市瀬谷区","横浜市泉区","横浜市栄区","横浜市港南区","横浜市磯子区","横浜市金沢区","川崎市川崎区","川崎市幸区","川崎市中原区","川崎市高津区","川崎市宮前区","川崎市多摩区","川崎市麻生区","相模原市中央区","相模原市南区","相模原市緑区","座間市","藤沢市","横須賀市","平塚市","茅ヶ崎市","大和市","厚木市","小田原市","鎌倉市","秦野市","伊勢原市","海老名市","綾瀬市"],
+      "愛知県": ["名古屋市中区","名古屋市中村区","名古屋市港区","名古屋市千種区","名古屋市東区","名古屋市北区","名古屋市西区","名古屋市昭和区","名古屋市瑞穂区","名古屋市熱田区","名古屋市中川区","名古屋市南区","名古屋市守山区","名古屋市緑区","名古屋市名東区","名古屋市天白区","豊田市","一宮市","岡崎市","豊橋市","春日井市","安城市","刈谷市","小牧市"],
+      "福岡県": ["福岡市博多区","福岡市中央区","福岡市東区","福岡市南区","福岡市早良区","福岡市西区","福岡市城南区","北九州市小倉北区","北九州市小倉南区","北九州市八幡西区","北九州市八幡東区","北九州市門司区","北九州市戸畑区","北九州市若松区","久留米市","春日市","大野城市","飯塚市","大牟田市"],
+      "北海道": ["札幌市中央区","札幌市北区","札幌市東区","札幌市白石区","札幌市豊平区","札幌市南区","札幌市西区","札幌市厚別区","札幌市手稲区","札幌市清田区","旭川市","函館市","苫小牧市","帯広市","釧路市","小樽市","江別市"],
+      "京都府": ["京都市中京区","京都市下京区","京都市伏見区","京都市左京区","京都市右京区","京都市上京区","京都市東山区","京都市山科区","京都市北区","京都市南区","京都市西京区","宇治市","長岡京市","城陽市"],
+      "兵庫県": ["神戸市中央区","神戸市兵庫区","神戸市灘区","神戸市東灘区","神戸市長田区","神戸市須磨区","神戸市垂水区","神戸市北区","神戸市西区","尼崎市","西宮市","芦屋市","伊丹市","宝塚市","川西市","明石市","加古川市","姫路市"],
+      "埼玉県": ["さいたま市大宮区","さいたま市浦和区","さいたま市中央区","さいたま市南区","さいたま市北区","さいたま市西区","さいたま市見沼区","さいたま市桜区","さいたま市緑区","さいたま市岩槻区","川口市","蕨市","戸田市","川越市","所沢市","越谷市","草加市","春日部市","上尾市","熊谷市","新座市","朝霞市","和光市","富士見市","ふじみ野市","三郷市","八潮市"],
+      "千葉県": ["千葉市中央区","千葉市花見川区","千葉市稲毛区","千葉市若葉区","千葉市緑区","千葉市美浜区","船橋市","松戸市","市川市","柏市","浦安市","習志野市","八千代市","流山市","野田市","鎌ケ谷市","佐倉市","成田市","木更津市"],
+      "広島県": ["広島市中区","広島市南区","広島市西区","広島市東区","広島市安佐南区","広島市安佐北区","広島市安芸区","広島市佐伯区","福山市","呉市","東広島市","尾道市"],
+      "宮城県": ["仙台市青葉区","仙台市宮城野区","仙台市太白区","仙台市泉区","仙台市若林区","石巻市","大崎市","名取市","多賀城市"],
+      "静岡県": ["静岡市葵区","静岡市駿河区","静岡市清水区","浜松市中央区","浜松市浜名区","沼津市","富士市","藤枝市","焼津市","三島市"],
+      "茨城県": ["水戸市","つくば市","土浦市","日立市","ひたちなか市","古河市","取手市","神栖市"],
+      "沖縄県": ["那覇市","沖縄市","浦添市","宜野湾市","うるま市","名護市","豊見城市","糸満市"],
       // South Korea (KR - 14 Metropolitan Cities & Provinces, 89 Administrative Districts)
       "首爾特別市": ["江南區","瑞草區","松坡區","麻浦區","龍山區","江西區","冠岳區","蘆原區","永登浦區","銅雀區","城東區","廣津區","東大門區","恩平區","鐘路區","中區","九老區","衿川區","陽川區","江東區","中浪區","城北區","江北區","道峰區","西大門區"],
       "釜山廣域市": ["海雲臺區","釜山鎮區","金井區","水營區","東萊區","南區","沙下區","北區","蓮堤區","沙上區"],
@@ -6856,7 +6871,7 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261026_twjp_v20";
+    const ARCHIVE_CACHE_VERSION = "20261027_twjp_v21_50k";
 
     const jpGsiAddressCoordCache = new Map();
 
@@ -7314,7 +7329,7 @@
     // ============================================================================
     // Standalone Browser IndexedDB Vault v11 (Protects against code rollbacks & syncs with crawler_vault_backup.json)
     // ============================================================================
-    const IDB_VAULT_NAME = "tw_haunted_standalone_db_v12";
+    const IDB_VAULT_NAME = "tw_haunted_standalone_db_v13";
     const IDB_STORE_NAME = "records_vault";
     const TAKEDOWN_LOCAL_KEY = "tw_haunted_takedown_blacklist_v1";
 

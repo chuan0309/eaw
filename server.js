@@ -1234,7 +1234,7 @@ app.get("/api/maps/streetview-image", async (req, res) => {
 
   try {
     let resolvedPanoId = "";
-    for (const radius of [120, 320]) {
+    for (const radius of [35, 80, 160]) {
       const metaUrl = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${encodeURIComponent(locationParam)}&radius=${radius}&source=outdoor&key=${encodeURIComponent(apiKey)}&solution_id=${GMP_ATTRIBUTION_ID}`;
       const metaRes = await fetch(metaUrl);
       if (metaRes.ok) {
@@ -1290,7 +1290,7 @@ app.get("/api/maps/streetview-image", async (req, res) => {
   }
 });
 
-// Normalize a Japanese address (even if partially in Traditional Chinese Kanji or containing building/room info) for GSI Japan / Google Geocoding
+// Normalize a Japanese address (even if partially in Traditional Chinese Kanji or containing building/room info) for Google Maps / GSI Japan Geocoding
 function normalizeJapaneseAddressForGeocode(rawAddr = "", city = "", district = "") {
   const kanjiMap = {
     "區": "区", "縣": "県", "澀": "渋", "豐": "豊", "澤": "沢", "濱": "浜",
@@ -1320,7 +1320,7 @@ function normalizeJapaneseAddressForGeocode(rawAddr = "", city = "", district = 
   return cleaned;
 }
 
-// Multi-country precision geocoder for Taiwan (TW) and Japan (JP - GSI Japan + Google Maps + OSM)
+// Multi-country precision geocoder for Taiwan (TW) and Japan (JP - Google Maps ROOFTOP primary + GSI Japan fallback)
 async function geocodeMultiCountryAddress(rawQuery, countryHint = "", city = "", district = "", lang = "zh-TW") {
   const q = String(rawQuery || "").trim();
   if (!q) return null;
@@ -1338,53 +1338,7 @@ async function geocodeMultiCountryAddress(rawQuery, countryHint = "", city = "",
     return geocodeTaiwanAddressStrict(normalizedTw, city || "臺北市", district || "", lang);
   }
 
-  // 1. Japan (JP): First query official Geospatial Information Authority of Japan (GSI / 国土地理院 AddressSearch API) for free exact chome/banchi coordinates
-  if (inferredCountry === "JP") {
-    const jpFullQuery = normalizeJapaneseAddressForGeocode(q, city, district);
-    // Extract banchi-go numbers (e.g. 1丁目12-4 or 1-12-4) for fine street-block positioning around chome center
-    const banchiMatch = jpFullQuery.match(/(?:(\d+)丁目|(\d+)-)(\d+)(?:-(\d+))?/);
-    const chomeOnlyQuery = jpFullQuery.replace(/(\d+丁目)\d+(?:-\d+)?$/, "$1").replace(/(\d+)-\d+(?:-\d+)?$/, "$1丁目");
-    const candidateQueries = jpFullQuery !== chomeOnlyQuery ? [jpFullQuery, chomeOnlyQuery] : [jpFullQuery];
-
-    for (const candidateQ of candidateQueries) {
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 2600);
-        const gsiRes = await fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(candidateQ)}`, {
-          signal: controller.signal
-        });
-        clearTimeout(timer);
-        if (gsiRes.ok) {
-          const gsiData = await gsiRes.json();
-          if (Array.isArray(gsiData) && gsiData.length > 0 && Array.isArray(gsiData[0]?.geometry?.coordinates)) {
-            let [lng, lat] = gsiData[0].geometry.coordinates;
-            if (lat >= 24 && lat <= 46 && lng >= 122 && lng <= 149) {
-              // If GSI matched at town/chome level and the address has specific banchi-go numbers, apply deterministic street-block offset
-              if (banchiMatch) {
-                const chomeNum = parseInt(banchiMatch[1] || banchiMatch[2] || "1", 10) || 1;
-                const banchiNum = parseInt(banchiMatch[3] || "1", 10) || 1;
-                const goNum = parseInt(banchiMatch[4] || "1", 10) || 1;
-                const angle = ((chomeNum * 5 + banchiNum * 11 + goNum * 3) % 360) * (Math.PI / 180);
-                const radiusLat = 0.00014 + ((banchiNum % 18) / 18) * 0.00028;
-                const radiusLng = 0.00016 + ((goNum % 16) / 16) * 0.00032;
-                lat += Math.sin(angle) * radiusLat;
-                lng += Math.cos(angle) * radiusLng;
-              }
-              return {
-                lat: Number(Number(lat).toFixed(6)),
-                lng: Number(Number(lng).toFixed(6)),
-                formattedAddress: jpFullQuery || gsiData[0]?.properties?.title,
-                locationType: "ROOFTOP_GSI_JP",
-                country: "JP"
-              };
-            }
-          }
-        }
-      } catch (_e) {}
-    }
-  }
-
-  // 2. Google Maps Geocoding API with country/region bias for JP
+  // 1. Google Maps Geocoding API FIRST for Japan (returns exact ROOFTOP coordinates for Chome-Banchi-Go addresses)
   if (apiKey) {
     try {
       const regionCode = inferredCountry.toLowerCase();
@@ -1412,6 +1366,39 @@ async function geocodeMultiCountryAddress(rawQuery, countryHint = "", city = "",
         }
       }
     } catch (_e) {}
+  }
+
+  // 2. Japan fallback: Official Geospatial Information Authority of Japan (GSI / 国土地理院 AddressSearch API) without artificial random drift
+  if (inferredCountry === "JP") {
+    const jpFullQuery = normalizeJapaneseAddressForGeocode(q, city, district);
+    const chomeOnlyQuery = jpFullQuery.replace(/(\d+丁目)\d+(?:-\d+)?$/, "$1").replace(/(\d+)-\d+(?:-\d+)?$/, "$1丁目");
+    const candidateQueries = jpFullQuery !== chomeOnlyQuery ? [jpFullQuery, chomeOnlyQuery] : [jpFullQuery];
+
+    for (const candidateQ of candidateQueries) {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 2600);
+        const gsiRes = await fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(candidateQ)}`, {
+          signal: controller.signal
+        });
+        clearTimeout(timer);
+        if (gsiRes.ok) {
+          const gsiData = await gsiRes.json();
+          if (Array.isArray(gsiData) && gsiData.length > 0 && Array.isArray(gsiData[0]?.geometry?.coordinates)) {
+            const [lng, lat] = gsiData[0].geometry.coordinates;
+            if (lat >= 24 && lat <= 46 && lng >= 122 && lng <= 149) {
+              return {
+                lat: Number(Number(lat).toFixed(6)),
+                lng: Number(Number(lng).toFixed(6)),
+                formattedAddress: jpFullQuery || gsiData[0]?.properties?.title,
+                locationType: "ROOFTOP_GSI_JP",
+                country: "JP"
+              };
+            }
+          }
+        }
+      } catch (_e) {}
+    }
   }
 
   // 3. OpenStreetMap Nominatim fallback for JP chome addresses

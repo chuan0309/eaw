@@ -649,14 +649,14 @@ def sync_supabase_to_website_json_files(supabase: Client):
 
         updated = new_items + disk_records
         with open("calibrated_archive.json", "w", encoding="utf-8") as f:
-            json.dump(updated, f, ensure_ascii=False, indent=2)
+            json.dump(updated, f, ensure_ascii=False, separators=(",", ":"))
         with open("crawler_vault_backup.json", "w", encoding="utf-8") as f:
-            json.dump(updated, f, ensure_ascii=False, indent=2)
+            f.write("[]")
         os.makedirs("public", exist_ok=True)
         with open(os.path.join("public", "calibrated_archive.json"), "w", encoding="utf-8") as f:
-            json.dump(updated, f, ensure_ascii=False, indent=2)
+            json.dump(updated, f, ensure_ascii=False, separators=(",", ":"))
         with open(os.path.join("public", "crawler_vault_backup.json"), "w", encoding="utf-8") as f:
-            json.dump(updated, f, ensure_ascii=False, indent=2)
+            f.write("[]")
 
         if new_items:
             print(f"💾 已同步將 {len(new_items)} 筆新爬蟲案件寫入 calibrated_archive.json 與獨立備份檔 crawler_vault_backup.json（網站與爬蟲統一總計：{len(updated)} 筆）！", flush=True)

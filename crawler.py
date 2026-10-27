@@ -626,6 +626,9 @@ def sync_supabase_to_website_json_files(supabase: Client):
         if os.path.exists("calibrated_archive.json"):
             with open("calibrated_archive.json", "r", encoding="utf-8") as f:
                 disk_records = json.load(f)
+        elif os.path.exists("crawler_vault_backup.json"):
+            with open("crawler_vault_backup.json", "r", encoding="utf-8") as f:
+                disk_records = json.load(f)
 
         existing_ids = {str(r.get("id")) for r in disk_records if r.get("id") is not None}
         existing_addrs = {str(r.get("address") or "").replace("台", "臺").strip() for r in disk_records if r.get("address")}
@@ -648,15 +651,16 @@ def sync_supabase_to_website_json_files(supabase: Client):
             new_items.append(cand)
 
         updated = new_items + disk_records
+        tw_only = [r for r in updated if str(r.get("country", "TW")).upper() == "TW"]
         with open("calibrated_archive.json", "w", encoding="utf-8") as f:
             json.dump(updated, f, ensure_ascii=False, separators=(",", ":"))
         with open("crawler_vault_backup.json", "w", encoding="utf-8") as f:
-            f.write("[]")
+            json.dump(tw_only, f, ensure_ascii=False, separators=(",", ":"))
         os.makedirs("public", exist_ok=True)
         with open(os.path.join("public", "calibrated_archive.json"), "w", encoding="utf-8") as f:
             json.dump(updated, f, ensure_ascii=False, separators=(",", ":"))
         with open(os.path.join("public", "crawler_vault_backup.json"), "w", encoding="utf-8") as f:
-            f.write("[]")
+            json.dump(tw_only, f, ensure_ascii=False, separators=(",", ":"))
 
         if new_items:
             print(f"💾 已同步將 {len(new_items)} 筆新爬蟲案件寫入 calibrated_archive.json 與獨立備份檔 crawler_vault_backup.json（網站與爬蟲統一總計：{len(updated)} 筆）！", flush=True)

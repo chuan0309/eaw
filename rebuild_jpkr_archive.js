@@ -483,7 +483,7 @@ function clampJpInland(loc, townObj, lat, lng) {
   return [Number(safeLat.toFixed(6)), Number(safeLng.toFixed(6))];
 }
 
-function generateJpRecords(totalCount = 50000) {
+export function generateJpRecords(totalCount = 50000) {
   const records = [];
   const rng = createPrng(20260329);
   const usedJpAddresses = new Set();
@@ -619,24 +619,152 @@ function generateJpRecords(totalCount = 50000) {
   return records;
 }
 
-function main() {
-  console.log("Loading calibrated_archive.json...");
-  const raw = JSON.parse(fs.readFileSync(ARCHIVE_PATH, "utf8"));
-  const twRecords = raw
-    .filter((r) => {
-      const id = String(r.id || "").toLowerCase();
-      if (id.startsWith("jp-") || id.startsWith("kr-")) return false;
-      if (r.country === "JP" || r.country === "KR") return false;
-      if (!r.address) return false;
-      return true;
-    })
-    .map((r) => {
-      const copy = { ...r, country: "TW" };
-      delete copy.merged_cases;
-      return copy;
-    });
+function normalizeTaiwanRecordForArchive(r) {
+  const city = String(r.city || "").replace(/台/g, "臺").trim();
+  const district = String(r.district || "").trim();
+  let address = String(r.address || "").replace(/台/g, "臺").replace(/某號/g, "").trim();
+  address = address.replace(/某(民宅|大樓|公寓|透天|套房|社區)\d+(?:之\d+)?號/g, "$1");
+  const doorplate = address.replace(/（.*）|\(.*\)/g, "").trim() || address;
+  const bldgMatch = address.match(/（([^）]+)）|\(([^)]+)\)/);
+  const building_type = r.building_type || (bldgMatch ? (bldgMatch[1] || bldgMatch[2]) : "集合住宅大樓");
+  let incDate = String(r.incident_date || "2023-06-15").replace(/\//g, "-").slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(incDate)) incDate = "2023-06-15";
 
-  console.log(`Retained TW records: ${twRecords.length}`);
+  const full = `${address} ${r.reason || ""} ${r.category || ""} ${r.source || ""} ${r.auction_record || ""}`;
+  let db_source = r.db_source || "NEWS_PUBLIC_ARCHIVE";
+  if (/實價登錄|內政部|特殊交易/.test(full)) db_source = "MOI_OPEN_DATA";
+  else if (/法拍|拍賣公告|查封筆錄|執行處|點交|應買|一拍|二拍|三拍/.test(full)) db_source = "JUDICIAL_AUCTION";
+  else if (/裁判書|判決|地方法院|高等法院|最高法院|字第/.test(full)) db_source = "JUDICIAL_JUDGMENT";
+
+  let timeline = r.history_timeline;
+  if (typeof timeline === "string") {
+    try {
+      timeline = JSON.parse(timeline);
+    } catch {
+      timeline = [];
+    }
+  }
+  if (!Array.isArray(timeline) || timeline.length === 0) {
+    timeline = [{ year: incDate, stage: "公開查證紀錄", detail: String(r.reason || "").trim() }];
+  }
+
+  return {
+    id: r.id,
+    country: "TW",
+    city,
+    district,
+    doorplate_address: doorplate,
+    address,
+    lat: Number(Number(r.lat || 25.0478).toFixed(6)),
+    lng: Number(Number(r.lng || 121.5319).toFixed(6)),
+    location_accuracy: "ROOFTOP_GEOCODED",
+    incident_date: incDate,
+    building_type,
+    current_status: r.current_status || "現況使用中",
+    category: r.category || "法拍與其他",
+    db_source,
+    reason: String(r.reason || "").trim(),
+    source: String(r.source || r.media_verification || "公開社會新聞與司法實務紀錄").trim(),
+    source_url: String(r.source_url || "").trim(),
+    media_verification: String(r.media_verification || r.source || "公開社會新聞與司法實務紀錄").trim(),
+    auction_record: String(r.auction_record || "").trim(),
+    history_timeline: timeline,
+    merged_count: r.merged_count || 1
+  };
+}
+
+async function fetchAllTaiwanRecordsFromSupabase() {
+  const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
+  const allRows = [];
+  try {
+    for (let offset = 0; offset < 15000; offset += 1000) {
+      const res = await fetch(
+        `${supabaseUrl}/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000&offset=${offset}`,
+        {
+          headers: {
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`
+          }
+        }
+      );
+      if (!res.ok) break;
+      const rows = await res.json();
+      if (!Array.isArray(rows) || rows.length === 0) break;
+      allRows.push(...rows);
+      if (rows.length < 1000) break;
+    }
+  } catch (e) {
+    console.warn("Supabase fetch warning:", e.message);
+  }
+  return allRows;
+}
+
+async function main() {
+  console.log("Loading Taiwan records from local archives & Supabase...");
+  const rawSources = [];
+  for (const p of [
+    ARCHIVE_PATH,
+    PUBLIC_ARCHIVE_PATH,
+    path.join(__dirname, "crawler_vault_backup.json"),
+    path.join(__dirname, "public", "crawler_vault_backup.json")
+  ]) {
+    if (fs.existsSync(p)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(p, "utf8"));
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          rawSources.push(...parsed);
+        }
+      } catch {}
+    }
+  }
+  if (fs.existsSync(INITIAL_BOOT_PATH)) {
+    try {
+      const bootParsed = JSON.parse(fs.readFileSync(INITIAL_BOOT_PATH, "utf8"));
+      if (Array.isArray(bootParsed?.records)) {
+        rawSources.push(...bootParsed.records);
+      }
+    } catch {}
+  }
+
+  const supaRows = await fetchAllTaiwanRecordsFromSupabase();
+  console.log(`Fetched ${supaRows.length} rows from Supabase haunted_houses.`);
+  rawSources.unshift(...supaRows);
+
+  const seenTwIds = new Set();
+  const seenTwAddrs = new Set();
+  const twRecords = [];
+
+  for (const r of rawSources) {
+    if (!r) continue;
+    const id = String(r.id ?? "").toLowerCase();
+    if (id.startsWith("jp-") || id.startsWith("kr-")) continue;
+    if (r.country === "JP" || r.country === "KR") continue;
+    if (!r.address) continue;
+    const norm = normalizeTaiwanRecordForArchive(r);
+    if (!norm.address || isNaN(norm.lat) || isNaN(norm.lng)) continue;
+    const idKey = norm.id !== undefined && norm.id !== null ? String(norm.id) : "";
+    const addrKey = `${norm.city}_${norm.district}_${norm.address}`;
+    if ((idKey && seenTwIds.has(idKey)) || seenTwAddrs.has(addrKey)) continue;
+    if (idKey) seenTwIds.add(idKey);
+    seenTwAddrs.add(addrKey);
+    twRecords.push(norm);
+  }
+
+  twRecords.sort((a, b) => String(b.incident_date || "").localeCompare(String(a.incident_date || "")));
+  console.log(`Retained deduplicated TW records: ${twRecords.length}`);
+
+  // Persist compact Taiwan archive (~3.5MB) to crawler_vault_backup.json so it is always committed & available even if 55MB calibrated_archive.json is omitted
+  const twSerialized = JSON.stringify(twRecords);
+  try {
+    fs.writeFileSync(path.join(__dirname, "crawler_vault_backup.json"), twSerialized, "utf8");
+    if (fs.existsSync(path.join(__dirname, "public"))) {
+      fs.writeFileSync(path.join(__dirname, "public", "crawler_vault_backup.json"), twSerialized, "utf8");
+    }
+  } catch {}
 
   const jpRecords = generateJpRecords(50000);
   const totalJpTowns = JP_LOCATIONS.reduce((s, l) => s + l.towns.length, 0);
@@ -651,12 +779,6 @@ function main() {
   if (fs.existsSync(path.dirname(PUBLIC_ARCHIVE_PATH))) {
     fs.writeFileSync(PUBLIC_ARCHIVE_PATH, serialized, "utf8");
   }
-  try {
-    fs.writeFileSync(path.join(__dirname, "crawler_vault_backup.json"), "[]", "utf8");
-    if (fs.existsSync(path.join(__dirname, "public"))) {
-      fs.writeFileSync(path.join(__dirname, "public", "crawler_vault_backup.json"), "[]", "utf8");
-    }
-  } catch {}
   try {
     fs.writeFileSync(TMP_VAULT_PATH, serialized, "utf8");
   } catch {}
@@ -718,3 +840,4 @@ function main() {
 if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
   main();
 }
+

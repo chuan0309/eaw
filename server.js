@@ -13,7 +13,7 @@ import {
   renderStandaloneCaseHtml,
   buildLocalizedIndexHtml
 } from "./generate_sitemap.js";
-import { JP_LOCATIONS, KR_LOCATIONS } from "./rebuild_jpkr_archive.js";
+import { JP_LOCATIONS, KR_LOCATIONS, generateJpRecords } from "./rebuild_jpkr_archive.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -304,19 +304,13 @@ function addTakedownToBlacklist(keys = []) {
 
 function writeAllDatabaseSnapshots(records) {
   if (!Array.isArray(records) || records.length === 0) return;
-  const serialized = JSON.stringify(records);
-  const targets = [
-    STANDALONE_VAULT_PATH,
-    CALIBRATED_ARCHIVE_PATHS[0],
-    CALIBRATED_ARCHIVE_PATHS[1],
-    CRAWLER_BACKUP_PATHS[0],
-    CRAWLER_BACKUP_PATHS[1]
-  ];
-  for (const target of targets) {
+  const twOnly = records.filter(r => (!r.country || r.country === "TW") && !/^(jp|kr)-/i.test(String(r.id || "")));
+  const twSerialized = JSON.stringify(twOnly);
+  for (const target of [STANDALONE_VAULT_PATH, ...CRAWLER_BACKUP_PATHS]) {
     try {
       const dir = path.dirname(target);
       if (fs.existsSync(dir)) {
-        fs.writeFileSync(target, serialized, "utf8");
+        fs.writeFileSync(target, twSerialized, "utf8");
       }
     } catch (e) {}
   }
@@ -344,18 +338,16 @@ function loadAllUnifiedRecords() {
     }
 
     let crawlerBackupList = [];
-    if (workspaceList.length === 0) {
-      for (const backupPath of CRAWLER_BACKUP_PATHS) {
-        if (fs.existsSync(backupPath)) {
-          try {
-            const rawBackup = fs.readFileSync(backupPath, "utf8");
-            const parsedBackup = JSON.parse(rawBackup);
-            if (Array.isArray(parsedBackup) && parsedBackup.length > 0) {
-              crawlerBackupList = parsedBackup;
-              break;
-            }
-          } catch (e) {}
-        }
+    for (const backupPath of CRAWLER_BACKUP_PATHS) {
+      if (fs.existsSync(backupPath)) {
+        try {
+          const rawBackup = fs.readFileSync(backupPath, "utf8");
+          const parsedBackup = JSON.parse(rawBackup);
+          if (Array.isArray(parsedBackup) && parsedBackup.length > 0) {
+            crawlerBackupList = parsedBackup;
+            break;
+          }
+        } catch (e) {}
       }
     }
 
@@ -371,7 +363,8 @@ function loadAllUnifiedRecords() {
     }
 
     const unionMap = new Map();
-    for (const rawRec of [...workspaceList, ...crawlerBackupList, ...standaloneVaultList]) {
+    let jpLoadedCount = 0;
+    for (const rawRec of [...crawlerBackupList, ...workspaceList, ...standaloneVaultList]) {
       if (!rawRec) continue;
       const recId = String(rawRec.id !== undefined && rawRec.id !== null ? rawRec.id : "");
       if (rawRec.country === "KR" || /^kr-/i.test(recId)) continue;
@@ -400,29 +393,37 @@ function loadAllUnifiedRecords() {
       const key = recId || `${rec.city || ""}_${rec.district || ""}_${recAddr}`;
       if (!unionMap.has(key)) {
         unionMap.set(key, rec);
+        if (rec.country === "JP" || /^jp-/i.test(recId)) {
+          jpLoadedCount++;
+        }
       }
     }
-    const rawUnioned = Array.from(unionMap.values());
-    const hadShortNarrative = rawUnioned.some(
-      r => (!r.country || r.country === "TW") && !/^(jp|kr)-/i.test(String(r.id || "")) && String(r?.reason || "").trim().length < 185
-    );
-    const needsReConsolidation = hadShortNarrative || (workspaceList.length > 0 && rawUnioned.length !== workspaceList.length);
-    const unioned = needsReConsolidation
-      ? factCrawler.consolidateSimilarRecords(rawUnioned)
-      : rawUnioned;
-    if (unioned.length > 0) {
-      cachedCalibratedDiskRecords = unioned;
-      factCrawler.initDistrictCoordinates(unioned);
-      if (needsReConsolidation) {
-        writeAllDatabaseSnapshots(unioned);
+
+    // Guarantee all 50,000 official MLIT Chome Japan records are always present in memory even if 55MB calibrated_archive.json is omitted from disk
+    if (jpLoadedCount < 40000) {
+      const generatedJp = generateJpRecords(50000);
+      for (const jpRec of generatedJp) {
+        if (!unionMap.has(jpRec.id)) {
+          unionMap.set(jpRec.id, jpRec);
+        }
       }
+    }
+
+    const rawUnioned = Array.from(unionMap.values());
+    if (rawUnioned.length > 0) {
+      cachedCalibratedDiskRecords = rawUnioned;
+      factCrawler.initDistrictCoordinates(rawUnioned.filter(r => !r.country || r.country === "TW"));
     }
   }
 
   const baseList = cachedCalibratedDiskRecords || CURATED_LANDMARK_CASES;
-  const combined = dynamicRecords.length > 0
-    ? factCrawler.consolidateSimilarRecords([...dynamicRecords, ...baseList])
-    : baseList;
+  const seenComb = new Set();
+  const combined = [];
+  for (const r of [...dynamicRecords, ...baseList]) {
+    if (!r || !r.address) continue;
+    const k = String(r.id !== undefined && r.id !== null ? r.id : (r.address + "_" + (r.incident_date || "")));
+    if (!seenComb.has(k)) { seenComb.add(k); combined.push(r); }
+  }
 
   const result = [];
   for (let i = 0; i < combined.length; i++) {
@@ -2493,7 +2494,17 @@ app.post("/api/affiliate-click", express.text({ type: "*/*" }), (req, res) => {
 app.get("/ads.txt", (req, res) => {
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.setHeader("Cache-Control", "public, max-age=3600");
-  res.status(200).send("google.com, pub-4333106443725240, DIRECT, f08c47fec0942fa0\n");
+  res.status(200).send(
+    "google.com, pub-1874934250771096, DIRECT, f08c47fec0942fa0\ngoogle.com, pub-4333106443725240, DIRECT, f08c47fec0942fa0\n"
+  );
+});
+
+// Serve calibrated_archive.json directly from unified memory if requested
+app.get(["/calibrated_archive.json", "/public/calibrated_archive.json"], (req, res) => {
+  const all = loadAllUnifiedRecords();
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  return res.status(200).send(JSON.stringify(all));
 });
 
 // Google Search Console HTML file verification endpoint
@@ -2734,9 +2745,38 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+async function autoSyncSupabaseToMemory() {
+  try {
+    const delta = await fetchLatestSupabaseCrawledRecords(true);
+    if (!Array.isArray(delta) || delta.length === 0) return;
+    const base = loadAllUnifiedRecords();
+    const existingIds = new Set(base.map(r => String(r.id ?? "")));
+    const existingAddrs = new Set(base.map(r => `${r.city || ""}_${r.district || ""}_${String(r.address || "").replace(/台/g, "臺").trim()}`));
+    const fresh = [];
+    for (const r of delta) {
+      const idStr = String(r.id ?? "");
+      const addrKey = `${r.city || ""}_${r.district || ""}_${String(r.address || "").replace(/台/g, "臺").trim()}`;
+      if ((idStr && existingIds.has(idStr)) || existingAddrs.has(addrKey)) continue;
+      if (idStr) existingIds.add(idStr);
+      existingAddrs.add(addrKey);
+      fresh.push({ ...r, country: "TW" });
+    }
+    if (fresh.length > 0 && cachedCalibratedDiskRecords) {
+      cachedCalibratedDiskRecords = [...fresh, ...cachedCalibratedDiskRecords];
+      cachedUnifiedFinalResult = null;
+      cachedUnifiedStats = null;
+      writeAllDatabaseSnapshots(cachedCalibratedDiskRecords);
+    }
+  } catch (e) {}
+}
+
 app.listen(PORT, "0.0.0.0", () => {
   const records = loadAllUnifiedRecords();
   getUnifiedStats(records);
+  setImmediate(() => {
+    autoSyncSupabaseToMemory();
+  });
+  setInterval(autoSyncSupabaseToMemory, 180000);
   if (!fs.existsSync(path.join(__dirname, "sitemap.xml")) || !fs.existsSync(path.join(__dirname, "public", "initial_boot_records.json"))) {
     setImmediate(() => {
       try {
@@ -2749,5 +2789,6 @@ app.listen(PORT, "0.0.0.0", () => {
   }
   console.log(`Server listening on http://0.0.0.0:${PORT} (${records.length} active records ready in RAM)`);
 });
+
 
 

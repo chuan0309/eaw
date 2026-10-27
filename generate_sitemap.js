@@ -169,7 +169,8 @@ export function generateAndWriteSitemapFiles(records = [], opts = {}) {
     if (fs.existsSync(baseHtmlPath)) {
       const baseHtml = fs.readFileSync(baseHtmlPath, "utf8");
       const routes = [
-        { key: "zh-tw", dirs: [path.join(__dirname, "public", "zh-tw")] },
+        { key: "zh-tw", dirs: [path.join(__dirname, "zh-tw"), path.join(__dirname, "public", "zh-tw")] },
+        { key: "ko", dirs: [path.join(__dirname, "ko"), path.join(__dirname, "public", "ko")] },
         { key: "ja", dirs: [path.join(__dirname, "ja"), path.join(__dirname, "public", "ja")] },
         { key: "en", dirs: [path.join(__dirname, "en"), path.join(__dirname, "public", "en")] }
       ];
@@ -192,11 +193,14 @@ export function generateAndWriteSitemapFiles(records = [], opts = {}) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
   let records = [];
-  const archPath = path.join(__dirname, "calibrated_archive.json");
-  if (fs.existsSync(archPath)) {
-    try {
-      records = JSON.parse(fs.readFileSync(archPath, "utf8"));
-    } catch (_e) {}
+  for (const fname of ["calibrated_archive.json", "crawler_vault_backup.json"]) {
+    const p = path.join(__dirname, fname);
+    if (fs.existsSync(p)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(p, "utf8"));
+        if (Array.isArray(parsed) && parsed.length > records.length) records = parsed;
+      } catch (_e) {}
+    }
   }
   const res = generateAndWriteSitemapFiles(records, { baseUrl: "https://chuancn.org" });
   console.log(`Generated sitemap.xml with ${res.totalUrls} URLs (${res.caseCount} cases).`);

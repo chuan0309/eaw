@@ -15,22 +15,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          pip install -r requirements.txt
+          npm install --no-audit --no-fund
 
       - name: Run Taiwan Crawler (368 Districts)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: python crawler_tw.py
 
       - name: Commit and Push updated archive
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add -A calibrated_archive.json public/calibrated_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json
+          git add -A calibrated_archive.json public/calibrated_archive.json jp_verified_archive.json public/jp_verified_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json
           git diff --staged --quiet || (git commit -m "Auto-update: Taiwan 368 districts crawler [skip ci]" && git pull --rebase --autostash origin main && git push)
+

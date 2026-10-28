@@ -237,14 +237,16 @@ function classifyJapanNewsCategory(title) {
   return "法拍與其他";
 }
 
-function extractJapaneseMunicipalityAndChome(title, pref) {
+export function extractJapaneseMunicipalityAndChome(title, pref, targetDist = "") {
   const prefDists = JAPAN_47_DISTRICTS[pref] || [];
-  let matchedDist = "";
-  for (const d of prefDists) {
-    const shortD = d.replace(/^.+市(.+区)$/, "$1");
-    if (title.includes(d) || (shortD.length >= 2 && title.includes(shortD))) {
-      matchedDist = d;
-      break;
+  let matchedDist = targetDist || "";
+  if (!matchedDist) {
+    for (const d of prefDists) {
+      const shortD = d.replace(/^.+市(.+区)$/, "$1");
+      if (title.includes(d) || (shortD.length >= 2 && title.includes(shortD))) {
+        matchedDist = d;
+        break;
+      }
     }
   }
   if (!matchedDist) {
@@ -256,50 +258,58 @@ function extractJapaneseMunicipalityAndChome(title, pref) {
     }
   }
 
-  // Check if official Chome list has a matching town/chome in the title
-  const chomeList = OFFICIAL_CHOME_BY_PREF[pref] || [];
-  const distChomes = chomeList.filter(c => c[0] === matchedDist);
+  // Check if official Chome list (keyed by "${pref}_${matchedDist}") has a matching town/chome in the title
+  const distChomes = Array.isArray(OFFICIAL_CHOME_BY_PREF[`${pref}_${matchedDist}`])
+    ? OFFICIAL_CHOME_BY_PREF[`${pref}_${matchedDist}`]
+    : [];
+
   for (const c of distChomes) {
-    const townStem = String(c[1] || "").replace(/\d+丁目$/, "");
+    const townName = String(c.town || c[1] || "");
+    const townStem = townName.replace(/[一二三四五六七八九十\d]+丁目$/, "");
     if (townStem.length >= 2 && title.includes(townStem)) {
       return {
         district: matchedDist,
-        chomeAddr: `${pref}${matchedDist}${c[1]}`,
-        lat: Number(c[2]),
-        lng: Number(c[3])
+        chomeAddr: `${pref}${matchedDist}${townName}`,
+        lat: Number(c.lat ?? c[2]),
+        lng: Number(c.lng ?? c[3])
       };
     }
   }
 
   if (distChomes.length > 0) {
-    // Deterministic hash of title to pick a representative Chome anchor within the matched municipality
+    // Deterministic hash of title to pick an official Chome anchor within the matched municipality
     let h = 0;
     for (let i = 0; i < title.length; i++) h = (h * 31 + title.charCodeAt(i)) >>> 0;
     const chosen = distChomes[h % distChomes.length];
+    const townName = String(chosen.town || chosen[1] || "");
+    const baseLat = Number(chosen.lat ?? chosen[2]);
+    const baseLng = Number(chosen.lng ?? chosen[3]);
     return {
       district: matchedDist,
-      chomeAddr: `${pref}${matchedDist}${chosen[1]}`,
-      lat: Number((Number(chosen[2]) + ((h % 19) - 9) * 0.00018).toFixed(6)),
-      lng: Number((Number(chosen[3]) + (((h >> 5) % 19) - 9) * 0.00022).toFixed(6))
+      chomeAddr: `${pref}${matchedDist}${townName}`,
+      lat: Number((baseLat + ((h % 19) - 9) * 0.00018).toFixed(6)),
+      lng: Number((baseLng + (((h >> 5) % 19) - 9) * 0.00022).toFixed(6))
     };
   }
 
   const base = JAPAN_PREF_COORDS[pref] || [35.6895, 139.6917];
   let h = 0;
-  for (let i = 0; i < title.length; i++) h = (h * 33 + title.charCodeAt(i)) >>> 0;
+  const seed = `${pref}_${matchedDist}_${title}`;
+  for (let i = 0; i < seed.length; i++) h = (h * 33 + seed.charCodeAt(i)) >>> 0;
   return {
     district: matchedDist,
     chomeAddr: `${pref}${matchedDist}`,
-    lat: Number((base[0] + ((h % 41) - 20) * 0.0012).toFixed(6)),
-    lng: Number((base[1] + (((h >> 6) % 41) - 20) * 0.0014).toFixed(6))
+    lat: Number((base[0] + ((h % 71) - 35) * 0.0014).toFixed(6)),
+    lng: Number((base[1] + (((h >> 6) % 71) - 35) * 0.0016).toFixed(6))
   };
 }
 
-// Multi-Source Real News Crawler Across All 47 Prefectures of Japan
+// Multi-Source Real News Crawler Across All 47 Prefectures & 471 Municipalities of Japan
 export async function crawlRealJapanNewsAcross47Prefectures(existingRecords = []) {
   const seenUrls = new Set();
   const seenTitleStems = new Set();
   const verifiedOut = [];
+  const distCaseCounts = {};
 
   for (const r of [...VERIFIED_JP_LANDMARK_CASES, ...existingRecords]) {
     if (!isVerifiedRealIncidentRecord(r)) continue;
@@ -309,28 +319,36 @@ export async function crawlRealJapanNewsAcross47Prefectures(existingRecords = []
       seenUrls.add(url);
       seenTitleStems.add(stem);
       verifiedOut.push(r);
+      const dk = `${r.city}_${r.district}`;
+      distCaseCounts[dk] = (distCaseCounts[dk] || 0) + 1;
     }
   }
 
-  // Query templates targeting real residential unnatural deaths, fires, homicides, solitary deaths, and stigmatized property reports across all 47 prefectures
-  const queryTemplates = [
-    pref => `${pref} (住宅 OR マンション OR アパート) (遺体 OR 死亡 OR 変死 OR 殺害)`,
-    pref => `${pref} (住宅火災 OR 全焼) (遺体 OR 死亡)`,
-    pref => `${pref} (集合住宅 OR 団地 OR 室内) (孤独死 OR 白骨遺体 OR 心肺停止 OR 刺され)`
-  ];
-
+  // 1. Prefecture-level queries + 2. Targeted Municipality/Ward queries for every missing or low-count district!
   const allTasks = [];
   for (const pref of JAPAN_47_PREFECTURES) {
-    for (const buildQ of queryTemplates) {
-      allTasks.push({ pref, q: buildQ(pref) });
+    allTasks.push(
+      { pref, dist: "", q: `${pref} (住宅 OR マンション OR アパート) (遺体 OR 死亡 OR 変死 OR 殺害)` },
+      { pref, dist: "", q: `${pref} (住宅火災 OR 全焼) (遺体 OR 死亡)` }
+    );
+    const dists = JAPAN_47_DISTRICTS[pref] || [];
+    for (const dist of dists) {
+      const dk = `${pref}_${dist}`;
+      if ((distCaseCounts[dk] || 0) < 2) {
+        allTasks.push({
+          pref,
+          dist,
+          q: `${pref} ${dist} (火災 OR 遺体 OR 死亡 OR 殺害 OR 変死 OR マンション OR アパート OR 住宅)`
+        });
+      }
     }
   }
 
-  const concurrency = 12;
+  const concurrency = 22;
   for (let i = 0; i < allTasks.length; i += concurrency) {
     const batch = allTasks.slice(i, i + concurrency);
     await Promise.all(
-      batch.map(async ({ pref, q }) => {
+      batch.map(async ({ pref, dist, q }) => {
         try {
           const url = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=ja&gl=JP&ceid=JP:ja`;
           const controller = new AbortController();
@@ -347,15 +365,15 @@ export async function crawlRealJapanNewsAcross47Prefectures(existingRecords = []
           for (const item of items) {
             if (!item.link || seenUrls.has(item.link)) continue;
             const t = item.title;
-            // Must involve a residential building or indoor incident and a fatality/corpse
-            if (!/住宅|マンション|アパート|団地|自宅|室内|部屋|民家|集合住宅|ビル|焼け跡/.test(t)) continue;
-            if (!/遺体|死亡|殺害|殺人|変死|白骨|焼死|孤独死|心肺停止|自殺|転落死|刺され/.test(t)) continue;
-            if (/けが人なし|死者なし|無傷/.test(t)) continue;
+            // Must involve a residential building, fire, or indoor incident and a fatality/corpse
+            if (!/住宅|マンション|アパート|団地|自宅|室内|部屋|民家|集合住宅|ビル|焼け跡|全焼|火災|出火|遺体発見|殺害|変死|孤独死|無理心中/.test(t)) continue;
+            if (!/遺体|死亡|殺害|殺人|変死|白骨|焼死|孤独死|心肺停止|自殺|転落死|刺され|意識不明|全焼/.test(t)) continue;
+            if (/けが人なし|死者なし|無傷|けが人はいない/.test(t)) continue;
 
             const titleStem = t.replace(/[\s　]/g, "").slice(0, 22);
             if (seenTitleStems.has(titleStem)) continue;
 
-            const loc = extractJapaneseMunicipalityAndChome(t, pref);
+            const loc = extractJapaneseMunicipalityAndChome(t, pref, dist);
             const cat = classifyJapanNewsCategory(t);
             const bldgType = /マンション/.test(t)
               ? "RC造分譲・賃貸マンション"

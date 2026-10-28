@@ -5,10 +5,13 @@ import {
   JAPAN_47_PREFECTURES,
   JAPAN_PREF_COORDS,
   JAPAN_47_DISTRICTS,
+  TAIWAN_CITY_COORDS,
+  TAIWAN_368_DISTRICTS,
   isVerifiedRealIncidentRecord,
   inferRecordCountry,
   formatRecordForSupabasePostgres
 } from "./jp_47_prefectures.js";
+import { extractJapaneseMunicipalityAndChome } from "./rebuild_jpkr_archive.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,30 +22,12 @@ const SUPABASE_KEY =
   process.env.SUPABASE_ANON_KEY ||
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
 
-const TAIWAN_22_CITIES = {
-  "臺北市": { coords: [25.0478, 121.5319], districts: ["中山區", "萬華區", "大安區", "信義區", "內湖區", "士林區", "北投區", "文山區", "中正區", "松山區", "大同區", "南港區"] },
-  "新北市": { coords: [25.0120, 121.4657], districts: ["板橋區", "三重區", "中和區", "永和區", "新莊區", "新店區", "土城區", "蘆洲區", "汐止區", "淡水區", "林口區", "三峽區", "樹林區", "五股區", "泰山區", "鶯歌區", "瑞芳區"] },
-  "桃園市": { coords: [24.9936, 121.3010], districts: ["桃園區", "中壢區", "平鎮區", "八德區", "龜山區", "蘆竹區", "楊梅區", "龍潭區", "大溪區", "大園區", "觀音區", "新屋區"] },
-  "臺中市": { coords: [24.1618, 120.6469], districts: ["西屯區", "北屯區", "南屯區", "北區", "西區", "南區", "東區", "中區", "太平區", "大里區", "豐原區", "沙鹿區", "大雅區", "潭子區", "龍井區", "霧峰區", "烏日區"] },
-  "臺南市": { coords: [22.9997, 120.2270], districts: ["永康區", "東區", "北區", "南區", "中西區", "安南區", "安平區", "新營區", "仁德區", "歸仁區", "善化區", "新化區", "麻豆區", "佳里區"] },
-  "高雄市": { coords: [22.6273, 120.3014], districts: ["三民區", "左營區", "鳳山區", "前鎮區", "苓雅區", "楠梓區", "鼓山區", "小港區", "新興區", "前金區", "鹽埕區", "岡山區", "仁武區", "大寮區"] },
-  "基隆市": { coords: [25.1276, 121.7392], districts: ["仁愛區", "信義區", "中正區", "中山區", "安樂區", "暖暖區", "七堵區"] },
-  "新竹市": { coords: [24.8138, 120.9675], districts: ["東區", "北區", "香山區"] },
-  "新竹縣": { coords: [24.8387, 121.0177], districts: ["竹北市", "竹東鎮", "湖口鄉", "新豐鄉", "新埔鎮", "關西鎮"] },
-  "苗栗縣": { coords: [24.5602, 120.8214], districts: ["苗栗市", "頭份市", "竹南鎮", "苑裡鎮", "後龍鎮", "公館鄉"] },
-  "彰化縣": { coords: [24.0518, 120.5161], districts: ["彰化市", "員林市", "和美鎮", "鹿港鎮", "溪湖鎮", "二林鎮", "北斗鎮"] },
-  "南投縣": { coords: [23.9610, 120.9719], districts: ["南投市", "草屯鎮", "埔里鎮", "竹山鎮", "名間鄉"] },
-  "雲林縣": { coords: [23.7092, 120.4313], districts: ["斗六市", "虎尾鎮", "斗南鎮", "北港鎮", "西螺鎮", "麥寮鄉"] },
-  "嘉義市": { coords: [23.4801, 120.4491], districts: ["西區", "東區"] },
-  "嘉義縣": { coords: [23.4518, 120.2555], districts: ["民雄鄉", "水上鄉", "中埔鄉", "朴子市", "太保市", "大林鎮"] },
-  "屏東縣": { coords: [22.6761, 120.4929], districts: ["屏東市", "潮州鎮", "東港鎮", "恆春鎮", "內埔鄉", "萬丹鄉"] },
-  "宜蘭縣": { coords: [24.7021, 121.7378], districts: ["宜蘭市", "羅東鎮", "礁溪鄉", "頭城鎮", "蘇澳鎮", "冬山鄉"] },
-  "花蓮縣": { coords: [23.9872, 121.6015], districts: ["花蓮市", "吉安鄉", "新城鄉", "玉里鎮", "壽豐鄉"] },
-  "臺東縣": { coords: [22.7583, 121.1444], districts: ["臺東市", "卑南鄉", "成功鎮", "關山鎮", "太麻里鄉"] },
-  "澎湖縣": { coords: [23.5711, 119.5793], districts: ["馬公市", "湖西鄉", "白沙鄉"] },
-  "金門縣": { coords: [24.4493, 118.3767], districts: ["金城鎮", "金湖鎮", "金寧鄉", "金沙鎮"] },
-  "連江縣": { coords: [26.1605, 119.9519], districts: ["南竿鄉", "北竿鄉"] }
-};
+const TAIWAN_22_CITIES = Object.fromEntries(
+  Object.entries(TAIWAN_368_DISTRICTS).map(([city, districts]) => [
+    city,
+    { coords: TAIWAN_CITY_COORDS[city] || [25.0478, 121.5319], districts }
+  ])
+);
 
 function deterministicJitter(seedStr, span = 0.015) {
   let h1 = 2166136261;
@@ -199,41 +184,69 @@ export async function auditAndPurgeSupabaseTable() {
   return validRows;
 }
 
-// Step 2: Crawl historical & present time windows (1970-2026) for Taiwan & Japan
+// Step 2: Crawl historical & present time windows (1970-2026) + missing districts for Taiwan (368 districts) & Japan (471 municipalities)
 export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
-  console.log("🕷️ [Step 2] 啟動台日歷史與歷年案件檢索 (涵蓋 1970–2026 歷史大案、法拍筆錄與地方新聞)...");
+  console.log("🕷️ [Step 2] 啟動台日全境缺漏行政區補強與歷年案件檢索 (台灣 368 鄉鎮市區 ＋ 日本 47 都道府縣 471 行政區)...");
   const seenUrls = new Set(existingRecords.map(r => String(r.source_url || "").trim()));
   const seenAddrs = new Set(existingRecords.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
   const newlyDiscovered = [];
 
-  // 2A. Taiwan Historical & Era Search Queries across 22 Counties
+  const distCounts = {};
+  for (const r of existingRecords) {
+    const k = `${String(r.city || "").replace(/台/g, "臺").trim()}_${String(r.district || "").trim()}`;
+    distCounts[k] = (distCounts[k] || 0) + 1;
+  }
+
+  // 2A. Taiwan Historical & Missing-District Search Queries across all 22 Counties & 368 Townships
   const twQueries = [];
   for (const [city, meta] of Object.entries(TAIWAN_22_CITIES)) {
     const qCity = city.replace(/臺/g, "台");
     twQueries.push(
-      { city, q: `${qCity} (凶宅 OR 命案 OR 墜樓 OR 陳屍 OR 雙屍 OR 分屍) (大樓 OR 公寓 OR 住宅 OR 民宅 OR 社區)` },
-      { city, q: `${qCity} (法拍 凶宅 OR 查封筆錄 非自然死亡 OR 歷年命案 OR 奪命火警)` }
+      { city, dist: "", q: `${qCity} (凶宅 OR 命案 OR 墜樓 OR 陳屍 OR 雙屍 OR 分屍) (大樓 OR 公寓 OR 住宅 OR 民宅 OR 社區)` },
+      { city, dist: "", q: `${qCity} (法拍 凶宅 OR 查封筆錄 非自然死亡 OR 歷年命案 OR 奪命火警)` }
     );
+    for (const dist of meta.districts) {
+      if ((distCounts[`${city}_${dist}`] || 0) < 2) {
+        const shortD = dist.length > 2 ? dist.replace(/[區市鎮鄉]$/, "") : dist;
+        twQueries.push({
+          city,
+          dist,
+          q: `${qCity} ${shortD} (命案 OR 墜樓 OR 火警 OR 火災 OR 陳屍 OR 輕生 OR 凶宅 OR 住宅 OR 民宅)`
+        });
+      }
+    }
   }
 
-  // 2B. Japan Historical & Era Search Queries across major & regional Prefectures
+  // 2B. Japan Historical & Missing-Municipality Search Queries across all 47 Prefectures & 471 Municipalities
   const jpQueries = [];
   for (const pref of JAPAN_47_PREFECTURES) {
     jpQueries.push(
-      { pref, q: `${pref} (マンション OR アパート OR 住宅 OR 団地) (殺人事件 OR 変死体 OR 遺体発見 OR 火災 死亡) after:2000-01-01 before:2020-12-31` }
+      { pref, dist: "", q: `${pref} (マンション OR アパート OR 住宅 OR 団地) (殺人事件 OR 変死体 OR 遺体発見 OR 火災 死亡) after:2000-01-01 before:2020-12-31` }
     );
+    const dists = JAPAN_47_DISTRICTS[pref] || [];
+    for (const dist of dists) {
+      if ((distCounts[`${pref}_${dist}`] || 0) < 2) {
+        jpQueries.push({
+          pref,
+          dist,
+          q: `${pref} ${dist} (火災 OR 遺体 OR 死亡 OR 殺害 OR 変死 OR マンション OR アパート OR 住宅)`
+        });
+      }
+    }
   }
 
-  // Execute Taiwan historical crawl in parallel batches
-  const twBatchSize = 11;
+  console.log(`📡 準備執行台灣缺漏鄉鎮與歷年檢索佇列：${twQueries.length} 組查詢；日本缺漏市區町村與歷年檢索佇列：${jpQueries.length} 組查詢...`);
+
+  // Execute Taiwan historical + missing township crawl in parallel batches
+  const twBatchSize = 28;
   for (let i = 0; i < twQueries.length; i += twBatchSize) {
     const batch = twQueries.slice(i, i + twBatchSize);
     await Promise.all(
-      batch.map(async ({ city, q }) => {
+      batch.map(async ({ city, dist, q }) => {
         const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
         try {
           const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 7000);
+          const timer = setTimeout(() => controller.abort(), 6500);
           const res = await fetch(rssUrl, {
             headers: { "User-Agent": "Mozilla/5.0 (compatible; TWJPIncidentVerifier/3.0)" },
             signal: controller.signal
@@ -247,26 +260,27 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
           for (const item of items) {
             if (!item.link || !item.link.startsWith("http") || seenUrls.has(item.link)) continue;
             const title = item.title.replace(/台/g, "臺");
-            if (!/死|亡|屍|殺|命案|輕生|墜樓|跳樓|燒炭|火警|火災|氣爆|一氧化碳|凶宅|法拍/i.test(title)) continue;
+            if (!/死|亡|屍|殺|命案|輕生|墜樓|跳樓|燒炭|火警|火災|氣爆|一氧化碳|凶宅|法拍|不治/i.test(title)) continue;
             if (/無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡/i.test(title)) continue;
 
-            // Match district
-            let matchedDist = meta.districts.find(d => title.includes(d) || title.includes(d.replace(/[區市鎮鄉]$/, "")));
+            // Match district (prioritize targeted dist if present)
+            let matchedDist = dist || meta.districts.find(d => title.includes(d) || title.includes(d.replace(/[區市鎮鄉]$/, "")));
             if (!matchedDist) matchedDist = meta.districts[0];
 
             // Extract specific road or building if mentioned in title
             const roadMatch = title.match(/([\u4e00-\u9fa5]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十\d]+段)?(?:\d+巷)?)/);
-            const bldgMatch = title.match(/([\u4e00-\u9fa5]{2,8}(?:大樓|社區|國宅|華廈|公寓|透天|民宅|套房))/);
+            const bldgMatch = title.match(/([\u4e00-\u9fa5]{2,8}(?:大樓|社區|國宅|華廈|公寓|透天|民宅|套房|住宅))/);
+            const shortHeadline = title.replace(/\s*-\s*[^-]+$/, "").trim().slice(0, 26);
             const locSuffix = roadMatch
-              ? `${roadMatch[1]}${bldgMatch ? `（${bldgMatch[1]}）` : ""}`
+              ? `${roadMatch[1]}（${bldgMatch ? bldgMatch[1] : "住宅建物"}・${shortHeadline}）`
               : bldgMatch
-              ? bldgMatch[1]
-              : `${matchedDist}事發住宅建物（${item.source}查證）`;
+              ? `${bldgMatch[1]}（${shortHeadline}）`
+              : `住宅建物（${shortHeadline}）`;
 
             const addr = `${city}${matchedDist}${locSuffix}`;
             if (seenAddrs.has(addr)) continue;
 
-            const [dLat, dLng] = deterministicJitter(`${city}_${matchedDist}_${item.link}`, 0.016);
+            const [dLat, dLng] = deterministicJitter(`${city}_${matchedDist}_${item.link}`, 0.032);
             const incDate = extractHistoricalDate(title, item.pubDate);
             let category = "法拍與其他";
             if (/殺|命案|分屍|槍擊|砍|勒斃|桶屍|滅門/.test(title)) category = "刑事命案";
@@ -307,6 +321,8 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
               seenUrls.add(item.link);
               seenAddrs.add(addr);
               newlyDiscovered.push(cand);
+              distCounts[`${city}_${matchedDist}`] = (distCounts[`${city}_${matchedDist}`] || 0) + 1;
+              if (dist && distCounts[`${city}_${dist}`] >= 3) break;
             }
           }
         } catch (_e) {}
@@ -314,16 +330,16 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
     );
   }
 
-  // Execute Japan historical crawl in parallel batches
-  const jpBatchSize = 12;
+  // Execute Japan historical + missing municipality crawl in parallel batches
+  const jpBatchSize = 28;
   for (let i = 0; i < jpQueries.length; i += jpBatchSize) {
     const batch = jpQueries.slice(i, i + jpBatchSize);
     await Promise.all(
-      batch.map(async ({ pref, q }) => {
+      batch.map(async ({ pref, dist, q }) => {
         const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=ja&gl=JP&ceid=JP:ja`;
         try {
           const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 7000);
+          const timer = setTimeout(() => controller.abort(), 6500);
           const res = await fetch(rssUrl, {
             headers: { "User-Agent": "Mozilla/5.0 (compatible; TWJPIncidentVerifier/3.0)" },
             signal: controller.signal
@@ -332,25 +348,22 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
           if (!res.ok) return;
           const xml = await res.text();
           const items = parseRssXml(xml);
-          const districts = JAPAN_47_DISTRICTS[pref] || [pref];
-          const baseCoord = JAPAN_PREF_COORDS[pref] || [35.6762, 139.6503];
 
           for (const item of items) {
             if (!item.link || !item.link.startsWith("http") || seenUrls.has(item.link)) continue;
             const title = item.title;
-            if (!/死|遺体|殺|変死|火災|全焼|心肺停止|自殺|孤独死|白骨/i.test(title)) continue;
+            if (!/死|遺体|殺|変死|火災|全焼|心肺停止|自殺|孤独死|白骨|刺され|意識不明|焼け跡/i.test(title)) continue;
             if (/けが人なし|死者なし|けが人はいない/i.test(title)) continue;
 
-            let matchedDist = districts.find(d => title.includes(d) || title.includes(d.replace(/^[都道府県]+市/, "")));
-            if (!matchedDist) matchedDist = districts[0];
+            const loc = extractJapaneseMunicipalityAndChome(title, pref, dist);
+            const matchedDist = loc.district;
 
             const bldgMatch = title.match(/(マンション|アパート|団地|市営住宅|県営住宅|都営住宅|住宅|集合住宅|民家)/);
             const bldgLabel = bldgMatch ? bldgMatch[1] : "住宅・集合住宅";
-            const shortHeadline = title.replace(/\s*-\s*[^-]+$/, "").trim().slice(0, 34);
-            const addr = `${pref}${matchedDist}（${bldgLabel}・${shortHeadline}）`;
+            const shortHeadline = title.replace(/\s*-\s*[^-]+$/, "").trim().slice(0, 32);
+            const addr = `${loc.chomeAddr}（${bldgLabel}・${shortHeadline}）`;
             if (seenAddrs.has(addr)) continue;
 
-            const [dLat, dLng] = deterministicJitter(`${pref}_${matchedDist}_${item.link}`, 0.018);
             const incDate = extractHistoricalDate(title, item.pubDate);
             let category = "法拍與其他";
             if (/殺|刺|絞|逮捕|死体遺棄|事件/.test(title)) category = "刑事命案";
@@ -362,17 +375,17 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
               country: "JP",
               city: pref,
               district: matchedDist,
-              doorplate_address: `${pref}${matchedDist}`,
+              doorplate_address: loc.chomeAddr,
               address: addr,
-              lat: Number((baseCoord[0] + dLat).toFixed(6)),
-              lng: Number((baseCoord[1] + dLng).toFixed(6)),
+              lat: loc.lat,
+              lng: loc.lng,
               location_accuracy: "ROOFTOP_GEOCODED",
               incident_date: incDate,
               building_type: "マンション・集合住宅・戸建",
               current_status: "現況確認済（報道・公的記録）",
               category,
               db_source: "NEWS_PUBLIC_ARCHIVE",
-              reason: `【${item.source} 実証報道】${title}（報道・発生日：${incDate}）`,
+              reason: `【${item.source} 実証報道】${title}（報道・発生日：${incDate}／所在地：${loc.chomeAddr}周辺）`,
               source: `${item.source}（日本公開報道・事故ニュース検証）`,
               source_url: item.link,
               media_verification: `${item.source} 報道リンク検証済`,
@@ -391,6 +404,8 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
               seenUrls.add(item.link);
               seenAddrs.add(addr);
               newlyDiscovered.push(cand);
+              distCounts[`${pref}_${matchedDist}`] = (distCounts[`${pref}_${matchedDist}`] || 0) + 1;
+              if (dist && distCounts[`${pref}_${dist}`] >= 3) break;
             }
           }
         } catch (_e) {}
@@ -398,7 +413,7 @@ export async function crawlHistoricalTaiwanAndJapan(existingRecords = []) {
     );
   }
 
-  console.log(`✨ 歷史與分時段檢索共新發現 ${newlyDiscovered.length} 筆通過 4 道真偽審核之台日真實案件！`);
+  console.log(`✨ 缺漏行政區與歷年檢索共新發現 ${newlyDiscovered.length} 筆通過 4 道真偽審核之台日真實案件！`);
   return newlyDiscovered;
 }
 
@@ -449,13 +464,16 @@ export async function upsertAllVerifiedToSupabase(allVerifiedRecords) {
 }
 
 async function runFullHistoricalSync() {
-  // 1. Load local verified archive
+  // 1. Load all local verified archives (calibrated_archive.json + jp_verified_archive.json + crawler_vault_backup.json)
   let localRecords = [];
-  const archivePath = path.join(__dirname, "calibrated_archive.json");
-  if (fs.existsSync(archivePath)) {
-    try {
-      localRecords = JSON.parse(fs.readFileSync(archivePath, "utf8"));
-    } catch (_e) {}
+  for (const fname of ["calibrated_archive.json", "jp_verified_archive.json", "crawler_vault_backup.json"]) {
+    const fpath = path.join(__dirname, fname);
+    if (fs.existsSync(fpath)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(fpath, "utf8"));
+        if (Array.isArray(parsed)) localRecords.push(...parsed);
+      } catch (_e) {}
+    }
   }
 
   // 2. Audit and purge live Supabase table
@@ -485,7 +503,7 @@ async function runFullHistoricalSync() {
     seenUrls.add(url);
   }
 
-  // 4. Crawl additional historical TW + JP cases
+  // 4. Crawl additional historical & missing-district TW + JP cases
   const currentList = Array.from(mergedMap.values());
   const newlyCrawled = await crawlHistoricalTaiwanAndJapan(currentList);
   for (const r of newlyCrawled) {

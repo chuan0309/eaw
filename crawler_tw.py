@@ -3,12 +3,27 @@ import re
 import json
 import time
 import random
+import subprocess
 import urllib.parse
 import xml.etree.ElementTree as ET
 import requests
-from google import genai
-from google.genai import types
-from supabase import create_client, Client
+
+try:
+    from google import genai
+    from google.genai import types
+    HAS_GENAI = True
+except ImportError:
+    genai = None
+    types = None
+    HAS_GENAI = False
+
+try:
+    from supabase import create_client, Client
+    HAS_SUPABASE_SDK = True
+except ImportError:
+    create_client = None
+    Client = object
+    HAS_SUPABASE_SDK = False
 
 # ==============================================================================
 # 1. 純文字模型嚴格過濾引擎 (100% 剔除圖片/語音/影片模型，只留純文字 LLM)
@@ -17,7 +32,7 @@ class StrictTextLLMEngine:
     def __init__(self, gemini_keys_str: str, openai_keys_str: str):
         self.gemini_keys = [k.strip() for k in (gemini_keys_str or "").split(",") if k.strip()]
         self.openai_keys = [k.strip() for k in (openai_keys_str or "").split(",") if k.strip()]
-        self.gemini_clients = [genai.Client(api_key=k) for k in self.gemini_keys]
+        self.gemini_clients = [genai.Client(api_key=k) for k in self.gemini_keys] if (HAS_GENAI and self.gemini_keys) else []
         self.dead_models = set()
         self.text_models = self._discover_strict_text_models()
         self.cursor = 0
@@ -331,13 +346,18 @@ def get_target_quota(city: str, dist: str) -> int:
 
 def main():
     supabase_url = os.environ.get("SUPABASE_URL") or "https://cfmcvcscyfblcodemnkt.supabase.co"
-    supabase_key = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_ANON_KEY") or ""
+    supabase_key = (
+        os.environ.get("SUPABASE_SERVICE_KEY")
+        or os.environ.get("SUPABASE_ANON_KEY")
+        or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo"
+    )
     gemini_keys = os.environ.get("GEMINI_API_KEYS") or os.environ.get("GEMINI_API_KEY") or ""
     openai_keys = os.environ.get("OPENAI_API_KEYS") or ""
     gmaps_key = os.environ.get("GOOGLE_MAPS_API_KEY") or os.environ.get("VITE_GOOGLE_MAPS_API_KEY") or ""
 
-    if not supabase_key:
-        print("⚠️ 未偵測到 SUPABASE_SERVICE_KEY，跳過遠端寫入。", flush=True)
+    if not HAS_SUPABASE_SDK or (not gemini_keys and not openai_keys):
+        print("🔄 啟動無須 API Key 之全台 368 鄉鎮市區＋日本 47 都道府縣 Google News RSS 實證爬蟲與 Supabase 同步引擎...", flush=True)
+        subprocess.run(["node", "sync_supabase_historical.js"], check=False)
         return
 
     supabase: Client = create_client(supabase_url, supabase_key)

@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-  <title>사고매물 지도｜대만·일본 부동산 사고 및 법원경매 검증 데이터베이스</title>
+  <title>사고매물 지도｜대만·일본 전국 47개 도도부현 부동산 사고 및 뉴스·경매 검증 데이터베이스</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
   <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Crect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23334155' stroke-width='1.5'/%3E%3Cpath d='M14 10 H38 L48 20 V52 C48 54.2 46.2 56 44 56 H14 C11.8 56 10 54.2 10 52 V14 C10 11.8 11.8 10 14 10 Z' fill='%23F8FAFC'/%3E%3Cpath d='M38 10 V18 C38 19.1 38.9 20 40 20 H48 L38 10 Z' fill='%23CBD5E1'/%3E%3Cpath d='M18 25 L27 17 L36 25' fill='none' stroke='%230F172A' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='21' y='25' width='12' height='9' rx='1' fill='%230F172A'/%3E%3Crect x='25.5' y='28' width='3' height='6' fill='%23F8FAFC'/%3E%3Crect x='16' y='38' width='20' height='2.6' rx='1.3' fill='%23475569'/%3E%3Crect x='16' y='43.5' width='14' height='2.6' rx='1.3' fill='%2364748B'/%3E%3Crect x='16' y='49' width='11' height='2.6' rx='1.3' fill='%2394A3B8'/%3E%3Crect x='33' y='33' width='23' height='23' rx='4.5' fill='%23DC2626' stroke='%23FFFFFF' stroke-width='2'/%3E%3Crect x='36' y='36' width='17' height='17' rx='2' fill='none' stroke='%23FECACA' stroke-width='1.2'/%3E%3Cpath d='M40 44.5 L43.2 47.7 L49.5 41.2' fill='none' stroke='%23FFFFFF' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="/favicon.svg?v=2" />
   <meta name="application-name" content="凶宅地圖" />
   <meta name="apple-mobile-web-app-title" content="凶宅地圖" />
-  <meta name="description" content="대만과 일본의 54,000건 이상 부동산 사고物件 및 법원 경매 기록을 교차 검증한 공간 검색 데이터베이스." />
+  <meta name="description" content="대만 전역 및 일본 전국 47개 도도부현의 실제 뉴스 보도와 법원 경매 기록을 교차 검증한 공간 검색 데이터베이스." />
   <meta name="keywords" content="凶宅地圖, 事故物件查詢, 台灣凶宅查詢, 凶宅名單, 法拍凶宅, 事故建物資料庫" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow" />
@@ -88,8 +88,8 @@
   <meta property="og:locale:alternate" content="ja_JP" />
   <meta property="og:locale:alternate" content="ko_KR" />
   <meta property="og:locale:alternate" content="en_US" />
-  <meta property="og:title" content="사고매물 지도｜대만·일본 부동산 사고 및 법원경매 검증 데이터베이스" />
-  <meta property="og:description" content="대만과 일본의 54,000건 이상 부동산 사고物件 및 법원 경매 기록을 교차 검증한 공간 검색 데이터베이스." />
+  <meta property="og:title" content="사고매물 지도｜대만·일본 전국 47개 도도부현 부동산 사고 및 뉴스·경매 검증 데이터베이스" />
+  <meta property="og:description" content="대만 전역 및 일본 전국 47개 도도부현의 실제 뉴스 보도와 법원 경매 기록을 교차 검증한 공간 검색 데이터베이스." />
   <meta property="og:image" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:secure_url" content="https://chuancn.org/og-cover.png?v=3" />
   <meta property="og:image:type" content="image/png" />
@@ -476,6 +476,7 @@
         <!-- Row 2: Always-Visible Dropdowns for Independent Country, City, District, and Time -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
           <select id="country-select" aria-label="Country" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-xs rounded-lg px-2.5 py-2 font-semibold focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
+            <option value="ALL" data-i18n="country_opt_all">台日全境 (TW+JP)</option>
             <option value="TW" selected data-i18n="country_opt_tw">臺灣</option>
             <option value="JP" data-i18n="country_opt_jp">日本</option>
           </select>
@@ -1144,7 +1145,7 @@
         <button type="button" data-pick-country="TW" class="country-pick-card p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 transition-all flex items-center justify-between gap-3 cursor-pointer group">
           <div class="min-w-0">
             <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_tw">臺灣</div>
-            <div class="text-[11px] text-slate-600 truncate">全臺 22 縣市 · 368 鄉鎮市區 · 已自動同步最新 4,182+ 筆實證卷宗</div>
+            <div id="welcome-tw-desc" class="text-[11px] text-slate-600 truncate">全臺 22 縣市 · 368 鄉鎮市區 · 新聞報導與法拍實證卷宗</div>
           </div>
           <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
         </button>
@@ -1152,7 +1153,15 @@
         <button type="button" data-pick-country="JP" class="country-pick-card p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 transition-all flex items-center justify-between gap-3 cursor-pointer group">
           <div class="min-w-0">
             <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_jp">日本</div>
-            <div class="text-[11px] text-slate-600 truncate">全境 15 都道府縣 · 已自動同步最新 50,000 筆事故物件實證卷宗</div>
+            <div id="welcome-jp-desc" class="text-[11px] text-slate-600 truncate">全境 47 都道府縣 · 新聞報導與官方公開實證卷宗</div>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
+        </button>
+
+        <button type="button" data-pick-country="ALL" class="country-pick-card p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 transition-all flex items-center justify-between gap-3 cursor-pointer group">
+          <div class="min-w-0">
+            <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_all">台日全境聯合檢索 (TW + JP)</div>
+            <div id="welcome-all-desc" class="text-[11px] text-slate-600 truncate">台灣 22 縣市 ＋ 日本 47 都道府縣 · 跨國聯合高速檢索</div>
           </div>
           <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
         </button>
@@ -1253,7 +1262,7 @@
         lbl_select_country_btn: "切換國家",
         welcome_country_title: "請選擇欲查詢的國家／地區",
         welcome_country_sub: "選擇後將立即載入該國全境行政區地圖與案件列表",
-        country_opt_all: "全部國家",
+        country_opt_all: "台日全境 (TW+JP)",
         country_opt_tw: "臺灣",
         country_opt_jp: "日本",
         country_opt_kr: "韓國",
@@ -1261,7 +1270,7 @@
         opt_country_jp: "日本",
         opt_country_kr: "韓國",
         all_taiwan: "全臺灣",
-        all_cities_all: "全部縣市／都道府縣／市道",
+        all_cities_all: "全部縣市／47都道府縣",
         all_cities_opt: "全部縣市",
         all_cities_tw: "全部縣市",
         all_cities_jp: "全部都道府縣",
@@ -2250,21 +2259,53 @@
       "澎湖縣": { "zh-TW": "澎湖縣", "en": "Penghu County", "ja": "澎湖県", "ko": "펑후현" },
       "金門縣": { "zh-TW": "金門縣", "en": "Kinmen County", "ja": "金門県", "ko": "진먼현" },
       "連江縣": { "zh-TW": "連江縣", "en": "Lienchiang County", "ja": "連江県", "ko": "롄장현" },
-      // Japan (JP - 15 Prefectures)
-      "東京都": { "zh-TW": "東京都", "en": "Tokyo", "ja": "東京都", "ko": "도쿄도" },
-      "大阪府": { "zh-TW": "大阪府", "en": "Osaka", "ja": "大阪府", "ko": "오사카부" },
-      "神奈川県": { "zh-TW": "神奈川縣", "en": "Kanagawa", "ja": "神奈川県", "ko": "가나가와현" },
-      "愛知県": { "zh-TW": "愛知縣", "en": "Aichi", "ja": "愛知県", "ko": "아이치현" },
-      "福岡県": { "zh-TW": "福岡縣", "en": "Fukuoka", "ja": "福岡県", "ko": "후쿠오카현" },
+      // Japan (JP - All 47 Prefectures)
       "北海道": { "zh-TW": "北海道", "en": "Hokkaido", "ja": "北海道", "ko": "홋카이도" },
-      "京都府": { "zh-TW": "京都府", "en": "Kyoto", "ja": "京都府", "ko": "교토부" },
-      "兵庫県": { "zh-TW": "兵庫縣", "en": "Hyogo", "ja": "兵庫県", "ko": "효고현" },
+      "青森県": { "zh-TW": "青森縣", "en": "Aomori", "ja": "青森県", "ko": "아오모리현" },
+      "岩手県": { "zh-TW": "岩手縣", "en": "Iwate", "ja": "岩手県", "ko": "이와테현" },
+      "宮城県": { "zh-TW": "宮城縣", "en": "Miyagi", "ja": "宮城県", "ko": "미야기현" },
+      "秋田県": { "zh-TW": "秋田縣", "en": "Akita", "ja": "秋田県", "ko": "아키타현" },
+      "山形県": { "zh-TW": "山形縣", "en": "Yamagata", "ja": "山形県", "ko": "야마가타현" },
+      "福島県": { "zh-TW": "福島縣", "en": "Fukushima", "ja": "福島県", "ko": "후쿠시마현" },
+      "茨城県": { "zh-TW": "茨城縣", "en": "Ibaraki", "ja": "茨城県", "ko": "이바라키현" },
+      "栃木県": { "zh-TW": "栃木縣", "en": "Tochigi", "ja": "栃木県", "ko": "도치기현" },
+      "群馬県": { "zh-TW": "群馬縣", "en": "Gunma", "ja": "群馬県", "ko": "군마현" },
       "埼玉県": { "zh-TW": "埼玉縣", "en": "Saitama", "ja": "埼玉県", "ko": "사이타마현" },
       "千葉県": { "zh-TW": "千葉縣", "en": "Chiba", "ja": "千葉県", "ko": "지바현" },
-      "広島県": { "zh-TW": "廣島縣", "en": "Hiroshima", "ja": "広島県", "ko": "히로시마현" },
-      "宮城県": { "zh-TW": "宮城縣", "en": "Miyagi", "ja": "宮城県", "ko": "미야기현" },
+      "東京都": { "zh-TW": "東京都", "en": "Tokyo", "ja": "東京都", "ko": "도쿄도" },
+      "神奈川県": { "zh-TW": "神奈川縣", "en": "Kanagawa", "ja": "神奈川県", "ko": "가나가와현" },
+      "新潟県": { "zh-TW": "新潟縣", "en": "Niigata", "ja": "新潟県", "ko": "니가타현" },
+      "富山県": { "zh-TW": "富山縣", "en": "Toyama", "ja": "富山県", "ko": "도야마현" },
+      "石川県": { "zh-TW": "石川縣", "en": "Ishikawa", "ja": "石川県", "ko": "이시카와현" },
+      "福井県": { "zh-TW": "福井縣", "en": "Fukui", "ja": "福井県", "ko": "후쿠이현" },
+      "山梨県": { "zh-TW": "山梨縣", "en": "Yamanashi", "ja": "山梨県", "ko": "야마나시현" },
+      "長野県": { "zh-TW": "長野縣", "en": "Nagano", "ja": "長野県", "ko": "나가노현" },
+      "岐阜県": { "zh-TW": "岐阜縣", "en": "Gifu", "ja": "岐阜県", "ko": "기후현" },
       "静岡県": { "zh-TW": "靜岡縣", "en": "Shizuoka", "ja": "静岡県", "ko": "시즈오카현" },
-      "茨城県": { "zh-TW": "茨城縣", "en": "Ibaraki", "ja": "茨城県", "ko": "이바라키현" },
+      "愛知県": { "zh-TW": "愛知縣", "en": "Aichi", "ja": "愛知県", "ko": "아이치현" },
+      "三重県": { "zh-TW": "三重縣", "en": "Mie", "ja": "三重県", "ko": "미에현" },
+      "滋賀県": { "zh-TW": "滋賀縣", "en": "Shiga", "ja": "滋賀県", "ko": "시가현" },
+      "京都府": { "zh-TW": "京都府", "en": "Kyoto", "ja": "京都府", "ko": "교토부" },
+      "大阪府": { "zh-TW": "大阪府", "en": "Osaka", "ja": "大阪府", "ko": "오사카부" },
+      "兵庫県": { "zh-TW": "兵庫縣", "en": "Hyogo", "ja": "兵庫県", "ko": "효고현" },
+      "奈良県": { "zh-TW": "奈良縣", "en": "Nara", "ja": "奈良県", "ko": "나라현" },
+      "和歌山県": { "zh-TW": "和歌山縣", "en": "Wakayama", "ja": "和歌山県", "ko": "와카야마현" },
+      "鳥取県": { "zh-TW": "鳥取縣", "en": "Tottori", "ja": "鳥取県", "ko": "돗토리현" },
+      "島根県": { "zh-TW": "島根縣", "en": "Shimane", "ja": "島根県", "ko": "시마네현" },
+      "岡山県": { "zh-TW": "岡山縣", "en": "Okayama", "ja": "岡山県", "ko": "오카야마현" },
+      "広島県": { "zh-TW": "廣島縣", "en": "Hiroshima", "ja": "広島県", "ko": "히로시마현" },
+      "山口県": { "zh-TW": "山口縣", "en": "Yamaguchi", "ja": "山口県", "ko": "야마구치현" },
+      "徳島県": { "zh-TW": "德島縣", "en": "Tokushima", "ja": "徳島県", "ko": "도쿠시마현" },
+      "香川県": { "zh-TW": "香川縣", "en": "Kagawa", "ja": "香川県", "ko": "가가와현" },
+      "愛媛県": { "zh-TW": "愛媛縣", "en": "Ehime", "ja": "愛媛県", "ko": "에히메현" },
+      "高知県": { "zh-TW": "高知縣", "en": "Kochi", "ja": "高知県", "ko": "고치현" },
+      "福岡県": { "zh-TW": "福岡縣", "en": "Fukuoka", "ja": "福岡県", "ko": "후쿠오카현" },
+      "佐賀県": { "zh-TW": "佐賀縣", "en": "Saga", "ja": "佐賀県", "ko": "사가현" },
+      "長崎県": { "zh-TW": "長崎縣", "en": "Nagasaki", "ja": "長崎県", "ko": "나가사키현" },
+      "熊本県": { "zh-TW": "熊本縣", "en": "Kumamoto", "ja": "熊本県", "ko": "구마모토현" },
+      "大分県": { "zh-TW": "大分縣", "en": "Oita", "ja": "大分県", "ko": "오이타현" },
+      "宮崎県": { "zh-TW": "宮崎縣", "en": "Miyazaki", "ja": "宮崎県", "ko": "미야자키현" },
+      "鹿児島県": { "zh-TW": "鹿兒島縣", "en": "Kagoshima", "ja": "鹿児島県", "ko": "가고시마현" },
       "沖縄県": { "zh-TW": "沖繩縣", "en": "Okinawa", "ja": "沖縄県", "ko": "오키나와현" },
       // South Korea (KR - 14 Metropolitan Cities & Provinces)
       "首爾特別市": { "zh-TW": "首爾特別市", "en": "Seoul", "ja": "ソウル特別市", "ko": "서울특별시" },
@@ -2873,7 +2914,13 @@
 
     const COUNTRY_CITY_GROUPS = {
       TW: ["臺北市","新北市","桃園市","臺中市","臺南市","高雄市","基隆市","新竹市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義市","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣","金門縣","連江縣"],
-      JP: ["東京都","大阪府","神奈川県","愛知県","福岡県","北海道","京都府","兵庫県","埼玉県","千葉県","広島県","宮城県","静岡県","茨城県","沖縄県"],
+      JP: [
+        "東京都","大阪府","神奈川県","愛知県","福岡県","北海道","京都府","兵庫県","埼玉県","千葉県",
+        "広島県","宮城県","静岡県","茨城県","沖縄県","青森県","岩手県","秋田県","山形県","福島県",
+        "栃木県","群馬県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","三重県",
+        "滋賀県","奈良県","和歌山県","鳥取県","島根県","岡山県","山口県","徳島県","香川県","愛媛県",
+        "高知県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県"
+      ],
       KR: ["首爾特別市","釜山廣域市","仁川廣域市","京畿道","大邱廣域市","大田廣域市","光州廣域市","蔚山廣域市","江原特別自治道","忠清北道","忠清南道","全北特別自治道","慶尚南道","濟州特別自治道"]
     };
 
@@ -2916,21 +2963,53 @@
       "澎湖縣": ["馬公市","湖西鄉","白沙鄉","西嶼鄉","望安鄉","七美鄉"],
       "金門縣": ["金城鎮","金湖鎮","金沙鎮","金寧鄉","烈嶼鄉","烏坵鄉"],
       "連江縣": ["南竿鄉","北竿鄉","莒光鄉","東引鄉"],
-      // Japan (JP - 15 Prefectures, 285 Administrative Wards & Cities)
+      // Japan (JP - All 47 Prefectures)
+      "北海道": ["札幌市中央区","札幌市北区","札幌市東区","札幌市白石区","札幌市豊平区","札幌市南区","札幌市西区","札幌市厚別区","札幌市手稲区","札幌市清田区","旭川市","函館市","苫小牧市","帯広市","釧路市","小樽市","江別市","北見市","千歳市"],
+      "青森県": ["青森市","八戸市","弘前市","十和田市","むつ市","五所川原市","三沢市"],
+      "岩手県": ["盛岡市","一関市","奥州市","花巻市","北上市","宮古市","大船渡市"],
+      "宮城県": ["仙台市青葉区","仙台市宮城野区","仙台市太白区","仙台市泉区","仙台市若林区","石巻市","大崎市","名取市","多賀城市","気仙沼市"],
+      "秋田県": ["秋田市","横手市","大仙市","由利本荘市","大館市","能代市"],
+      "山形県": ["山形市","鶴岡市","酒田市","米沢市","天童市","東根市"],
+      "福島県": ["郡山市","いわき市","福島市","会津若松市","須賀川市","白河市"],
+      "茨城県": ["水戸市","つくば市","土浦市","日立市","ひたちなか市","古河市","取手市","神栖市","筑西市"],
+      "栃木県": ["宇都宮市","小山市","栃木市","足利市","佐野市","那須塩原市","鹿沼市"],
+      "群馬県": ["高崎市","前橋市","太田市","伊勢崎市","桐生市","館林市","藤岡市"],
+      "埼玉県": ["さいたま市大宮区","さいたま市浦和区","さいたま市中央区","さいたま市南区","さいたま市北区","さいたま市西区","さいたま市見沼区","さいたま市桜区","さいたま市緑区","さいたま市岩槻区","川口市","蕨市","戸田市","川越市","所沢市","越谷市","草加市","春日部市","上尾市","熊谷市","新座市","朝霞市","和光市"],
+      "千葉県": ["千葉市中央区","千葉市花見川区","千葉市稲毛区","千葉市若葉区","千葉市緑区","千葉市美浜区","船橋市","松戸市","市川市","柏市","浦安市","習志野市","八千代市","流山市","野田市","佐倉市","成田市","木更津市"],
       "東京都": ["新宿区","港区","豊島区","大田区","渋谷区","世田谷区","足立区","江戸川区","中野区","杉並区","板橋区","練馬区","江東区","墨田区","台東区","品川区","目黒区","北区","荒川区","葛飾区","文京区","中央区","千代田区","八王子市","立川市","武蔵野市","三鷹市","青梅市","府中市","昭島市","調布市","町田市","小金井市","小平市","日野市","東村山市","国分寺市","国立市","福生市","狛江市","東大和市","清瀬市","東久留米市","武蔵村山市","多摩市","稲城市","あきる野市","西東京市"],
-      "大阪府": ["大阪市北区","大阪市中央区","大阪市西成区","大阪市浪速区","大阪市淀川区","大阪市東淀川区","大阪市西淀川区","大阪市天王寺区","大阪市阿倍野区","大阪市東成区","大阪市生野区","大阪市城東区","大阪市鶴見区","大阪市旭区","大阪市都島区","大阪市福島区","大阪市此花区","大阪市西区","大阪市港区","大阪市大正区","大阪市住之江区","大阪市住吉区","大阪市東住吉区","大阪市平野区","堺市堺区","堺市北区","堺市西区","堺市中区","堺市東区","堺市美原区","堺市南区","東大阪市","吹田市","豊中市","高槻市","枚方市","茨木市","八尾市","寝屋川市","岸和田市","和泉市","守口市","門真市","箕面市","大東市","松原市"],
       "神奈川県": ["横浜市中区","横浜市西区","横浜市港北区","横浜市神奈川区","横浜市南区","横浜市鶴見区","横浜市青葉区","横浜市都筑区","横浜市戸塚区","横浜市保土ケ谷区","横浜市旭区","横浜市緑区","横浜市瀬谷区","横浜市泉区","横浜市栄区","横浜市港南区","横浜市磯子区","横浜市金沢区","川崎市川崎区","川崎市幸区","川崎市中原区","川崎市高津区","川崎市宮前区","川崎市多摩区","川崎市麻生区","相模原市中央区","相模原市南区","相模原市緑区","座間市","藤沢市","横須賀市","平塚市","茅ヶ崎市","大和市","厚木市","小田原市","鎌倉市","秦野市","伊勢原市","海老名市","綾瀬市"],
+      "新潟県": ["新潟市中央区","新潟市西区","新潟市東区","新潟市北区","新潟市南区","新潟市江南区","新潟市秋葉区","新潟市西蒲区","長岡市","上越市","三条市","新発田市"],
+      "富山県": ["富山市","高岡市","射水市","魚津市","砺波市"],
+      "石川県": ["金沢市","白山市","小松市","野々市市","加賀市","七尾市"],
+      "福井県": ["福井市","坂井市","越前市","敦賀市","鯖江市"],
+      "山梨県": ["甲府市","甲斐市","南アルプス市","笛吹市","富士吉田市"],
+      "長野県": ["長野市","松本市","上田市","飯田市","佐久市","安曇野市","塩尻市"],
+      "岐阜県": ["岐阜市","大垣市","各務原市","多治見市","可児市","高山市","関市"],
+      "静岡県": ["静岡市葵区","静岡市駿河区","静岡市清水区","浜松市中央区","浜松市浜名区","沼津市","富士市","藤枝市","焼津市","三島市","磐田市"],
       "愛知県": ["名古屋市中区","名古屋市中村区","名古屋市港区","名古屋市千種区","名古屋市東区","名古屋市北区","名古屋市西区","名古屋市昭和区","名古屋市瑞穂区","名古屋市熱田区","名古屋市中川区","名古屋市南区","名古屋市守山区","名古屋市緑区","名古屋市名東区","名古屋市天白区","豊田市","一宮市","岡崎市","豊橋市","春日井市","安城市","刈谷市","小牧市"],
-      "福岡県": ["福岡市博多区","福岡市中央区","福岡市東区","福岡市南区","福岡市早良区","福岡市西区","福岡市城南区","北九州市小倉北区","北九州市小倉南区","北九州市八幡西区","北九州市八幡東区","北九州市門司区","北九州市戸畑区","北九州市若松区","久留米市","春日市","大野城市","飯塚市","大牟田市"],
-      "北海道": ["札幌市中央区","札幌市北区","札幌市東区","札幌市白石区","札幌市豊平区","札幌市南区","札幌市西区","札幌市厚別区","札幌市手稲区","札幌市清田区","旭川市","函館市","苫小牧市","帯広市","釧路市","小樽市","江別市"],
-      "京都府": ["京都市中京区","京都市下京区","京都市伏見区","京都市左京区","京都市右京区","京都市上京区","京都市東山区","京都市山科区","京都市北区","京都市南区","京都市西京区","宇治市","長岡京市","城陽市"],
+      "三重県": ["四日市市","津市","鈴鹿市","松阪市","桑名市","伊勢市"],
+      "滋賀県": ["大津市","草津市","長浜市","東近江市","彦根市","守山市"],
+      "京都府": ["京都市中京区","京都市下京区","京都市伏見区","京都市左京区","京都市右京区","京都市上京区","京都市東山区","京都市山科区","京都市北区","京都市南区","京都市西京区","宇治市","長岡京市","城陽市","舞鶴市"],
+      "大阪府": ["大阪市北区","大阪市中央区","大阪市西成区","大阪市浪速区","大阪市淀川区","大阪市東淀川区","大阪市西淀川区","大阪市天王寺区","大阪市阿倍野区","大阪市東成区","大阪市生野区","大阪市城東区","大阪市鶴見区","大阪市旭区","大阪市都島区","大阪市福島区","大阪市此花区","大阪市西区","大阪市港区","大阪市大正区","大阪市住之江区","大阪市住吉区","大阪市東住吉区","大阪市平野区","堺市堺区","堺市北区","堺市西区","堺市中区","堺市東区","堺市美原区","堺市南区","東大阪市","吹田市","豊中市","高槻市","枚方市","茨木市","八尾市","寝屋川市","岸和田市","和泉市","守口市","門真市","箕面市","大東市","松原市"],
       "兵庫県": ["神戸市中央区","神戸市兵庫区","神戸市灘区","神戸市東灘区","神戸市長田区","神戸市須磨区","神戸市垂水区","神戸市北区","神戸市西区","尼崎市","西宮市","芦屋市","伊丹市","宝塚市","川西市","明石市","加古川市","姫路市"],
-      "埼玉県": ["さいたま市大宮区","さいたま市浦和区","さいたま市中央区","さいたま市南区","さいたま市北区","さいたま市西区","さいたま市見沼区","さいたま市桜区","さいたま市緑区","さいたま市岩槻区","川口市","蕨市","戸田市","川越市","所沢市","越谷市","草加市","春日部市","上尾市","熊谷市","新座市","朝霞市","和光市","富士見市","ふじみ野市","三郷市","八潮市"],
-      "千葉県": ["千葉市中央区","千葉市花見川区","千葉市稲毛区","千葉市若葉区","千葉市緑区","千葉市美浜区","船橋市","松戸市","市川市","柏市","浦安市","習志野市","八千代市","流山市","野田市","鎌ケ谷市","佐倉市","成田市","木更津市"],
+      "奈良県": ["奈良市","橿原市","生駒市","大和郡山市","香芝市","天理市"],
+      "和歌山県": ["和歌山市","田辺市","橋本市","紀の川市","岩出市"],
+      "鳥取県": ["鳥取市","米子市","倉吉市","境港市"],
+      "島根県": ["松江市","出雲市","浜田市","益田市"],
+      "岡山県": ["岡山市北区","岡山市中区","岡山市東区","岡山市南区","倉敷市","津山市","総社市"],
       "広島県": ["広島市中区","広島市南区","広島市西区","広島市東区","広島市安佐南区","広島市安佐北区","広島市安芸区","広島市佐伯区","福山市","呉市","東広島市","尾道市"],
-      "宮城県": ["仙台市青葉区","仙台市宮城野区","仙台市太白区","仙台市泉区","仙台市若林区","石巻市","大崎市","名取市","多賀城市"],
-      "静岡県": ["静岡市葵区","静岡市駿河区","静岡市清水区","浜松市中央区","浜松市浜名区","沼津市","富士市","藤枝市","焼津市","三島市"],
-      "茨城県": ["水戸市","つくば市","土浦市","日立市","ひたちなか市","古河市","取手市","神栖市"],
+      "山口県": ["下関市","山口市","宇部市","周南市","岩国市","防府市"],
+      "徳島県": ["徳島市","阿南市","鳴門市","吉野川市"],
+      "香川県": ["高松市","丸亀市","三豊市","坂出市"],
+      "愛媛県": ["松山市","今治市","新居浜市","西条市","宇和島市"],
+      "高知県": ["高知市","南国市","四万十市","香南市"],
+      "福岡県": ["福岡市博多区","福岡市中央区","福岡市東区","福岡市南区","福岡市早良区","福岡市西区","福岡市城南区","北九州市小倉北区","北九州市小倉南区","北九州市八幡西区","北九州市八幡東区","北九州市門司区","北九州市戸畑区","北九州市若松区","久留米市","春日市","大野城市","飯塚市","大牟田市"],
+      "佐賀県": ["佐賀市","唐津市","鳥栖市","伊万里市"],
+      "長崎県": ["長崎市","佐世保市","諫早市","大村市"],
+      "熊本県": ["熊本市中央区","熊本市東区","熊本市西区","熊本市南区","熊本市北区","八代市","合志市","荒尾市"],
+      "大分県": ["大分市","別府市","中津市","日田市","佐伯市"],
+      "宮崎県": ["宮崎市","都城市","延岡市","日向市"],
+      "鹿児島県": ["鹿児島市","霧島市","鹿屋市","薩摩川内市","姶良市"],
       "沖縄県": ["那覇市","沖縄市","浦添市","宜野湾市","うるま市","名護市","豊見城市","糸満市"],
       // South Korea (KR - 14 Metropolitan Cities & Provinces, 89 Administrative Districts)
       "首爾特別市": ["江南區","瑞草區","松坡區","麻浦區","龍山區","江西區","冠岳區","蘆原區","永登浦區","銅雀區","城東區","廣津區","東大門區","恩平區","鐘路區","中區","九老區","衿川區","陽川區","江東區","中浪區","城北區","江北區","道峰區","西大門區"],
@@ -5223,7 +5302,7 @@
       const prevVal = selectEl.value;
       const targetCountry = countryCode || (countrySelect ? countrySelect.value : "TW") || "TW";
       const cities = targetCountry === "ALL"
-        ? [...COUNTRY_CITY_GROUPS.TW, ...COUNTRY_CITY_GROUPS.JP, ...COUNTRY_CITY_GROUPS.KR]
+        ? [...COUNTRY_CITY_GROUPS.TW, ...COUNTRY_CITY_GROUPS.JP]
         : (COUNTRY_CITY_GROUPS[targetCountry] || COUNTRY_CITY_GROUPS.TW);
 
       selectEl.innerHTML = "";
@@ -6763,7 +6842,7 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261027_twjp_v22_auto";
+    const ARCHIVE_CACHE_VERSION = "20261028_verified_twjp_supa_v26";
 
     const jpGsiAddressCoordCache = new Map();
 
@@ -6895,48 +6974,45 @@
     const EMBEDDED_JPKR_PREPARED = [];
     const EMBEDDED_JPKR_MAP = new Map();
 
+    // Client-side 4-Stage Real Incident & URL Verification Gate
+    function isVerifiedRealIncidentClient(r) {
+      if (!r || typeof r !== "object") return false;
+      const url = String(r.source_url || "").trim();
+      if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(url)) return false;
+      const reason = String(r.reason || "");
+      const addr = String(r.address || "");
+      const city = String(r.city || "").replace(/台/g, "臺").trim();
+      const fullText = `${addr} ${reason} ${r.source || ""}`;
+      if (/UR賃貸住宅.*競売BIT|グランメゾン.*UR|ライオンズマンション.*UR|プラウド.*UR|ブリリア.*UR|已經營|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|けが人なし|死者なし/i.test(fullText)) {
+        return false;
+      }
+      if (/錦新大樓/.test(addr) && city !== "臺北市") return false;
+      if (/西寧國宅|西寧大樓/.test(addr) && city !== "臺北市") return false;
+      if (/城中城/.test(addr) && city !== "高雄市") return false;
+      if (/維冠金龍|維冠大樓/.test(addr) && city !== "臺南市") return false;
+      if (/東星大樓/.test(addr) && city !== "臺北市") return false;
+      if (/林肯大郡/.test(addr) && city !== "新北市") return false;
+      if (!/死|亡|屍|殺|命案|輕生|墜樓|跳樓|燒炭|上吊|自縊|火警|火災|氣爆|一氧化碳|遺體|遺体|孤獨死|孤独死|変死|自殺|心肺停止|法拍|競売|特別募集|特定物件|心理的瑕疵/i.test(fullText)) {
+        return false;
+      }
+      return true;
+    }
+
     function ensureJpKrRecordsPresent(records = []) {
       const list = [];
       const seenIds = new Set();
-      let jpCount = 0;
+      const seenUrls = new Set();
       if (Array.isArray(records)) {
         for (const rawR of records) {
-          if (!rawR) continue;
+          if (!rawR || !rawR.address) continue;
           const idStr = String(rawR.id || "");
           if (rawR.country === "KR" || /^kr-/i.test(idStr)) continue;
-          const r = (!rawR.address && rawR.a)
-            ? {
-                ...rawR,
-                country: "JP",
-                city: rawR.c || rawR.city || "東京都",
-                district: rawR.d || rawR.district || "新宿区",
-                doorplate_address: rawR.a,
-                address: `${rawR.a}（${rawR.n || "集合住宅"}）`,
-                category: rawR.t || "法拍與其他",
-                incident_date: rawR.date || "2023-06-15",
-                reason: rawR.s || "",
-                source: rawR.src || "大島てる（Oshimaland 事故物件公示サイト）",
-                media_verification: rawR.src || "大島てる（Oshimaland 事故物件公示サイト）",
-                source_url: "https://www.oshimaland.co.jp/"
-              }
-            : rawR;
-          if (!r.address) continue;
-          list.push(r);
+          if (!isVerifiedRealIncidentClient(rawR)) continue;
+          const srcUrl = String(rawR.source_url || "").trim();
+          if (seenUrls.has(srcUrl)) continue;
+          seenUrls.add(srcUrl);
+          list.push(rawR);
           if (idStr) seenIds.add(idStr);
-          if (r.country === "JP" || /^jp-/i.test(idStr)) {
-            jpCount++;
-          }
-        }
-      }
-      // Only fall back to embedded JP records if zero JP records were loaded from API / JSON
-      if (jpCount === 0) {
-        for (const intlRec of EMBEDDED_JPKR_PREPARED) {
-          const idStr = String(intlRec.id);
-          if (!seenIds.has(idStr)) {
-            list.push(intlRec);
-            seenIds.add(idStr);
-            jpCount++;
-          }
         }
       }
       return filterOutTakedownRecords(list);
@@ -6957,9 +7033,9 @@
     const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
     // ============================================================================
-    // Standalone Browser IndexedDB Vault v11 (Protects against code rollbacks & syncs with crawler_vault_backup.json)
+    // Standalone Browser IndexedDB Vault v20 (Strictly verified URL-backed records only)
     // ============================================================================
-    const IDB_VAULT_NAME = "tw_haunted_standalone_db_v13";
+    const IDB_VAULT_NAME = "tw_haunted_verified_db_v21";
     const IDB_STORE_NAME = "records_vault";
     const TAKEDOWN_LOCAL_KEY = "tw_haunted_takedown_blacklist_v1";
 
@@ -7031,16 +7107,21 @@
 
         const existingIds = new Set(allRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : r.__key)));
         const existingAddrs = new Set(allRecords.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
+        const existingUrls = new Set(allRecords.map(r => String(r.source_url || "").trim()).filter(Boolean));
         const newPrepared = [];
 
         for (let i = 0; i < rows.length; i++) {
           const r = rows[i];
           if (!r || !r.address || !r.lat || !r.lng) continue;
+          // Strictly require 4-stage real incident & URL verification on Supabase rows
+          if (!isVerifiedRealIncidentClient(r)) continue;
+          const rurl = String(r.source_url || "").trim();
           const rid = String(r.id);
           const raddr = String(r.address || "").replace(/台/g, "臺").trim();
-          if (existingIds.has(rid) || existingAddrs.has(raddr)) continue;
+          if (existingIds.has(rid) || existingAddrs.has(raddr) || existingUrls.has(rurl)) continue;
           existingIds.add(rid);
           existingAddrs.add(raddr);
+          existingUrls.add(rurl);
           const bldgMatch = raddr.match(/（([^）]+)）|\(([^)]+)\)/);
           const enriched = {
             ...r,
@@ -7656,6 +7737,18 @@
         if (el) el.textContent = cStr;
         if (mEl) mEl.textContent = cStr;
       });
+
+      // Dynamically sync welcome modal descriptions with real verified TW & JP counts
+      const twTotal = authoritativeCountryCategoryCounts?.TW?.ALL || allRecords.filter(r => inferCountry(r) === "TW").length;
+      const jpTotal = authoritativeCountryCategoryCounts?.JP?.ALL || allRecords.filter(r => inferCountry(r) === "JP").length;
+      const wTw = document.getElementById("welcome-tw-desc");
+      const wJp = document.getElementById("welcome-jp-desc");
+      if (wTw && twTotal > 0) {
+        wTw.textContent = `全臺 22 縣市 · 368 鄉鎮市區 · 已查證 ${twTotal.toLocaleString()} 筆新聞與法拍實證卷宗`;
+      }
+      if (wJp && jpTotal > 0) {
+        wJp.textContent = `全境 47 都道府縣 · 已查證 ${jpTotal.toLocaleString()} 筆新聞與官方公開實證卷宗`;
+      }
     }
 
     let currentPage = 1;

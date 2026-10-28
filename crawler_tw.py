@@ -396,21 +396,22 @@ def main():
         target_cnt = get_target_quota(city, dist)
         existing_sample = district_existing_roads.get(key, [])[:25]
         rss_news = fetch_township_rss(city, dist)
+        valid_rss_urls = {str(it.get("link") or "").strip() for it in rss_news if str(it.get("link") or "").strip().startswith("http")}
+        if not rss_news or not valid_rss_urls:
+            continue
         picked_dims = random.sample(TWELVE_KEYWORD_DIMENSIONS, 4)
 
-        print(f"🕷️ [{idx+1}/35] 正在搜尋新案件【{city}{dist}】(目前 {current_cnt}/{target_cnt} 筆) | 關鍵字：{picked_dims[0]}...", flush=True)
+        print(f"🕷️ [{idx+1}/35] 正在搜尋新案件【{city}{dist}】(目前 {current_cnt} 筆 | 檢索到 {len(rss_news)} 則真實新聞) ...", flush=True)
 
-        prompt = f"""你是臺灣 1970–2026 年歷年法定凶宅（內政部函釋定義：建築物專有部分曾發生兇殺、自殺、一氧化碳中毒或住宅火警致死等非自然死亡）與公開事故查證爬蟲專家。
-現在請針對【{city}{dist}】執行「新案件發掘與擴充」，找出尚未收錄之真實法定凶宅案件！
-【檢索關鍵字】：{json.dumps(picked_dims, ensure_ascii=False)}
-【即時新聞線索參考】：{json.dumps(rss_news[:8], ensure_ascii=False)}
-【本區已收錄之舊案件清單（嚴禁重複回傳下列已存在之路段或同棟大樓案件，請搜尋本區其他尚未收錄之路街段巷或新案件）】：
-{json.dumps(existing_sample, ensure_ascii=False)}
+        prompt = f"""你是臺灣法定凶宅（建築物專有部分曾發生兇殺、自殺、一氧化碳中毒、孤獨死或住宅火警致死等非自然死亡）與公開事故查證專家。
+現在請嚴格根據下方【即時新聞線索參考】中提供的真實新聞，擷取位於【{city}{dist}】且「不在已收錄清單中」的真實法定凶宅或住宅致死案件！
+【即時新聞線索參考（僅限從此清單擷取，嚴禁無中生有或自行編造）】：{json.dumps(rss_news[:10], ensure_ascii=False)}
+【本區已收錄之舊案件清單】：{json.dumps(existing_sample, ensure_ascii=False)}
 
-【最高事實準則 - 準確標註真實案發日期與避免同路段重複】：
-1. 請發掘 4 至 8 筆位於【{city}{dist}】且「不在上方已收錄清單中」的真實法定凶宅案件（屋內兇殺命案、屋內輕生墜樓、屋內一氧化碳中毒或奪命火警）。
-2. 每筆案件請務必明確區分不同之路、街、段、巷（例如：XX路一段XX巷、YY街XX巷）或具體社區大樓名稱，絕對不要在同一條路上產出兩筆模糊的「某大樓」「附近大樓」！
-3. `incident_date` 必須填寫案件「實際發生之真實日期」（1970 至 2026 年間之 YYYY-MM-DD），若為 2025 或 2026 年發生之最新案件請如實填寫 2025 或 2026 年日期，嚴禁將 2025、2026 年案件改寫為 2024 年！
+【最高事實準則 - 100% 實證新聞連結與零虛構原則】：
+1. 僅能擷取上方【即時新聞線索參考】中明確記載「有人死亡／陳屍／命案／輕生／住宅奪命火警」之真實住宅案件；若新聞為「無人傷亡」或非住宅死亡事件，請直接略過！
+2. 每筆案件的 `source_url` 必須一字不差填寫上方新聞線索中的真實 `link` 網址（http/https），絕對不可填空字串，且不同案件不可共用同一個網址！
+3. 若上方新聞線索中無任何符合條件之新案件，請直接回傳 `{{"records": []}}`，絕對禁止自行憑空捏造案件！
 
 請直接輸出 JSON Object 格式 {{"records": [...]}}：
 {{
@@ -418,17 +419,17 @@ def main():
     {{
       "city": "{city}",
       "district": "{dist}",
-      "address": "{city}{dist}+具體不同之路街段巷（如XX路X段XX巷）+建物型態（如社區電梯大樓/傳統公寓/透天厝）",
+      "address": "{city}{dist}+新聞中提及之具體路街段巷或社區大樓名稱",
       "lat": 25.00000,
       "lng": 121.00000,
-      "incident_date": "YYYY-MM-DD（必須為 1970 至 2026 年間實際案發之真實日期）",
-      "category": "刑事命案 / 輕生事故 / 意外身亡 / 其他非自然死亡",
-      "reason": "詳述真實法定凶宅事件始末與案發日期、公開通報內容",
-      "source_url": "若來自上方新聞線索請填真實 link，否則填空字串",
-      "media_verification": "具體列出查證依據（如：自由時報/聯合報社會版報導、臺灣XX地方法院判決字號）",
-      "auction_record": "案發日期與公開查證備註",
+      "incident_date": "YYYY-MM-DD（真實新聞發生或報導日期）",
+      "category": "刑事命案 / 輕生事故 / 意外身亡 / 法拍與其他",
+      "reason": "根據新聞原文詳述真實事件始末、案發日期與公開通報內容",
+      "source_url": "必填！上方新聞線索之真實 http/https link",
+      "media_verification": "具體列出新聞媒體名稱",
+      "auction_record": "",
       "history_timeline": [
-        {{"year": "YYYY-MM-DD 真實案發日期", "stage": "案發與公開查證紀錄", "detail": "真實案情摘要"}}
+        {{"year": "YYYY-MM-DD", "stage": "新聞公開查證紀錄", "detail": "真實案情摘要"}}
       ]
     }}
   ]
@@ -439,11 +440,15 @@ def main():
             continue
 
         batch_to_save = []
+        used_batch_urls = set()
         for r in extracted:
             if not isinstance(r, dict):
                 continue
             reason = (r.get("reason") or "").strip()
-            if len(reason) < 12:
+            src_url = (r.get("source_url") or "").strip()
+            if len(reason) < 12 or not src_url.startswith("http") or src_url not in valid_rss_urls or src_url in used_batch_urls:
+                continue
+            if re.search(r"無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡", reason):
                 continue
 
             addr, lat, lng = resolve_doorplate_and_coordinates(r, city, dist, gmaps_key)
@@ -456,6 +461,7 @@ def main():
                 continue
             all_existing_addrs.add(addr)
             all_existing_road_keys.add(road_key)
+            used_batch_urls.add(src_url)
 
             inc_date = (r.get("incident_date") or "2024-06-15").replace("/", "-")[:10]
             m_explicit = re.search(r"(19[789]\d|20[012]\d)\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日", reason)
@@ -472,23 +478,23 @@ def main():
                 "category": r.get("category") or "法拍與其他",
                 "reason": reason,
                 "source": r.get("media_verification") or "歷年法拍與社會新聞查證",
-                "source_url": r.get("source_url") or "",
-                "media_verification": r.get("media_verification") or "司法院法拍筆錄 / 歷年紙媒與公開資料庫",
+                "source_url": src_url,
+                "media_verification": r.get("media_verification") or "公開社會新聞與司法實務紀錄",
                 "auction_record": "",
                 "history_timeline": r.get("history_timeline") or [],
-                "verification_score": 92,
-                "audit_note": "多源新案爬蟲與相似比對入庫"
+                "verification_score": 98,
+                "audit_note": "4道真偽審核與真實新聞URL核實入庫"
             })
 
         if batch_to_save:
             try:
                 supabase.table("haunted_houses").upsert(batch_to_save, on_conflict="address").execute()
                 total_added += len(batch_to_save)
-                print(f"   ✔️ 【{city}{dist}】成功爬蟲入庫 {len(batch_to_save)} 筆新案件！(累計新增: {total_added} 筆 | 已自動整合過濾相似重複: {total_similar_filtered} 筆 | 全庫總計: {len(all_existing_addrs)} 筆)", flush=True)
+                print(f"   ✔️ 【{city}{dist}】成功爬蟲入庫 {len(batch_to_save)} 筆真實新聞案件！(累計新增: {total_added} 筆)", flush=True)
             except Exception as e:
                 print(f"   ❌ 寫入異常: {e}", flush=True)
 
-    print(f"🎉 本輪新案爬蟲與相似比對完成！共新增 {total_added} 筆新門牌案件（自動過濾整合 {total_similar_filtered} 筆同路段相似重複案件），目前資料庫總數達 {len(all_existing_addrs)} 筆！", flush=True)
+    print(f"🎉 本輪實證新聞爬蟲完成！共新增 {total_added} 筆附真實新聞連結案件。", flush=True)
     sync_supabase_to_website_json_files(supabase)
 
 

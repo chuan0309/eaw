@@ -26,32 +26,32 @@ export function buildLocalizedIndexHtml(baseHtml, pageKey = "zh-root", baseUrl =
   const metaByKey = {
     "zh-root": {
       lang: "zh-Hant-TW",
-      title: "凶宅地圖｜台灣・日本事故物件查詢與公開法院法拍實證資料庫",
-      desc: "整合台灣與日本超過 54,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災、孤獨死）與法院法拍點交紀錄之空間查詢資料庫。",
+      title: "凶宅地圖｜台灣・日本全境 47 都道府縣事故物件查詢與新聞法拍實證資料庫",
+      desc: "整合台灣全境 22 縣市與日本全境 47 都道府縣之真實新聞報導、法院法拍公告與公營住宅（UR/JKK）實證事故物件空間查詢資料庫。",
       url: `${cleanBase}/`
     },
     "zh-tw": {
       lang: "zh-Hant-TW",
-      title: "凶宅地圖｜台灣・日本事故物件查詢與公開法院法拍實證資料庫",
-      desc: "整合台灣與日本超過 54,000 筆凶宅地圖、事故物件查詢、屋內非自然死亡（他殺、自殺、奪命火災、孤獨死）與法院法拍點交紀錄之空間查詢資料庫。",
+      title: "凶宅地圖｜台灣・日本全境 47 都道府縣事故物件查詢與新聞法拍實證資料庫",
+      desc: "整合台灣全境 22 縣市與日本全境 47 都道府縣之真實新聞報導、法院法拍公告與公營住宅（UR/JKK）實證事故物件空間查詢資料庫。",
       url: `${cleanBase}/zh-tw/`
     },
     ja: {
       lang: "ja",
-      title: "事故物件マップ｜日本・台湾の心理的瑕疵・競売BIT・報道検証データベース",
-      desc: "日本全国50,000件以上および台湾の事故物件（大島てる・競売BIT3点セット・成仏不動産・UR特別募集・報道記録）を網羅した空間検索データベース。",
+      title: "事故物件マップ｜日本全国47都道府県・台湾の報道検証・競売BIT・公的記録データベース",
+      desc: "日本全国47都道府県および台湾全土の報道検証済み事故物件（全国紙・地方紙報道、UR特別募集住宅、JKK特定物件、競売BIT）を網羅した空間検索データベース。",
       url: `${cleanBase}/ja/`
     },
     ko: {
       lang: "ko",
-      title: "사고매물 지도｜대만·일본 부동산 사고 및 법원경매 검증 데이터베이스",
-      desc: "대만과 일본의 54,000건 이상 부동산 사고物件 및 법원 경매 기록을 교차 검증한 공간 검색 데이터베이스.",
+      title: "사고매물 지도｜대만·일본 전국 47개 도도부현 부동산 사고 및 뉴스·경매 검증 데이터베이스",
+      desc: "대만 전역 및 일본 전국 47개 도도부현의 실제 뉴스 보도와 법원 경매 기록을 교차 검증한 공간 검색 데이터베이스.",
       url: `${cleanBase}/ko/`
     },
     en: {
       lang: "en",
-      title: "Property Incident Map | Taiwan & Japan Stigmatized Property & Court Auction Archive",
-      desc: "Spatial verification database covering over 54,000 verified property incidents across Taiwan and Japan, cross-referenced with court auctions and news archives.",
+      title: "Property Incident Map | Taiwan & All 47 Prefectures of Japan Verified Property Incident Archive",
+      desc: "Spatial verification database covering news-verified property incidents across all 22 cities/counties of Taiwan and all 47 prefectures of Japan.",
       url: `${cleanBase}/en/`
     }
   };

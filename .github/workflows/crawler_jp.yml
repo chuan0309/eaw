@@ -1,36 +1,40 @@
-name: Japan Jiko Bukken Crawler (日本全境獨立爬蟲)
+name: Japan 47-Prefectures Verified News Crawler
 
 on:
   schedule:
-    - cron: '15 */6 * * *'
+    - cron: '20 */6 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  crawl-japan:
+  crawl_japan_verified:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+        run: npm install --no-audit --no-fund
 
-      - name: Run Japan Crawler (15 Prefectures / 285 Districts / 50,000 Cases)
+      - name: Run Japan 47-Prefecture Verified News Crawler & 4-Stage Purification
         run: python crawler_jp.py
 
-      - name: Commit and Push updated archive
+      - name: Commit and Push updated verified archive
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -A calibrated_archive.json public/calibrated_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json
-          git diff --staged --quiet || (git commit -m "Auto-update: Japan 285 districts 50,000 cases crawler [skip ci]" && git pull --rebase --autostash origin main && git push)
+          git config --local user.email "crawler-bot@chuancn.org"
+          git config --local user.name "Verified Property Incident Bot"
+          git add calibrated_archive.json public/calibrated_archive.json jp_verified_archive.json public/jp_verified_archive.json crawler_vault_backup.json public/crawler_vault_backup.json initial_boot_records.json public/initial_boot_records.json sitemap.xml public/sitemap.xml
+          git diff --staged --quiet || git commit -m "chore(data): update 47-prefecture Japan & Taiwan URL-verified property incident archive"
+          git push

@@ -383,8 +383,9 @@ function loadAllUnifiedRecords() {
 
     const unionMap = new Map();
     const seenSourceUrls = new Set();
+    const coordGridMap = new Map();
     let jpLoadedCount = 0;
-    for (const rawRec of [...crawlerBackupList, ...jpVerifiedList, ...workspaceList, ...standaloneVaultList]) {
+    for (const rawRec of [...workspaceList, ...crawlerBackupList, ...jpVerifiedList, ...standaloneVaultList]) {
       if (!rawRec || !rawRec.address) continue;
       const recId = String(rawRec.id !== undefined && rawRec.id !== null ? rawRec.id : "");
       if (rawRec.country === "KR" || /^kr-/i.test(recId)) continue;
@@ -393,17 +394,34 @@ function loadAllUnifiedRecords() {
       const srcUrl = String(rawRec.source_url || "").trim();
       if (!srcUrl.startsWith("http") || seenSourceUrls.has(srcUrl)) continue;
 
-      const recAddr = String(rawRec.address || "").replace(/台/g, "臺").trim();
-      const recDoor = String(rawRec.doorplate_address || "").replace(/台/g, "臺").trim();
+      const recAddr = String(rawRec.address || "").replace(/巿/g, "市").replace(/台(?!東区|東一|東二|東三|東四|原|町)/g, "臺").trim();
+      const recDoor = String(rawRec.doorplate_address || recAddr.replace(/（.*）|\(.*\)/g, "")).replace(/巿/g, "市").replace(/台(?!東区|東一|東二|東三|東四|原|町)/g, "臺").trim();
       if (takedownSet.has(recId) || takedownSet.has(recAddr) || (recDoor && takedownSet.has(recDoor))) {
         continue;
       }
-      const key = recId || `${rawRec.city || ""}_${rawRec.district || ""}_${recAddr}`;
-      if (!unionMap.has(key)) {
-        unionMap.set(key, rawRec);
+      const ctry = rawRec.country === "JP" || /^jp-/i.test(recId) ? "JP" : "TW";
+      const cityNorm = ctry === "TW" ? String(rawRec.city || "").replace(/台/g, "臺").trim() : String(rawRec.city || "").trim();
+      const distNorm = String(rawRec.district || "").trim();
+      const doorKey = `${ctry}_${cityNorm}_${distNorm}_${recDoor}`;
+      const coordKey = `${Math.round(Number(rawRec.lat) * 4500)}_${Math.round(Number(rawRec.lng) * 4500)}`;
+      const existingKey = unionMap.has(doorKey) ? doorKey : (coordGridMap.get(coordKey) || "");
+
+      if (!existingKey) {
+        unionMap.set(doorKey, { ...rawRec, address: recAddr, doorplate_address: recDoor });
+        coordGridMap.set(coordKey, doorKey);
         seenSourceUrls.add(srcUrl);
-        if (rawRec.country === "JP" || /^jp-/i.test(recId)) {
+        if (ctry === "JP") {
           jpLoadedCount++;
+        }
+      } else {
+        const ex = unionMap.get(existingKey);
+        if (ex && rawRec.reason && ex.reason && !ex.reason.includes(rawRec.reason.slice(0, 22))) {
+          ex.reason = `${ex.reason} ｜ 【交叉查證整合】${rawRec.reason}`.slice(0, 650);
+          if (rawRec.media_verification && ex.media_verification && !ex.media_verification.includes(rawRec.media_verification)) {
+            ex.media_verification = `${ex.media_verification} · ${rawRec.media_verification}`;
+          }
+          ex.merged_count = (ex.merged_count || 1) + (rawRec.merged_count || 1);
+          seenSourceUrls.add(srcUrl);
         }
       }
     }
@@ -414,8 +432,9 @@ function loadAllUnifiedRecords() {
       for (const jpRec of verifiedJp) {
         if (!isVerifiedRealIncidentRecord(jpRec)) continue;
         const srcUrl = String(jpRec.source_url || "").trim();
-        if (!unionMap.has(jpRec.id) && !seenSourceUrls.has(srcUrl)) {
-          unionMap.set(jpRec.id, jpRec);
+        const jpDoorKey = `JP_${jpRec.city}_${jpRec.district}_${jpRec.doorplate_address || jpRec.address}`;
+        if (!unionMap.has(jpDoorKey) && !seenSourceUrls.has(srcUrl)) {
+          unionMap.set(jpDoorKey, jpRec);
           seenSourceUrls.add(srcUrl);
         }
       }
@@ -436,7 +455,8 @@ function loadAllUnifiedRecords() {
     if (!r || !r.address || !isVerifiedRealIncidentRecord(r)) continue;
     const srcUrl = String(r.source_url || "").trim();
     if (srcUrl && seenUrlsFinal.has(srcUrl)) continue;
-    const k = String(r.id !== undefined && r.id !== null ? r.id : (r.address + "_" + (r.incident_date || "")));
+    const doorNorm = String(r.doorplate_address || r.address || "").replace(/（.*）|\(.*\)/g, "").replace(/巿/g, "市").trim();
+    const k = `${r.country || "TW"}_${r.city || ""}_${r.district || ""}_${doorNorm}`;
     if (!seenComb.has(k)) {
       seenComb.add(k);
       if (srcUrl) seenUrlsFinal.add(srcUrl);
@@ -2128,10 +2148,10 @@ function getCrawlerStatusSummary(totalCount) {
     lastRunAt: crawlerState.lastRunAt,
     recentDiscovered: crawlerState.recentDiscovered.slice(0, 8),
     sources: [
-      "臺灣：司法院法拍屋公告系統 · 民事/刑事裁判書 · 內政部實價登錄特殊交易",
-      "臺灣：PTT 房版 · Dcard · Mobile01 · 591/樂居事故索引 · LTN/UDN/ETtoday",
-      "日本：大島てる (Oshima Teru) · JikoDB · 裁判所競売 BIT · 国土交通省 REINFOLIB · 全国紙社会報道",
-      "韓國：행정안전부 생활안전지도 (SafeMap) · 대법원 법원경매 · 경찰청 변사통계 · 형사사법포털(CCJS) · 연합뉴스/네이버 사건사고"
+      "臺灣：台灣凶宅網 (unluckyhouse.com 全分區存檔直連爬蟲) · 居易網 · PTT home-sale",
+      "臺灣：司法院法拍屋公告系統 (不點交筆錄) · 民事瑕疵擔保裁判書 · 內政部實價登錄特殊交易",
+      "日本：大島てる (oshimaland.co.jp 事故物件公示照合) · UR特別募集住宅 · 裁判所競売 BIT (3点セット)",
+      "日本：国土交通省 心理的瑕疵ガイドライン · 全国47都道府県 警察/消防/新聞社公開アーカイブ"
     ]
   };
 }
@@ -2279,11 +2299,11 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 35) {
         page === 1 && typeof factCrawler.fetchPublicForumAndCommunityRss === "function"
           ? factCrawler.fetchPublicForumAndCommunityRss(q)
           : Promise.resolve([]),
-        page === 1 && typeof factCrawler.fetchHauntedWebAndForeclosureRss === "function"
-          ? factCrawler.fetchHauntedWebAndForeclosureRss(q)
+        typeof factCrawler.fetchHauntedWebAndForeclosureRss === "function"
+          ? factCrawler.fetchHauntedWebAndForeclosureRss(q, city, district, page)
           : Promise.resolve([])
       ]);
-      for (const a of [...communityRss, ...hauntedRss, ...gnews, ...udn, ...ltn, ...ett, ...bing]) {
+      for (const a of [...hauntedRss, ...communityRss, ...gnews, ...udn, ...ltn, ...ett, ...bing]) {
         rawArticles.push({ article: a, hintCity: city, hintDistrict: district });
       }
     })
@@ -2329,8 +2349,7 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 35) {
       continue;
     }
 
-    // Strict Google Maps Geocoding verification: must resolve to a specific road/building inside the target district
-    let geocodedOk = false;
+    // Try upgrading coordinates via Google Maps Rooftop Geocoding if available, otherwise keep the verified street-corridor coordinates from getTaiwanStreetCorridorCoords
     if (getGoogleMapsApiKey()) {
       try {
         const geoQuery = `${parsed.city}${parsed.district}${parsed.__road || parsed.__community}`;
@@ -2339,11 +2358,10 @@ async function runVerifiedFactCrawlQueries(querySpecs, maxToReturn = 35) {
           parsed.lat = geo.lat;
           parsed.lng = geo.lng;
           parsed.location_accuracy = "ROOFTOP_GEOCODED";
-          geocodedOk = true;
         }
       } catch (e) {}
     }
-    if (!geocodedOk) continue;
+    if (!parsed.lat || !parsed.lng || !isVerifiedRealIncidentRecord(parsed, "TW")) continue;
 
     sigs.forEach(s => seenSigs.add(s));
     delete parsed.__road;
@@ -2467,6 +2485,9 @@ async function runLiveJpKrCrawlBatch(targetCountry = "JP", city = "", district =
     });
     if (crawlerState.recentDiscovered.length > 20) crawlerState.recentDiscovered.pop();
     if (added.length >= maxReturn) break;
+  }
+  if (added.length > 0) {
+    persistNewVerifiedRecordsToDisk(added);
   }
   return added;
 }
@@ -2979,6 +3000,26 @@ async function autoSyncSupabaseToMemory() {
   } catch (e) {}
 }
 
+async function runContinuousBackgroundCrawlerCycle() {
+  if (crawlerState.isBusyBatch) return;
+  crawlerState.isBusyBatch = true;
+  try {
+    const [c, d] = allDistrictPairs[crawlerState.cursorDistrict % allDistrictPairs.length];
+    const p = (crawlerState.cursorPage % 6) + 1;
+    crawlerState.currentTarget = `背景持續巡檢：台灣凶宅網 (unluckyhouse.com ${c}${d}) ＋ 日本大島てる (oshimaland.co.jp)`;
+    await Promise.all([
+      runVerifiedFactCrawlQueries([{ q: `${c.slice(0, 2)} ${d} 凶宅 命案`, page: p, city: c, district: d }], 10),
+      runLiveJpKrCrawlBatch("JP", "", "", "", 6)
+    ]);
+    crawlerState.cursorDistrict += 1;
+    crawlerState.cursorTopic += 1;
+    crawlerState.cursorPage += 1;
+  } catch (_e) {
+  } finally {
+    crawlerState.isBusyBatch = false;
+  }
+}
+
 app.listen(PORT, "0.0.0.0", () => {
   const records = loadAllUnifiedRecords();
   getUnifiedStats(records);
@@ -2986,6 +3027,7 @@ app.listen(PORT, "0.0.0.0", () => {
     autoSyncSupabaseToMemory();
   });
   setInterval(autoSyncSupabaseToMemory, 180000);
+  setInterval(runContinuousBackgroundCrawlerCycle, 150000);
   if (!fs.existsSync(path.join(__dirname, "sitemap.xml")) || !fs.existsSync(path.join(__dirname, "public", "initial_boot_records.json"))) {
     setImmediate(() => {
       try {
@@ -2998,6 +3040,7 @@ app.listen(PORT, "0.0.0.0", () => {
   }
   console.log(`Server listening on http://0.0.0.0:${PORT} (${records.length} active records ready in RAM)`);
 });
+
 
 
 

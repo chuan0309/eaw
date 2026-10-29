@@ -3053,10 +3053,12 @@
       if (currentLang === "ko" && item.i18n && item.i18n.ko && item.i18n.ko.doorplate_address) {
         return String(item.i18n.ko.doorplate_address);
       }
-      const raw = String(item.doorplate_address || item.address || "").replace(/台/g, "臺");
+      const raw = String(item.doorplate_address || item.address || "")
+        .replace(/巿/g, "市")
+        .replace(/台(?!東区|東一|東二|東三|東四|原|町)/g, "臺");
       return raw
         .replace(/[（(].*$/, "")
-        .replace(/(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)/g, "")
+        .replace(/^(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)(?=[一-龥])/g, "")
         .replace(/某(?:社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅|三層|四層|連棟|平房|獨棟|神壇|五金|宮廟|生技).*$/g, "")
         .replace(/(?:三層半透天厝|與鄰近.*|及巷口周邊|事發住宅建物.*)$/g, "")
         .trim() || raw;
@@ -3076,6 +3078,8 @@
         item.district,
         String(item.city || "").replace(/台/g, "臺"),
         String(item.city || "").replace(/臺/g, "台"),
+        String(item.city || "").replace(/[縣市]$/, ""),
+        String(item.district || "").replace(/[區市鎮鄉]$/, ""),
         tCity(item.city),
         tDistrict(item.district),
         item.i18n?.[currentLang]?.city,
@@ -3086,17 +3090,20 @@
         item.i18n?.ja?.district,
         item.i18n?.ko?.city,
         item.i18n?.ko?.district
-      ].filter(Boolean);
+      ].filter(p => p && String(p).length >= 2);
 
       let cleaned = door;
       for (const prefix of prefixesToStrip) {
-        cleaned = cleaned.split(prefix).join("");
+        if (cleaned.startsWith(prefix)) {
+          cleaned = cleaned.slice(prefix.length).trim();
+        }
       }
       cleaned = cleaned
         .replace(/[（(][^）)]*[）)]/g, " ")
-        .replace(/^(?:臺北市|台北市|新北市|桃園市|臺中市|台中市|臺南市|台南市|高雄市|基隆市|新竹市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義市|嘉義縣|屏東縣|宜蘭縣|花蓮縣|臺東縣|台東縣|澎湖縣|金門縣|連江縣|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)+/g, "")
+        .replace(/^(?:臺北市|台北市|新北市|桃園市|桃園縣|臺中市|台中市|臺南市|台南市|高雄市|基隆市|新竹市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義市|嘉義縣|屏東縣|宜蘭縣|花蓮縣|臺東縣|台東縣|澎湖縣|金門縣|連江縣|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)+/g, "")
         .replace(/^[一-龥]{1,3}[區市鎮鄉]/, "")
         .replace(/^[^\d「]*[里村]/, "")
+        .replace(/^(?:(?!(?:臺灣大道|臺北大道|臺東路|臺西路))(?:臺|台|北|新|桃|中|南|高|基|竹|嘉|出|傳|陳屍|位於|坐落於|坐落))(?=[一-龥]{2,5}(?:路|街|大道|巷))/, "")
         .replace(/某(?:社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅|三層|四層|連棟|平房|獨棟).*$/g, "")
         .replace(/\s+/g, " ")
         .trim();
@@ -7326,11 +7333,20 @@
 
     function areSameIncidentClient(r1, r2) {
       if (!r1 || !r2) return false;
+      const lat1 = parseFloat(r1.lat);
+      const lng1 = parseFloat(r1.lng);
+      const lat2 = parseFloat(r2.lat);
+      const lng2 = parseFloat(r2.lng);
+      if (!isNaN(lat1) && !isNaN(lng1) && !isNaN(lat2) && !isNaN(lng2)) {
+        if (Math.abs(lat1 - lat2) < 0.00018 && Math.abs(lng1 - lng2) < 0.00018) return true;
+      }
+
       const isIntl1 = r1.country === "JP" || r1.country === "KR" || /^(jp|kr)-/i.test(String(r1.id || ""));
       const isIntl2 = r2.country === "JP" || r2.country === "KR" || /^(jp|kr)-/i.test(String(r2.id || ""));
       if (isIntl1 || isIntl2) {
-        if (r1.id && r2.id && String(r1.id) !== String(r2.id)) return false;
-        return String(r1.address || "").trim() === String(r2.address || "").trim();
+        const d1 = String(r1.doorplate_address || r1.address || "").replace(/（.*）|\(.*\)/g, "").trim();
+        const d2 = String(r2.doorplate_address || r2.address || "").replace(/（.*）|\(.*\)/g, "").trim();
+        return Boolean(d1 && d1 === d2);
       }
 
       const c1 = String(r1.city || "").replace(/台/g, "臺").trim();
@@ -7343,16 +7359,17 @@
       const u2 = String(r2.source_url || "").split("?")[0].trim();
       if (u1 && u2 && u1.startsWith("http") && u1 === u2 && u1.replace(/^https?:\/\/[^/]+/, "").length > 16) return true;
 
-      const door1 = normalizeTaiwanRoadClient(r1.doorplate_address || r1.address || "");
-      const door2 = normalizeTaiwanRoadClient(r2.doorplate_address || r2.address || "");
+      const door1 = normalizeTaiwanRoadClient(r1.doorplate_address || r1.address || "").replace(/（.*）|\(.*\)/g, "").trim();
+      const door2 = normalizeTaiwanRoadClient(r2.doorplate_address || r2.address || "").replace(/（.*）|\(.*\)/g, "").trim();
+      if (door1 && door1 === door2) return true;
+
       const num1 = door1.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?\d+號)/);
       const num2 = door2.match(/([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?\d+號)/);
+      if (num1 && num2 && num1[1] === num2[1]) return true;
 
       const t1 = Date.parse(`${String(r1.incident_date || "").slice(0, 10)}T00:00:00Z`);
       const t2 = Date.parse(`${String(r2.incident_date || "").slice(0, 10)}T00:00:00Z`);
       const daysDiff = (!isNaN(t1) && !isNaN(t2)) ? Math.abs(t1 - t2) / 86400000 : 9999;
-
-      if (num1 && num2 && num1[1] === num2[1] && daysDiff <= 180) return true;
 
       const txt1 = `${r1.reason || ""} ${r1.source || ""}`;
       const txt2 = `${r2.reason || ""} ${r2.source || ""}`;
@@ -7416,9 +7433,15 @@
           const winner = getClientAuthorityScore(cand) > getClientAuthorityScore(ex) ? { ...cand } : { ...ex };
           const loser = winner === cand ? ex : cand;
           if (!winner.source_url && loser.source_url) winner.source_url = loser.source_url;
-          if ((loser.reason || "").length > (winner.reason || "").length && !winner.source_url) {
+          if (loser.reason && winner.reason && !winner.reason.includes(loser.reason.slice(0, 22))) {
+            winner.reason = `${winner.reason} ｜ 【交叉查證整合】${loser.reason}`.slice(0, 650);
+          } else if ((loser.reason || "").length > (winner.reason || "").length) {
             winner.reason = loser.reason;
           }
+          if (loser.media_verification && winner.media_verification && !winner.media_verification.includes(loser.media_verification)) {
+            winner.media_verification = `${winner.media_verification} · ${loser.media_verification}`;
+          }
+          winner.merged_count = (winner.merged_count || 1) + (loser.merged_count || 1);
           bucket[dupIdx] = winner;
         }
       }

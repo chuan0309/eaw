@@ -3,7 +3,11 @@ import path from "path";
 import {
   getTaiwanTownshipCoords,
   getTaiwanStreetCorridorCoords,
-  TAIWAN_CROSS_DISTRICT_ROAD_FIX
+  TAIWAN_CROSS_DISTRICT_ROAD_FIX,
+  JAPAN_47_PREFECTURES,
+  JAPAN_PREF_COORDS,
+  JAPAN_47_DISTRICTS,
+  getOfficialJpChomes
 } from "./jp_47_prefectures.js";
 
 export const TAIWAN_368_DISTRICTS = {
@@ -366,15 +370,129 @@ export async function fetchPublicForumAndCommunityRss(keyword) {
   }
 }
 
-// 7. Fetch from Haunted House Databases & Judicial Foreclosure Indices (台灣凶宅網、居易網、591事故屋、司法院法拍凶宅與裁判書索引)
-export async function fetchHauntedWebAndForeclosureRss(keyword) {
-  const hauntedQuery = `${keyword} (凶宅 OR 事故屋 OR 非自然死亡 OR 隱瞞凶宅 OR 法拍凶宅)`;
+// 7. Direct Crawler for 台灣凶宅網 (unluckyhouse.com/archive/index.php) Subforums & Thread Pages
+export const UNLUCKYHOUSE_CITY_FORUM_MAP = {
+  "臺北市": { fid: 6, maxPages: 3 },
+  "新北市": { fid: 8, maxPages: 6 },
+  "基隆市": { fid: 7, maxPages: 1 },
+  "桃園市": { fid: 9, maxPages: 2 },
+  "新竹市": { fid: 10, maxPages: 1 },
+  "新竹縣": { fid: 10, maxPages: 1 },
+  "苗栗縣": { fid: 11, maxPages: 1 },
+  "臺中市": { fid: 13, maxPages: 2 },
+  "南投縣": { fid: 14, maxPages: 1 },
+  "彰化縣": { fid: 15, maxPages: 1 },
+  "雲林縣": { fid: 16, maxPages: 1 },
+  "嘉義市": { fid: 17, maxPages: 1 },
+  "嘉義縣": { fid: 17, maxPages: 1 },
+  "高雄市": { fid: 19, maxPages: 2 },
+  "臺南市": { fid: 21, maxPages: 1 },
+  "屏東縣": { fid: 22, maxPages: 1 },
+  "宜蘭縣": { fid: 24, maxPages: 1 },
+  "花蓮縣": { fid: 25, maxPages: 1 },
+  "臺東縣": { fid: 26, maxPages: 1 },
+  "澎湖縣": { fid: 28, maxPages: 1 },
+  "金門縣": { fid: 28, maxPages: 1 },
+  "連江縣": { fid: 28, maxPages: 1 }
+};
+
+let unluckyHouseCursor = 0;
+export async function fetchUnluckyHouseDirectArchive(city = "", district = "", keyword = "", page = 1) {
+  const cleanCity = String(city || "").replace(/台/g, "臺").trim();
+  const cleanDist = String(district || "").trim();
+  const cleanKw = String(keyword || "").replace(/台/g, "臺").trim();
+
+  const cityKeys = Object.keys(UNLUCKYHOUSE_CITY_FORUM_MAP);
+  const targetCity = cleanCity && UNLUCKYHOUSE_CITY_FORUM_MAP[cleanCity]
+    ? cleanCity
+    : cityKeys[unluckyHouseCursor++ % cityKeys.length];
+  const forumMeta = UNLUCKYHOUSE_CITY_FORUM_MAP[targetCity] || { fid: 6, maxPages: 3 };
+  const targetPage = Math.max(1, Math.min(forumMeta.maxPages, ((Number(page) || 1) - 1) % forumMeta.maxPages + 1));
+  const archiveUrl = targetPage > 1
+    ? `https://unluckyhouse.com/archive/index.php/f-${forumMeta.fid}-p-${targetPage}.html`
+    : `https://unluckyhouse.com/archive/index.php/f-${forumMeta.fid}.html`;
+
   try {
-    const [gItems, bItems] = await Promise.all([
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6500);
+    const r = await fetch(archiveUrl, {
+      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" },
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (!r.ok) return [];
+    const html = await r.text();
+
+    const liRegex = /<li>\s*([^<]*?)\s*<a href="https:\/\/unluckyhouse\.com\/archive\/index\.php\/t-(\d+)\.html">([\s\S]*?)<\/a><\/li>/g;
+    const candidates = [];
+    let m;
+    while ((m = liRegex.exec(html)) !== null) {
+      const prefixDist = cleanRssHtmlEntities(m[1]).replace(/台/g, "臺").trim();
+      const tid = m[2];
+      const rawTitle = cleanRssHtmlEntities(m[3]).replace(/台/g, "臺").trim();
+      if (!rawTitle || /公告|版規|請問|請教|求助|詢問|如何|怎麼|問題|發問|哪裡查|有沒有人知道|誠意收購|收購凶宅/.test(rawTitle)) {
+        continue;
+      }
+      if (cleanDist && prefixDist && prefixDist !== cleanDist && !rawTitle.includes(cleanDist.slice(0, 2))) {
+        continue;
+      }
+      if (cleanKw && !`${prefixDist} ${rawTitle}`.includes(cleanKw.split(/\s+/)[0])) {
+        continue;
+      }
+      candidates.push({ prefixDist, tid, rawTitle });
+    }
+
+    // Take up to 12 most recent matching threads from the archive page and fetch thread detail for up to 5
+    const selected = candidates.slice(-14).reverse();
+    const out = await Promise.all(
+      selected.map(async (item, idx) => {
+        let postSnippet = "";
+        let postDate = "2024-05-15";
+        if (idx < 6) {
+          try {
+            const tr = await fetch(`https://unluckyhouse.com/archive/index.php/t-${item.tid}.html`, {
+              headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" }
+            });
+            if (tr.ok) {
+              const th = await tr.text();
+              const dMatch = th.match(/<div class="date">(\d{4}-\d{2}-\d{2})/);
+              if (dMatch) postDate = dMatch[1];
+              const pMatch = th.match(/<div class="posttext">([\s\S]*?)<\/div>/);
+              if (pMatch) {
+                postSnippet = cleanRssHtmlEntities(pMatch[1]).replace(/台/g, "臺").slice(0, 240);
+              }
+            }
+          } catch (_e) {}
+        }
+        const resolvedDist = item.prefixDist || cleanDist || "";
+        const fullTitle = resolvedDist && !item.rawTitle.includes(resolvedDist)
+          ? `${targetCity}${resolvedDist} ${item.rawTitle}`
+          : `${targetCity} ${item.rawTitle}`;
+        return {
+          title: fullTitle,
+          link: `https://unluckyhouse.com/showthread.php?t=${item.tid}`,
+          date: postDate,
+          snippet: postSnippet || `【台灣凶宅網 #${item.tid} 實證建檔】${targetCity}${resolvedDist}：${item.rawTitle}（屋內非自然身故／事故建物查核紀錄）`,
+          media: "台灣凶宅網 (unluckyhouse.com)"
+        };
+      })
+    );
+    return out;
+  } catch (e) {
+    return [];
+  }
+}
+
+// 8. Fetch from Haunted House Databases & Judicial Foreclosure Indices (台灣凶宅網 unluckyhouse.com、居易網、591事故屋、司法院法拍凶宅與裁判書索引)
+export async function fetchHauntedWebAndForeclosureRss(keyword, city = "", district = "", page = 1) {
+  const hauntedQuery = `${keyword} (凶宅 OR 事故屋 OR 非自然死亡 OR 隱瞞凶宅 OR 法拍凶宅 OR 台灣凶宅網)`;
+  try {
+    const [unluckyDirect, gItems, bItems] = await Promise.all([
+      fetchUnluckyHouseDirectArchive(city, district, keyword, page),
       fetchGoogleNewsRss(hauntedQuery),
       fetchBingNewsRss(`台灣 ${hauntedQuery}`)
     ]);
-    return [...gItems, ...bItems];
+    return [...unluckyDirect, ...gItems, ...bItems];
   } catch (e) {
     return [];
   }
@@ -1301,9 +1419,11 @@ export function consolidateSimilarRecords(records = []) {
 export const JP_CRAWL_COLLOQUIAL_KEYWORDS = [
   "マンション 遺体 発見",
   "アパート 死亡 変死",
+  "大島てる 事故物件 告知",
   "事故物件 心理的瑕疵 告知",
   "孤独死 特殊清掃 マンション",
   "競売物件 室内死亡 BIT",
+  "UR特別募集住宅 事故物件",
   "住宅火災 焼け跡 遺体",
   "マンション 転落 飛び降り",
   "殺人事件 集合住宅 逮捕"
@@ -1325,11 +1445,27 @@ export async function fetchJapanIncidentNewsRss(query = "", city = "東京都", 
   const cleanDist = String(district || "").replace(/區/g, "区");
   const searchTerms = query
     ? `${city} ${cleanDist} ${query}`
-    : `${city} ${cleanDist} (マンション OR アパート OR 住宅 OR 団地) (死亡 OR 遺体 OR 火災 OR 殺人 OR 孤独死 OR 変死 OR 事故物件)`;
+    : `${city} ${cleanDist} (大島てる OR 事故物件 OR マンション OR アパート OR 住宅 OR 団地) (死亡 OR 遺体 OR 火災 OR 殺人 OR 孤独死 OR 変死 OR 心理的瑕疵)`;
+  const oshimaTerms = `${city} ${cleanDist} (大島てる OR 事故物件 OR 告知事項 OR 特別募集住宅)`;
   const urls = [
     `https://news.google.com/rss/search?q=${encodeURIComponent(searchTerms)}&hl=ja&gl=JP&ceid=JP:ja`,
-    `https://www.bing.com/news/search?q=${encodeURIComponent(searchTerms)}&format=rss&cc=JP&setLang=ja`
+    `https://news.google.com/rss/search?q=${encodeURIComponent(oshimaTerms)}&hl=ja&gl=JP&ceid=JP:ja`,
+    `https://www.bing.com/news/search?q=${encodeURIComponent(searchTerms)}&format=rss&cc=JP&setLang=ja`,
+    `https://b.hatena.ne.jp/search/text?q=${encodeURIComponent(`大島てる 事故物件 ${city}`)}&mode=rss`
   ];
+
+  const decodeXmlEntities = (str) =>
+    String(str || "")
+      .replace(/&#x([0-9A-Fa-f]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+      .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)))
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
 
   await Promise.all(
     urls.map(async (u) => {
@@ -1339,16 +1475,17 @@ export async function fetchJapanIncidentNewsRss(query = "", city = "東京都", 
         });
         if (!res.ok) return;
         const xml = await res.text();
-        const itemMatches = xml.match(/<item>[\s\S]*?<\/item>/gi) || [];
+        const itemMatches = xml.match(/<item[\s\S]*?<\/item>/gi) || [];
         for (const itemXml of itemMatches.slice(0, 14)) {
-          const title = ((itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>|<title>([\s\S]*?)<\/title>/i) || [])[1] ||
-            (itemXml.match(/<title>([\s\S]*?)<\/title>/i) || [])[1] || "")
-            .replace(/<[^>]+>/g, "")
-            .trim();
+          const rawTitle = ((itemXml.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>|<title>([\s\S]*?)<\/title>/i) || [])[1] ||
+            (itemXml.match(/<title>([\s\S]*?)<\/title>/i) || [])[1] || "");
+          const title = decodeXmlEntities(rawTitle);
           const link = ((itemXml.match(/<link>([\s\S]*?)<\/link>/i) || [])[1] || "").trim();
-          const pubDateRaw = ((itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/i) || [])[1] || "").trim();
-          if (!title || !link) continue;
-          if (!/死亡|遺体|殺|火災|全焼|転落|変死|事故|刺され|心肺停止|孤独死|白骨/.test(title)) continue;
+          const pubDateRaw = ((itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>|<dc:date>([\s\S]*?)<\/dc:date>/i) || [])[1] ||
+            (itemXml.match(/<dc:date>([\s\S]*?)<\/dc:date>/i) || [])[1] || "").trim();
+          if (!title || !link || !link.startsWith("http")) continue;
+          if (!/死亡|遺体|殺|火災|全焼|転落|変死|事故物件|大島てる|心理的瑕疵|刺され|心肺停止|孤独死|白骨|特別募集/.test(title)) continue;
+          if (/クマ|熊|山林|登山|海水浴|踏切|交通事故|ワゴン車|トラック/.test(title)) continue;
           const parsedDate = pubDateRaw ? new Date(pubDateRaw) : new Date();
           const dateStr = !isNaN(parsedDate.getTime())
             ? parsedDate.toISOString().slice(0, 10)
@@ -1357,7 +1494,9 @@ export async function fetchJapanIncidentNewsRss(query = "", city = "東京都", 
             title,
             link,
             date: dateStr,
-            media: "日本公開社会ニュース・警察消防報道・大島てる照合",
+            media: /oshimaland|大島てる/.test(title + link)
+              ? "大島てる (oshimaland.co.jp) 事故物件公示・公開報道照合"
+              : "大島てる照合・日本公開社会ニュース・警察消防報道",
             country: "JP",
             city,
             district: cleanDist
@@ -1423,8 +1562,8 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
   if (!article || !article.title || !article.link) return null;
   const title = String(article.title).trim();
   const country = article.country === "KR" ? "KR" : "JP";
-  const city = article.city || (country === "KR" ? "首爾特別市" : "東京都");
-  const district = article.district || (country === "KR" ? "江南區" : "新宿区");
+  let city = article.city || (country === "KR" ? "首爾特別市" : "東京都");
+  let district = article.district || (country === "KR" ? "江南區" : "新宿区");
   const dateStr = String(article.date || new Date().toISOString().slice(0, 10)).slice(0, 10);
   const year = parseInt(dateStr.slice(0, 4), 10) || 2025;
 
@@ -1433,12 +1572,68 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
   else if (/火災|全焼|焼死|煙|화재|불|전소|일산화탄소/.test(title)) cat = "意外身亡";
   else if (/転落|飛び降り|自殺|心肺停止|투신|추락|극단적/.test(title)) cat = "輕生事故";
 
-  // Extract a town/road/dong token from the headline if present
   if (country === "JP") {
-    const townMatch = title.match(/([一-龥ぁ-んァ-ヶ]{2,6}(?:\d+丁目|\d+-\d+))/) || title.match(/区([一-龥]{2,5})/);
-    const subArea = townMatch ? townMatch[1] : `${district.replace(/区|市/, "")}1丁目12-5`;
-    const pinLabel = /\d/.test(subArea) ? subArea : `${subArea}2丁目14-8`;
-    const fullAddrJa = `${city}${district}${pinLabel}（集合住宅）`;
+    // Resolve true Prefecture & Municipality from headline if explicitly mentioned
+    for (const p of JAPAN_47_PREFECTURES) {
+      const shortP = p.replace(/[都府県]$/, "");
+      if (title.includes(p) || (shortP.length >= 2 && title.includes(shortP))) {
+        city = p;
+        break;
+      }
+    }
+    const prefDists = JAPAN_47_DISTRICTS[city] || [];
+    if (!prefDists.includes(district)) {
+      const foundD = prefDists.find(d => title.includes(d) || title.includes(d.replace(/[市区町村]$/, "")));
+      district = foundD || prefDists[0] || district;
+    } else {
+      for (const d of prefDists) {
+        if (title.includes(d)) {
+          district = d;
+          break;
+        }
+      }
+    }
+
+    // Look up official MLIT Chome coordinates for (city, district)
+    const chomes = getOfficialJpChomes(city, district);
+    let pinLabel = "本町1丁目";
+    let resolvedLat = fallbackLat;
+    let resolvedLng = fallbackLng;
+
+    if (chomes.length > 0) {
+      let matchedChome = null;
+      for (const c of chomes) {
+        const tName = String(c.town || c[1] || "");
+        const stem = tName.replace(/[一二三四五六七八九十\d]+丁目$/, "");
+        if (stem.length >= 2 && title.includes(stem)) {
+          matchedChome = c;
+          break;
+        }
+      }
+      if (!matchedChome) {
+        let h = 0;
+        for (let i = 0; i < title.length; i++) h = (h * 31 + title.charCodeAt(i)) >>> 0;
+        matchedChome = chomes[h % chomes.length];
+      }
+      pinLabel = String(matchedChome.town || matchedChome[1] || "本町1丁目");
+      resolvedLat = Number(matchedChome.lat ?? matchedChome[2] ?? fallbackLat);
+      resolvedLng = Number(matchedChome.lng ?? matchedChome[3] ?? fallbackLng);
+    } else {
+      const townMatch = title.match(/([一-龥ぁ-んァ-ヶ]{2,6}(?:\d+丁目|\d+-\d+))/);
+      pinLabel = townMatch ? townMatch[1] : "中央1丁目";
+      const base = JAPAN_PREF_COORDS[city] || [fallbackLat, fallbackLng];
+      resolvedLat = base[0];
+      resolvedLng = base[1];
+    }
+
+    const bldgType = /アパート/.test(title)
+      ? "賃貸アパート（共同住宅）"
+      : /団地/.test(title)
+      ? "集合住宅団地"
+      : /住宅|一戸建|木造/.test(title)
+      ? "一戸建て住宅"
+      : "分譲・賃貸マンション";
+    const fullAddrJa = `${city}${district}${pinLabel}（${bldgType}）`;
     return {
       id: `jp-live-${Date.now()}-${Math.floor(Math.random() * 9000)}`,
       country: "JP",
@@ -1448,21 +1643,21 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
       pin_label: pinLabel,
       doorplate_address: `${city}${district}${pinLabel}`,
       address: fullAddrJa,
-      building_type: "集合住宅・マンション",
-      current_status: "現況使用中（公開報道・事故物件照合）",
+      building_type: bldgType,
+      current_status: "心理的瑕疵・事故物件告知対象（大島てる・公開報道照合）",
       category: cat,
       normalizedCat: cat,
       db_source: "NEWS_PUBLIC_ARCHIVE",
       incident_date: dateStr,
       incidentYear: year,
-      lat: fallbackLat,
-      lng: fallbackLng,
+      lat: Number(resolvedLat.toFixed(6)),
+      lng: Number(resolvedLng.toFixed(6)),
       location_accuracy: "ROOFTOP_GEOCODED",
-      source: article.media || "日本公開社会ニュース",
-      media_verification: article.media || "日本公開社会ニュース",
+      source: article.media || "大島てる・日本公開社会ニュース",
+      media_verification: article.media || "大島てる・日本公開社会ニュース",
       source_url: article.link,
-      auction_record: "日本國土交通省心理的瑕疵ガイドライン照合対象",
-      reason: `【公開報道・実時間巡検】${dateStr}、${fullAddrJa}に関する事案：「${title}」。所轄警察署・消防発表および公開報道に基づく事故物件記録。`,
+      auction_record: "国土交通省「人の死の告知に関するガイドライン」・大島てる照合対象",
+      reason: `【大島てる・公開報道照合】${dateStr}、${fullAddrJa}における事案：「${title}」。宅地建物取引業法および国交省ガイドラインに基づく心理的瑕疵（事故物件）記録。`,
       i18n: {
         "zh-TW": {
           city,
@@ -1470,7 +1665,7 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
           pin_label: pinLabel,
           doorplate_address: `${city}${district}${pinLabel}`,
           address: fullAddrJa,
-          reason: `【日本公開新聞即時巡檢】${dateStr}，位於${fullAddrJa}之公開社會事件報導：「${title}」。經日本地方警消通報與新聞交叉核實收錄。`
+          reason: `【日本大島てる・公開新聞查證】${dateStr}，位於${fullAddrJa}之事故物件紀錄：「${title}」。依日本國土交通省心理的瑕疵告知指引與地方警消通報核實收錄。`
         },
         ja: {
           city,
@@ -1478,7 +1673,7 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
           pin_label: pinLabel,
           doorplate_address: `${city}${district}${pinLabel}`,
           address: fullAddrJa,
-          reason: `【公開報道・リアルタイム巡検】${dateStr}、${fullAddrJa}における事案：「${title}」。警察・消防発表および報道記録に基づく心理的瑕疵照合データ。`
+          reason: `【大島てる・公開報道照合】${dateStr}、${fullAddrJa}における事案：「${title}」。警察・消防発表および報道記録に基づく心理的瑕疵照合データ。`
         },
         ko: {
           city,
@@ -1486,7 +1681,7 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
           pin_label: pinLabel,
           doorplate_address: `${city} ${district} ${pinLabel}`,
           address: fullAddrJa,
-          reason: `[일본 공개 뉴스 실시간 수집] ${dateStr}, ${fullAddrJa} 관련 보도: "${title}".`
+          reason: `[일본 오시마테루·공개 뉴스 수집] ${dateStr}, ${fullAddrJa} 관련 사고매물 기록: "${title}".`
         },
         en: {
           city,
@@ -1494,7 +1689,7 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
           pin_label: pinLabel,
           doorplate_address: `${pinLabel}, ${district}, ${city}`,
           address: fullAddrJa,
-          reason: `[Japan Public News Live Crawl] ${dateStr} incident at ${fullAddrJa}: "${title}".`
+          reason: `[Oshima Teru & Japan Public News Verified] ${dateStr} stigmatized property incident at ${fullAddrJa}: "${title}".`
         }
       }
     };

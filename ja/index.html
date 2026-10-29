@@ -476,7 +476,6 @@
         <!-- Row 2: Always-Visible Dropdowns for Independent Country, City, District, and Time -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
           <select id="country-select" aria-label="Country" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-xs rounded-lg px-2.5 py-2 font-semibold focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
-            <option value="ALL" data-i18n="country_opt_all">台日全境 (TW+JP)</option>
             <option value="TW" selected data-i18n="country_opt_tw">臺灣</option>
             <option value="JP" data-i18n="country_opt_jp">日本</option>
           </select>
@@ -1154,14 +1153,6 @@
           <div class="min-w-0">
             <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_jp">日本</div>
             <div id="welcome-jp-desc" class="text-[11px] text-slate-600 truncate">全境 47 都道府縣 · 新聞報導與官方公開實證卷宗</div>
-          </div>
-          <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
-        </button>
-
-        <button type="button" data-pick-country="ALL" class="country-pick-card p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 transition-all flex items-center justify-between gap-3 cursor-pointer group">
-          <div class="min-w-0">
-            <div class="text-sm font-bold text-slate-900 group-hover:underline" data-i18n="country_opt_all">台日全境聯合檢索 (TW + JP)</div>
-            <div id="welcome-all-desc" class="text-[11px] text-slate-600 truncate">台灣 22 縣市 ＋ 日本 47 都道府縣 · 跨國聯合高速檢索</div>
           </div>
           <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-semibold shrink-0">進入 →</span>
         </button>
@@ -3062,9 +3053,13 @@
       if (currentLang === "ko" && item.i18n && item.i18n.ko && item.i18n.ko.doorplate_address) {
         return String(item.i18n.ko.doorplate_address);
       }
-      if (item.doorplate_address) return String(item.doorplate_address);
-      const raw = String(item.address || "").replace(/台/g, "臺");
-      return raw.replace(/[（(].*$/, "").trim() || raw;
+      const raw = String(item.doorplate_address || item.address || "").replace(/台/g, "臺");
+      return raw
+        .replace(/[（(].*$/, "")
+        .replace(/(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)/g, "")
+        .replace(/某(?:社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅|三層|四層|連棟|平房|獨棟|神壇|五金|宮廟|生技).*$/g, "")
+        .replace(/(?:三層半透天厝|與鄰近.*|及巷口周邊|事發住宅建物.*)$/g, "")
+        .trim() || raw;
     }
 
     function extractShortDoorplateLabel(item) {
@@ -3080,6 +3075,7 @@
         item.city,
         item.district,
         String(item.city || "").replace(/台/g, "臺"),
+        String(item.city || "").replace(/臺/g, "台"),
         tCity(item.city),
         tDistrict(item.district),
         item.i18n?.[currentLang]?.city,
@@ -3094,13 +3090,23 @@
 
       let cleaned = door;
       for (const prefix of prefixesToStrip) {
-        cleaned = cleaned.replace(prefix, "");
+        cleaned = cleaned.split(prefix).join("");
       }
       cleaned = cleaned
         .replace(/[（(][^）)]*[）)]/g, " ")
-        .replace(/^[^\d]*[里村]/, "")
+        .replace(/^(?:臺北市|台北市|新北市|桃園市|臺中市|台中市|臺南市|台南市|高雄市|基隆市|新竹市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義市|嘉義縣|屏東縣|宜蘭縣|花蓮縣|臺東縣|台東縣|澎湖縣|金門縣|連江縣|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)+/g, "")
+        .replace(/^[一-龥]{1,3}[區市鎮鄉]/, "")
+        .replace(/^[^\d「]*[里村]/, "")
+        .replace(/某(?:社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅|三層|四層|連棟|平房|獨棟).*$/g, "")
         .replace(/\s+/g, " ")
         .trim();
+
+      if (!cleaned || cleaned === item.city || cleaned === item.district || cleaned === `${item.city || ""}${item.district || ""}`) {
+        const mBldg = String(item.address || "").match(/「([^」]{2,12})」/);
+        if (mBldg) return `「${mBldg[1]}」`;
+        const mRoad = String(item.address || "").match(/([一-龥]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?(?:\d+號)?)/);
+        if (mRoad) return mRoad[1];
+      }
       return cleaned || door;
     }
 
@@ -6842,9 +6848,10 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261028_verified_twjp_supa_v27";
+    const ARCHIVE_CACHE_VERSION = "20261029_verified_twjp_supa_v31";
 
     const jpGsiAddressCoordCache = new Map();
+    const twArcgisAddressCoordCache = new Map();
 
     // Normalize a Japanese address (even if partially in Traditional Chinese Kanji or containing building/room info) for GSI Japan AddressSearch API
     function normalizeClientJapaneseAddress(rawAddr = "", city = "", district = "") {
@@ -6875,12 +6882,61 @@
       return cleaned;
     }
 
-    // Live address-to-coordinate converter for Japan cases using GSI Japan (国土地理院 AddressSearch API) + banchi-go block offset
+    // Live address-to-coordinate converter for BOTH Taiwan (ArcGIS Street Geocoder) and Japan (GSI Japan AddressSearch API)
     async function resolveAccurateCaseCoordinates(item) {
       if (!item) return null;
       const baseLat = parseFloat(item.lat);
       const baseLng = parseFloat(item.lng);
-      if (inferCountry(item) !== "JP") {
+      const country = inferCountry(item);
+
+      if (country === "TW") {
+        if (item.__twStreetVerified && !isNaN(baseLat) && !isNaN(baseLng)) {
+          return { lat: baseLat, lng: baseLng };
+        }
+        const rawTwAddr = String(item.doorplate_address || item.address || "")
+          .replace(/（[^）]*）/g, "")
+          .replace(/\([^)]*\)/g, "")
+          .replace(/「[^」]*」/g, "")
+          .trim();
+        if (!rawTwAddr || rawTwAddr.length < 6) {
+          return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
+        }
+        if (twArcgisAddressCoordCache.has(rawTwAddr)) {
+          const cached = twArcgisAddressCoordCache.get(rawTwAddr);
+          item.lat = cached.lat;
+          item.lng = cached.lng;
+          item.__twStreetVerified = true;
+          return cached;
+        }
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 2200);
+          const arcUrl = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(rawTwAddr)}&countryCode=TWN&maxLocations=1&f=json`;
+          const arcRes = await fetch(arcUrl, { signal: controller.signal });
+          clearTimeout(timer);
+          if (arcRes.ok) {
+            const arcData = await arcRes.json();
+            const top = arcData?.candidates?.[0];
+            if (top && top.score >= 82 && top.location) {
+              const candLat = Number(top.location.y);
+              const candLng = Number(top.location.x);
+              const distName = String(item.district || "").replace(/[區鎮鄉市]$/, "");
+              const matchAddr = String(top.address || "").replace(/台/g, "臺");
+              if (candLat >= 21.8 && candLat <= 26.4 && candLng >= 118.1 && candLng <= 122.2 && (!distName || matchAddr.includes(distName))) {
+                const resolved = { lat: Number(candLat.toFixed(6)), lng: Number(candLng.toFixed(6)) };
+                twArcgisAddressCoordCache.set(rawTwAddr, resolved);
+                item.lat = resolved.lat;
+                item.lng = resolved.lng;
+                item.__twStreetVerified = true;
+                return resolved;
+              }
+            }
+          }
+        } catch (_e) {}
+        return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
+      }
+
+      if (country !== "JP") {
         return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
       }
       if (item.__gsiVerified && !isNaN(baseLat) && !isNaN(baseLng)) {
@@ -6974,16 +7030,24 @@
     const EMBEDDED_JPKR_PREPARED = [];
     const EMBEDDED_JPKR_MAP = new Map();
 
-    // Client-side 4-Stage Real Incident & URL Verification Gate
+    // Client-side 5-Stage Real Incident, Address Integrity & URL Verification Gate
     function isVerifiedRealIncidentClient(r) {
       if (!r || typeof r !== "object") return false;
       const url = String(r.source_url || "").trim();
       if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(url)) return false;
       const reason = String(r.reason || "");
       const addr = String(r.address || "");
+      const bldg = String(r.building_type || "");
       const city = String(r.city || "").replace(/台/g, "臺").trim();
       const fullText = `${addr} ${reason} ${r.source || ""}`;
-      if (/UR賃貸住宅.*競売BIT|グランメゾン.*UR|ライオンズマンション.*UR|プラウド.*UR|ブリリア.*UR|已經營|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|けが人なし|死者なし/i.test(fullText)) {
+      if (/事發住宅建物|住宅建物（|(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東|澎湖|金門|連江)[^\s（(]{1,4}民宅/.test(addr)) {
+        return false;
+      }
+      if (/^(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東)[^\s]{1,4}民宅$/.test(bldg)) {
+        return false;
+      }
+      if (/([一-龥]{2,3}[區鎮鄉市])\1/.test(addr)) return false;
+      if (/UR賃貸住宅.*競売BIT|グランメゾン.*UR|ライオンズマンション.*UR|プラウド.*UR|ブリリア.*UR|已經營|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|けが人なし|死者なし|国道で.*事故|新東名|東名高速|遺跡で土壁|工場で.*転落/i.test(fullText)) {
         return false;
       }
       if (/錦新大樓/.test(addr) && city !== "臺北市") return false;

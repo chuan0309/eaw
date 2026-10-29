@@ -72,7 +72,7 @@ class StrictTextLLMEngine:
             return 5
 
         discovered.sort(key=rank_model)
-        return discovered if discovered else ["gemini-2.5-flash", "gemini-flash-latest"]
+        return discovered if discovered else ["gemini-3-flash-preview", "gemini-3.8-flash", "gemini-flash-latest"]
 
     def _extract_json_array(self, raw_text: str) -> list:
         if not raw_text:
@@ -272,6 +272,23 @@ def resolve_doorplate_and_coordinates(r: dict, city: str, dist: str, gmaps_key: 
             loc = best["geometry"]["location"]
             lat, lng = float(loc["lat"]), float(loc["lng"])
             return clean_display_addr, round(lat, 6), round(lng, 6)
+    except Exception:
+        pass
+
+    # Fallback to ArcGIS World Geocoder (works without Google Maps billing/referer restrictions)
+    try:
+        q_arc = geocode_street_query.replace("新臺五路", "新台五路")
+        arc_url = f"https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine={urllib.parse.quote(q_arc)}&countryCode=TWN&maxLocations=1&f=json"
+        arc_res = requests.get(arc_url, timeout=6).json()
+        cands = arc_res.get("candidates") or []
+        if cands and cands[0].get("score", 0) >= 82 and cands[0].get("location"):
+            cand_addr = (cands[0].get("address") or "").replace("台", "臺")
+            dist_short = dist[:-1] if len(dist) > 2 else dist
+            if dist_short in cand_addr:
+                lat = float(cands[0]["location"]["y"])
+                lng = float(cands[0]["location"]["x"])
+                if 21.8 <= lat <= 26.4 and 118.1 <= lng <= 122.2:
+                    return clean_display_addr, round(lat, 6), round(lng, 6)
     except Exception:
         pass
 
@@ -516,6 +533,7 @@ def main():
 
     print(f"🎉 本輪實證新聞爬蟲完成！共新增 {total_added} 筆附真實新聞連結案件。", flush=True)
     sync_supabase_to_website_json_files(supabase)
+    subprocess.run(["node", "sync_supabase_historical.js"], check=False)
 
 
 def infer_db_source_py(r: dict) -> str:

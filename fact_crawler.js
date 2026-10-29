@@ -1,5 +1,10 @@
 import fs from "fs";
 import path from "path";
+import {
+  getTaiwanTownshipCoords,
+  getTaiwanStreetCorridorCoords,
+  TAIWAN_CROSS_DISTRICT_ROAD_FIX
+} from "./jp_47_prefectures.js";
 
 export const TAIWAN_368_DISTRICTS = {
   "臺北市": ["中正區","大同區","中山區","松山區","大安區","萬華區","信義區","士林區","北投區","內湖區","南港區","文山區"],
@@ -113,8 +118,9 @@ export function initDistrictCoordinates(records = []) {
 export function getDistrictBaseCoords(city, district, seedStr = "") {
   const cleanCity = (city || "臺北市").replace(/台/g, "臺");
   const key = `${cleanCity}_${district}`;
-  const base = districtCoordMap.get(key) || CITY_BASE_COORDS[cleanCity] || [25.0478, 121.5319];
-  const [dLat, dLng] = deterministicOffset(`${key}_${seedStr}`, districtCoordMap.has(key) ? 0.0055 : 0.014);
+  const townshipBase = getTaiwanTownshipCoords(cleanCity, district);
+  const base = districtCoordMap.get(key) || townshipBase || CITY_BASE_COORDS[cleanCity] || [25.0478, 121.5319];
+  const [dLat, dLng] = deterministicOffset(`${key}_${seedStr}`, 0.0045);
   return [Number((base[0] + dLat).toFixed(6)), Number((base[1] + dLng).toFixed(6))];
 }
 
@@ -548,11 +554,11 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     const rawRoadCandidate = (commonRoadMatch && commonRoadMatch[1]) || (fallbackRoadMatch && fallbackRoadMatch[1]) || "";
     if (rawRoadCandidate) {
       const cleanedRoad = rawRoadCandidate
-        .replace(/^(?:位於|坐落|在|於|抵|往|住|租|買|賣|傳|區|鎮|鄉|市|里|村|鄰|某|該|一處|間|北市|新北|台中|臺中|高雄|高市|台南|臺南|桃園|年|她|他|下|指稱|稱|驚傳|發生|大樓|公寓|民宅|套房|屋內|女子|男子|老翁|婦人)+/, "")
+        .replace(/^(?:位於|坐落|在|於|抵|往|住|租|買|賣|傳|區|鎮|鄉|市|里|村|鄰|某|該|一處|間|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市|台北|臺北|台中|臺中|高雄|台南|臺南|桃園|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東|年|她|他|下|指稱|稱|驚傳|發生|大樓|公寓|民宅|套房|屋內|女子|男子|老翁|婦人)+/, "")
         .trim();
       if (
         cleanedRoad.length >= 3 &&
-        !/網路|跑路|死路|絕路|退路|逃亡路|神報喜利路|走投無路|不歸路|絲路|鐵路|公路|國道|省道|道路|馬路|半路|同路|一路|出路|生路|末路|血路|心路|套路|紋路|管路|線路|電路|水路|陸路|山路|平路|老街|商店街|美食街|地下街|華爾街|逛街|上街|掃街|遊街|街頭|路面|路口|路段/.test(cleanedRoad)
+        !/審過程|過程與路|路段背景|網路|跑路|死路|絕路|慘死路|退路|逃亡路|神報喜利路|走投無路|不歸路|黃泉路|逃生路|絲路|鐵路|公路|國道|省道|道路|馬路|半路|同路|一路|出路|生路|末路|血路|心路|套路|紋路|管路|線路|電路|水路|陸路|山路|平路|老街|商店街|美食街|地下街|華爾街|逛街|上街|掃街|遊街|街頭|路面|路口|路段|竹市街|高市街|南市街|中市街|桃市街/.test(cleanedRoad)
       ) {
         roadPart = cleanedRoad;
       }
@@ -575,9 +581,25 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   let communityPart = "";
   const commMatch =
     fullText.match(/「([一-龥]{2,12}(?:大樓|社區|大廈|華廈|國宅|新村|山莊|別墅|廣場|學苑|花園|帝寶|天下|世紀|世界|家園|新城|時代|公館|一品|皇家|凱旋|巴黎|東京|星鑽|極品))」/) ||
-    fullText.match(/(西寧國宅|錦新大樓|南機場國宅|成功國宅|延平國宅|正義國宅|萬芳國宅|果貿國宅|城中城大樓|千越綠川大廈|亞洲廣場大樓|美麗華大樓|東星大樓|維冠金龍大樓|太原路凶宅|永大路凶宅|中正路凶宅|民生東路凶宅|林森北路套房|忠孝東路公寓)/);
-  if (commMatch && commMatch[1] && !/某|該|一棟|住宅|社區大樓|公寓大樓|集合住宅|北市|新北|台中|高雄|桃園|台南|擬推|興建|推動|全台|全臺/.test(commMatch[1])) {
+    fullText.match(/(西寧國宅|錦新大樓|南機場國宅|成功國宅|延平國宅|正義國宅|萬芳國宅|果貿國宅|城中城大樓|千越綠川大廈|亞洲廣場大樓|美麗華大樓|東星大樓|維冠金龍大樓|林肯大郡)/);
+  if (
+    commMatch &&
+    commMatch[1] &&
+    !/某|該|一棟|住宅|社區大樓|公寓大樓|集合住宅|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市|台北|臺北|台中|臺中|高雄|桃園|台南|臺南|擬推|興建|推動|全台|全臺|命案|陳屍|墜樓|自家|新建|闖大樓|小模|老婦|老翁|女子|男子|猛鬼|最凶/.test(commMatch[1])
+  ) {
     communityPart = commMatch[1];
+  }
+
+  // Cross-district road & landmark auto-correction (Prevents hospitals/precincts like 馬偕醫院 in 中山區 from misplacing 信義區福德街 or 中正區杭州南路!)
+  const combinedLocCheck = `${roadPart} ${communityPart} ${areaPart}`;
+  for (const rule of TAIWAN_CROSS_DISTRICT_ROAD_FIX) {
+    if (rule.onlyIfCity && matchedCity !== rule.onlyIfCity) continue;
+    if (rule.match.test(combinedLocCheck) && (matchedCity === rule.city || !rule.onlyIfCity)) {
+      if (matchedCity === rule.city) {
+        matchedDist = rule.dist;
+      }
+      break;
+    }
   }
 
   let floorPart = "";
@@ -597,12 +619,12 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   else if (/公寓/.test(fullText)) bldgType = "傳統公寓住宅";
   else if (/別墅/.test(fullText)) bldgType = "透天別墅";
 
-  // Strictly require at least a specific road, community, village, or well-known zone (never create vague district-only or headline-stuffed stubs!)
-  if (!roadPart && !communityPart && !villagePart && !areaPart) {
+  // Strictly require at least a specific road or verified iconic community (never create vague district-only or headline-stuffed stubs!)
+  if (!roadPart && !communityPart) {
     return null;
   }
 
-  const locCore = `${matchedCity}${matchedDist}${villagePart}${areaPart && !roadPart ? areaPart : ""}${roadPart}${communityPart ? `「${communityPart}」` : ""}`;
+  const locCore = `${matchedCity}${matchedDist}${villagePart}${roadPart}${communityPart ? `「${communityPart}」` : ""}`;
   const detailSuffix = `${floorPart ? floorPart + " · " : ""}${bldgType}`;
   const displayAddress = `${locCore}（${detailSuffix}）`;
 
@@ -686,7 +708,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     ? `【${sanitizedTitle}】${sanitizedSnippet}`
     : `依據公開資料庫與${cleanRssHtmlEntities(article.media)}核實紀錄「${sanitizedTitle}」，該處位於${matchedCity}${matchedDist}${roadPart || communityPart || areaPart || villagePart || ""}，於 ${trueIncidentDate} 發生非自然死亡或特殊事故紀錄。`;
 
-  const [lat, lng] = getDistrictBaseCoords(matchedCity, matchedDist, `${roadPart}_${communityPart}_${sanitizedTitle}`);
+  const [lat, lng] = getTaiwanStreetCorridorCoords(matchedCity, matchedDist, locCore, `${roadPart}_${communityPart}_${sanitizedTitle}`);
   const cleanSource = `${cleanRssHtmlEntities(article.media)}報導「${sanitizedTitle}」`;
 
   return {
@@ -1152,7 +1174,7 @@ export function enrichCaseNarrativeAndTimeline(record) {
     } else if (/一氧化碳|瓦斯|熱水器|中毒/.test(fullText)) {
       supplement = `本案係因住宅室內或加裝窗戶之陽台熱水器通風不良，導致一氧化碳氣體蓄積，經親友或鄰居察覺異狀通報119消防救護人員到場破門搶救，惟屋內住戶已因一氧化碳中毒缺氧不幸身亡，並由轄區警方與檢察官完成相驗。依內政部不動產交易現況說明書規範，一氧化碳中毒致死明確列為四大法定非自然死亡（凶宅）應揭露項目之一，產權移轉與銀行核貸估價時均會反映事故折價。`;
     } else if (/砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺|虐死|家暴|持刀|鐵鎚|行凶/.test(fullText) && (record.category === "刑事命案" || /命案|兇殺|他殺|砍殺|槍擊/.test(baseReason))) {
-      supplement = `案發後轄區警分局偵查隊與鑑識人員立即封鎖該${bldg}現場進行採證，並報請地方檢察署檢察官指揮偵辦及率法醫相驗，相關刑案偵審過程與路段背景均載明於公開社會新聞與司法卷宗。由於建物專有部分曾發生重大刑事命案，屬不動產市場心理畏懼程度最高之法定凶宅類型，出賣人於買賣時負有絕對據實揭露義務，買方亦可透過司法院裁判書系統與${courtName}公告進一步交叉核對。`;
+      supplement = `案發後轄區警分局偵查隊與鑑識人員立即封鎖該${bldg}專有部分現場進行採證，並報請地方檢察署檢察官率法醫完成相驗，相關屋內非自然死亡始末與產權現況均載明於公開實證檔案與司法卷宗。由於住宅專有部分曾發生非自然死亡事故，屬不動產市場明確列管之法定凶宅標的，出賣人於買賣或出租時負有《不動產說明書》據實揭露義務，買方亦可透過台灣凶宅網、司法院裁判書系統與${courtName}法拍公告進一步交叉核對。`;
     } else if (record.db_source === "JUDICIAL_JUDGMENT" || /裁判書|判決|減少價金|瑕疵擔保|隱瞞/.test(fullText)) {
       supplement = `本案於不動產買賣移轉後，因買受人查知屋內曾發生非自然死亡事故，遂向${courtName}提起民事「物之瑕疵擔保減少價金」或解除契約訴訟；審理期間經法院向轄區警消機關調閱當年報案與相驗卷宗核實，判決認定該${bldg}確屬交易價值減損之事故建物。意向買方與租客可透過司法院法學資料檢索系統查閱歷審裁判書原文，核對具體案發年份與法院認定之折價比例。`;
     } else if (record.db_source === "JUDICIAL_AUCTION" || /法拍|拍賣|查封筆錄|民事執行處|點交/.test(fullText)) {

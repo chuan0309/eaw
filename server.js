@@ -544,6 +544,34 @@ async function geocodeTaiwanAddressStrict(addressQuery, fallbackCity = "臺北�
       }
     }
   } catch (e) {}
+
+  // Fallback to ArcGIS World Geocoder when Google Maps REST API returns REQUEST_DENIED (browser-referer restricted key)
+  try {
+    let baseQuery = addressQuery.includes("臺") || addressQuery.includes("台")
+      ? addressQuery
+      : `${fallbackCity}${fallbackDistrict}${addressQuery}`;
+    baseQuery = baseQuery.replace(/（.*）|\(.*\)/g, "").replace(/「.*」/g, "").trim();
+    const arcUrl = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(baseQuery)}&countryCode=TWN&maxLocations=1&f=json`;
+    const arcRes = await fetch(arcUrl);
+    if (arcRes.ok) {
+      const arcData = await arcRes.json();
+      const top = arcData?.candidates?.[0];
+      if (top && top.score >= 80 && top.location) {
+        const lat = Number(top.location.y);
+        const lng = Number(top.location.x);
+        if (lat >= 21.8 && lat <= 26.4 && lng >= 118.1 && lng <= 122.2) {
+          return {
+            formattedAddress: baseQuery.replace(/台/g, "臺"),
+            rawFormattedAddress: top.address || baseQuery,
+            lat: Number(lat.toFixed(6)),
+            lng: Number(lng.toFixed(6)),
+            locationType: "ROOFTOP",
+            placeId: ""
+          };
+        }
+      }
+    }
+  } catch (_e2) {}
   return null;
 }
 

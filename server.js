@@ -44,7 +44,24 @@ const JP_VERIFIED_ARCHIVE_PATHS = [
 const STANDALONE_VAULT_PATH = "/var/tmp/tw_haunted_standalone_vault.json";
 const TAKEDOWN_BLACKLIST_PATH = "/var/tmp/tw_haunted_takedowns.json";
 
-app.use(express.json({ limit: "25mb" }));
+app.use(express.json({ limit: "10mb" }));
+
+// Security headers middleware
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "geolocation=(self)");
+  next();
+});
+
+function stripDangerousHtml(str = "") {
+  return String(str || "")
+    .replace(/<script\b[\s\S]*?<\/script>/gi, "")
+    .replace(/<\/?[a-z][^>]*>?/gi, " ")
+    .replace(/[<>]/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
 
 // High-speed Gzip compression middleware for HTML, JSON, XML, and JS payloads (reduces 4.2MB JSON to ~480KB)
 app.use((req, res, next) => {
@@ -660,19 +677,24 @@ const CALIBRATED_SUPABASE_MAX_ID = 3123;
 
 async function fetchLatestSupabaseCrawledRecords(forceFresh = false) {
   const now = Date.now();
-  if (!forceFresh && now - lastSupabaseDeltaFetch < 15000 && cachedSupabaseDelta.length > 0) {
+  if (!forceFresh && now - lastSupabaseDeltaFetch < 120000 && cachedSupabaseDelta.length > 0) {
     return cachedSupabaseDelta;
   }
   lastSupabaseDeltaFetch = now;
   const supabaseUrl = process.env.SUPABASE_URL || "https://cfmcvcscyfblcodemnkt.supabase.co";
 
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000`, {
+    const cols = "id,city,district,address,lat,lng,category,reason,incident_date,source,source_url,auction_record";
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 7000);
+    const res = await fetch(`${supabaseUrl}/rest/v1/haunted_houses?select=${cols}&order=id.desc&limit=600`, {
       headers: {
         apikey: REAL_SUPABASE_ANON_KEY,
         Authorization: `Bearer ${REAL_SUPABASE_ANON_KEY}`
-      }
+      },
+      signal: controller.signal
     });
+    clearTimeout(timer);
     if (res.ok) {
       const allRows = await res.json();
       if (Array.isArray(allRows) && allRows.length > 0) {
@@ -1061,9 +1083,14 @@ app.get("/api/records/live-sync", async (req, res) => {
 // POST /api/records/sync-vault - Bidirectional union sync with client IndexedDB vault or imported JSON backup
 app.post("/api/records/sync-vault", (req, res) => {
   try {
-    const clientRecords = Array.isArray(req.body?.records) ? req.body.records : [];
-    if (clientRecords.length > 0) {
-      persistNewVerifiedRecordsToDisk(clientRecords);
+    const perm = checkSubmissionPermission(req, "sync_vault");
+    if (!perm.allowed) {
+      return res.status(429).json({ ok: false, error: perm.reason });
+    }
+    const rawList = Array.isArray(req.body?.records) ? req.body.records.slice(0, 100) : [];
+    const verifiedClientRecords = rawList.filter(r => r && r.address && isVerifiedRealIncidentRecord(r));
+    if (verifiedClientRecords.length > 0) {
+      persistNewVerifiedRecordsToDisk(verifiedClientRecords);
     }
     const all = loadAllUnifiedRecords();
     return res.json({
@@ -1909,11 +1936,11 @@ app.get("/api/official-lookup", async (req, res) => {
 // Helper: Validate user submission / correction payload
 function validateRecordReportInput(body = {}) {
   const errors = [];
-  const rawCity = String(body.city || "").trim();
+  const rawCity = stripDangerousHtml(body.city || "");
   const city = CITY_BASE_COORDS[rawCity] ? rawCity : rawCity.replace(/台/g, "臺").trim();
-  const district = String(body.district || "").trim();
-  const address = String(body.address || "").trim();
-  const reason = String(body.reason || "").trim();
+  const district = stripDangerousHtml(body.district || "");
+  const address = stripDangerousHtml(body.address || "");
+  const reason = stripDangerousHtml(body.reason || "");
   const sourceUrl = String(body.source_url || "").trim();
 
   if (!city || !CITY_BASE_COORDS[city]) {
@@ -1944,11 +1971,11 @@ function validateRecordReportInput(body = {}) {
       reason,
       sourceUrl,
       incident_date: String(body.incident_date || new Date().toISOString().slice(0, 10)).slice(0, 10),
-      building_type: String(body.building_type || "集合住宅／公寓大樓").trim(),
-      current_status: String(body.current_status || "現況使用中").trim(),
-      category: String(body.category || "法拍與其他").trim(),
-      auction_record: String(body.auction_record || "").trim(),
-      media_verification: String(body.media_verification || "使用者實務回報與公開資料佐證").trim(),
+      building_type: stripDangerousHtml(body.building_type || "集合住宅／公寓大樓"),
+      current_status: stripDangerousHtml(body.current_status || "現況使用中"),
+      category: stripDangerousHtml(body.category || "法拍與其他"),
+      auction_record: stripDangerousHtml(body.auction_record || ""),
+      media_verification: stripDangerousHtml(body.media_verification || "使用者實務回報與公開資料佐證"),
       lat: body.lat,
       lng: body.lng
     }
@@ -2803,16 +2830,30 @@ app.get("/robots.txt", (req, res) => {
   );
 });
 
-// Helper: Find a case record by SEO slug or ID
+// Helper: Find a case record by SEO slug or ID (supports legacy taiwan-jp-* and prefecture-prefixed slugs)
 function findCaseRecordBySlugOrId(slugOrId) {
-  const target = String(slugOrId || "").trim().toLowerCase().replace(/\/+$/, "");
+  let target = "";
+  try {
+    target = decodeURIComponent(String(slugOrId || "")).trim().toLowerCase().replace(/\/+$/, "");
+  } catch (_e) {
+    target = String(slugOrId || "").trim().toLowerCase().replace(/\/+$/, "");
+  }
   if (!target) return null;
+  const legacyStripped = target.replace(/^taiwan-(?=jp-|kr-)/, "");
   const allRecords = loadAllUnifiedRecords();
   for (let i = 0; i < allRecords.length; i++) {
     const r = allRecords[i];
-    const slug = buildCaseSlug(r, i);
+    const slug = (r.slug || buildCaseSlug(r, i)).toLowerCase();
     const idLower = String(r.id || "").trim().toLowerCase();
-    if (slug === target || idLower === target || slug.endsWith(`-${target}`)) {
+    const cleanId = idLower.replace(/[^a-z0-9-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+    if (
+      slug === target ||
+      slug === legacyStripped ||
+      idLower === target ||
+      cleanId === target ||
+      cleanId === legacyStripped ||
+      (cleanId && (target.endsWith(`-${cleanId}`) || slug.endsWith(`-${target}`)))
+    ) {
       return { record: { ...r, slug }, totalCount: allRecords.length };
     }
   }

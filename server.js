@@ -265,12 +265,22 @@ const CURATED_LANDMARK_CASES = [
 let dynamicRecords = [];
 let cachedCalibratedDiskRecords = null;
 let cachedUnifiedFinalResult = null;
+let cachedUnifiedDynamicCount = -1;
 let cachedUnifiedStats = null;
+let cachedFullRecordsGzip = null;
+let cachedFullRecordsCount = -1;
+let cachedInitialRecordsGzip = null;
+let cachedInitialRecordsCount = -1;
 const caseTranslationCache = new Map();
 
 function invalidateUnifiedRecordsCache() {
   cachedUnifiedFinalResult = null;
+  cachedUnifiedDynamicCount = -1;
   cachedUnifiedStats = null;
+  cachedFullRecordsGzip = null;
+  cachedFullRecordsCount = -1;
+  cachedInitialRecordsGzip = null;
+  cachedInitialRecordsCount = -1;
 }
 
 function loadTakedownBlacklist() {
@@ -298,7 +308,7 @@ function addTakedownToBlacklist(keys = []) {
 function writeAllDatabaseSnapshots(records) {
   if (!Array.isArray(records) || records.length === 0) return;
   const verifiedAll = records.filter(r => isVerifiedRealIncidentRecord(r) && r.country !== "KR" && !/^kr-/i.test(String(r.id || "")));
-  const serializedAll = JSON.stringify(verifiedAll, null, 2);
+  const serializedAll = JSON.stringify(verifiedAll);
   for (const target of [STANDALONE_VAULT_PATH, ...CRAWLER_BACKUP_PATHS]) {
     try {
       const dir = path.dirname(target);
@@ -309,7 +319,7 @@ function writeAllDatabaseSnapshots(records) {
   }
   const jpOnly = verifiedAll.filter(r => r.country === "JP" || /^jp-/i.test(String(r.id || "")));
   if (jpOnly.length > 0) {
-    const jpSerialized = JSON.stringify(jpOnly, null, 2);
+    const jpSerialized = JSON.stringify(jpOnly);
     for (const jpTarget of JP_VERIFIED_ARCHIVE_PATHS) {
       try {
         const dir = path.dirname(jpTarget);
@@ -322,7 +332,7 @@ function writeAllDatabaseSnapshots(records) {
 }
 
 function loadAllUnifiedRecords() {
-  if (cachedUnifiedFinalResult && dynamicRecords.length === 0) {
+  if (cachedUnifiedFinalResult && cachedUnifiedDynamicCount === dynamicRecords.length) {
     return cachedUnifiedFinalResult;
   }
 
@@ -402,26 +412,13 @@ function loadAllUnifiedRecords() {
       const ctry = rawRec.country === "JP" || /^jp-/i.test(recId) ? "JP" : "TW";
       const cityNorm = ctry === "TW" ? String(rawRec.city || "").replace(/台/g, "臺").trim() : String(rawRec.city || "").trim();
       const distNorm = String(rawRec.district || "").trim();
-      const doorKey = `${ctry}_${cityNorm}_${distNorm}_${recDoor}`;
-      const coordKey = `${Math.round(Number(rawRec.lat) * 4500)}_${Math.round(Number(rawRec.lng) * 4500)}`;
-      const existingKey = unionMap.has(doorKey) ? doorKey : (coordGridMap.get(coordKey) || "");
+      const doorKey = `${ctry}_${cityNorm}_${distNorm}_${recDoor}_${srcUrl}`;
 
-      if (!existingKey) {
+      if (!unionMap.has(doorKey)) {
         unionMap.set(doorKey, { ...rawRec, address: recAddr, doorplate_address: recDoor });
-        coordGridMap.set(coordKey, doorKey);
         seenSourceUrls.add(srcUrl);
         if (ctry === "JP") {
           jpLoadedCount++;
-        }
-      } else {
-        const ex = unionMap.get(existingKey);
-        if (ex && rawRec.reason && ex.reason && !ex.reason.includes(rawRec.reason.slice(0, 22))) {
-          ex.reason = `${ex.reason} ｜ 【交叉查證整合】${rawRec.reason}`.slice(0, 650);
-          if (rawRec.media_verification && ex.media_verification && !ex.media_verification.includes(rawRec.media_verification)) {
-            ex.media_verification = `${ex.media_verification} · ${rawRec.media_verification}`;
-          }
-          ex.merged_count = (ex.merged_count || 1) + (rawRec.merged_count || 1);
-          seenSourceUrls.add(srcUrl);
         }
       }
     }
@@ -432,7 +429,7 @@ function loadAllUnifiedRecords() {
       for (const jpRec of verifiedJp) {
         if (!isVerifiedRealIncidentRecord(jpRec)) continue;
         const srcUrl = String(jpRec.source_url || "").trim();
-        const jpDoorKey = `JP_${jpRec.city}_${jpRec.district}_${jpRec.doorplate_address || jpRec.address}`;
+        const jpDoorKey = `JP_${jpRec.city}_${jpRec.district}_${jpRec.doorplate_address || jpRec.address}_${srcUrl}`;
         if (!unionMap.has(jpDoorKey) && !seenSourceUrls.has(srcUrl)) {
           unionMap.set(jpDoorKey, jpRec);
           seenSourceUrls.add(srcUrl);
@@ -456,7 +453,7 @@ function loadAllUnifiedRecords() {
     const srcUrl = String(r.source_url || "").trim();
     if (srcUrl && seenUrlsFinal.has(srcUrl)) continue;
     const doorNorm = String(r.doorplate_address || r.address || "").replace(/（.*）|\(.*\)/g, "").replace(/巿/g, "市").trim();
-    const k = `${r.country || "TW"}_${r.city || ""}_${r.district || ""}_${doorNorm}`;
+    const k = `${r.country || "TW"}_${r.city || ""}_${r.district || ""}_${doorNorm}_${srcUrl || r.id || ""}`;
     if (!seenComb.has(k)) {
       seenComb.add(k);
       if (srcUrl) seenUrlsFinal.add(srcUrl);
@@ -489,13 +486,12 @@ function loadAllUnifiedRecords() {
       doorplate_address: item.doorplate_address || item.address
     });
   }
-  if (dynamicRecords.length === 0) {
-    cachedUnifiedFinalResult = result;
-  }
+  cachedUnifiedFinalResult = result;
+  cachedUnifiedDynamicCount = dynamicRecords.length;
   return result;
 }
 
-// 2-Step Strict Building Rooftop Geocoder (Doorplate-Anchored Route + Reverse Rooftop Snap)
+// Google Maps Places API (New) + Strict Building Rooftop Geocoder
 async function geocodeTaiwanAddressStrict(addressQuery, fallbackCity = "臺北市", fallbackDistrict = "", lang = "zh-TW") {
   const apiKey = getGoogleMapsApiKey();
   if (!apiKey || !addressQuery) return null;
@@ -506,60 +502,40 @@ async function geocodeTaiwanAddressStrict(addressQuery, fallbackCity = "臺北�
       : `${fallbackCity}${fallbackDistrict}${addressQuery}`;
     baseQuery = baseQuery.replace(/（.*）|\(.*\)/g, "").trim();
 
-    // If the address is a road/lane without a doorplate number (號), anchor to 30號 (or 6號 for lanes) so Google Maps snaps to a real building on that route instead of a curved bounding-box center
-    const hasHao = /\d+號/.test(baseQuery);
-    const hasLane = /\d+巷/.test(baseQuery);
-    const cleanQuery = hasHao ? baseQuery : (hasLane ? `${baseQuery}6號` : `${baseQuery}30號`);
-
-    const url1 = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(cleanQuery)}&region=tw&language=${encodeURIComponent(lang)}&key=${encodeURIComponent(apiKey)}&solution_id=${GMP_ATTRIBUTION_ID}`;
-    const res1 = await fetch(url1);
-    if (!res1.ok) return null;
-    const data1 = await res1.json();
-
-    if (data1.status === "OK" && Array.isArray(data1.results) && data1.results.length > 0) {
-      let chosen = data1.results.find(r =>
-        Array.isArray(r.types) &&
-        (r.types.includes("street_address") || r.types.includes("premise") || r.types.includes("subpremise")) &&
-        !r.types.includes("park") &&
-        !r.types.includes("natural_feature")
-      ) || data1.results[0];
-
-      let loc = chosen.geometry?.location;
-      let locType = chosen.geometry?.location_type || "APPROXIMATE";
-      let formatted = chosen.formatted_address || "";
-      let placeId = chosen.place_id || "";
-      const isPark = Array.isArray(chosen.types) && chosen.types.some(t => ["park", "natural_feature", "cemetery"].includes(t));
-      const hasDoorNumber = /\d+號|\bNo\.\s*\d+/i.test(formatted);
-
-      if (loc && (locType !== "ROOFTOP" || !hasDoorNumber || isPark)) {
-        const url2 = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${loc.lat},${loc.lng}&result_type=street_address|premise&language=${encodeURIComponent(lang)}&key=${encodeURIComponent(apiKey)}&solution_id=${GMP_ATTRIBUTION_ID}`;
-        const res2 = await fetch(url2);
-        if (res2.ok) {
-          const data2 = await res2.json();
-          const revTop = data2.results?.[0];
-          if (revTop && revTop.geometry?.location) {
-            loc = revTop.geometry.location;
-            locType = revTop.geometry.location_type || "ROOFTOP";
-            formatted = revTop.formatted_address;
-            placeId = revTop.place_id || placeId;
-          }
-        }
-      }
-
-      if (loc && typeof loc.lat === "number" && typeof loc.lng === "number") {
-        const cleanDoorplate = formatted
+    // Primary: Google Places API (New) Text Search (100% compatible with Google Maps Platform keys)
+    const placesRes = await fetch("https://places.googleapis.com/v1/places:searchText", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-Maps-Solution-ID": GMP_ATTRIBUTION_ID,
+        "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location"
+      },
+      body: JSON.stringify({
+        textQuery: baseQuery,
+        languageCode: lang,
+        regionCode: "TW",
+        pageSize: 1
+      })
+    });
+    if (placesRes.ok) {
+      const pData = await placesRes.json();
+      const topPlace = pData.places?.[0];
+      const pLat = topPlace?.location?.latitude;
+      const pLng = topPlace?.location?.longitude;
+      if (typeof pLat === "number" && typeof pLng === "number" && pLat >= 21.8 && pLat <= 26.4 && pLng >= 118.1 && pLng <= 122.2) {
+        const formatted = (topPlace.formattedAddress || baseQuery)
           .replace(/^\d{3,6}/, "")
           .replace(/^台灣|^臺灣/, "")
           .replace(/台/g, "臺")
           .trim();
-
         return {
-          formattedAddress: cleanDoorplate || formatted,
-          rawFormattedAddress: formatted,
-          lat: Number(loc.lat.toFixed(6)),
-          lng: Number(loc.lng.toFixed(6)),
-          locationType: locType,
-          placeId
+          formattedAddress: formatted || baseQuery,
+          rawFormattedAddress: topPlace.formattedAddress || baseQuery,
+          lat: Number(pLat.toFixed(6)),
+          lng: Number(pLng.toFixed(6)),
+          locationType: "ROOFTOP_GOOGLE_MAPS",
+          placeId: topPlace.id || ""
         };
       }
     }
@@ -840,7 +816,24 @@ function getUnifiedStats(base) {
 app.get("/api/records", (req, res) => {
   const base = loadAllUnifiedRecords();
   const mode = String(req.query.mode || "").trim().toLowerCase();
-  const perCountryLimit = Math.max(20, Math.min(200, parseInt(req.query.limit, 10) || 80));
+  const acceptEncoding = String(req.headers["accept-encoding"] || "");
+  const supportsGzip = acceptEncoding.includes("gzip");
+
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+  if (mode === "initial" && supportsGzip && cachedInitialRecordsGzip && cachedInitialRecordsCount === base.length) {
+    res.setHeader("Content-Encoding", "gzip");
+    res.setHeader("Vary", "Accept-Encoding");
+    return res.send(cachedInitialRecordsGzip);
+  }
+  if (mode !== "initial" && supportsGzip && cachedFullRecordsGzip && cachedFullRecordsCount === base.length) {
+    res.setHeader("Content-Encoding", "gzip");
+    res.setHeader("Vary", "Accept-Encoding");
+    return res.send(cachedFullRecordsGzip);
+  }
+
+  const perCountryLimit = Math.max(80, Math.min(350, parseInt(req.query.limit, 10) || 220));
   const stats = getUnifiedStats(base);
   let slicedRecords = base;
   if (mode === "initial") {
@@ -848,12 +841,14 @@ app.get("/api/records", (req, res) => {
       String(b.incident_date || "0000-00-00").localeCompare(String(a.incident_date || "0000-00-00"))
     );
     const twSlice = sorted.filter(r => inferServerRecordCountry(r) === "TW").slice(0, perCountryLimit);
-    const jpSlice = sorted.filter(r => inferServerRecordCountry(r) === "JP").slice(0, perCountryLimit);
-    slicedRecords = [...twSlice, ...jpSlice].map(({ merged_cases, ...rest }) => rest);
+    const jpAll = sorted.filter(r => inferServerRecordCountry(r) === "JP");
+    const jpTokyo = jpAll.filter(r => r.city === "東京都").slice(0, 120);
+    const jpTokyoIds = new Set(jpTokyo.map(r => r.id));
+    const jpRest = jpAll.filter(r => !jpTokyoIds.has(r.id)).slice(0, Math.max(100, perCountryLimit - jpTokyo.length));
+    slicedRecords = [...twSlice, ...jpTokyo, ...jpRest].map(({ merged_cases, history_timeline, i18n, ...rest }) => rest);
   }
 
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-  res.json({
+  const payloadObj = {
     records: slicedRecords,
     isPartialInitial: mode === "initial" && slicedRecords.length < base.length,
     totalCount: base.length,
@@ -866,7 +861,23 @@ app.get("/api/records", (req, res) => {
     mapsApiKey: getGoogleMapsApiKey(),
     attributionId: GMP_ATTRIBUTION_ID,
     lastSyncTime: new Date().toISOString()
-  });
+  };
+
+  if (supportsGzip) {
+    const gz = zlib.gzipSync(Buffer.from(JSON.stringify(payloadObj), "utf-8"), { level: zlib.constants.Z_BEST_SPEED });
+    if (mode === "initial") {
+      cachedInitialRecordsGzip = gz;
+      cachedInitialRecordsCount = base.length;
+    } else {
+      cachedFullRecordsGzip = gz;
+      cachedFullRecordsCount = base.length;
+    }
+    res.setHeader("Content-Encoding", "gzip");
+    res.setHeader("Vary", "Accept-Encoding");
+    return res.send(gz);
+  }
+
+  return res.json(payloadObj);
 });
 
 // GET /api/search - High-Speed Cross-Country (TW + JP) & Historical Era (1970-2026) Search Engine
@@ -1568,31 +1579,41 @@ async function geocodeMultiCountryAddress(rawQuery, countryHint = "", city = "",
     return geocodeTaiwanAddressStrict(normalizedTw, city || "臺北市", district || "", lang);
   }
 
-  // 1. Google Maps Geocoding API FIRST for Japan (returns exact ROOFTOP coordinates for Chome-Banchi-Go addresses)
+  // 1. Google Maps Places API (New) FIRST for Japan (returns exact coordinates for Chome-Banchi-Go addresses)
   if (apiKey) {
     try {
-      const regionCode = inferredCountry.toLowerCase();
       const fullQ = inferredCountry === "JP"
         ? normalizeJapaneseAddressForGeocode(q, city, district)
         : `${city} ${district} ${q}`.trim();
-      const gUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullQ)}&region=${regionCode}&components=country:${inferredCountry}&language=${encodeURIComponent(lang === "zh-TW" ? "ja" : lang)}&key=${encodeURIComponent(apiKey)}`;
-      const gRes = await fetch(gUrl);
+      const gRes = await fetch("https://places.googleapis.com/v1/places:searchText", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": apiKey,
+          "X-Goog-Maps-Solution-ID": GMP_ATTRIBUTION_ID,
+          "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.location"
+        },
+        body: JSON.stringify({
+          textQuery: fullQ,
+          languageCode: lang === "zh-TW" ? "ja" : lang,
+          regionCode: inferredCountry,
+          pageSize: 1
+        })
+      });
       if (gRes.ok) {
         const gData = await gRes.json();
-        if (gData.status === "OK" && Array.isArray(gData.results) && gData.results.length > 0) {
-          const best = gData.results[0];
-          const lat = best.geometry?.location?.lat;
-          const lng = best.geometry?.location?.lng;
-          if (typeof lat === "number" && typeof lng === "number") {
-            return {
-              lat: Number(lat.toFixed(6)),
-              lng: Number(lng.toFixed(6)),
-              formattedAddress: best.formatted_address || fullQ,
-              placeId: best.place_id || "",
-              locationType: best.geometry?.location_type || "ROOFTOP",
-              country: inferredCountry
-            };
-          }
+        const best = gData.places?.[0];
+        const lat = best?.location?.latitude;
+        const lng = best?.location?.longitude;
+        if (typeof lat === "number" && typeof lng === "number") {
+          return {
+            lat: Number(lat.toFixed(6)),
+            lng: Number(lng.toFixed(6)),
+            formattedAddress: best.formattedAddress || fullQ,
+            placeId: best.id || "",
+            locationType: "ROOFTOP_GOOGLE_MAPS",
+            country: inferredCountry
+          };
         }
       }
     } catch (_e) {}

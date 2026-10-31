@@ -1276,7 +1276,7 @@
         db_jp_auction: "凶宅地址：大島てる・JikoDB・競賣BIT",
         db_jp_judgment: "他殺統計：日本警察廳 (NPA)・e-Stat",
         db_jp_moi: "區域犯罪風險地圖：官方犯罪統計＋地理資料",
-        db_jp_news: "自殺死亡統計：日本警察廳・厚勞省統計",
+        db_jp_news: "大島てる公示・日本新聞實證",
         db_kr_auction: "事故物件地址：大法院競賣（公開同類庫難尋）",
         db_kr_judgment: "他殺統計：韓國警察廳 (KNPA)・CCJS",
         db_kr_moi: "區域犯罪風險地圖：生活安全地圖 (Safemap)",
@@ -1522,7 +1522,7 @@
         db_jp_auction: "Stigma Addr: Oshimateru · JikoDB · BIT",
         db_jp_judgment: "Homicide Stats: Japan NPA · e-Stat",
         db_jp_moi: "Crime Risk Map: Official Crime Stats + GIS",
-        db_jp_news: "Suicide Stats: Japan NPA · MHLW Data",
+        db_jp_news: "Oshimateru & Japan News Archives",
         db_kr_auction: "Incident Addr: Court Auction (Rare Public DB)",
         db_kr_judgment: "Homicide Stats: Korea KNPA · CCJS",
         db_kr_moi: "Crime Risk Map: Safemap (생활안전지도)",
@@ -1768,7 +1768,7 @@
         db_jp_auction: "事故物件住所：大島てる・JikoDB・競売BIT",
         db_jp_judgment: "他殺・殺人統計：日本警察庁・e-Stat",
         db_jp_moi: "地域犯罪リスク地図：公式犯罪統計＋地理データ",
-        db_jp_news: "自殺死亡統計：日本警察庁・厚労省基礎資料",
+        db_jp_news: "大島てる公示・報道機関検証記録",
         db_kr_auction: "事故物件住所：韓国大法院競売（公開DB希少補完）",
         db_kr_judgment: "他殺・殺人統計：韓国警察庁・CCJS",
         db_kr_moi: "地域犯罪リスク地図：生活安全地図 (Safemap)",
@@ -2015,7 +2015,7 @@
         db_jp_auction: "사고물건 주소: 오시마테루·JikoDB·경매BIT",
         db_jp_judgment: "타살·살인 통계: 일본 경찰청·e-Stat",
         db_jp_moi: "지역 범죄위험지도: 공식 범죄통계+지리자료",
-        db_jp_news: "자살사망 통계: 일본 경찰청·후생노동성 통계",
+        db_jp_news: "오시마테루·일본 언론보도 검증기록",
         db_kr_auction: "사고물건 주소: 법원경매(공개 동류DB 부재 보완)",
         db_kr_judgment: "타살·살인 통계: 경찰청·형사사법포털(CCJS)",
         db_kr_moi: "지역 범죄위험지도: 생활안전지도(Safemap)",
@@ -3078,8 +3078,6 @@
         item.district,
         String(item.city || "").replace(/台/g, "臺"),
         String(item.city || "").replace(/臺/g, "台"),
-        String(item.city || "").replace(/[縣市]$/, ""),
-        String(item.district || "").replace(/[區市鎮鄉]$/, ""),
         tCity(item.city),
         tDistrict(item.district),
         item.i18n?.[currentLang]?.city,
@@ -3101,8 +3099,8 @@
       cleaned = cleaned
         .replace(/[（(][^）)]*[）)]/g, " ")
         .replace(/^(?:臺北市|台北市|新北市|桃園市|桃園縣|臺中市|台中市|臺南市|台南市|高雄市|基隆市|新竹市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義市|嘉義縣|屏東縣|宜蘭縣|花蓮縣|臺東縣|台東縣|澎湖縣|金門縣|連江縣|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)+/g, "")
-        .replace(/^[一-龥]{1,3}[區市鎮鄉]/, "")
-        .replace(/^[^\d「]*[里村]/, "")
+        .replace(/^[一-龥]{1,3}[區市鎮鄉](?=[一-龥\d「])/, "")
+        .replace(/^[^\d「路街大道巷]*[里村](?=[一-龥\d「])/, "")
         .replace(/^(?:(?!(?:臺灣大道|臺北大道|臺東路|臺西路))(?:臺|台|北|新|桃|中|南|高|基|竹|嘉|出|傳|陳屍|位於|坐落於|坐落))(?=[一-龥]{2,5}(?:路|街|大道|巷))/, "")
         .replace(/某(?:社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅|三層|四層|連棟|平房|獨棟).*$/g, "")
         .replace(/\s+/g, " ")
@@ -3380,9 +3378,9 @@
 
     function localizeCaseReasonPreview(item) {
       if (item && item.i18n && item.i18n[currentLang] && item.i18n[currentLang].reason) {
-        return item.i18n[currentLang].reason;
+        return sanitizeHtmlEntitiesAndText(item.i18n[currentLang].reason);
       }
-      const zhReason = String(item.reason || "");
+      const zhReason = sanitizeHtmlEntitiesAndText(item.reason || "");
       if (currentLang === "zh-TW") return zhReason;
 
       const fullCached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
@@ -6670,24 +6668,29 @@
 
     function sanitizeHtmlEntitiesAndText(str) {
       if (!str) return "";
-      return String(str)
+      let s = String(str)
         .replace(/&amp;nbsp;/gi, " ")
         .replace(/&nbsp;/gi, " ")
         .replace(/&#160;/g, " ")
         .replace(/&amp;quot;/gi, '"')
         .replace(/&quot;/gi, '"')
-        .replace(/&#39;|&apos;/gi, "'")
+        .replace(/&#0*39;|&apos;/gi, "'")
         .replace(/&amp;lt;|&lt;/gi, "<")
         .replace(/&amp;gt;|&gt;/gi, ">")
-        .replace(/&amp;/gi, "&")
-        .replace(/\s{2,}/g, " ")
-        .trim();
+        .replace(/&amp;/gi, "&");
+      s = s.replace(/\s*—\s*報道内容：\s*<a\b[\s\S]*?(?=（発生・報道日：|$)/gi, "");
+      s = s.replace(/\s*—\s*報導摘錄：\s*<a\b[\s\S]*?(?=（|事故發生|案發|$)/gi, "");
+      s = s.replace(/<a\b[^>]*?(?=[（\s]|$)/gi, " ");
+      s = s.replace(/<\/?[a-z][^>]*>?/gi, " ");
+      s = s.replace(/[<>]/g, " ");
+      s = s.replace(/\s*—\s*(?:報道内容|報導摘錄)：\s*(?=（|$)/g, "");
+      return s.replace(/\s{2,}/g, " ").trim();
     }
 
     function prepareRecord(r, index) {
       // Fast path for pre-calibrated archive records or records with multi-language i18n
-      const rawAddrFast = String(r.address || "");
-      const rawReasonFast = String(r.reason || "");
+      const rawAddrFast = sanitizeHtmlEntitiesAndText(r.address || "");
+      const rawReasonFast = sanitizeHtmlEntitiesAndText(r.reason || "");
       const isAlreadyCalibrated =
         Boolean(r.i18n) ||
         inferCountry(r) !== "TW" ||
@@ -6706,9 +6709,9 @@
       if (isAlreadyCalibrated) {
         cleanAddress = rawAddrFast;
         cleanReason = rawReasonFast;
-        cleanSource = String(r.source || "");
-        cleanMedia = String(r.media_verification || r.source || "");
-        const rawA = String(r.auction_record || "");
+        cleanSource = sanitizeHtmlEntitiesAndText(r.source || "");
+        cleanMedia = sanitizeHtmlEntitiesAndText(r.media_verification || r.source || "");
+        const rawA = sanitizeHtmlEntitiesAndText(r.auction_record || "");
         cleanAuction = /案發日期雙重核實|案發日期核實|無公開法拍|尚無法拍|公開資訊與歷史紀錄核實/.test(rawA) ? "" : rawA;
         cleanTimeline = r.history_timeline;
       } else {
@@ -6855,7 +6858,7 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261029_verified_twjp_supa_v31";
+    const ARCHIVE_CACHE_VERSION = "20261031_verified_twjp_supa_v32";
 
     const jpGsiAddressCoordCache = new Map();
     const twArcgisAddressCoordCache = new Map();
@@ -8165,29 +8168,38 @@
           const row = document.createElement("article");
           row.setAttribute("data-record-key", String(item.__key));
           row.setAttribute("data-city-zh", String(item.city || ""));
-          row.className = "p-3.5 sm:p-4 bg-white hover:bg-slate-50/90 active:bg-slate-100/70 cursor-pointer transition-colors";
+          row.className = "p-3.5 sm:p-4 bg-white hover:bg-slate-50/90 active:bg-slate-100/70 cursor-pointer transition-colors overflow-hidden";
+          const safeReasonPreview = String(localizeCaseReasonPreview(item) || "")
+            .replace(/<[^>]*>?/g, " ")
+            .replace(/[<>]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          const safeAddrDisplay = String(addrDisplay || "")
+            .replace(/<[^>]*>?/g, " ")
+            .replace(/[<>]/g, " ")
+            .trim();
           row.innerHTML = `
-            <div class="flex items-center justify-between gap-2 text-xs text-slate-600 mb-1">
-              <div class="flex items-center gap-1.5 flex-wrap">
+            <div class="flex items-start justify-between gap-2 text-xs text-slate-600 mb-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap min-w-0">
                 <span class="font-semibold ${meta.textColor}">${catLabel}</span>
                 <span aria-hidden="true">·</span>
                 <span class="card-dist-el text-slate-700 font-medium">${cityLabel} ${distLabel}</span>
                 <span aria-hidden="true">·</span>
-                <span class="font-medium ${dbMeta.textClass || 'text-slate-600'}">${dbSourceLabel}</span>
+                <span class="font-medium ${dbMeta.textClass || 'text-slate-600'} truncate">${dbSourceLabel}</span>
               </div>
-              <time class="font-mono text-xs font-bold text-red-700 bg-red-50 border border-red-100 px-2 py-0.5 rounded tabular-nums shrink-0">${t("badge_incident_prefix")}${item.incident_date || ""}</time>
+              <time class="font-mono text-[11px] font-bold text-red-700 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded tabular-nums shrink-0 whitespace-nowrap">${t("badge_incident_prefix")}${item.incident_date || ""}</time>
             </div>
 
-            <h3 class="card-addr-el text-sm font-bold text-slate-900 mb-1.5 leading-snug">${addrDisplay}</h3>
+            <h3 class="card-addr-el text-sm font-bold text-slate-900 mb-1.5 leading-snug break-words">${safeAddrDisplay}</h3>
 
-            <p class="card-reason-el text-xs text-slate-600 leading-relaxed mb-2.5 line-clamp-3">${localizeCaseReasonPreview(item)}</p>
+            <p class="card-reason-el text-xs text-slate-600 leading-relaxed mb-2.5 line-clamp-3 break-words">${safeReasonPreview}</p>
 
-            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-600 gap-2">
-              <div class="flex items-center gap-1.5 truncate">
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-600 gap-2 min-w-0">
+              <div class="flex items-center gap-1.5 truncate min-w-0">
                 <span class="text-slate-600 font-medium truncate">${localizeBuildingType(item.building_type, item)}</span>
                 ${details.directSourceUrl ? `<span aria-hidden="true">·</span><span class="text-slate-700 font-semibold shrink-0">${t("badge_has_link")}</span>` : ""}
               </div>
-              <div class="flex items-center gap-2 shrink-0 font-semibold">
+              <div class="flex items-center gap-2 shrink-0 font-semibold whitespace-nowrap">
                 <button type="button" class="locate-pin-inline-btn min-h-[28px] px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium">
                   ${t("btn_rooftop_locate")}
                 </button>

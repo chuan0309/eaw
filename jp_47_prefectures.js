@@ -642,8 +642,9 @@ export function isVerifiedRealIncidentRecord(r) {
   if (/（\d+樓\d+室）.*之單身獨居高齡住戶於室內突發疾病孤獨死/i.test(fullText)) return false;
   if (/發生感情、財務或家庭糾紛引發之持刀殺害與傷害致死案件，轄區警察署設立搜查本部偵辦/i.test(fullText)) return false;
   if (/於深夜發生室內一氧化碳中毒（練炭自殺）或浴室自縊輕生案件，警方現場勘驗排除他殺嫌疑/i.test(fullText)) return false;
-  if (/国道で.*事故|高速道路|新東名|東名高速|乗用車.*衝突|トラック.*横転|遺跡で土壁|工場で.*転落|土砂崩れ|火災死亡リスクが|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|無人員受困傷亡|けが人なし|死者なし|けが人はいない/i.test(fullText)) return false;
-  if (/主要案發地點在街頭|發生於車內|陳屍於車內|周邊停車場|生技公司廠房|資源回收場|陳屍於樹下|工寮聚餐飲酒後突發猝死|洗外牆.*吊車|商辦大樓工地|教學大樓|大廳滑手機不動|倒臥廁所送醫亡|歇業SPA養生館|園區周邊辦公室/.test(fullText)) return false;
+  if (/国道で.*事故|高速道路|新東名|東名高速|乗用車.*衝突|トラック.*横転|踏切|列車にはねられ|電車にはねられ|交通死亡事故|街頭犯罪ゼロ|断食道場|山中に.*遺体|クマに襲われ|遺跡で土壁|工場で.*転落|工場火災|倉庫火災|用水路|土砂崩れ|火災死亡リスクが|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|無人員受困傷亡|けが人なし|死者なし|けが人はいない/i.test(fullText)) return false;
+  if (/主要案發地點在街頭|發生於車內|陳屍於車內|周邊停車場|生技公司廠房|資源回收場|成衣廠|成衣大廠|倉庫火警|大廠火災|300坪鐵皮|鐵皮場|鐵皮工廠|工廠火警|廠房火警|河口湖命案主嫌背景|父擁臺南.*13年前|陳屍於樹下|工寮聚餐飲酒後突發猝死|洗外牆.*吊車|商辦大樓工地|教學大樓|大廳滑手機不動|倒臥廁所送醫亡|歇業SPA養生館|園區周邊辦公室/.test(fullText)) return false;
+  if (/(?:路竹區|湖內區)高雄路$/.test(door)) return false;
   if (/已經營\d+年|開幕|新開幕|美食推薦/i.test(fullText) && !/命案|死亡|身亡|陳屍|輕生|墜樓|他殺/i.test(fullText)) return false;
 
   const hasIncidentFact = /死|亡|屍|殺|命案|輕生|墜樓|跳樓|燒炭|上吊|自縊|火警|火災|氣爆|一氧化碳|遺體|遺体|孤獨死|孤独死|変死|自殺|心肺停止|意識不明|法拍|拍賣|競売|特別募集|特定物件|心理的瑕疵|告知事項|凶宅|事故物件/i.test(fullText);
@@ -671,13 +672,16 @@ export function isVerifiedRealIncidentRecord(r) {
   } else if (country === "TW") {
     if (lat < 21.5 || lat > 26.5 || lng < 118.0 || lng > 122.5) return false;
     const twCore = door.replace(/台/g, "臺").replace(city, "").replace(dist, "").trim();
-    if (!twCore || /^(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)/.test(twCore)) return false;
-    if (!/^(?:[一-龥]{2,3}[里村])?[一-龥]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?(?:\d+(?:之\d+)?號)?(?:\d+樓)?(?:「[一-龥A-Za-z0-9]{2,12}」)?$/.test(twCore)) {
+    if (!twCore || twCore.length < 2 || /^(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)/.test(twCore)) return false;
+    const isValidRoad = /^(?:[一-龥]{2,3}[里村])?[一-龥0-9一二三四五六七八九十]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:(?:新建|\d+)巷)?(?:\d+弄)?(?:\d+(?:之\d+)?號)?(?:\d+樓(?:之\d+)?)?(?:「[一-龥A-Za-z0-9]{2,16}」)?$/.test(twCore);
+    const isValidVillage = /^[一-龥]{2,4}[里村](?:\d+鄰)?(?:[一-龥]{0,4}\d+(?:之\d+)?號)?(?:「[一-龥A-Za-z0-9]{2,16}」)?$/.test(twCore);
+    const isValidLandmark = /^「[一-龥A-Za-z0-9]{2,16}」$|^[一-龥A-Za-z0-9]{2,12}(?:國宅|大樓|大廈|華廈|社區|山莊|新城|新村|花園廣場|花園|家園|世家|天下|帝國|別墅|學苑|新第|雙星|名宮|廣場|大飯店|旅社|宿舍)$/.test(twCore);
+    if (!isValidRoad && !isValidVillage && !isValidLandmark) {
       return false;
     }
     if (TAIWAN_368_TOWNSHIP_COORDS[`${city}_${dist}`]) {
       const [tLat, tLng] = TAIWAN_368_TOWNSHIP_COORDS[`${city}_${dist}`];
-      if (haversineKm(lat, lng, tLat, tLng) > 12.0) return false;
+      if (haversineKm(lat, lng, tLat, tLng) > 18.0) return false;
     }
   }
 
@@ -729,15 +733,9 @@ export function formatRecordForSupabasePostgres(r) {
     verification_score: Number(r.verification_score || 98),
     audit_note: `${country} 5道凶宅真偽與街道座標核實入庫`,
     case_fingerprint: fingerprint,
-    raw_payload: {
-      ...r,
-      country,
-      city,
-      district,
-      address,
-      doorplate_address: doorplate,
-      incident_date: incDate,
-      source_url: srcUrl
-    }
+    building_type: String(r.building_type || (country === "JP" ? "共同住宅・マンション" : "集合住宅大樓")).slice(0, 40),
+    current_status: String(r.current_status || "現況列管中").slice(0, 60),
+    db_source: String(r.db_source || "NEWS_PUBLIC_ARCHIVE").slice(0, 40),
+    location_accuracy: String(r.location_accuracy || "ROOFTOP_GOOGLE_MAPS").slice(0, 40)
   };
 }

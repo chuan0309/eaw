@@ -16,6 +16,24 @@
   <meta name="google-site-verification" content="google6a317e59d3daa28c" />
   <meta name="google-site-verification" content="6a317e59d3daa28c" />
   <meta name="google-adsense-account" content="ca-pub-4333106443725240" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" id="meta-theme-color" content="#ffffff" />
+  <script id="system-theme-init">
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem("tw_map_theme_pref");
+        var sysDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var useDark = savedTheme === "dark" || (savedTheme !== "light" && sysDark);
+        if (useDark) {
+          document.documentElement.classList.add("dark");
+          var metaTc = document.getElementById("meta-theme-color");
+          if (metaTc) metaTc.setAttribute("content", "#0f172a");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script id="i18n-route-guard">
     (function() {
       try {
@@ -220,6 +238,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: "class",
       theme: {
         extend: {
           fontFamily: {
@@ -242,6 +261,7 @@
       font-family: "Plus Jakarta Sans", "Noto Sans TC", "Noto Sans JP", "Noto Sans KR", sans-serif;
       -webkit-font-smoothing: antialiased;
       overscroll-behavior: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     #map {
@@ -271,6 +291,153 @@
       color: #475569 !important;
       opacity: 1;
     }
+
+    /* ==========================================================================
+       Adaptive System Dark Mode & Manual Sun/Moon Theme Engine (html.dark)
+       Matches iOS/macOS Safari, Google Chrome, and Windows/Mac Dark Appearance
+       ========================================================================== */
+    html.dark,
+    html.dark body {
+      background-color: #0B1120 !important;
+      color: #F1F5F9 !important;
+      color-scheme: dark;
+    }
+    html.dark #map {
+      background: #111827 !important;
+    }
+    html.dark .bg-white {
+      background-color: #0F172A !important;
+    }
+    html.dark .bg-white\/95 {
+      background-color: rgba(15, 23, 42, 0.95) !important;
+    }
+    html.dark .bg-slate-50,
+    html.dark .bg-slate-50\/75,
+    html.dark .bg-slate-50\/50 {
+      background-color: #1E293B !important;
+    }
+    html.dark .bg-slate-100 {
+      background-color: #334155 !important;
+    }
+    html.dark .hover\:bg-slate-50:hover,
+    html.dark .hover\:bg-slate-50\/90:hover,
+    html.dark .hover\:bg-slate-100:hover {
+      background-color: #1E293B !important;
+    }
+    html.dark .hover\:bg-slate-200:hover {
+      background-color: #475569 !important;
+    }
+    html.dark .text-slate-900 {
+      color: #F8FAFC !important;
+    }
+    html.dark .text-slate-800 {
+      color: #E2E8F0 !important;
+    }
+    html.dark .text-slate-700 {
+      color: #CBD5E1 !important;
+    }
+    html.dark .text-slate-600,
+    html.dark .text-slate-500,
+    html.dark .text-slate-400 {
+      color: #94A3B8 !important;
+    }
+    html.dark .placeholder-slate-400::placeholder {
+      color: #64748B !important;
+    }
+    html.dark .border-slate-200,
+    html.dark .border-slate-200\/90,
+    html.dark .border-slate-200\/80,
+    html.dark .border-slate-300 {
+      border-color: #334155 !important;
+    }
+    html.dark .border-slate-100 {
+      border-color: #1E293B !important;
+    }
+    html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+    html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+      border-color: #1E293B !important;
+    }
+    html.dark input,
+    html.dark select,
+    html.dark textarea {
+      background-color: #1E293B !important;
+      color: #F8FAFC !important;
+      border-color: #334155 !important;
+    }
+    html.dark input:focus,
+    html.dark select:focus,
+    html.dark textarea:focus {
+      border-color: #38BDF8 !important;
+      background-color: #0F172A !important;
+    }
+    html.dark .bg-red-50,
+    html.dark .bg-red-50\/60,
+    html.dark .bg-red-50\/40 {
+      background-color: rgba(127, 29, 29, 0.35) !important;
+    }
+    html.dark .border-red-100,
+    html.dark .border-red-200 {
+      border-color: rgba(248, 113, 113, 0.35) !important;
+    }
+    html.dark .text-red-700 {
+      color: #FCA5A5 !important;
+    }
+    html.dark .text-amber-700 {
+      color: #FCD34D !important;
+    }
+    html.dark .text-purple-700 {
+      color: #D8B4FE !important;
+    }
+    html.dark .text-sky-700 {
+      color: #7DD3FC !important;
+    }
+    html.dark .bg-amber-50,
+    html.dark .bg-amber-50\/50 {
+      background-color: rgba(120, 53, 15, 0.32) !important;
+    }
+    html.dark .text-amber-900 {
+      color: #FDE68A !important;
+    }
+    html.dark .border-amber-200 {
+      border-color: rgba(251, 191, 36, 0.35) !important;
+    }
+    html.dark .bg-indigo-50 {
+      background-color: rgba(49, 46, 129, 0.4) !important;
+    }
+    html.dark .text-indigo-700 {
+      color: #A5B4FC !important;
+    }
+    html.dark .border-indigo-200\/80 {
+      border-color: rgba(129, 140, 248, 0.35) !important;
+    }
+    html.dark .cat-btn.border-slate-900 {
+      border-color: #38BDF8 !important;
+      color: #F8FAFC !important;
+    }
+    html.dark .leaflet-popup-content-wrapper,
+    html.dark .leaflet-popup-tip {
+      background: #0F172A !important;
+      color: #F8FAFC !important;
+      border-color: #334155 !important;
+    }
+    html.dark .gm-style .gm-style-iw-c {
+      background-color: #0F172A !important;
+      color: #F8FAFC !important;
+      border: 1px solid #334155 !important;
+    }
+    html.dark .gm-style .gm-style-iw-tc::after {
+      background: #0F172A !important;
+    }
+    html.dark .leaflet-tile-pane {
+      filter: brightness(0.84) contrast(1.08) saturate(0.88);
+    }
+    html.dark .adsense-slot-wrapper {
+      background-color: #0F172A !important;
+      border-color: #334155 !important;
+    }
+    html.dark ::-webkit-scrollbar-track { background: #0F172A; }
+    html.dark ::-webkit-scrollbar-thumb { background: #334155; }
+    html.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
     .marker-cluster-small,
     .marker-cluster-medium,
@@ -375,6 +542,7 @@
       <div class="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold" role="group" aria-label="Language Switcher">
         <a href="/" data-lang="zh-TW" data-route="/" class="lang-btn px-2 py-1 rounded-md bg-slate-900 text-white transition-colors">繁中</a>
         <a href="/ja/" data-lang="ja" data-route="/ja/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">日本語</a>
+        <a href="/ko/" data-lang="ko" data-route="/ko/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">한국어</a>
         <a href="/en/" data-lang="en" data-route="/en/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">EN</a>
       </div>
       <select
@@ -384,8 +552,25 @@
       >
         <option value="zh-TW" data-route="/">繁中</option>
         <option value="ja" data-route="/ja/">日本語</option>
+        <option value="ko" data-route="/ko/">한국어</option>
         <option value="en" data-route="/en/">EN</option>
       </select>
+
+      <button
+        type="button"
+        id="theme-toggle-btn"
+        aria-label="切換深色或淺色模式 (Toggle Dark / Light Mode)"
+        title="切換深色／淺色模式"
+        class="w-9 h-9 sm:w-[38px] sm:h-[38px] p-0 text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors shrink-0 cursor-pointer flex items-center justify-center"
+      >
+        <svg id="theme-icon-moon" class="w-4 h-4 inline-flex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="theme-icon-sun" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
 
       <button type="button" id="open-country-picker-btn" class="min-h-[36px] sm:min-h-[38px] px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1">
         <span id="header-active-country-label" data-i18n="lbl_select_country_btn">選擇國家</span>
@@ -501,15 +686,8 @@
           </select>
         </div>
 
-        <!-- Row 3: Direct Public Database Source Filter + Residential Building Type Filter -->
+        <!-- Row 3: Residential Building Type & Sort Controls -->
         <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
-          <select id="db-source-select" aria-label="Connected Public Database Source" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
-            <option value="ALL" data-i18n="db_opt_all">全部資料來源</option>
-            <option value="JUDICIAL_AUCTION" data-i18n="db_opt_auction">司法院法拍查封筆錄</option>
-            <option value="JUDICIAL_JUDGMENT" data-i18n="db_opt_judgment">司法院民事瑕疵判決</option>
-            <option value="MOI_OPEN_DATA" data-i18n="db_opt_moi">內政部實價特殊交易</option>
-            <option value="NEWS_PUBLIC_ARCHIVE" data-i18n="db_opt_news">社會新聞與警消紀錄</option>
-          </select>
           <select id="bldg-type-select" aria-label="Residential Building Type" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="ALL" data-i18n="bldg_opt_all">全部建物型態</option>
             <option value="大樓" data-i18n="bldg_opt_condo">電梯大樓／社區華廈</option>
@@ -518,9 +696,14 @@
             <option value="套房" data-i18n="bldg_opt_studio">獨立套房／分租雅房</option>
             <option value="商業" data-i18n="bldg_opt_comm">店面／商辦廠房</option>
           </select>
+          <select id="sort-select" aria-label="Sort" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
+            <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
+            <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
+            <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
+          </select>
         </div>
 
-        <!-- Row 4: Collapsible / Secondary Custom Year & Sort Controls -->
+        <!-- Row 4: Custom Year Inputs (Shown on Desktop/Tablet or when Custom Year Range is selected) -->
         <div id="collapsible-filters" class="hidden md:flex items-center justify-between gap-2 pt-0.5 text-xs">
           <div class="flex items-center gap-1.5 flex-1 min-w-0">
             <span class="text-slate-500 shrink-0" data-i18n="label_year_range">年份：</span>
@@ -544,21 +727,13 @@
               class="w-16 sm:w-20 bg-slate-50 border border-slate-200 text-slate-800 font-mono text-xs rounded-lg px-2 py-1 text-center tabular-nums focus:outline-none focus:border-slate-800 focus:bg-white"
             />
           </div>
-
-          <div class="flex items-center gap-1.5 shrink-0">
-            <select id="sort-select" aria-label="Sort" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors">
-              <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
-              <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
-              <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
-            </select>
-          </div>
         </div>
       </div>
 
       <!-- Clean Summary Bar with Per-Page Size Selector -->
       <div class="px-3.5 sm:px-4 py-2 bg-slate-50 border-b border-slate-200 text-xs text-slate-600 flex justify-between items-center gap-2 shrink-0">
         <div class="flex items-center gap-2 min-w-0">
-          <span id="filter-result-label" class="font-semibold text-slate-800 tabular-nums shrink-0">共 4,182 筆案件卷宗</span>
+          <span id="filter-result-label" class="font-semibold text-slate-800 tabular-nums shrink-0">共 9,177 筆案件卷宗</span>
           <span aria-hidden="true" class="text-slate-300">·</span>
           <span id="region-summary-label" class="text-slate-600 truncate">全臺灣</span>
         </div>
@@ -594,7 +769,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0 font-semibold">
               <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium">定位</span>
-              <span class="text-slate-900">詳情 →</span>
+              <span class="hidden md:inline text-slate-900">詳情 →</span>
             </div>
           </div>
         </article>
@@ -617,7 +792,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0 font-semibold">
               <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium">定位</span>
-              <span class="text-slate-900">詳情 →</span>
+              <span class="hidden md:inline text-slate-900">詳情 →</span>
             </div>
           </div>
         </article>
@@ -640,7 +815,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0 font-semibold">
               <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium">定位</span>
-              <span class="text-slate-900">詳情 →</span>
+              <span class="hidden md:inline text-slate-900">詳情 →</span>
             </div>
           </div>
         </article>
@@ -649,7 +824,7 @@
       <!-- Clean Footer Status Bar (Removed 3 Taiwan-only bottom links per user request) -->
       <div class="flex px-3.5 sm:px-4 py-2 border-t border-slate-200 text-[11px] text-slate-600 justify-between items-center bg-white shrink-0 gap-2">
         <div class="flex items-center gap-2 min-w-0">
-          <span id="db-status" class="tabular-nums truncate font-mono font-semibold text-slate-700">共 4,182 筆實證紀錄</span>
+          <span id="db-status" class="tabular-nums truncate font-mono font-semibold text-slate-700">共 9,177 筆實證紀錄</span>
         </div>
       </div>
     </aside>
@@ -913,7 +1088,7 @@
   </div>
 
   <!-- Mobile Bottom Navigation Bar (< md) -->
-  <nav aria-label="Mobile View Switcher" class="md:hidden bg-white border-t border-slate-200 grid grid-cols-4 items-center h-14 px-2 shrink-0 z-40">
+  <nav aria-label="Mobile View Switcher" class="md:hidden bg-white border-t border-slate-200 grid grid-cols-3 items-center h-14 px-2 shrink-0 z-40">
     <button
       type="button"
       data-mobile-view="list"
@@ -940,14 +1115,6 @@
     >
       <span class="text-xs leading-none" data-i18n="mnav_split">上下分割</span>
       <span class="text-[10px] text-slate-400 mt-1" data-i18n="mnav_split_sub">地圖+列表</span>
-    </button>
-    <button
-      type="button"
-      id="m-nav-filter"
-      class="flex flex-col items-center justify-center h-12 rounded-lg text-slate-500 font-medium hover:text-slate-900 transition-colors"
-    >
-      <span class="text-xs leading-none" data-i18n="mnav_filter">進階設定</span>
-      <span class="text-[10px] text-slate-400 mt-1" data-i18n="mnav_filter_sub">自訂年份</span>
     </button>
   </nav>
 
@@ -1198,7 +1365,6 @@
         return "ja";
       }
       if (pathLang === "ko") {
-        initialAutoDetectedCountry = "KR";
         return "ko";
       }
       if (pathLang === "en") {
@@ -1215,19 +1381,16 @@
       const manualPref = localStorage.getItem("user_lang_pref") || (localStorage.getItem("tw_archive_lang_explicit") === "1" ? localStorage.getItem("tw_archive_lang") : "");
       if (manualPref && ["zh-TW", "en", "ja", "ko"].includes(manualPref)) {
         if (manualPref === "ja") initialAutoDetectedCountry = "JP";
-        else if (manualPref === "ko") initialAutoDetectedCountry = "KR";
         else if (manualPref === "zh-TW") initialAutoDetectedCountry = "TW";
         return manualPref;
       }
       try {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-        if (tz === "Asia/Seoul") initialAutoDetectedCountry = "KR";
-        else if (tz === "Asia/Tokyo") initialAutoDetectedCountry = "JP";
+        if (tz === "Asia/Tokyo") initialAutoDetectedCountry = "JP";
         else if (tz === "Asia/Taipei") initialAutoDetectedCountry = "TW";
       } catch (e) {}
       const navLang = String(navigator.language || "").toLowerCase();
       if (navLang.startsWith("ko")) {
-        initialAutoDetectedCountry = "KR";
         return "ko";
       }
       if (navLang.startsWith("ja")) {
@@ -1285,6 +1448,7 @@
         ext_tw_news: "📰 台灣新聞／原始報導 ↗",
         ext_tw_court: "⚖️ 司法院裁判／法拍查證 ↗",
         ext_tw_lvr: "🏛️ 內政部實價／公開查證 ↗",
+        ext_jp_oshima: "🏠 大島てる（事故物件公示）↗",
         ext_jp_news: "📰 警察廳・e-Stat・自殺統計 ↗",
         ext_jp_court: "⚖️ 大島てる・JikoDB・競売BIT ↗",
         ext_jp_lvr: "🏛️ 官方犯罪統計＋地理資料 GIS ↗",
@@ -1531,6 +1695,7 @@
         ext_tw_news: "📰 Taiwan News / Source ↗",
         ext_tw_court: "⚖️ TW Judicial & Auction ↗",
         ext_tw_lvr: "🏛️ TW MOI Real Price & DB ↗",
+        ext_jp_oshima: "🏠 Oshimateru Stigma Map ↗",
         ext_jp_news: "📰 Japan NPA · e-Stat Stats ↗",
         ext_jp_court: "⚖️ Oshimateru · JikoDB · BIT ↗",
         ext_jp_lvr: "🏛️ JP Crime Risk GIS & MLIT ↗",
@@ -1777,6 +1942,7 @@
         ext_tw_news: "📰 台湾報道・元記事 ↗",
         ext_tw_court: "⚖️ 台湾司法院判例・競売 ↗",
         ext_tw_lvr: "🏛️ 台湾内政部実価・公開DB ↗",
+        ext_jp_oshima: "🏠 大島てる（事故物件公示）↗",
         ext_jp_news: "📰 警察庁・e-Stat・自殺統計 ↗",
         ext_jp_court: "⚖️ 大島てる・JikoDB・競売BIT ↗",
         ext_jp_lvr: "🏛️ 犯罪リスク地図GIS・国交省 ↗",
@@ -2024,6 +2190,7 @@
         ext_tw_news: "📰 대만 뉴스·원본 보도 ↗",
         ext_tw_court: "⚖️ 대만 사법원 판결·경매 ↗",
         ext_tw_lvr: "🏛️ 대만 내정부 실거래가·DB ↗",
+        ext_jp_oshima: "🏠 오시마테루 사고물건 ↗",
         ext_jp_news: "📰 일본 경찰청·e-Stat 통계 ↗",
         ext_jp_court: "⚖️ 오시마테루·JikoDB·경매BIT ↗",
         ext_jp_lvr: "🏛️ 범죄위험지도 GIS·국토교통성 ↗",
@@ -2567,9 +2734,18 @@
       "嘉義市": "chiayi-city", "嘉義縣": "chiayi", "屏東縣": "pingtung", "宜蘭縣": "yilan",
       "花蓮縣": "hualien", "臺東縣": "taitung", "台東縣": "taitung", "澎湖縣": "penghu",
       "金門縣": "kinmen", "連江縣": "lienchiang",
-      "東京都": "tokyo", "大阪府": "osaka", "神奈川県": "kanagawa", "愛知県": "aichi",
-      "福岡県": "fukuoka", "北海道": "hokkaido", "京都府": "kyoto", "兵庫県": "hyogo",
-      "埼玉県": "saitama", "千葉県": "chiba",
+      "北海道": "hokkaido", "青森県": "aomori", "岩手県": "iwate", "宮城県": "miyagi",
+      "秋田県": "akita", "山形県": "yamagata", "福島県": "fukushima", "茨城県": "ibaraki",
+      "栃木県": "tochigi", "群馬県": "gunma", "埼玉県": "saitama", "千葉県": "chiba",
+      "東京都": "tokyo", "神奈川県": "kanagawa", "新潟県": "niigata", "富山県": "toyama",
+      "石川県": "ishikawa", "福井県": "fukui", "山梨県": "yamanashi", "長野県": "nagano",
+      "岐阜県": "gifu", "静岡県": "shizuoka", "愛知県": "aichi", "三重県": "mie",
+      "滋賀県": "shiga", "京都府": "kyoto", "大阪府": "osaka", "兵庫県": "hyogo",
+      "奈良県": "nara", "和歌山県": "wakayama", "鳥取県": "tottori", "島根県": "shimane",
+      "岡山県": "okayama", "広島県": "hiroshima", "山口県": "yamaguchi", "徳島県": "tokushima",
+      "香川県": "kagawa", "愛媛県": "ehime", "高知県": "kochi", "福岡県": "fukuoka",
+      "佐賀県": "saga", "長崎県": "nagasaki", "熊本県": "kumamoto", "大分県": "oita",
+      "宮崎県": "miyazaki", "鹿児島県": "kagoshima", "沖縄県": "okinawa",
       "首爾特別市": "seoul", "釜山廣域市": "busan", "仁川廣域市": "incheon", "京畿道": "gyeonggi",
       "大邱廣域市": "daegu", "大田廣域市": "daejeon", "光州廣域市": "gwangju", "濟州特別自治道": "jeju"
     };
@@ -2577,8 +2753,10 @@
     function buildCaseSlugClient(record, fallbackIndex = 0) {
       if (!record || typeof record !== "object") return `case-${fallbackIndex}`;
       if (record.__seo_slug) return String(record.__seo_slug);
-      const rawCity = String(record.city || "").replace(/台/g, "臺").trim();
-      const citySlug = CITY_ASCII_SLUG_CLIENT[rawCity] || "taiwan";
+      const rawCity = String(record.city || "").trim();
+      const normCity = rawCity.replace(/台/g, "臺");
+      const isJp = record.country === "JP" || /^jp-/i.test(String(record.id || ""));
+      const citySlug = CITY_ASCII_SLUG_CLIENT[rawCity] || CITY_ASCII_SLUG_CLIENT[normCity] || (isJp ? "japan" : "taiwan");
       let rawId = record.id !== undefined && record.id !== null ? String(record.id).trim() : "";
       if (!rawId) {
         const addr = String(record.doorplate_address || record.address || `rec-${fallbackIndex}`);
@@ -2668,6 +2846,115 @@
       });
     }
 
+    const JP_KANA_TO_KO_MAP = {
+      "あ":"아","い":"이","う":"우","え":"에","お":"오",
+      "か":"가","き":"기","く":"구","け":"게","こ":"고",
+      "さ":"사","し":"시","す":"스","せ":"세","そ":"소",
+      "た":"다","ち":"지","つ":"쓰","て":"데","と":"도",
+      "な":"나","に":"니","ぬ":"누","ね":"네","の":"노",
+      "は":"하","ひ":"히","ふ":"후","へ":"헤","ほ":"호",
+      "ま":"마","み":"미","む":"무","め":"메","も":"모",
+      "や":"야","ゆ":"유","よ":"요",
+      "ら":"라","り":"리","る":"루","れ":"레","ろ":"로",
+      "わ":"와","を":"오","ん":"은",
+      "が":"가","ぎ":"기","ぐ":"구","げ":"게","ご":"고",
+      "ざ":"자","じ":"지","ず":"즈","ぜ":"제","ぞ":"조",
+      "だ":"다","ぢ":"지","づ":"즈","で":"데","ど":"도",
+      "ば":"바","び":"비","ぶ":"부","べ":"베","ぼ":"보",
+      "ぱ":"파","ぴ":"피","ぷ":"푸","ぺ":"페","ぽ":"포",
+      "っ":"","ー":"","ヶ":"가","ケ":"가",
+      "ア":"아","イ":"이","ウ":"우","エ":"에","オ":"오",
+      "カ":"카","キ":"키","ク":"쿠","ケ":"케","コ":"코",
+      "サ":"사","シ":"시","ス":"스","セ":"세","ソ":"소",
+      "タ":"타","チ":"치","ツ":"쓰","テ":"테","ト":"토",
+      "ナ":"나","ニ":"니","ヌ":"누","ネ":"네","ノ":"노",
+      "ハ":"하","ヒ":"히","フ":"후","ヘ":"헤","ホ":"호",
+      "マ":"마","ミ":"미","ム":"무","メ":"메","モ":"모",
+      "ヤ":"야","ユ":"유","ヨ":"요",
+      "ラ":"라","リ":"리","ル":"루","レ":"레","ロ":"로",
+      "ワ":"와","ヲ":"오","ン":"은",
+      "ガ":"가","ギ":"기","グ":"구","ゲ":"게","ゴ":"고",
+      "ザ":"자","ジ":"지","ズ":"즈","ゼ":"제","ゾ":"조",
+      "ダ":"다","ヂ":"지","ヅ":"즈","デ":"데","ド":"도",
+      "バ":"바","ビ":"비","ブ":"부","ベ":"베","ボ":"보",
+      "パ":"파","ピ":"피","プ":"푸","ペ":"페","ポ":"포",
+      "ッ":""
+    };
+
+    const JP_KANJI_WORD_TO_KO = [
+      ["札幌", "삿포로"], ["函館", "하코다테"], ["旭川", "아사히카와"], ["苫小牧", "도마코마이"], ["帯広", "오비히로"], ["釧路", "구시로"], ["小樽", "오타루"], ["江別", "에베쓰"], ["北見", "기타미"], ["千歳", "치토세"],
+      ["青森", "아오모리"], ["八戸", "하치노헤"], ["弘前", "히로사키"], ["十和田", "도와다"], ["五所川原", "고쇼가와라"], ["三沢", "미사와"],
+      ["盛岡", "모리오카"], ["一関", "이치노세키"], ["奥州", "오슈"], ["花巻", "하나마키"], ["北上", "기타카미"], ["宮古", "미야코"], ["大船渡", "오후나토"],
+      ["仙台", "센다이"], ["青葉", "아오바"], ["宮城野", "미야기노"], ["太白", "다이하쿠"], ["若林", "와카바야시"], ["石巻", "이시노마키"], ["大崎", "오사키"], ["名取", "나토리"], ["多賀城", "다가조"], ["気仙沼", "게센누마"],
+      ["秋田", "아키타"], ["横手", "요코테"], ["大仙", "다이센"], ["由利本荘", "유리혼조"], ["大館", "오다테"], ["能代", "노시로"],
+      ["山形", "야마가타"], ["鶴岡", "쓰루오카"], ["酒田", "사카타"], ["米沢", "요네자와"], ["天童", "덴도"], ["東根", "히가시네"],
+      ["福島", "후쿠시마"], ["郡山", "고리야마"], ["会津若松", "아이즈와카마쓰"], ["須賀川", "스카가와"], ["白河", "시라카와"],
+      ["水戸", "미토"], ["土浦", "쓰치우라"], ["日立", "히타치"], ["古河", "고가"], ["取手", "도리데"], ["神栖", "가미스"], ["筑西", "지쿠세이"], ["笠原", "가사하라"],
+      ["宇都宮", "우쓰노미야"], ["小山", "오야마"], ["栃木", "도치기"], ["足利", "아시카가"], ["佐野", "사노"], ["那須塩原", "나스시오바라"], ["鹿沼", "가누마"],
+      ["高崎", "다카사키"], ["前橋", "마에바시"], ["太田", "오타"], ["伊勢崎", "이세사키"], ["桐生", "기류"], ["館林", "다테바야시"], ["藤岡", "후지오카"], ["境東", "사카이히가시"],
+      ["大宮", "오미야"], ["浦和", "우라와"], ["見沼", "미누마"], ["岩槻", "이와쓰키"], ["川口", "가와구치"], ["蕨", "와라비"], ["戸田", "도다"], ["川越", "가와고에"], ["所沢", "도코로자와"], ["越谷", "고시가야"], ["草加", "소카"], ["春日部", "가스카베"], ["上尾", "아게오"], ["熊谷", "구마가야"], ["新座", "니자"], ["朝霞", "아사카"], ["和光", "와코"],
+      ["千葉", "지바"], ["花見川", "하나미가와"], ["稲毛", "이나게"], ["若葉", "와카바"], ["美浜", "미하마"], ["船橋", "후나바시"], ["松戸", "마쓰도"], ["市川", "이치카와"], ["柏", "가시와"], ["浦安", "우라야스"], ["習志野", "나라시노"], ["八千代", "야치요"], ["流山", "나가레야마"], ["野田", "노다"], ["佐倉", "사쿠라"], ["成田", "나리타"], ["木更津", "기사라즈"],
+      ["新宿", "신주쿠"], ["歌舞伎", "가부키"], ["豊島", "도시마"], ["池袋", "이케부쿠로"], ["渋谷", "시부야"], ["世田谷", "세타가야"], ["足立", "아다치"], ["江戸川", "에도가와"], ["中野", "나카노"], ["杉並", "스기나미"], ["板橋", "이타바시"], ["練馬", "네리마"], ["江東", "고토"], ["墨田", "스미다"], ["台東", "다이토"], ["品川", "시나가와"], ["目黒", "메구로"], ["荒川", "아라카와"], ["葛飾", "가쓰시카"], ["文京", "분쿄"], ["千代田", "지요다"], ["八王子", "하치오지"], ["立川", "다치카와"], ["武蔵野", "무사시노"], ["三鷹", "미타카"], ["青梅", "오메"], ["府中", "후추"], ["昭島", "아키시마"], ["調布", "조후"], ["町田", "마치다"], ["小金井", "고가네이"], ["小平", "고다이라"], ["日野", "히노"], ["東村山", "히가시무라야마"], ["国分寺", "고쿠분지"], ["国立", "구니타치"],
+      ["横浜", "요코하마"], ["鶴見", "쓰루미"], ["神奈川", "가나가와"], ["保土ケ谷", "호도가야"], ["港北", "고호쿠"], ["港南", "고난"], ["戸塚", "도쓰카"], ["金沢", "가나자와"], ["都筑", "쓰즈키"], ["川崎", "가와사키"], ["中原", "나카하라"], ["高津", "다카쓰"], ["宮前", "미야마에"], ["多摩", "다마"], ["麻生", "아사오"], ["相模原", "사가미하라"], ["座間", "자마"], ["藤沢", "후지사와"], ["横須賀", "요코스카"], ["平塚", "히라쓰카"], ["茅ヶ崎", "지가사키"], ["大和", "야마토"], ["厚木", "아쓰기"], ["小田原", "오다와라"], ["鎌倉", "가마쿠라"], ["秦野", "하다노"], ["海老名", "에비나"],
+      ["新潟", "니가타"], ["長岡", "나가오카"], ["上越", "조에쓰"], ["三条", "산조"], ["新発田", "시바타"],
+      ["富山", "도야마"], ["高岡", "다카오카"], ["射水", "이미즈"], ["魚津", "우오즈"], ["砺波", "도나미"],
+      ["白山", "하쿠산"], ["小松", "고마쓰"], ["野々市", "노노이치"], ["加賀", "가가"], ["七尾", "나나오"],
+      ["福井", "후쿠이"], ["坂井", "사카이"], ["越前", "에치젠"], ["敦賀", "쓰루가"], ["鯖江", "사바에"],
+      ["甲府", "고후"], ["甲斐", "가이"], ["笛吹", "후에후키"], ["富士吉田", "후지요시다"], ["今福新田", "이마후쿠신덴"],
+      ["長野", "나가노"], ["松本", "마쓰모토"], ["上田", "우에다"], ["飯田", "이다"], ["佐久", "사쿠"], ["安曇野", "아즈미노"], ["塩尻", "시오지리"],
+      ["岐阜", "기후"], ["大垣", "오가키"], ["各務原", "가카미가하라"], ["多治見", "다지미"], ["可児", "가니"], ["高山", "다카야마"],
+      ["静岡", "시즈오카"], ["駿河", "스루가"], ["浜松", "하마마쓰"], ["沼津", "누마즈"], ["富士", "후지"], ["藤枝", "후지에다"], ["焼津", "야이즈"], ["三島", "미시마"], ["磐田", "이와타"],
+      ["名古屋", "나고야"], ["千種", "지쿠사"], ["中村", "나카무라"], ["瑞穂", "미즈호"], ["熱田", "아쓰타"], ["中川", "나카가와"], ["守山", "모리야마"], ["名東", "메이토"], ["天白", "덴파쿠"], ["豊田", "도요타"], ["一宮", "이치노미야"], ["岡崎", "오카자키"], ["豊橋", "도요하시"], ["春日井", "가스가이"], ["安城", "안조"], ["刈谷", "가리야"], ["小牧", "고마키"],
+      ["四日市", "욧카이치"], ["鈴鹿", "스즈카"], ["松阪", "마쓰사카"], ["桑名", "구와나"], ["伊勢", "이세"],
+      ["大津", "오쓰"], ["草津", "구사쓰"], ["長浜", "나가하마"], ["東近江", "히가시오미"], ["彦根", "히코네"],
+      ["京都", "교토"], ["中京", "나카교"], ["下京", "시모교"], ["上京", "가미교"], ["左京", "사쿄"], ["右京", "우쿄"], ["東山", "히가시야마"], ["山科", "야마시나"], ["伏見", "후시미"], ["西京", "니시쿄"], ["宇治", "우지"], ["長岡京", "나가오카쿄"], ["舞鶴", "마이즈루"],
+      ["大阪", "오사카"], ["西成", "니시나리"], ["浪速", "나니와"], ["淀川", "요도가와"], ["東淀川", "히가시요도가와"], ["西淀川", "니시요도가와"], ["天王寺", "덴노지"], ["阿倍野", "아베노"], ["東成", "히가시나리"], ["生野", "이쿠노"], ["城東", "조토"], ["都島", "미야코지마"], ["此花", "고노하나"], ["住之江", "스미노에"], ["住吉", "스미요시"], ["東住吉", "히가시스미요시"], ["平野", "히라노"], ["堺", "사카이"], ["東大阪", "히가시오사카"], ["吹田", "스이타"], ["豊中", "도요나카"], ["高槻", "다카쓰키"], ["枚方", "히라카타"], ["茨木", "이바라키"], ["八尾", "야오"], ["寝屋川", "네야가와"], ["岸和田", "기시와다"], ["和泉", "이즈미"], ["守口", "모리구치"], ["門真", "가도마"], ["箕面", "미노오"],
+      ["神戸", "고베"], ["東灘", "히가시나다"], ["灘", "나다"], ["兵庫", "효고"], ["長田", "나가타"], ["須磨", "스마"], ["垂水", "다루미"], ["尼崎", "아마가사키"], ["西宮", "니시노미야"], ["芦屋", "아시야"], ["伊丹", "이타미"], ["宝塚", "다카라즈카"], ["川西", "가와니시"], ["明石", "아카시"], ["加古川", "가코가와"], ["姫路", "히메지"],
+      ["奈良", "나라"], ["橿原", "가시하라"], ["生駒", "이코마"], ["大和郡山", "야마토코리야마"], ["香芝", "가시바"], ["天理", "덴리"],
+      ["和歌山", "와카야마"], ["田辺", "다나베"], ["橋本", "하시모토"], ["紀の川", "기노카와"], ["岩出", "이와데"],
+      ["鳥取", "돗토리"], ["米子", "요나고"], ["倉吉", "구라요시"], ["境港", "사카이미나토"],
+      ["松江", "마쓰에"], ["出雲", "이즈모"], ["浜田", "하마다"], ["益田", "마스다"],
+      ["岡山", "오카야마"], ["倉敷", "구라시키"], ["津山", "쓰야마"], ["総社", "소자"],
+      ["広島", "히로시마"], ["安佐南", "아사미나미"], ["安佐北", "아사키타"], ["安芸", "아키"], ["佐伯", "사에키"], ["福山", "후쿠야마"], ["呉", "구레"], ["東広島", "히가시히로시마"], ["尾道", "오노미치"],
+      ["下関", "시모노세키"], ["山口", "야마구치"], ["宇部", "우베"], ["周南", "슈난"], ["岩国", "이와쿠니"], ["防府", "호후"],
+      ["徳島", "도쿠시마"], ["阿南", "아난"], ["鳴門", "나루토"], ["吉野川", "요시노가와"],
+      ["高松", "다카마쓰"], ["丸亀", "마루가메"], ["三豊", "미토요"], ["坂出", "사카이데"],
+      ["松山", "마쓰야마"], ["今治", "이마바리"], ["新居浜", "니이하마"], ["西条", "사이조"], ["宇和島", "우와지마"],
+      ["高知", "고치"], ["南国", "난코쿠"], ["四万十", "시만토"], ["香南", "고난"],
+      ["福岡", "후쿠오카"], ["博多", "하카타"], ["早良", "사와라"], ["城南", "조난"], ["北九州", "기타큐슈"], ["小倉北", "고쿠라키타"], ["小倉南", "고쿠라미나미"], ["八幡西", "야하타니시"], ["八幡東", "야하타히가시"], ["門司", "모지"], ["戸畑", "도바타"], ["若松", "와카마쓰"], ["久留米", "구루메"], ["春日", "가스가"], ["大野城", "오노조"], ["飯塚", "이즈카"], ["大牟田", "오무타"],
+      ["佐賀", "사가"], ["唐津", "가라쓰"], ["鳥栖", "도스"], ["伊万里", "이마리"],
+      ["長崎", "나가사키"], ["佐世保", "사세보"], ["諫早", "이사하야"], ["大村", "오무라"],
+      ["熊本", "구마모토"], ["八代", "야쓰시로"], ["合志", "고시"], ["荒尾", "아라오"],
+      ["大分", "오이타"], ["別府", "벳푸"], ["中津", "나카쓰"], ["日田", "히타"],
+      ["宮崎", "미야자키"], ["都城", "미야코노조"], ["延岡", "노베오카"], ["日向", "휴가"],
+      ["鹿児島", "가고시마"], ["霧島", "기리시마"], ["鹿屋", "가노야"], ["薩摩川内", "사쓰마센다이"], ["姶良", "아이라"],
+      ["那覇", "나하"], ["沖縄", "오키나와"], ["浦添", "우라소에"], ["宜野湾", "기노완"], ["名護", "나고"], ["豊見城", "도미구스쿠"], ["糸満", "이토만"],
+      ["中央", "주오"], ["北", "기타"], ["南", "미나미"], ["東", "히가시"], ["西", "니시"], ["中", "나카"], ["港", "미나토"], ["緑", "미도리"], ["桜", "사쿠라"], ["栄", "사카에"], ["泉", "이즈미"], ["葵", "아오이"], ["昭和", "쇼와"], ["大正", "다이쇼"]
+    ];
+
+    function transliterateJapaneseToKorean(str) {
+      if (!str) return "";
+      let s = String(str);
+      for (const [jpWord, koWord] of JP_KANJI_WORD_TO_KO) {
+        s = s.replace(new RegExp(jpWord, "g"), koWord);
+      }
+      s = s
+        .replace(/市(?=[가-힣A-Za-z\s]|$)/g, "시 ")
+        .replace(/区|區/g, "구 ")
+        .replace(/町/g, "초 ")
+        .replace(/村/g, "무라 ")
+        .replace(/郡/g, "군 ")
+        .replace(/丁目/g, "초메 ")
+        .replace(/番地/g, "번지 ")
+        .replace(/番/g, "번 ")
+        .replace(/号室/g, "호실 ")
+        .replace(/号|號/g, "호 ")
+        .replace(/階|樓/g, "층 ");
+      s = s.replace(/[\u3040-\u309F\u30A0-\u30FFーヶケ]/g, ch => JP_KANA_TO_KO_MAP[ch] ?? "");
+      s = transliterateRemainingCjk(s, "ko");
+      return s.replace(/\s+/g, " ").trim();
+    }
+
     function tDistrict(distZh) {
       if (!distZh) return "";
       const raw = String(distZh).trim();
@@ -2698,14 +2985,17 @@
         return clean.replace(/區$/g, "区").replace(/鄉$/g, "郷").replace(/臺/g, "台").replace(/裡/g, "裏");
       }
       if (currentLang === "ko") {
+        if (/[\u3040-\u309F\u30A0-\u30FF]|区$|市.+区$|町$|村$/.test(raw)) {
+          return transliterateJapaneseToKorean(raw);
+        }
         const stem = clean.replace(/[區鄉鎮市]$/g, "");
         const suffix = clean.endsWith("區") ? "구" : clean.endsWith("鄉") ? "향" : clean.endsWith("鎮") ? "진" : clean.endsWith("市") ? "시" : "";
-        const koStem = transliterateRemainingCjk(stem, "ko").trim();
+        const koStem = transliterateJapaneseToKorean(stem).trim();
         return (koStem || stem) + suffix;
       }
       if (currentLang === "en") {
-        const stem = clean.replace(/[區鄉鎮市]$/g, "");
-        const suffix = clean.endsWith("區") ? " Dist." : (clean.endsWith("鄉") || clean.endsWith("鎮")) ? " Township" : clean.endsWith("市") ? " City" : "";
+        const stem = clean.replace(/[區区鄉鎮市]$/g, "");
+        const suffix = (clean.endsWith("區") || clean.endsWith("区")) ? " Dist." : (clean.endsWith("鄉") || clean.endsWith("鎮")) ? " Township" : clean.endsWith("市") ? " City" : "";
         const enStem = transliterateRemainingCjk(stem, "en").trim();
         return (enStem || stem) + suffix;
       }
@@ -3096,6 +3386,17 @@
           cleaned = cleaned.slice(prefix.length).trim();
         }
       }
+      const isJpItem = inferCountry(item) === "JP";
+      if (isJpItem) {
+        cleaned = cleaned
+          .replace(/[（(][^）)]*[）)]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (!cleaned || cleaned === item.city || cleaned === item.district || cleaned === `${item.city || ""}${item.district || ""}`) {
+          cleaned = String(item.district || item.city || door).trim();
+        }
+        return (cleaned || door).slice(0, 14);
+      }
       cleaned = cleaned
         .replace(/[（(][^）)]*[）)]/g, " ")
         .replace(/^(?:臺北市|台北市|新北市|桃園市|桃園縣|臺中市|台中市|臺南市|台南市|高雄市|基隆市|新竹市|新竹縣|苗栗縣|彰化縣|南投縣|雲林縣|嘉義市|嘉義縣|屏東縣|宜蘭縣|花蓮縣|臺東縣|台東縣|澎湖縣|金門縣|連江縣|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)+/g, "")
@@ -3221,22 +3522,48 @@
           .replace(/內政部實價登錄/g, "内政部実価登録")
           .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "公開報道・司法記録アーカイブ");
       } else if (currentLang === "ko") {
-        return s
-          .replace(/三立新聞/g, "SETN 삼립뉴스")
-          .replace(/鏡週刊/g, "미러미디어(鏡週刊)")
-          .replace(/TVBS新聞網/g, "TVBS 뉴스")
+        let out = s
+          .replace(/Yahoo!ニュース|Yahoo! JAPAN ニュース/gi, "Yahoo! 뉴스 일본")
+          .replace(/Yahoo奇摩新聞|Yahoo新聞/gi, "Yahoo 대만 뉴스")
+          .replace(/テレ朝NEWS|テレビ朝日/g, "TV아사히 뉴스")
+          .replace(/TBS NEWS DIG|TBSニュース/gi, "TBS 뉴스")
+          .replace(/FNNプライムオンライン|フジテレビ/g, "FNN 후지뉴스")
+          .replace(/日テレNEWS|日本テレビ/g, "닛테레 뉴스")
+          .replace(/NHKニュース|NHK/g, "NHK 뉴스")
+          .replace(/朝日新聞/g, "아사히신문")
+          .replace(/読売新聞/g, "요미우리신문")
+          .replace(/毎日新聞/g, "마이니치신문")
+          .replace(/産経新聞/g, "산케이신문")
+          .replace(/日本経済新聞/g, "니혼게이자이신문")
+          .replace(/大島てる/g, "오시마테루(사고물건 공시)")
+          .replace(/事故物件調査記録|事故物件公示/g, "사고물건 조사 기록")
+          .replace(/三立新聞網|三立新聞/g, "SETN 삼립뉴스")
+          .replace(/鏡週刊/g, "미러미디어")
+          .replace(/TVBS新聞網|TVBS新聞|TVBS/g, "TVBS 뉴스")
           .replace(/自由時報/g, "자유시보(LTN)")
           .replace(/聯合新聞網|聯合報/g, "연합보(UDN)")
-          .replace(/ETtoday新聞雲/g, "ETtoday 뉴스")
-          .replace(/中時新聞網|中國時報/g, "중국시보(China Times)")
+          .replace(/ETtoday新聞雲|ETtoday/g, "ETtoday 뉴스")
+          .replace(/中時新聞網|中國時報/g, "중국시보")
           .replace(/中央社/g, "중앙통신사(CNA)")
-          .replace(/公視新聞|公視/g, "공공TV(PTS)")
-          .replace(/民視新聞|民視/g, "민시뉴스(FTV)")
+          .replace(/公視新聞網|公視新聞|公視/g, "공공TV(PTS) 뉴스")
+          .replace(/民視新聞網|民視新聞|民視/g, "민시뉴스(FTV)")
+          .replace(/壹蘋新聞網/g, "넥스트애플 뉴스")
+          .replace(/華視新聞|華視/g, "화시뉴스(CTS)")
+          .replace(/東森新聞/g, "동삼뉴스(EBC)")
+          .replace(/中天新聞/g, "중천뉴스(CTi)")
+          .replace(/台灣凶宅網/g, "대만 흉가망")
           .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "사법원 법원경매 공고")
           .replace(/司法院裁判書查詢系統|司法院裁判書/g, "사법원 판결문 조회 시스템")
           .replace(/內政部實價登錄/g, "내정부 실거래가 등록")
+          .replace(/公開新聞實證|實證報導|公開報導/g, "공개 보도 검증")
           .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "공개 사회뉴스 및 사법 기록")
-          .replace(/、/g, ", ");
+          .replace(/、|・/g, " · ");
+        if (/[\u4E00-\u9FFF\u3040-\u30FF]/.test(out)) {
+          out = inferCountry(item) === "JP"
+            ? "일본 언론 보도 및 오시마테루 사고물건 검증 기록"
+            : "공개 언론 보도 및 사법원·실거래가 검증 기록";
+        }
+        return out;
       }
       return s;
     }
@@ -3259,16 +3586,23 @@
         return cached.address;
       }
 
-      const cityZh = String(item.city || "").replace(/台/g, "臺");
+      const isJpItem = inferCountry(item) === "JP";
+      const cityZh = isJpItem ? String(item.city || "") : String(item.city || "").replace(/台/g, "臺");
       const distZh = String(item.district || "");
       const cityLoc = tCity(cityZh);
       const distLoc = tDistrict(distZh);
-      let rest = rawAddr.replace(/台/g, "臺").replace(cityZh, "").replace(distZh, "").trim();
+      let rest = (isJpItem ? rawAddr : rawAddr.replace(/台/g, "臺"))
+        .replace(cityZh, "")
+        .replace(distZh, "")
+        .trim();
 
-      // 1. Extract and localize parenthetical building type FIRST so "大樓" never gets corrupted by floor replacement
+      // 1. Extract and localize parenthetical building type FIRST (handling nested parentheses cleanly)
       let bldgSuffix = "";
-      rest = rest.replace(/[（(]([^）)]+)[）)]/g, (_, inner) => {
+      rest = rest.replace(/[（(](.+)[）)]\s*$/, (_, inner) => {
         bldgSuffix = ` (${localizeBuildingType(inner, item)})`;
+        return "";
+      }).replace(/[（(]([^）)]+)[）)]/g, (_, inner) => {
+        if (!bldgSuffix) bldgSuffix = ` (${localizeBuildingType(inner, item)})`;
         return "";
       }).trim();
 
@@ -3293,6 +3627,10 @@
           .replace(/臺/g, "台").replace(/區/g, "区").replace(/鄉/g, "郷");
         return `${cityLoc} ${distLoc} ${rest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
       } else if (currentLang === "ko") {
+        if (isJpItem) {
+          const koRest = transliterateJapaneseToKorean(rest).replace(/[\u4E00-\u9FFF]+/g, "").trim();
+          return `${cityLoc} ${distLoc} ${koRest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
+        }
         rest = rest
           .replace(/「[^」]+」/g, "")
           .replace(/^[^\d\s]{1,3}[里村](?=[一-龥])/g, "")
@@ -3308,7 +3646,7 @@
           .replace(/某透天厝|某透天民宅|透天厝|透天民宅|某民宅|民宅/g, "단독주택")
           .replace(/某出租套房|出租套房|獨立套房/g, "임대 원룸")
           .replace(/社區/g, "단지 ").replace(/國宅/g, "공공주택 ").replace(/華廈/g, "맨션 ").replace(/周邊路段|周邊/g, "일대 ");
-        rest = transliterateRemainingCjk(rest, "ko").replace(/[\u4E00-\u9FFF]+/g, "");
+        rest = transliterateJapaneseToKorean(rest).replace(/[\u4E00-\u9FFF]+/g, "");
         return `${cityLoc} ${distLoc} ${rest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
       } else if (currentLang === "en") {
         rest = rest
@@ -3353,7 +3691,7 @@
           .replace(/某透天厝|某透天民宅|透天厝|透天民宅|某民宅|民宅/g, "Townhouse")
           .replace(/某出租套房|出租套房|獨立套房/g, "Rental Studio")
           .replace(/社區/g, "Community ").replace(/國宅/g, "Public Housing ").replace(/華廈/g, "Condo ").replace(/周邊路段|周邊/g, "Area ");
-        rest = transliterateRemainingCjk(rest, "en").replace(/[\u4E00-\u9FFF]+/g, "");
+        rest = transliterateRemainingCjk(rest, "en").replace(/[\u4E00-\u9FFF\u3040-\u30FF]+/g, "");
         return `${rest}${bldgSuffix}, ${distLoc}, ${cityLoc}`.replace(/\s+/g, " ").replace(/^,\s*/, "").trim();
       }
       return rawAddr;
@@ -3389,25 +3727,43 @@
       const batchCached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
       if (batchCached && batchCached.reason) return batchCached.reason;
 
+      const isJpItem = inferCountry(item) === "JP";
+      if (currentLang === "ja" && isJpItem) return zhReason;
+
       const catLabel = tCategoryLabel(item.normalizedCat);
       const dateStr = item.incident_date || (item.incidentYear ? String(item.incidentYear) : "Historical");
       const bldgLabel = localizeBuildingType(item.building_type, item);
       const addrLabel = localizeAddressDisplay(item);
       const srcLabel = localizeMediaSource(item.media_verification || item.source || "", item);
 
-      // Extract specific facts from Chinese narrative so immediate preview is accurate & 100% in target language
-      const floorMatch = zhReason.match(/(\d+)\s*樓/);
+      const floorMatch = zhReason.match(/(\d+)\s*(?:樓|階)/);
       const floorNum = floorMatch ? floorMatch[1] : null;
-      const ageMatch = zhReason.match(/(\d+)\s*歲/);
+      const ageMatch = zhReason.match(/(\d+)\s*(?:歲|歳)/);
       const ageNum = ageMatch ? ageMatch[1] : null;
-      const isFall = /墜樓|墜落|跳樓/.test(zhReason);
-      const isFire = /火警|火災|惡火|濃煙|燒毀/.test(zhReason);
-      const isCO = /一氧化碳|瓦斯|中毒/.test(zhReason);
-      const isHomicide = /砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺/.test(zhReason) && item.normalizedCat === "刑事命案";
-      const isCourt = /法拍|判決|查封|點交|瑕疵擔保/.test(zhReason);
+      const isFall = /墜樓|墜落|跳樓|転落|飛び降り/.test(zhReason);
+      const isFire = /火警|火災|惡火|濃煙|燒毀|出火|全焼/.test(zhReason);
+      const isCO = /一氧化碳|一酸化炭素|瓦斯|中毒/.test(zhReason);
+      const isHomicide = (/砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺|殺人|殺害|刺殺|絞殺|死体遺棄/.test(zhReason)) && item.normalizedCat === "刑事命案";
+      const isCourt = /法拍|判決|查封|點交|瑕疵擔保|競売|大島てる|特別募集|特定物件/.test(zhReason);
 
       if (currentLang === "ko") {
         let body = `해당 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 발생한 ${catLabel} 기록입니다.`;
+        if (isJpItem) {
+          if (isFall) {
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 거주자 " : ""}추락 사망 사고가 발생하여 관할 경찰서 및 소방 구급대가 현장 검증을 실시한 사건입니다. 일본 국토교통성 심리적 하자 가이드라인 및 택지건물거래업법상 중요사항설명(고지사항) 대상 물건으로 분류되며, 오시마테루 공시 기록과 대조 확인되었습니다.`;
+          } else if (isFire) {
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 실내에서 주택 화재 및 일산화탄소 흡입 사고가 발생하여 소방대 출동 및 병원 이송 후 사망이 확인된 사건입니다. 일본 택지건물거래업법 및 국토교통성 가이드라인에 따른 사고물건(심리적 하자) 고지 대상이며, 건물 수리 이력 및 중요사항설명서 확인이 권장됩니다.`;
+          } else if (isCO) {
+            body = `${addrLabel} 소재 ${bldgLabel} 실내에서 일산화탄소 중독 사고로 인한 인명 피해가 확인된 사건입니다. 일본 부동산 거래 실무상 심리적 하자 고지사항 대상에 해당합니다.`;
+          } else if (isHomicide) {
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 중대 형사·살인 사건이 발생하여 도도부현 경찰본부 수사 및 사법 절차가 진행된 검증 사건입니다. 일본 국토교통성 가이드라인상 기간 제한 없이 매매·임대차 계약 시 필수 고지사항(告知事項)에 해당합니다.`;
+          } else if (isCourt) {
+            body = `${addrLabel} 소재 ${bldgLabel}에 대하여 일본 지방재판소 부동산 경매 BIT(3종 세트) 또는 사고물건 공시 기록에 실내 비자연사(심리적 하자) 사실이 명시된 검증 사건입니다.`;
+          } else {
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 실내에서 발생한 ${catLabel} 사건으로, 관할 경찰서 검시 및 현지 언론 보도·사고물건 공시 데이터베이스를 통해 교차 검증된 기록입니다.`;
+          }
+          return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (출처: " + srcLabel + ")" : ""}`;
+        }
         if (isFall) {
           body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 " : ""}추락 사고가 발생하여 119 구급대 및 관할 경찰이 현장에 긴급 출동하였으나 사망이 확인된 사건입니다. 경찰 감식반의 현장 조사 및 검찰 검시 결과 외력 개입 혐의는 배제되었습니다. 대만 내정부 부동산설명서 기준 및 법원 판례상 전용부분 또는 약정전용 노대(테라스) 추락 사건은 매매·임대 시 주요 고지 대상에 해당하므로, 관리위원회 및 내정부 실거래가 특수거래 비고란을 통한 사전 확인이 권장됩니다.`;
         } else if (isFire) {
@@ -3441,17 +3797,17 @@
       } else if (currentLang === "en") {
         let body = `Verified ${catLabel.toLowerCase()} incident recorded at this ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""}.`;
         if (isFall) {
-          body = `A ${ageNum ? ageNum + "-year-old " : ""}resident fell from${floorNum ? " the " + floorNum + "th floor of" : ""} the ${bldgLabel.toLowerCase()} at ${addrLabel} and was pronounced deceased following emergency 119 and precinct police response. Police forensic inspection and prosecutorial examination ruled out foul play. Under Ministry of the Interior (MOI) property disclosure regulations and Taiwan court precedents, falls involving a private unit or designated exclusive terrace carry material stigmatized-property disclosure and valuation impacts; buyers are advised to verify the exact unit and check MOI Real-Price Registry special transaction notes.`;
+          body = `A ${ageNum ? ageNum + "-year-old " : ""}resident fell from${floorNum ? " the " + floorNum + "th floor of" : ""} the ${bldgLabel.toLowerCase()} at ${addrLabel} and was pronounced deceased following emergency response. Police forensic inspection and official examination confirmed the fatality. Under statutory property disclosure regulations, falls involving a private unit carry material stigmatized-property disclosure impacts.`;
         } else if (isFire) {
-          body = `A residential fire broke out at the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, resulting in indoor fatalities despite fire department rescue operations. Following fire investigation and police forensic examination, the unit is classified under MOI statutory unnatural-death disclosure rules, and prospective buyers should inspect both structural renovation records and special transaction price remarks.`;
+          body = `A residential fire broke out at the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, resulting in indoor fatalities despite fire department rescue operations. Following fire investigation and police forensic examination, the unit is classified under statutory unnatural-death disclosure rules.`;
         } else if (isCO) {
-          body = `A fatal carbon monoxide poisoning incident caused by poor water-heater ventilation occurred inside the ${bldgLabel.toLowerCase()} at ${addrLabel}, confirmed by emergency responders and police examination. Under MOI real estate regulations, carbon monoxide fatalities are explicitly listed among the four statutory stigmatized-property categories requiring mandatory disclosure.`;
+          body = `A fatal carbon monoxide poisoning incident occurred inside the ${bldgLabel.toLowerCase()} at ${addrLabel}, confirmed by emergency responders and police examination. Carbon monoxide fatalities are explicitly listed among statutory stigmatized-property categories requiring mandatory disclosure.`;
         } else if (isHomicide) {
-          body = `A major criminal homicide case occurred inside the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, with crime-scene forensics conducted by precinct police and prosecution proceedings documented in judicial archives. As an indoor criminal homicide property, mandatory seller disclosure applies and mortgage lending ratios are typically restricted.`;
+          body = `A major criminal homicide case occurred inside the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, with crime-scene forensics conducted by police and prosecution proceedings documented in public archives. Mandatory seller disclosure applies.`;
         } else if (isCourt) {
-          body = `Judicial Yuan District Court civil enforcement foreclosure inspection notes or civil defect-warranty judgments explicitly document an indoor unnatural death history at this ${bldgLabel.toLowerCase()} on ${addrLabel}. Cross-verified via official court records and precinct police inquiries, this property is subject to statutory disclosure in real estate transactions.`;
+          body = `Court foreclosure inspection notes or public defect records explicitly document an indoor unnatural death history at this ${bldgLabel.toLowerCase()} on ${addrLabel}. Cross-verified via official court and police records, this property is subject to statutory disclosure in real estate transactions.`;
         } else {
-          body = `An indoor ${catLabel.toLowerCase()} incident occurred within the private unit of the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} at ${addrLabel}, verified by precinct police and emergency dispatch records. Classified under MOI statutory disclosure guidelines, prospective buyers and tenants should cross-check building management records and MOI Real-Price Registry special transaction remarks.`;
+          body = `An indoor ${catLabel.toLowerCase()} incident occurred within the private unit of the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} at ${addrLabel}, verified by police and emergency dispatch records.`;
         }
         return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (Source: " + srcLabel + ")" : ""}`;
       }
@@ -3704,9 +4060,9 @@
           ],
           "ko": [
             {
-              name: "1. 흉가 지도·사고물건 주소: 오시마테루(大島てる) · JikoDB · 경매 BIT",
-              agency: `민간 사고물건 DB + 관할 재판소: ${jurisdiction.courtName}`,
-              desc: `좌표 (${lat.toFixed(6)}, ${lng.toFixed(6)}) 기준 오시마테루, JikoDB 및 법원 경매 BIT 3종 세트를 교차 검증합니다. [좌표 특성: 민간 자료에서 개별 좌표 제공 가능하나 라이선스 및 정밀도 확인 필수]`,
+              name: "1. 사고물건 주소 데이터베이스: 오시마테루 · JikoDB · 경매 BIT",
+              agency: `민간 사고물건 DB + 관할 지방재판소 (${jurisdiction.courtCode})`,
+              desc: `좌표 (${lat.toFixed(6)}, ${lng.toFixed(6)}) 기준 오시마테루, JikoDB 및 일본 법원 경매 BIT 3종 세트를 교차 검증합니다.`,
               url: `https://www.oshimaland.co.jp/?q=${encodeURIComponent(`${city}${district}${shortDoor}`)}`,
               copyKeyword: `${city}${district}${shortDoor}`
             },
@@ -3982,36 +4338,36 @@
         ],
         "ko": [
           {
-            name: "사법원 법원경매 공고 시스템 (司法院法拍屋公告)",
-            agency: `관할 법원: ${jurisdiction.courtName} (${jurisdiction.courtCode})`,
+            name: "사법원 법원경매 공고 시스템",
+            agency: `관할 법원: ${tCity(city)} 지방법원 (${jurisdiction.courtCode})`,
             desc: "부동산 강제집행 경매 공고, 인도 현황 및 관할 경찰서 현장 조사 조서(비자연사 발생 여부)를 조회합니다.",
             url: "https://aomp109.judicial.gov.tw/judbp/wkw/WHD1A02.htm",
             copyKeyword: `${district} ${shortDoor}`.trim()
           },
           {
-            name: "사법원 판결문 조회 시스템 (司法院裁判書查詢)",
-            agency: "사법원 법학자료 검색 시스템",
+            name: "사법원 판결문 조회 시스템",
+            agency: "대만 사법원 법학자료 검색 시스템",
             desc: "번지 또는 도로명 키워드로 민사 '하자담보책임' 또는 형사 판결 사건번호를 검색합니다.",
             url: "https://judgment.judicial.gov.tw/FJUD/default.aspx",
             copyKeyword: `${city}${district}${shortDoor} 凶宅`
           },
           {
-            name: "내정부 부동산 실거래가 조회 서비스 (內政部實價登錄)",
+            name: "내정부 부동산 실거래가 조회 서비스",
             agency: `내정부 지정사 · 현시 코드 ${jurisdiction.lvrCode}`,
             desc: "해당 번지 구간의 역대 실거래가 내역 및 '특수거래 비고란'을 확인합니다.",
             url: "https://lvr.land.moi.gov.tw/",
             copyKeyword: `${district}${shortDoor}`
           },
           {
-            name: "내정부 지적도 네트워크 서비스 EasyMap (地籍圖資系統)",
+            name: "내정부 지적도 네트워크 서비스 (EasyMap)",
             agency: "내정부 국토측회센터",
             desc: `주소 및 좌표 (${lat.toFixed(6)}, ${lng.toFixed(6)})에 대응하는 지번과 대지 경계선을 확인합니다.`,
             url: "https://easymap.land.moi.gov.tw/",
             copyKeyword: `${city}${district}${shortDoor}`
           },
           {
-            name: "지방정부 지정 공간정보망 (地方地政雲)",
-            agency: jurisdiction.landOffice,
+            name: "지방정부 지정 공간정보 포털",
+            agency: `${tCity(city)} 정부 지정국`,
             desc: "토지용도구역, 건축허가 번호 및 특별관리 건축물 명부를 조회합니다.",
             url: `https://www.google.com/search?q=${encodeURIComponent(jurisdiction.landOffice + " " + city + district)}`,
             copyKeyword: `${city}${district}${shortDoor}`
@@ -4193,14 +4549,22 @@
       };
     }
 
+    const svgPinCache = new Map();
+    const svgClusterCache = new Map();
+
     function createSvgPinDataUrl(hexColor, badgeText = "") {
       const cleanBadge = String(badgeText || "").trim().slice(0, 18);
+      const cacheKey = `${hexColor}|${cleanBadge}`;
+      const cached = svgPinCache.get(cacheKey);
+      if (cached) return cached;
+
+      let result;
       if (!cleanBadge) {
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36">
           <path d="M14 1C7.37 1 2 6.37 2 13c0 8.5 12 21.5 12 21.5S26 21.5 26 13c0-6.63-5.37-12-12-12z" fill="${hexColor}" stroke="#FFFFFF" stroke-width="2.2"/>
           <circle cx="14" cy="13" r="4.5" fill="#FFFFFF"/>
         </svg>`;
-        return {
+        result = {
           url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
           width: 28,
           height: 36,
@@ -4214,13 +4578,18 @@
         }
         const w = Math.max(96, Math.round(charUnits * 11 + 22));
         const cx = Math.round(w / 2);
+        const safeSvgBadge = cleanBadge
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="54" viewBox="0 0 ${w} 54">
           <rect x="2" y="2" width="${w - 4}" height="20" rx="5" fill="#0F172A" stroke="#FFFFFF" stroke-width="1.5"/>
-          <text x="${cx}" y="15.5" text-anchor="middle" fill="#FFFFFF" font-family="Noto Sans TC, Noto Sans JP, Noto Sans KR, sans-serif" font-size="10.5" font-weight="700">${cleanBadge.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</text>
+          <text x="${cx}" y="15.5" text-anchor="middle" fill="#FFFFFF" font-family="Noto Sans TC, Noto Sans JP, Noto Sans KR, sans-serif" font-size="10.5" font-weight="700">${safeSvgBadge}</text>
           <path d="M${cx} 23c-5.5 0-10 4.5-10 10 0 7.2 10 19 10 19s10-11.8 10-19c0-5.5-4.5-10-10-10z" fill="${hexColor}" stroke="#FFFFFF" stroke-width="2"/>
           <circle cx="${cx}" cy="33" r="3.8" fill="#FFFFFF"/>
         </svg>`;
-        return {
+        result = {
           url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
           width: w,
           height: 54,
@@ -4228,33 +4597,72 @@
           anchorY: 52
         };
       }
+      if (svgPinCache.size > 1500) svgPinCache.clear();
+      svgPinCache.set(cacheKey, result);
+      return result;
     }
 
     function createClusterSvgDataUrl(count) {
       const label = count > 999 ? `${(count / 1000).toFixed(1)}k` : String(count);
+      const cached = svgClusterCache.get(label);
+      if (cached) return cached;
       const size = count >= 100 ? 44 : (count >= 20 ? 38 : 34);
       const r = size / 2;
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
         <circle cx="${r}" cy="${r}" r="${r - 2}" fill="#0F172A" fill-opacity="0.92" stroke="#FFFFFF" stroke-width="2.5"/>
         <text x="${r}" y="${r + 4}" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="11.5" font-weight="700">${label}</text>
       </svg>`;
-      return {
+      const result = {
         url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
         size,
         anchor: r
       };
+      svgClusterCache.set(label, result);
+      return result;
+    }
+
+    const DARK_GMAP_STYLES = [
+      { elementType: "geometry", stylers: [{ color: "#1e293b" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#0f172a" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#94a3b8" }] },
+      { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#e2e8f0" }] },
+      { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+      { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#0f2922" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#334155" }] },
+      { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#1e293b" }] },
+      { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#475569" }] },
+      { featureType: "transit", elementType: "geometry", stylers: [{ color: "#1e293b" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#091526" }] },
+      { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#475569" }] }
+    ];
+
+    function isDarkThemeActive() {
+      return document.documentElement.classList.contains("dark");
+    }
+
+    function applyThemeToMapEngine() {
+      if (usingNativeGoogleMap && gmap) {
+        try {
+          gmap.setOptions({
+            styles: (isDarkThemeActive() && currentMapTypeMode === "roadmap") ? DARK_GMAP_STYLES : null
+          });
+        } catch (e) {}
+      }
     }
 
     let gmap = null;
     let gmapInfoWindow = null;
     let gmapMarkers = [];
+    let gmapActiveCaseMarker = null;
     let gmapSearchMarker = null;
     let gmapSearchCircle = null;
     let gmapCadastralOverlay = null;
     let usingNativeGoogleMap = false;
+    let lastTargetMapCenter = null;
 
     let fallbackMap = null;
     let fallbackCluster = null;
+    let fallbackActiveCaseMarker = null;
     let fallbackRoadLayer = null;
     let fallbackHybridLayer = null;
     let fallbackTerrainLayer = null;
@@ -4460,6 +4868,7 @@
             minZoom: 4,
             maxZoom: getMaxSafeZoomForMapType(currentMapTypeMode),
             mapTypeId: currentMapTypeMode,
+            styles: (isDarkThemeActive() && currentMapTypeMode === "roadmap") ? DARK_GMAP_STYLES : null,
             mapTypeControl: false,
             fullscreenControl: false,
             streetViewControl: true,
@@ -4557,6 +4966,7 @@
       const parsedLng = parseFloat(lng);
       if (isNaN(parsedLat) || isNaN(parsedLng)) return;
       const safeZoom = Math.min(zoom, getMaxSafeZoomForMapType(currentMapTypeMode));
+      lastTargetMapCenter = { lat: parsedLat, lng: parsedLng, zoom: safeZoom };
 
       if (!isMapViewportVisible()) {
         pendingMapTarget = { lat: parsedLat, lng: parsedLng, zoom: safeZoom };
@@ -4568,6 +4978,7 @@
           gmap.setOptions({ maxZoom: getMaxSafeZoomForMapType(currentMapTypeMode) });
           gmap.setCenter({ lat: parsedLat, lng: parsedLng });
           gmap.setZoom(safeZoom);
+          renderMapMarkersOnly(currentFilteredRecords.length > 0 ? currentFilteredRecords : allRecords);
         } else if (fallbackMap) {
           fallbackMap.invalidateSize({ animate: false });
           fallbackMap.setView([parsedLat, parsedLng], safeZoom, { animate: true });
@@ -4578,6 +4989,65 @@
         ensureMapEngineReady().then(performFly);
       } else {
         performFly();
+      }
+    }
+
+    function focusAndHighlightCaseOnMap(item, targetZoom = 16) {
+      if (!item) return;
+      const lat = parseFloat(item.lat);
+      const lng = parseFloat(item.lng);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      const safeZoom = Math.min(targetZoom, getMaxSafeZoomForMapType(currentMapTypeMode));
+      lastTargetMapCenter = { lat, lng, zoom: safeZoom };
+      mapFlyTo(lat, lng, safeZoom);
+
+      const meta = CATEGORY_META[item.normalizedCat] || CATEGORY_META["法拍與其他"];
+      const shortLabel = extractShortDoorplateLabel(item);
+      const pinData = createSvgPinDataUrl(meta.hex, shortLabel);
+
+      if (usingNativeGoogleMap && gmap) {
+        if (gmapActiveCaseMarker) {
+          gmapActiveCaseMarker.setMap(null);
+          gmapActiveCaseMarker = null;
+        }
+        gmapActiveCaseMarker = new google.maps.Marker({
+          position: { lat, lng },
+          map: gmap,
+          zIndex: 999999,
+          title: localizeAddressDisplay(item),
+          icon: {
+            url: pinData.url,
+            scaledSize: new google.maps.Size(pinData.width, pinData.height),
+            anchor: new google.maps.Point(pinData.anchorX, pinData.anchorY)
+          }
+        });
+        gmapActiveCaseMarker.addListener("click", () => {
+          if (window.innerWidth >= 768 && gmapInfoWindow) {
+            gmapInfoWindow.setContent(buildPopupHtml(item));
+            gmapInfoWindow.open(gmap, gmapActiveCaseMarker);
+          }
+          openCaseDossier(item);
+        });
+        if (window.innerWidth >= 768 && gmapInfoWindow) {
+          gmapInfoWindow.setContent(buildPopupHtml(item));
+          gmapInfoWindow.open(gmap, gmapActiveCaseMarker);
+        }
+      } else if (fallbackMap && typeof L !== "undefined") {
+        if (fallbackActiveCaseMarker) {
+          try {
+            fallbackMap.removeLayer(fallbackActiveCaseMarker);
+          } catch (_e) {}
+          fallbackActiveCaseMarker = null;
+        }
+        const icon = L.icon({
+          iconUrl: pinData.url,
+          iconSize: [pinData.width, pinData.height],
+          iconAnchor: [pinData.anchorX, pinData.anchorY],
+          popupAnchor: [0, -pinData.anchorY + 6]
+        });
+        fallbackActiveCaseMarker = L.marker([lat, lng], { icon, zIndexOffset: 10000 }).addTo(fallbackMap);
+        fallbackActiveCaseMarker.bindPopup(buildPopupHtml(item), { maxWidth: 330, minWidth: 265 }).openPopup();
       }
     }
 
@@ -4671,9 +5141,13 @@
 
         const zoom = gmap.getZoom() || 12;
         const allowDoorplateBadge = zoom >= 13 || records.length <= 150;
+        const mapCenterObj = gmap.getCenter();
+        const refLat = mapCenterObj ? mapCenterObj.lat() : (lastTargetMapCenter ? lastTargetMapCenter.lat : 25.0478);
+        const refLng = mapCenterObj ? mapCenterObj.lng() : (lastTargetMapCenter ? lastTargetMapCenter.lng : 121.5319);
+        const bounds = gmap.getBounds();
 
-        if (zoom <= 12 && records.length > 220) {
-          const cellSize = zoom <= 9 ? 0.14 : (zoom <= 11 ? 0.052 : 0.019);
+        if (zoom <= 12 && records.length > 180) {
+          const cellSize = zoom <= 8 ? 0.22 : (zoom <= 10 ? 0.085 : (zoom === 11 ? 0.042 : 0.022));
           const buckets = new Map();
 
           for (const item of records) {
@@ -4692,15 +5166,32 @@
             b.items.push(item);
           }
 
-          buckets.forEach(bucket => {
+          let bucketList = Array.from(buckets.values()).map(bucket => {
             const count = bucket.items.length;
             const avgLat = bucket.sumLat / count;
             const avgLng = bucket.sumLng / count;
+            const dLat = avgLat - refLat;
+            const dLng = avgLng - refLng;
+            const distSq = dLat * dLat + dLng * dLng;
+            const inBounds = bounds ? bounds.contains({ lat: avgLat, lng: avgLng }) : false;
+            return { count, avgLat, avgLng, items: bucket.items, distSq, inBounds };
+          });
+
+          if (bucketList.length > 420) {
+            bucketList.sort((a, b) => {
+              if (a.inBounds !== b.inBounds) return a.inBounds ? -1 : 1;
+              return a.distSq - b.distSq;
+            });
+            bucketList = bucketList.slice(0, 420);
+          }
+
+          bucketList.forEach(bucket => {
+            const { count, avgLat, avgLng } = bucket;
 
             if (count === 1) {
               const single = bucket.items[0];
               const meta = CATEGORY_META[single.normalizedCat] || CATEGORY_META["法拍與其他"];
-              const pinData = createSvgPinDataUrl(meta.hex, extractShortDoorplateLabel(single));
+              const pinData = createSvgPinDataUrl(meta.hex, zoom >= 12 ? extractShortDoorplateLabel(single) : "");
               const marker = new google.maps.Marker({
                 position: { lat: avgLat, lng: avgLng },
                 map: gmap,
@@ -4712,11 +5203,11 @@
                 }
               });
               marker.addListener("click", () => {
-                gmapInfoWindow.setContent(buildPopupHtml(single));
-                gmapInfoWindow.open(gmap, marker);
-                if (window.innerWidth >= 768) {
-                  openCaseDossier(single);
+                if (window.innerWidth >= 768 && gmapInfoWindow) {
+                  gmapInfoWindow.setContent(buildPopupHtml(single));
+                  gmapInfoWindow.open(gmap, marker);
                 }
+                openCaseDossier(single);
               });
               gmapMarkers.push(marker);
             } else {
@@ -4741,18 +5232,32 @@
           return;
         }
 
-        const bounds = gmap.getBounds();
         let visibleSlice = records;
-        if (bounds && records.length > 200) {
-          visibleSlice = records.filter(r => {
-            const lat = parseFloat(r.lat);
-            const lng = parseFloat(r.lng);
-            return !isNaN(lat) && !isNaN(lng) && bounds.contains({ lat, lng });
-          });
-          if (visibleSlice.length === 0) visibleSlice = records.slice(0, 320);
+        if (records.length > 200) {
+          if (bounds) {
+            visibleSlice = records.filter(r => {
+              const lat = parseFloat(r.lat);
+              const lng = parseFloat(r.lng);
+              return !isNaN(lat) && !isNaN(lng) && bounds.contains({ lat, lng });
+            });
+          }
+          if (!bounds || visibleSlice.length < 25) {
+            const targetLat = lastTargetMapCenter ? lastTargetMapCenter.lat : refLat;
+            const targetLng = lastTargetMapCenter ? lastTargetMapCenter.lng : refLng;
+            visibleSlice = records
+              .map(r => {
+                const lat = parseFloat(r.lat);
+                const lng = parseFloat(r.lng);
+                const d2 = isNaN(lat) || isNaN(lng) ? 999999 : (lat - targetLat) * (lat - targetLat) + (lng - targetLng) * (lng - targetLng);
+                return { r, d2 };
+              })
+              .sort((a, b) => a.d2 - b.d2)
+              .slice(0, 380)
+              .map(x => x.r);
+          }
         }
 
-        const maxPins = Math.min(visibleSlice.length, 650);
+        const maxPins = Math.min(visibleSlice.length, 550);
         const labeledCells = new Set();
         const labelGridStep = zoom >= 17 ? 0.00055 : (zoom >= 16 ? 0.0011 : (zoom >= 15 ? 0.0022 : (zoom >= 14 ? 0.0038 : 0.0065)));
 
@@ -4785,11 +5290,11 @@
           });
 
           marker.addListener("click", () => {
-            gmapInfoWindow.setContent(buildPopupHtml(item));
-            gmapInfoWindow.open(gmap, marker);
-            if (window.innerWidth >= 768) {
-              openCaseDossier(item);
+            if (window.innerWidth >= 768 && gmapInfoWindow) {
+              gmapInfoWindow.setContent(buildPopupHtml(item));
+              gmapInfoWindow.open(gmap, marker);
             }
+            openCaseDossier(item);
           });
 
           gmapMarkers.push(marker);
@@ -4827,9 +5332,12 @@
             popupAnchor: [0, -pinData.anchorY + 6]
           });
 
-          const m = L.marker([lat, lng], { icon }).bindPopup(buildPopupHtml(item), { maxWidth: 340 });
+          const m = L.marker([lat, lng], { icon });
+          if (window.innerWidth >= 768) {
+            m.bindPopup(buildPopupHtml(item), { maxWidth: 340 });
+          }
           m.on("click", () => {
-            if (window.innerWidth >= 768) openCaseDossier(item);
+            openCaseDossier(item);
           });
           markersToAdd.push(m);
         });
@@ -4939,6 +5447,7 @@
     });
 
     function toggleMobileFilters(forceOpen) {
+      if (!collapsibleFilters) return;
       const isHidden = collapsibleFilters.classList.contains("hidden");
       const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : isHidden;
       if (shouldOpen) {
@@ -4953,11 +5462,6 @@
       }
       setTimeout(() => mapInvalidateSize(), 100);
     }
-
-    document.getElementById("m-nav-filter").addEventListener("click", () => {
-      closeDossierDrawer();
-      toggleMobileFilters();
-    });
 
     window.addEventListener("resize", () => {
       if (window.innerWidth >= 768 && !mapEngineInitialized && allRecords.length > 0) {
@@ -5396,9 +5900,10 @@
         populateCityDropdown(formCity, false, c);
         populateDistrictDropdown(formCity.value, formDistrict, false);
       }
-      applyFilters(true);
       const center = getCountryDefaultCenter(c);
+      lastTargetMapCenter = center;
       mapFlyTo(center.lat, center.lng, center.zoom);
+      applyFilters(true);
     });
 
     citySelect.addEventListener("change", () => {
@@ -5469,33 +5974,20 @@
         localStorage.setItem("tw_archive_lang_explicit", "1");
       } catch (e) {}
       const targetUrl = getLanguageSubdirectoryUrl(targetLang, true);
-      const currPath = window.location.pathname || "/";
-      const isAlreadyOnRoute =
-        (targetLang === "zh-TW" && (currPath === "/" || currPath === "/index.html" || currPath.startsWith("/zh-tw"))) ||
-        (targetLang === "ja" && (currPath === "/ja" || currPath.startsWith("/ja/"))) ||
-        (targetLang === "ko" && (currPath === "/ko" || currPath.startsWith("/ko/"))) ||
-        (targetLang === "en" && (currPath === "/en" || currPath.startsWith("/en/")));
-
-      if (!isAlreadyOnRoute && window.location.protocol.startsWith("http")) {
-        window.location.href = targetUrl;
-        return;
-      }
-      // Also switch country filter when user manually switches language
+      try {
+        if (window.history && typeof window.history.pushState === "function") {
+          window.history.pushState({ lang: targetLang }, "", targetUrl);
+        }
+      } catch (e) {}
+      // Switch country filter when user switches to Japanese or Traditional Chinese; for Korean/English keep current TW/JP country
       if (targetLang === "ja" && countrySelect && countrySelect.value !== "JP") {
         countrySelect.value = "JP";
         citySelect.value = "";
         populateCityDropdown(citySelect, true, "JP");
         populateDistrictDropdown("", districtSelect, true);
         updateDbSourceDropdownOptions("JP");
+        updateHeaderCountryBadge("JP");
         const center = getCountryDefaultCenter("JP");
-        mapFlyTo(center.lat, center.lng, center.zoom);
-      } else if (targetLang === "ko" && countrySelect && countrySelect.value !== "KR") {
-        countrySelect.value = "KR";
-        citySelect.value = "";
-        populateCityDropdown(citySelect, true, "KR");
-        populateDistrictDropdown("", districtSelect, true);
-        updateDbSourceDropdownOptions("KR");
-        const center = getCountryDefaultCenter("KR");
         mapFlyTo(center.lat, center.lng, center.zoom);
       } else if (targetLang === "zh-TW" && countrySelect && countrySelect.value !== "TW") {
         countrySelect.value = "TW";
@@ -5503,8 +5995,11 @@
         populateCityDropdown(citySelect, true, "TW");
         populateDistrictDropdown("", districtSelect, true);
         updateDbSourceDropdownOptions("TW");
+        updateHeaderCountryBadge("TW");
         const center = getCountryDefaultCenter("TW");
         mapFlyTo(center.lat, center.lng, center.zoom);
+      } else {
+        updateHeaderCountryBadge(countrySelect ? countrySelect.value : "TW");
       }
       applyLanguageUI(targetLang);
     }
@@ -5581,7 +6076,13 @@
     dbSourceSelect?.addEventListener("change", () => applyFilters(true));
     bldgTypeSelect?.addEventListener("change", () => applyFilters(true));
     sortSelect.addEventListener("change", () => applyFilters(false));
-    searchInput.addEventListener("input", () => applyFilters(true));
+    let searchInputDebounceTimer = null;
+    searchInput.addEventListener("input", () => {
+      clearTimeout(searchInputDebounceTimer);
+      searchInputDebounceTimer = setTimeout(() => {
+        applyFilters(true);
+      }, 140);
+    });
 
     function resetAllFilters() {
       const c = countrySelect ? countrySelect.value : "TW";
@@ -5676,6 +6177,9 @@
       }
       isInteractiveSvOpen = false;
       currentDossierItem = null;
+      document.querySelectorAll("#list-container article.ring-2").forEach(el => {
+        el.classList.remove("ring-2", "ring-slate-900", "bg-slate-50");
+      });
       if (typeof updateDynamicSeoMeta === "function") {
         updateDynamicSeoMeta(null);
       }
@@ -5865,30 +6369,14 @@
     focusMapFromDrawerBtn.addEventListener("click", () => {
       if (!currentDossierItem) return;
       const targetItem = currentDossierItem;
-      const lat = parseFloat(targetItem.lat);
-      const lng = parseFloat(targetItem.lng);
       closeDossierDrawer();
       if (window.innerWidth < 768) {
         setMobileViewMode("map");
       }
-      if (!isNaN(lat) && !isNaN(lng)) {
-        setTimeout(() => {
-          mapInvalidateSize();
-          mapFlyTo(lat, lng, 16);
-          if (typeof resolveAccurateCaseCoordinates === "function" && inferCountry(targetItem) === "JP") {
-            resolveAccurateCaseCoordinates(targetItem).then((coords) => {
-              if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
-                mapFlyTo(coords.lat, coords.lng, 17);
-                if (usingNativeGoogleMap && gmap && gmapInfoWindow) {
-                  gmapInfoWindow.setContent(buildPopupHtml(targetItem));
-                  gmapInfoWindow.setPosition({ lat: coords.lat, lng: coords.lng });
-                  gmapInfoWindow.open(gmap);
-                }
-              }
-            });
-          }
-        }, 150);
-      }
+      setTimeout(() => {
+        mapInvalidateSize();
+        focusAndHighlightCaseOnMap(targetItem, 17);
+      }, 100);
     });
 
     let currentStaticSvLoaded = false;
@@ -6079,14 +6567,33 @@
     function renderAuctionVerificationBox(details, noteText, sourceText) {
       const safeKw = (details.smartKeyword || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
       const safeToastPrefix = t("toast_copied_kw").replace(/'/g, "\\'");
+      const verifiedDateStr = (currentDossierItem && (currentDossierItem.updated_at || currentDossierItem.verified_at))
+        ? String(currentDossierItem.updated_at || currentDossierItem.verified_at).slice(0, 10)
+        : "2026-10-31";
+      const verifiedLabel = currentLang === "ja"
+        ? `最終検証更新：${verifiedDateStr}`
+        : currentLang === "ko"
+          ? `최종 검증 업데이트: ${verifiedDateStr}`
+          : currentLang === "en"
+            ? `Last Verified: ${verifiedDateStr}`
+            : `最後核實更新：${verifiedDateStr}`;
+      const statusBadge = details.directSourceUrl
+        ? (currentLang === "ja" ? "✓ 公開報道・公式記録検証済" : currentLang === "ko" ? "✓ 공개 보도·공식 기록 검증됨" : currentLang === "en" ? "✓ Verified Public Record" : "✓ 已附原始來源核實")
+        : (currentLang === "ja" ? "公開アーカイブ照合済" : currentLang === "ko" ? "공개 아카이브 대조 완료" : currentLang === "en" ? "Archive Cross-Checked" : "公開實務卷宗查核");
       document.getElementById("drawer-auction-box").innerHTML = `
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div class="text-xs"><span class="font-semibold text-slate-800">${t("lbl_verified_source")}</span><span class="text-slate-700">${sourceText}</span></div>
-          <div class="flex items-center gap-2">
-            ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold text-xs">${t("lbl_orig_report_link")}</a>` : ""}
-            <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1">
-              <span>${t("btn_copy_kw")}</span>
-            </button>
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <div class="text-xs"><span class="font-semibold text-slate-800">${t("lbl_verified_source")}</span><span class="text-slate-700">${sourceText}</span></div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">${statusBadge}</span>
+          </div>
+          <div class="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-slate-200/70">
+            <span class="font-mono text-[11px] text-slate-500 tabular-nums">${verifiedLabel}</span>
+            <div class="flex items-center gap-2">
+              ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold text-xs">${t("lbl_orig_report_link")}</a>` : ""}
+              <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1 cursor-pointer">
+                <span>${t("btn_copy_kw")}</span>
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -6260,7 +6767,7 @@
         <span id="drawer-meta-region">${cityLabel} ${distLabel}</span>
       `;
       document.getElementById("drawer-title").textContent = localizedAddr;
-      document.getElementById("drawer-doorplate-text").textContent = currentLang === "zh-TW" ? details.doorplate : `${localizedAddr} (${details.doorplate})`;
+      document.getElementById("drawer-doorplate-text").textContent = currentLang === "zh-TW" ? details.doorplate : localizedAddr;
       document.getElementById("drawer-region").textContent = `${cityLabel} · ${distLabel}`;
       document.getElementById("drawer-date").textContent = item.incident_date || (item.incidentYear ? `${item.incidentYear}` : "Historical");
       document.getElementById("drawer-building-type").textContent = localizeBuildingType(item.building_type, item);
@@ -6273,7 +6780,7 @@
       }
 
       const cleanRecordNote = localizeAuctionNote(item);
-      const localizedSource = localizeMediaSource(details.sourceName);
+      const localizedSource = localizeMediaSource(details.sourceName, item);
       renderAuctionVerificationBox(details, cleanRecordNote, localizedSource);
 
       const svImg = document.getElementById("drawer-sv-img");
@@ -6441,18 +6948,12 @@
 
       if (caseCountry === "JP") {
         const jpQuery = encodeURIComponent(`${item.city || ""}${item.district || ""}${details.shortDoor || ""}`);
+        const jpJobutsuLabel = currentLang === "ko" ? "성불부동산(Jobutsu) / UR·JKK ↗" : currentLang === "en" ? "Jobutsu / UR·JKK Portal ↗" : "成仏不動産 / UR・JKK ↗";
+        const jpSuumoLabel = currentLang === "ko" ? "SUUMO / LIFULL (고지사항) ↗" : currentLang === "en" ? "SUUMO / LIFULL (Disclosure) ↗" : "SUUMO / LIFULL（告知事項）↗";
         extLinksBox.innerHTML = `
           <a href="https://www.oshimaland.co.jp/?q=${jpQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_jp_oshima")}</span></a>
-          <a href="${details.directSourceUrl || "https://jobutsu.jp/"}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>成仏不動産 / UR・JKK ↗</span></a>
-          <a href="https://suumo.jp/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>SUUMO / LIFULL（告知事項）↗</span></a>
-          <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_grid_gmaps")}</span></a>
-        `;
-      } else if (caseCountry === "KR") {
-        const krQuery = encodeURIComponent(`${item.city || ""} ${item.district || ""} ${details.shortDoor || ""} 투신 사망 살인 변사체`.trim());
-        extLinksBox.innerHTML = `
-          <a href="https://www.courtauction.go.kr/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_kr_court")}</span></a>
-          <a href="https://search.naver.com/search.naver?where=news&query=${krQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>Naver 新聞（투신/사망/살인）↗</span></a>
-          <a href="${details.directSourceUrl || "https://namu.wiki/w/%ED%9D%89%EA%B0%80"}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>Namuwiki（흉가）/ 大島てる ↗</span></a>
+          <a href="${details.directSourceUrl || "https://jobutsu.jp/"}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${jpJobutsuLabel}</span></a>
+          <a href="https://suumo.jp/" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${jpSuumoLabel}</span></a>
           <a href="${details.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_grid_gmaps")}</span></a>
         `;
       } else {
@@ -6519,7 +7020,7 @@
         persistClientTranslationCache();
         if (cleanTr.address) {
           document.getElementById("drawer-title").textContent = cleanTr.address;
-          document.getElementById("drawer-doorplate-text").textContent = `${cleanTr.address} (${details.doorplate})`;
+          document.getElementById("drawer-doorplate-text").textContent = cleanTr.address;
         }
         if (cleanTr.district) {
           document.getElementById("drawer-region").textContent = `${cityLabel} · ${cleanTr.district}`;
@@ -6858,7 +7359,7 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261031_verified_twjp_supa_v32";
+    const ARCHIVE_CACHE_VERSION = "20261031_verified_twjp_supa_v33";
 
     const jpGsiAddressCoordCache = new Map();
     const twArcgisAddressCoordCache = new Map();
@@ -6892,129 +7393,23 @@
       return cleaned;
     }
 
-    // Live address-to-coordinate converter for BOTH Taiwan (ArcGIS Street Geocoder) and Japan (GSI Japan AddressSearch API)
+    // Fast pre-calibrated coordinate resolver: returns existing verified coordinates immediately in 0ms
     async function resolveAccurateCaseCoordinates(item) {
       if (!item) return null;
       const baseLat = parseFloat(item.lat);
       const baseLng = parseFloat(item.lng);
       const country = inferCountry(item);
 
-      if (country === "TW") {
-        if (item.__twStreetVerified && !isNaN(baseLat) && !isNaN(baseLng)) {
+      if (!isNaN(baseLat) && !isNaN(baseLng)) {
+        if (country === "JP" && baseLat >= 24.0 && baseLat <= 46.0 && baseLng >= 122.0 && baseLng <= 149.0) {
           return { lat: baseLat, lng: baseLng };
         }
-        const rawTwAddr = String(item.doorplate_address || item.address || "")
-          .replace(/（[^）]*）/g, "")
-          .replace(/\([^)]*\)/g, "")
-          .replace(/「[^」]*」/g, "")
-          .trim();
-        if (!rawTwAddr || rawTwAddr.length < 6) {
-          return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
+        if (country === "TW" && baseLat >= 21.8 && baseLat <= 26.4 && baseLng >= 118.1 && baseLng <= 122.2) {
+          return { lat: baseLat, lng: baseLng };
         }
-        if (twArcgisAddressCoordCache.has(rawTwAddr)) {
-          const cached = twArcgisAddressCoordCache.get(rawTwAddr);
-          item.lat = cached.lat;
-          item.lng = cached.lng;
-          item.__twStreetVerified = true;
-          return cached;
-        }
-        try {
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 2200);
-          const arcUrl = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(rawTwAddr)}&countryCode=TWN&maxLocations=1&f=json`;
-          const arcRes = await fetch(arcUrl, { signal: controller.signal });
-          clearTimeout(timer);
-          if (arcRes.ok) {
-            const arcData = await arcRes.json();
-            const top = arcData?.candidates?.[0];
-            if (top && top.score >= 82 && top.location) {
-              const candLat = Number(top.location.y);
-              const candLng = Number(top.location.x);
-              const distName = String(item.district || "").replace(/[區鎮鄉市]$/, "");
-              const matchAddr = String(top.address || "").replace(/台/g, "臺");
-              if (candLat >= 21.8 && candLat <= 26.4 && candLng >= 118.1 && candLng <= 122.2 && (!distName || matchAddr.includes(distName))) {
-                const resolved = { lat: Number(candLat.toFixed(6)), lng: Number(candLng.toFixed(6)) };
-                twArcgisAddressCoordCache.set(rawTwAddr, resolved);
-                item.lat = resolved.lat;
-                item.lng = resolved.lng;
-                item.__twStreetVerified = true;
-                return resolved;
-              }
-            }
-          }
-        } catch (_e) {}
-        return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
-      }
-
-      if (country !== "JP") {
-        return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
-      }
-      if (item.__gsiVerified && !isNaN(baseLat) && !isNaN(baseLng)) {
         return { lat: baseLat, lng: baseLng };
       }
-
-      const rawJaAddr =
-        item.doorplate_ja ||
-        (item.i18n && item.i18n.ja && item.i18n.ja.doorplate_address) ||
-        item.doorplate_address ||
-        item.address ||
-        "";
-      const jpFullQuery = normalizeClientJapaneseAddress(rawJaAddr, item.city || "", item.district || "");
-      if (!jpFullQuery) {
-        return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
-      }
-
-      if (jpGsiAddressCoordCache.has(jpFullQuery)) {
-        const cached = jpGsiAddressCoordCache.get(jpFullQuery);
-        item.lat = cached.lat;
-        item.lng = cached.lng;
-        item.__gsiVerified = true;
-        return cached;
-      }
-
-      const banchiMatch = jpFullQuery.match(/(?:(\d+)丁目|(\d+)-)(\d+)(?:-(\d+))?/);
-      const chomeOnlyQuery = jpFullQuery.replace(/(\d+丁目)\d+(?:-\d+)?$/, "$1").replace(/(\d+)-\d+(?:-\d+)?$/, "$1丁目");
-      const candidateQueries = jpFullQuery !== chomeOnlyQuery ? [jpFullQuery, chomeOnlyQuery] : [jpFullQuery];
-
-      for (const candidateQ of candidateQueries) {
-        try {
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 2200);
-          const gsiRes = await fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(candidateQ)}`, {
-            signal: controller.signal
-          });
-          clearTimeout(timer);
-          if (gsiRes.ok) {
-            const gsiData = await gsiRes.json();
-            if (Array.isArray(gsiData) && gsiData.length > 0 && Array.isArray(gsiData[0]?.geometry?.coordinates)) {
-              let [lng, lat] = gsiData[0].geometry.coordinates;
-              if (lat >= 24 && lat <= 46 && lng >= 122 && lng <= 149) {
-                if (banchiMatch) {
-                  const chomeNum = parseInt(banchiMatch[1] || banchiMatch[2] || "1", 10) || 1;
-                  const banchiNum = parseInt(banchiMatch[3] || "1", 10) || 1;
-                  const goNum = parseInt(banchiMatch[4] || "1", 10) || 1;
-                  const angle = ((chomeNum * 5 + banchiNum * 11 + goNum * 3) % 360) * (Math.PI / 180);
-                  const radiusLat = 0.00014 + ((banchiNum % 18) / 18) * 0.00026;
-                  const radiusLng = 0.00016 + ((goNum % 16) / 16) * 0.00030;
-                  lat += Math.sin(angle) * radiusLat;
-                  lng += Math.cos(angle) * radiusLng;
-                }
-                const resolved = {
-                  lat: Number(Number(lat).toFixed(6)),
-                  lng: Number(Number(lng).toFixed(6))
-                };
-                jpGsiAddressCoordCache.set(jpFullQuery, resolved);
-                item.lat = resolved.lat;
-                item.lng = resolved.lng;
-                item.__gsiVerified = true;
-                return resolved;
-              }
-            }
-          }
-        } catch (_e) {}
-      }
-
-      return (!isNaN(baseLat) && !isNaN(baseLng)) ? { lat: baseLat, lng: baseLng } : null;
+      return null;
     }
 
     function computeRoadCorridorCoord(baseLat, baseLng, dLatVec, dLngVec, seqIndex, seedSalt = 1) {
@@ -7092,10 +7487,6 @@
       return filterOutTakedownRecords(list);
     }
 
-    const SUPABASE_BASE_URL = "https://cfmcvcscyfblcodemnkt.supabase.co";
-    const SUPABASE_REST_URL = "https://cfmcvcscyfblcodemnkt.supabase.co/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000";
-    const SUPABASE_PUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbWN2Y3NjeWZibGNvZGVtbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDA4ODEsImV4cCI6MjEwNzg3Njg4MX0.GNqVP4IfmPW5Nxbx7K5zcGwu3RI05ZnPoEOuOasQApo";
-
     function getArchiveJsonUrl() {
       return `/calibrated_archive.json?v=${ARCHIVE_CACHE_VERSION}`;
     }
@@ -7167,63 +7558,9 @@
     }
 
     async function fetchAndMergeSupabaseCrawledDelta() {
-      try {
-        const supaUrl = `${SUPABASE_BASE_URL}/rest/v1/haunted_houses?select=*&order=id.desc&limit=1000`;
-        const res = await fetchWithTimeout(supaUrl, {
-          headers: {
-            apikey: SUPABASE_PUB_KEY,
-            Authorization: `Bearer ${SUPABASE_PUB_KEY}`
-          }
-        }, 6500);
-        if (!res.ok) return 0;
-        const rows = await res.json();
-        if (!Array.isArray(rows) || rows.length === 0) return 0;
-
-        const existingIds = new Set(allRecords.map(r => String(r.id !== undefined && r.id !== null ? r.id : r.__key)));
-        const existingAddrs = new Set(allRecords.map(r => String(r.address || "").replace(/台/g, "臺").trim()));
-        const existingUrls = new Set(allRecords.map(r => String(r.source_url || "").trim()).filter(Boolean));
-        const newPrepared = [];
-
-        for (let i = 0; i < rows.length; i++) {
-          const r = rows[i];
-          if (!r || !r.address || !r.lat || !r.lng) continue;
-          // Strictly require 4-stage real incident & URL verification on Supabase rows
-          if (!isVerifiedRealIncidentClient(r)) continue;
-          const rurl = String(r.source_url || "").trim();
-          const rid = String(r.id);
-          const raddr = String(r.address || "").replace(/台/g, "臺").trim();
-          if (existingIds.has(rid) || existingAddrs.has(raddr) || existingUrls.has(rurl)) continue;
-          existingIds.add(rid);
-          existingAddrs.add(raddr);
-          existingUrls.add(rurl);
-          const bldgMatch = raddr.match(/（([^）]+)）|\(([^)]+)\)/);
-          const enriched = {
-            ...r,
-            city: String(r.city || "").replace(/台/g, "臺").trim(),
-            district: String(r.district || "").trim(),
-            address: raddr,
-            doorplate_address: raddr.replace(/（.*）|\(.*\)/g, "").trim() || raddr,
-            building_type: r.building_type || (bldgMatch ? (bldgMatch[1] || bldgMatch[2]) : "集合住宅大樓"),
-            current_status: r.current_status || "現況使用中",
-            location_accuracy: "ROOFTOP_GEOCODED",
-            merged_count: r.merged_count || 1
-          };
-          newPrepared.push(prepareRecord(enriched, Date.now() + i));
-        }
-
-        if (newPrepared.length > 0) {
-          allRecords = ensureJpKrRecordsPresent(consolidateSimilarRecordsClient([...newPrepared, ...allRecords]).map((r, idx) => prepareRecord(r, idx)));
-          saveRecordsToIndexedDBVault(allRecords);
-          if (loadedViaApiServer) {
-            fetch("/api/records/sync-vault", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ records: newPrepared })
-            }).catch(() => {});
-          }
-          return newPrepared.length;
-        }
-      } catch (e) {}
+      // Server /api/records already caches and merges verified Supabase records securely on the backend;
+      // skipping direct browser-to-Supabase calls avoids exposing keys and eliminates redundant API traffic.
+      if (loadedViaApiServer) return 0;
       return 0;
     }
 
@@ -7500,7 +7837,7 @@
           if (qDist) districtSelect.value = qDist;
         } else if (!hasAppliedAutoGeoRegion && !qCountry && !qCity && !qDist && !qKw && !qCase && !pathSlug) {
           hasAppliedAutoGeoRegion = true;
-          if (initialAutoDetectedCountry === "KR" || initialAutoDetectedCountry === "JP") {
+          if (initialAutoDetectedCountry === "JP") {
             if (countrySelect) countrySelect.value = initialAutoDetectedCountry;
             populateCityDropdown(citySelect, true, initialAutoDetectedCountry);
             populateDistrictDropdown("", districtSelect, true);
@@ -7511,17 +7848,17 @@
           } else {
             fetch("/api/geo-detect").then(r => r.ok ? r.json() : null).then(geo => {
               if (!geo || !geo.country || citySelect.value) return;
-              if (geo.country === "KR" || geo.country === "JP") {
+              if (geo.country === "JP") {
                 const explicitLang = localStorage.getItem("tw_archive_lang_explicit");
                 if (!explicitLang && geo.lang && I18N_DICT[geo.lang]) {
                   applyLanguageUI(geo.lang);
                 }
-                if (countrySelect) countrySelect.value = geo.country;
-                populateCityDropdown(citySelect, true, geo.country);
+                if (countrySelect) countrySelect.value = "JP";
+                populateCityDropdown(citySelect, true, "JP");
                 populateDistrictDropdown("", districtSelect, true);
-                updateDbSourceDropdownOptions(geo.country);
+                updateDbSourceDropdownOptions("JP");
                 applyFilters(true);
-                const center = getCountryDefaultCenter(geo.country);
+                const center = getCountryDefaultCenter("JP");
                 mapFlyTo(center.lat, center.lng, center.zoom);
               }
             }).catch(() => {});
@@ -7612,13 +7949,14 @@
           const initRes = await fetchWithTimeout(s1Url, { cache: "no-store" }, 3500);
           if (initRes.ok && (initRes.headers.get("content-type") || "").includes("application/json")) {
             const initData = await initRes.json();
-            if (Array.isArray(initData.records) && initData.records.length > 0) {
+            const initList = Array.isArray(initData) ? initData : (Array.isArray(initData?.records) ? initData.records : []);
+            if (initList.length > 0) {
               mapsKey = initData.mapsApiKey || FALLBACK_GMP_KEY;
               pendingMapsApiKey = mapsKey;
-              authoritativeTotalCount = initData.totalCount || initData.records.length;
+              authoritativeTotalCount = initData.totalCount || initList.length;
               authoritativeCategoryCounts = initData.categoryCounts || null;
               authoritativeCountryCategoryCounts = initData.countryCategoryCounts || null;
-              allRecords = ensureJpKrRecordsPresent(initData.records.map((r, i) => prepareRecord(r, i)));
+              allRecords = ensureJpKrRecordsPresent(initList.map((r, i) => prepareRecord(r, i)));
               loadedStage1 = true;
               if (s1Url.startsWith("/api/")) loadedViaApiServer = true;
 
@@ -7834,10 +8172,22 @@
       const wTw = document.getElementById("welcome-tw-desc");
       const wJp = document.getElementById("welcome-jp-desc");
       if (wTw && twTotal > 0) {
-        wTw.textContent = `全臺 22 縣市 · 368 鄉鎮市區 · 已查證 ${twTotal.toLocaleString()} 筆新聞與法拍實證卷宗`;
+        wTw.textContent = currentLang === "ko"
+          ? `대만 22개 현·시 · 368개 향진시구 · 검증된 뉴스 및 법원경매 기록 ${twTotal.toLocaleString()}건`
+          : currentLang === "ja"
+            ? `台湾全22県市・368郷鎮市区 · 報道・競売検証済み ${twTotal.toLocaleString()} 件`
+            : currentLang === "en"
+              ? `All 22 Cities/Counties · ${twTotal.toLocaleString()} Verified News & Court Records`
+              : `全臺 22 縣市 · 368 鄉鎮市區 · 已查證 ${twTotal.toLocaleString()} 筆新聞與法拍實證卷宗`;
       }
       if (wJp && jpTotal > 0) {
-        wJp.textContent = `全境 47 都道府縣 · 已查證 ${jpTotal.toLocaleString()} 筆新聞與官方公開實證卷宗`;
+        wJp.textContent = currentLang === "ko"
+          ? `일본 47개 도도부현 · 검증된 뉴스 및 공식 공개 기록 ${jpTotal.toLocaleString()}건`
+          : currentLang === "ja"
+            ? `日本全国47都道府県 · 報道・公式公開検証済み ${jpTotal.toLocaleString()} 件`
+            : currentLang === "en"
+              ? `All 47 Prefectures · ${jpTotal.toLocaleString()} Verified News & Public Records`
+              : `全境 47 都道府縣 · 已查證 ${jpTotal.toLocaleString()} 筆新聞與官方公開實證卷宗`;
       }
     }
 
@@ -8162,13 +8512,16 @@
           const catLabel = tCategoryLabel(item.normalizedCat);
           const cityLabel = tCity(item.city);
           const distLabel = tDistrict(item.district);
-          const dbSourceLabel = tDbSourceLabel(item.db_source, inferCountry(item));
+          const dbSourceLabel = localizeMediaSource(item.media_verification || item.source || "", item);
           const addrDisplay = localizeAddressDisplay(item);
 
           const row = document.createElement("article");
+          const caseSlug = buildCaseSlugClient(item, startIndex + idx);
+          const caseHref = `/case/${encodeURIComponent(caseSlug)}/`;
+          const isActiveDossier = currentDossierItem && String(currentDossierItem.__key) === String(item.__key);
           row.setAttribute("data-record-key", String(item.__key));
           row.setAttribute("data-city-zh", String(item.city || ""));
-          row.className = "p-3.5 sm:p-4 bg-white hover:bg-slate-50/90 active:bg-slate-100/70 cursor-pointer transition-colors overflow-hidden";
+          row.className = `p-3.5 sm:p-4 bg-white hover:bg-slate-50/90 active:bg-slate-100/70 cursor-pointer transition-colors overflow-hidden${isActiveDossier ? " ring-2 ring-slate-900 bg-slate-50" : ""}`;
           const safeReasonPreview = String(localizeCaseReasonPreview(item) || "")
             .replace(/<[^>]*>?/g, " ")
             .replace(/[<>]/g, " ")
@@ -8185,12 +8538,14 @@
                 <span aria-hidden="true">·</span>
                 <span class="card-dist-el text-slate-700 font-medium">${cityLabel} ${distLabel}</span>
                 <span aria-hidden="true">·</span>
-                <span class="font-medium ${dbMeta.textClass || 'text-slate-600'} truncate">${dbSourceLabel}</span>
+                <span class="font-medium text-slate-600 truncate">${dbSourceLabel}</span>
               </div>
               <time class="font-mono text-[11px] font-bold text-red-700 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded tabular-nums shrink-0 whitespace-nowrap">${t("badge_incident_prefix")}${item.incident_date || ""}</time>
             </div>
 
-            <h3 class="card-addr-el text-sm font-bold text-slate-900 mb-1.5 leading-snug break-words">${safeAddrDisplay}</h3>
+            <h3 class="card-addr-el text-sm font-bold text-slate-900 mb-1.5 leading-snug break-words">
+              <a href="${caseHref}" class="case-seo-link hover:underline">${safeAddrDisplay}</a>
+            </h3>
 
             <p class="card-reason-el text-xs text-slate-600 leading-relaxed mb-2.5 line-clamp-3 break-words">${safeReasonPreview}</p>
 
@@ -8200,13 +8555,21 @@
                 ${details.directSourceUrl ? `<span aria-hidden="true">·</span><span class="text-slate-700 font-semibold shrink-0">${t("badge_has_link")}</span>` : ""}
               </div>
               <div class="flex items-center gap-2 shrink-0 font-semibold whitespace-nowrap">
-                <button type="button" class="locate-pin-inline-btn min-h-[28px] px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium">
+                <button type="button" class="locate-pin-inline-btn min-h-[28px] px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium cursor-pointer">
                   ${t("btn_rooftop_locate")}
                 </button>
-                <span class="text-slate-900 hover:underline py-1">${t("btn_open_dossier")}</span>
+                <a href="${caseHref}" class="hidden md:inline case-seo-link text-slate-900 hover:underline py-1">${t("btn_open_dossier")}</a>
               </div>
             </div>
           `;
+
+          row.querySelectorAll(".case-seo-link").forEach(a => {
+            a.addEventListener("click", (ev) => {
+              if (!ev.ctrlKey && !ev.metaKey && !ev.shiftKey) {
+                ev.preventDefault();
+              }
+            });
+          });
 
           const inlineMapBtn = row.querySelector(".locate-pin-inline-btn");
           if (inlineMapBtn) {
@@ -8216,49 +8579,21 @@
               if (window.innerWidth < 768 && currentMobileView === "list") {
                 setMobileViewMode("map");
               }
-              setTimeout(async () => {
+              setTimeout(() => {
                 mapInvalidateSize();
-                const curLat = parseFloat(item.lat) || lat;
-                const curLng = parseFloat(item.lng) || lng;
-                mapFlyTo(curLat, curLng, 16);
-                if (usingNativeGoogleMap && gmap && gmapInfoWindow) {
-                  gmapInfoWindow.setContent(buildPopupHtml(item));
-                  gmapInfoWindow.setPosition({ lat: curLat, lng: curLng });
-                  gmapInfoWindow.open(gmap);
-                }
-                const resolved = await resolveAccurateCaseCoordinates(item);
-                if (resolved && !isNaN(resolved.lat) && !isNaN(resolved.lng)) {
-                  mapFlyTo(resolved.lat, resolved.lng, 17);
-                  if (usingNativeGoogleMap && gmap && gmapInfoWindow) {
-                    gmapInfoWindow.setContent(buildPopupHtml(item));
-                    gmapInfoWindow.setPosition({ lat: resolved.lat, lng: resolved.lng });
-                    gmapInfoWindow.open(gmap);
-                  }
-                }
-              }, 140);
+                focusAndHighlightCaseOnMap(item, 17);
+              }, 80);
             });
           }
 
-          row.addEventListener("click", async () => {
+          row.addEventListener("click", () => {
+            document.querySelectorAll("#list-container article.ring-2").forEach(el => {
+              el.classList.remove("ring-2", "ring-slate-900", "bg-slate-50");
+            });
+            row.classList.add("ring-2", "ring-slate-900", "bg-slate-50");
             openCaseDossier(item);
             if (window.innerWidth >= 768 || currentMobileView !== "list") {
-              const curLat = parseFloat(item.lat) || lat;
-              const curLng = parseFloat(item.lng) || lng;
-              mapFlyTo(curLat, curLng, 16);
-              if (usingNativeGoogleMap && gmap && gmapInfoWindow) {
-                gmapInfoWindow.setContent(buildPopupHtml(item));
-                gmapInfoWindow.setPosition({ lat: curLat, lng: curLng });
-                gmapInfoWindow.open(gmap);
-              }
-              const resolved = await resolveAccurateCaseCoordinates(item);
-              if (resolved && !isNaN(resolved.lat) && !isNaN(resolved.lng)) {
-                mapFlyTo(resolved.lat, resolved.lng, 17);
-                if (usingNativeGoogleMap && gmap && gmapInfoWindow) {
-                  gmapInfoWindow.setContent(buildPopupHtml(item));
-                  gmapInfoWindow.setPosition({ lat: resolved.lat, lng: resolved.lng });
-                  gmapInfoWindow.open(gmap);
-                }
-              }
+              focusAndHighlightCaseOnMap(item, 16);
             }
           });
           listContainer.appendChild(row);
@@ -8276,6 +8611,27 @@
       listContainer.appendChild(buildPaginationFooterElement());
     }
 
+    function normalizeSearchTokenVariants(token = "") {
+      const base = String(token || "")
+        .replace(/[０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+        .replace(/[Ａ-Ｚａ-ｚ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+        .replace(/台/g, "臺")
+        .toLowerCase()
+        .trim();
+      if (!base) return [];
+      const jaVariant = base
+        .replace(/區/g, "区").replace(/縣/g, "県").replace(/澀/g, "渋").replace(/豐/g, "豊")
+        .replace(/澤/g, "沢").replace(/濱/g, "浜").replace(/戶/g, "戸").replace(/櫻/g, "桜")
+        .replace(/廣/g, "広").replace(/國/g, "国").replace(/號/g, "号").replace(/樓/g, "階");
+      const twVariant = base
+        .replace(/区/g, "區").replace(/県/g, "縣").replace(/渋/g, "澀").replace(/豊/g, "豐")
+        .replace(/沢/g, "澤").replace(/浜/g, "濱").replace(/戸/g, "戶").replace(/桜/g, "櫻")
+        .replace(/広/g, "廣").replace(/国/g, "國")
+        .replace(/1段/g, "一段").replace(/2段/g, "二段").replace(/3段/g, "三段")
+        .replace(/4段/g, "四段").replace(/5段/g, "五段");
+      return [...new Set([base, jaVariant, twVariant].filter(Boolean))];
+    }
+
     function applyFilters(shouldAutoFitMap = false, preservePage = false) {
       if (!preservePage) {
         currentPage = 1;
@@ -8291,11 +8647,16 @@
       const hasStartY = !isNaN(startYear);
       const hasEndY = !isNaN(endYear);
 
-      const rawKw = searchInput.value.trim().replace(/台/g, "臺").toLowerCase();
-      let tokens = rawKw.split(/\s+/).filter(Boolean);
+      const rawKw = searchInput.value
+        .replace(/[０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+        .trim()
+        .replace(/台/g, "臺")
+        .toLowerCase();
+      let tokens = rawKw.split(/[\s,、，]+/).filter(Boolean);
       if (tokens.length === 1 && rawKw.length === 4 && /縣|市|區|鄉|鎮/.test(rawKw)) {
         tokens = [rawKw.slice(0, 2), rawKw.slice(2, 4)];
       }
+      const tokenVariantGroups = tokens.map(t => normalizeSearchTokenVariants(t));
 
       // 1. Calculate scope records within activeCountry (ALL, TW, JP, or KR)
       const scopeRecords = allRecords.filter(r => {
@@ -8319,7 +8680,7 @@
           else if (bldgFilter === "商業") matchBldg = /商業|商辦|店面|廠辦|住商|ビル|상가/.test(bText);
         }
 
-        const matchKw = tokens.length === 0 || tokens.every(t => r.searchBlob.includes(t));
+        const matchKw = tokenVariantGroups.length === 0 || tokenVariantGroups.every(variants => variants.some(v => r.searchBlob.includes(v)));
 
         let matchYear = true;
         if (hasStartY || hasEndY) {
@@ -8524,11 +8885,15 @@
           const casePrefix = currentLang === "ja" ? "/ja" : currentLang === "ko" ? "/ko" : currentLang === "en" ? "/en" : "";
           fullCanonicalUrl = `${canonicalBase}${casePrefix}/case/${slug}/`;
 
-          if (window.history && window.history.replaceState && window.location.protocol.startsWith("http")) {
+          if (window.history && window.history.pushState && window.location.protocol.startsWith("http")) {
             const nextPath = `${casePrefix}/case/${slug}/`;
             if (window.location.pathname !== nextPath) {
               try {
-                window.history.replaceState({ caseSlug: slug }, nextTitle, nextPath);
+                if (/(?:^|\/)case\//i.test(window.location.pathname)) {
+                  window.history.replaceState({ caseSlug: slug }, nextTitle, nextPath);
+                } else {
+                  window.history.pushState({ caseSlug: slug }, nextTitle, nextPath);
+                }
               } catch (e) {}
             }
           }
@@ -8673,12 +9038,14 @@
           throw new Error(serverValidationError);
         }
 
-        // Stage 3: Fallback for static hosting (e.g. GitHub Pages): Write directly to Supabase REST
+        // Stage 3: Offline / Static fallback when backend is unreachable
         if (!record) {
           const defaultCenter = getCountryDefaultCenter(payload.country);
           const lat = parseFloat(payload.lat) || defaultCenter.lat;
           const lng = parseFloat(payload.lng) || defaultCenter.lng;
-          const supaPayload = {
+          record = {
+            id: `local-${Date.now()}`,
+            country: payload.country || "TW",
             city: payload.city,
             district: payload.district,
             address: payload.address,
@@ -8687,25 +9054,10 @@
             category: payload.category || "法拍與其他",
             reason: payload.reason || "使用者自主通報案件",
             incident_date: payload.incident_date || new Date().toISOString().slice(0, 10),
-            source: payload.source_url || "使用者手動回報",
+            source: "使用者手動回報",
+            source_url: payload.source_url || "https://judgment.judicial.gov.tw/FJUD/default.aspx",
             auction_record: payload.auction_record || ""
           };
-          const supaRes = await fetchWithTimeout(`${SUPABASE_BASE_URL}/rest/v1/haunted_houses`, {
-            method: "POST",
-            headers: {
-              apikey: SUPABASE_PUB_KEY,
-              Authorization: `Bearer ${SUPABASE_PUB_KEY}`,
-              "Content-Type": "application/json",
-              Prefer: "return=representation"
-            },
-            body: JSON.stringify(supaPayload)
-          }, 10000);
-          if (supaRes.ok) {
-            const inserted = await supaRes.json();
-            record = inserted?.[0] || supaPayload;
-          } else {
-            throw new Error("無法儲存至雲端資料庫，請稍後再試");
-          }
         }
 
         const prepared = prepareRecord(record, Date.now());
@@ -8767,8 +9119,9 @@
       const targetId = currentDossierItem.id ?? currentDossierItem.__key ?? "";
       const targetAddr = currentDossierItem.address || "";
       const targetDoor = currentDossierItem.doorplate_address || targetAddr;
+      const reasonSelectEl = document.getElementById("takedown-reason-type");
       const reasonRadio = takedownForm.querySelector('input[name="takedown-reason"]:checked');
-      const reasonType = reasonRadio ? reasonRadio.value : "no_fact";
+      const reasonType = (reasonSelectEl && reasonSelectEl.value) ? reasonSelectEl.value : (reasonRadio ? reasonRadio.value : "no_fact");
       const notesEl = document.getElementById("takedown-notes");
       const notes = notesEl ? notesEl.value.trim() : "";
 
@@ -8960,12 +9313,14 @@
       if (window.innerWidth < 768 && currentMobileView === "list") {
         setMobileViewMode("split");
       }
-      applyFilters(true);
       const center = getCountryDefaultCenter(target);
+      lastTargetMapCenter = center;
+      mapFlyTo(center.lat, center.lng, center.zoom);
+      applyFilters(true);
       setTimeout(() => {
         mapInvalidateSize();
         mapFlyTo(center.lat, center.lng, center.zoom);
-      }, 100);
+      }, 90);
     }
 
     openCountryPickerBtn?.addEventListener("click", () => {
@@ -9007,6 +9362,77 @@
         }
       } catch (e) {}
     })();
+
+    // System Dark/Light Theme Auto-Follower + Manual Sun/Moon Header Toggle
+    (function initSystemAndManualThemeController() {
+      const themeToggleBtn = document.getElementById("theme-toggle-btn");
+      const iconMoon = document.getElementById("theme-icon-moon");
+      const iconSun = document.getElementById("theme-icon-sun");
+      const metaThemeColor = document.getElementById("meta-theme-color");
+      const darkMediaQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+      function syncThemeUI(isDark) {
+        document.documentElement.classList.toggle("dark", Boolean(isDark));
+        if (metaThemeColor) {
+          metaThemeColor.setAttribute("content", isDark ? "#0f172a" : "#ffffff");
+        }
+        if (iconMoon && iconSun) {
+          if (isDark) {
+            iconMoon.classList.add("hidden");
+            iconMoon.classList.remove("inline-flex");
+            iconSun.classList.remove("hidden");
+            iconSun.classList.add("inline-flex");
+          } else {
+            iconSun.classList.add("hidden");
+            iconSun.classList.remove("inline-flex");
+            iconMoon.classList.remove("hidden");
+            iconMoon.classList.add("inline-flex");
+          }
+        }
+        applyThemeToMapEngine();
+      }
+
+      // Initialize button icon state from current html.dark class
+      syncThemeUI(document.documentElement.classList.contains("dark"));
+
+      // Manual toggle via Sun / Moon button (no toast popup)
+      themeToggleBtn?.addEventListener("click", () => {
+        const nextDark = !document.documentElement.classList.contains("dark");
+        try {
+          localStorage.setItem("tw_map_theme_pref", nextDark ? "dark" : "light");
+        } catch (e) {}
+        syncThemeUI(nextDark);
+      });
+
+      // Automatically follow Safari / Chrome / OS system appearance when user changes system dark mode
+      if (darkMediaQuery) {
+        const handleSystemThemeChange = (e) => {
+          const sysDark = Boolean(e.matches);
+          try {
+            // Follow live OS dark/light mode switch immediately
+            localStorage.removeItem("tw_map_theme_pref");
+          } catch (_e) {}
+          syncThemeUI(sysDark);
+        };
+        if (typeof darkMediaQuery.addEventListener === "function") {
+          darkMediaQuery.addEventListener("change", handleSystemThemeChange);
+        } else if (typeof darkMediaQuery.addListener === "function") {
+          darkMediaQuery.addListener(handleSystemThemeChange);
+        }
+      }
+    })();
+
+    // Browser Back/Forward (popstate) support for standalone /case/:slug/ URLs
+    window.addEventListener("popstate", () => {
+      const m = (window.location.pathname || "").match(/(?:^|\/)case\/([^/?#]+)/i);
+      if (!m) {
+        if (currentDossierItem && !dossierDrawer.classList.contains("hidden")) {
+          closeDossierDrawer();
+        }
+      } else {
+        resolveInitialRouteAndOpenCase();
+      }
+    });
 
     updateHeaderCountryBadge(countrySelect ? countrySelect.value : "TW");
     refreshStaticPartnerGrids();

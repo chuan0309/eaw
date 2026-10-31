@@ -263,6 +263,7 @@ export function buildSitemapXml(records = [], baseUrl = "https://chuancn.org") {
     `${cleanBase}/`,
     `${cleanBase}/zh-tw/`,
     `${cleanBase}/ja/`,
+    `${cleanBase}/ko/`,
     `${cleanBase}/en/`
   ];
   const substantive = Array.isArray(records) ? records.filter(isSubstantiveCaseForSeo) : [];

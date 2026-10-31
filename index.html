@@ -542,6 +542,7 @@
       <div class="hidden sm:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold" role="group" aria-label="Language Switcher">
         <a href="/" data-lang="zh-TW" data-route="/" class="lang-btn px-2 py-1 rounded-md bg-slate-900 text-white transition-colors">繁中</a>
         <a href="/ja/" data-lang="ja" data-route="/ja/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">日本語</a>
+        <a href="/ko/" data-lang="ko" data-route="/ko/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">한국어</a>
         <a href="/en/" data-lang="en" data-route="/en/" class="lang-btn px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors">EN</a>
       </div>
       <select
@@ -551,6 +552,7 @@
       >
         <option value="zh-TW" data-route="/">繁中</option>
         <option value="ja" data-route="/ja/">日本語</option>
+        <option value="ko" data-route="/ko/">한국어</option>
         <option value="en" data-route="/en/">EN</option>
       </select>
 
@@ -558,11 +560,16 @@
         type="button"
         id="theme-toggle-btn"
         aria-label="切換深色或淺色模式 (Toggle Dark / Light Mode)"
-        title="切換深色／淺色模式（預設跟隨手機 Safari / 電腦系統外觀）"
-        class="min-h-[36px] sm:min-h-[38px] px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
+        title="切換深色／淺色模式"
+        class="w-9 h-9 sm:w-[38px] sm:h-[38px] p-0 text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors shrink-0 cursor-pointer flex items-center justify-center"
       >
-        <span id="theme-icon-moon" class="inline-flex items-center gap-1">🌙 <span class="hidden md:inline text-[11px]">深色</span></span>
-        <span id="theme-icon-sun" class="hidden items-center gap-1">☀️ <span class="hidden md:inline text-[11px]">淺色</span></span>
+        <svg id="theme-icon-moon" class="w-4 h-4 inline-flex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="theme-icon-sun" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
       </button>
 
       <button type="button" id="open-country-picker-btn" class="min-h-[36px] sm:min-h-[38px] px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1">
@@ -679,8 +686,8 @@
           </select>
         </div>
 
-        <!-- Row 3: Residential Building Type Filter -->
-        <div>
+        <!-- Row 3: Residential Building Type & Sort Controls -->
+        <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
           <select id="bldg-type-select" aria-label="Residential Building Type" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
             <option value="ALL" data-i18n="bldg_opt_all">全部建物型態</option>
             <option value="大樓" data-i18n="bldg_opt_condo">電梯大樓／社區華廈</option>
@@ -689,9 +696,14 @@
             <option value="套房" data-i18n="bldg_opt_studio">獨立套房／分租雅房</option>
             <option value="商業" data-i18n="bldg_opt_comm">店面／商辦廠房</option>
           </select>
+          <select id="sort-select" aria-label="Sort" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-2 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors truncate">
+            <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
+            <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
+            <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
+          </select>
         </div>
 
-        <!-- Row 4: Collapsible / Secondary Custom Year & Sort Controls -->
+        <!-- Row 4: Custom Year Inputs (Shown on Desktop/Tablet or when Custom Year Range is selected) -->
         <div id="collapsible-filters" class="hidden md:flex items-center justify-between gap-2 pt-0.5 text-xs">
           <div class="flex items-center gap-1.5 flex-1 min-w-0">
             <span class="text-slate-500 shrink-0" data-i18n="label_year_range">年份：</span>
@@ -714,14 +726,6 @@
               aria-label="End Year"
               class="w-16 sm:w-20 bg-slate-50 border border-slate-200 text-slate-800 font-mono text-xs rounded-lg px-2 py-1 text-center tabular-nums focus:outline-none focus:border-slate-800 focus:bg-white"
             />
-          </div>
-
-          <div class="flex items-center gap-1.5 shrink-0">
-            <select id="sort-select" aria-label="Sort" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-lg px-2 py-1 font-medium focus:outline-none focus:border-slate-800 focus:bg-white transition-colors">
-              <option value="date_desc" data-i18n="sort_newest">近期發生優先</option>
-              <option value="date_asc" data-i18n="sort_oldest">早期歷史優先</option>
-              <option value="verified_desc" data-i18n="sort_verified">附原始報導連結優先</option>
-            </select>
           </div>
         </div>
       </div>
@@ -765,7 +769,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0 font-semibold">
               <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium">定位</span>
-              <span class="text-slate-900">詳情 →</span>
+              <span class="hidden md:inline text-slate-900">詳情 →</span>
             </div>
           </div>
         </article>
@@ -788,7 +792,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0 font-semibold">
               <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium">定位</span>
-              <span class="text-slate-900">詳情 →</span>
+              <span class="hidden md:inline text-slate-900">詳情 →</span>
             </div>
           </div>
         </article>
@@ -811,7 +815,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0 font-semibold">
               <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium">定位</span>
-              <span class="text-slate-900">詳情 →</span>
+              <span class="hidden md:inline text-slate-900">詳情 →</span>
             </div>
           </div>
         </article>
@@ -1084,7 +1088,7 @@
   </div>
 
   <!-- Mobile Bottom Navigation Bar (< md) -->
-  <nav aria-label="Mobile View Switcher" class="md:hidden bg-white border-t border-slate-200 grid grid-cols-4 items-center h-14 px-2 shrink-0 z-40">
+  <nav aria-label="Mobile View Switcher" class="md:hidden bg-white border-t border-slate-200 grid grid-cols-3 items-center h-14 px-2 shrink-0 z-40">
     <button
       type="button"
       data-mobile-view="list"
@@ -1111,14 +1115,6 @@
     >
       <span class="text-xs leading-none" data-i18n="mnav_split">上下分割</span>
       <span class="text-[10px] text-slate-400 mt-1" data-i18n="mnav_split_sub">地圖+列表</span>
-    </button>
-    <button
-      type="button"
-      id="m-nav-filter"
-      class="flex flex-col items-center justify-center h-12 rounded-lg text-slate-500 font-medium hover:text-slate-900 transition-colors"
-    >
-      <span class="text-xs leading-none" data-i18n="mnav_filter">進階設定</span>
-      <span class="text-[10px] text-slate-400 mt-1" data-i18n="mnav_filter_sub">自訂年份</span>
     </button>
   </nav>
 
@@ -5027,13 +5023,13 @@
           }
         });
         gmapActiveCaseMarker.addListener("click", () => {
-          gmapInfoWindow.setContent(buildPopupHtml(item));
-          gmapInfoWindow.open(gmap, gmapActiveCaseMarker);
-          if (window.innerWidth >= 768) {
-            openCaseDossier(item);
+          if (window.innerWidth >= 768 && gmapInfoWindow) {
+            gmapInfoWindow.setContent(buildPopupHtml(item));
+            gmapInfoWindow.open(gmap, gmapActiveCaseMarker);
           }
+          openCaseDossier(item);
         });
-        if (gmapInfoWindow) {
+        if (window.innerWidth >= 768 && gmapInfoWindow) {
           gmapInfoWindow.setContent(buildPopupHtml(item));
           gmapInfoWindow.open(gmap, gmapActiveCaseMarker);
         }
@@ -5207,11 +5203,11 @@
                 }
               });
               marker.addListener("click", () => {
-                gmapInfoWindow.setContent(buildPopupHtml(single));
-                gmapInfoWindow.open(gmap, marker);
-                if (window.innerWidth >= 768) {
-                  openCaseDossier(single);
+                if (window.innerWidth >= 768 && gmapInfoWindow) {
+                  gmapInfoWindow.setContent(buildPopupHtml(single));
+                  gmapInfoWindow.open(gmap, marker);
                 }
+                openCaseDossier(single);
               });
               gmapMarkers.push(marker);
             } else {
@@ -5294,11 +5290,11 @@
           });
 
           marker.addListener("click", () => {
-            gmapInfoWindow.setContent(buildPopupHtml(item));
-            gmapInfoWindow.open(gmap, marker);
-            if (window.innerWidth >= 768) {
-              openCaseDossier(item);
+            if (window.innerWidth >= 768 && gmapInfoWindow) {
+              gmapInfoWindow.setContent(buildPopupHtml(item));
+              gmapInfoWindow.open(gmap, marker);
             }
+            openCaseDossier(item);
           });
 
           gmapMarkers.push(marker);
@@ -5336,9 +5332,12 @@
             popupAnchor: [0, -pinData.anchorY + 6]
           });
 
-          const m = L.marker([lat, lng], { icon }).bindPopup(buildPopupHtml(item), { maxWidth: 340 });
+          const m = L.marker([lat, lng], { icon });
+          if (window.innerWidth >= 768) {
+            m.bindPopup(buildPopupHtml(item), { maxWidth: 340 });
+          }
           m.on("click", () => {
-            if (window.innerWidth >= 768) openCaseDossier(item);
+            openCaseDossier(item);
           });
           markersToAdd.push(m);
         });
@@ -5448,6 +5447,7 @@
     });
 
     function toggleMobileFilters(forceOpen) {
+      if (!collapsibleFilters) return;
       const isHidden = collapsibleFilters.classList.contains("hidden");
       const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : isHidden;
       if (shouldOpen) {
@@ -5462,11 +5462,6 @@
       }
       setTimeout(() => mapInvalidateSize(), 100);
     }
-
-    document.getElementById("m-nav-filter").addEventListener("click", () => {
-      closeDossierDrawer();
-      toggleMobileFilters();
-    });
 
     window.addEventListener("resize", () => {
       if (window.innerWidth >= 768 && !mapEngineInitialized && allRecords.length > 0) {
@@ -5979,17 +5974,11 @@
         localStorage.setItem("tw_archive_lang_explicit", "1");
       } catch (e) {}
       const targetUrl = getLanguageSubdirectoryUrl(targetLang, true);
-      const currPath = window.location.pathname || "/";
-      const isAlreadyOnRoute =
-        (targetLang === "zh-TW" && (currPath === "/" || currPath === "/index.html" || currPath.startsWith("/zh-tw"))) ||
-        (targetLang === "ja" && (currPath === "/ja" || currPath.startsWith("/ja/"))) ||
-        (targetLang === "ko" && (currPath === "/ko" || currPath.startsWith("/ko/"))) ||
-        (targetLang === "en" && (currPath === "/en" || currPath.startsWith("/en/")));
-
-      if (!isAlreadyOnRoute && window.location.protocol.startsWith("http")) {
-        window.location.href = targetUrl;
-        return;
-      }
+      try {
+        if (window.history && typeof window.history.pushState === "function") {
+          window.history.pushState({ lang: targetLang }, "", targetUrl);
+        }
+      } catch (e) {}
       // Switch country filter when user switches to Japanese or Traditional Chinese; for Korean/English keep current TW/JP country
       if (targetLang === "ja" && countrySelect && countrySelect.value !== "JP") {
         countrySelect.value = "JP";
@@ -5997,6 +5986,7 @@
         populateCityDropdown(citySelect, true, "JP");
         populateDistrictDropdown("", districtSelect, true);
         updateDbSourceDropdownOptions("JP");
+        updateHeaderCountryBadge("JP");
         const center = getCountryDefaultCenter("JP");
         mapFlyTo(center.lat, center.lng, center.zoom);
       } else if (targetLang === "zh-TW" && countrySelect && countrySelect.value !== "TW") {
@@ -6005,11 +5995,13 @@
         populateCityDropdown(citySelect, true, "TW");
         populateDistrictDropdown("", districtSelect, true);
         updateDbSourceDropdownOptions("TW");
+        updateHeaderCountryBadge("TW");
         const center = getCountryDefaultCenter("TW");
         mapFlyTo(center.lat, center.lng, center.zoom);
+      } else {
+        updateHeaderCountryBadge(countrySelect ? countrySelect.value : "TW");
       }
       applyLanguageUI(targetLang);
-      if (typeof updateThemeToggleUI === "function") updateThemeToggleUI();
     }
 
     document.querySelectorAll(".lang-btn").forEach(btn => {
@@ -6580,12 +6572,14 @@
         : "2026-10-31";
       const verifiedLabel = currentLang === "ja"
         ? `最終検証更新：${verifiedDateStr}`
-        : currentLang === "en"
-          ? `Last Verified: ${verifiedDateStr}`
-          : `最後核實更新：${verifiedDateStr}`;
+        : currentLang === "ko"
+          ? `최종 검증 업데이트: ${verifiedDateStr}`
+          : currentLang === "en"
+            ? `Last Verified: ${verifiedDateStr}`
+            : `最後核實更新：${verifiedDateStr}`;
       const statusBadge = details.directSourceUrl
-        ? (currentLang === "ja" ? "✓ 公開報道・公式記録検証済" : currentLang === "en" ? "✓ Verified Public Record" : "✓ 已附原始來源核實")
-        : (currentLang === "ja" ? "公開アーカイブ照合済" : currentLang === "en" ? "Archive Cross-Checked" : "公開實務卷宗查核");
+        ? (currentLang === "ja" ? "✓ 公開報道・公式記録検証済" : currentLang === "ko" ? "✓ 공개 보도·공식 기록 검증됨" : currentLang === "en" ? "✓ Verified Public Record" : "✓ 已附原始來源核實")
+        : (currentLang === "ja" ? "公開アーカイブ照合済" : currentLang === "ko" ? "공개 아카이브 대조 완료" : currentLang === "en" ? "Archive Cross-Checked" : "公開實務卷宗查核");
       document.getElementById("drawer-auction-box").innerHTML = `
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -8178,10 +8172,22 @@
       const wTw = document.getElementById("welcome-tw-desc");
       const wJp = document.getElementById("welcome-jp-desc");
       if (wTw && twTotal > 0) {
-        wTw.textContent = `全臺 22 縣市 · 368 鄉鎮市區 · 已查證 ${twTotal.toLocaleString()} 筆新聞與法拍實證卷宗`;
+        wTw.textContent = currentLang === "ko"
+          ? `대만 22개 현·시 · 368개 향진시구 · 검증된 뉴스 및 법원경매 기록 ${twTotal.toLocaleString()}건`
+          : currentLang === "ja"
+            ? `台湾全22県市・368郷鎮市区 · 報道・競売検証済み ${twTotal.toLocaleString()} 件`
+            : currentLang === "en"
+              ? `All 22 Cities/Counties · ${twTotal.toLocaleString()} Verified News & Court Records`
+              : `全臺 22 縣市 · 368 鄉鎮市區 · 已查證 ${twTotal.toLocaleString()} 筆新聞與法拍實證卷宗`;
       }
       if (wJp && jpTotal > 0) {
-        wJp.textContent = `全境 47 都道府縣 · 已查證 ${jpTotal.toLocaleString()} 筆新聞與官方公開實證卷宗`;
+        wJp.textContent = currentLang === "ko"
+          ? `일본 47개 도도부현 · 검증된 뉴스 및 공식 공개 기록 ${jpTotal.toLocaleString()}건`
+          : currentLang === "ja"
+            ? `日本全国47都道府県 · 報道・公式公開検証済み ${jpTotal.toLocaleString()} 件`
+            : currentLang === "en"
+              ? `All 47 Prefectures · ${jpTotal.toLocaleString()} Verified News & Public Records`
+              : `全境 47 都道府縣 · 已查證 ${jpTotal.toLocaleString()} 筆新聞與官方公開實證卷宗`;
       }
     }
 
@@ -8552,7 +8558,7 @@
                 <button type="button" class="locate-pin-inline-btn min-h-[28px] px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium cursor-pointer">
                   ${t("btn_rooftop_locate")}
                 </button>
-                <a href="${caseHref}" class="case-seo-link text-slate-900 hover:underline py-1">${t("btn_open_dossier")}</a>
+                <a href="${caseHref}" class="hidden md:inline case-seo-link text-slate-900 hover:underline py-1">${t("btn_open_dossier")}</a>
               </div>
             </div>
           `;
@@ -9389,14 +9395,13 @@
       // Initialize button icon state from current html.dark class
       syncThemeUI(document.documentElement.classList.contains("dark"));
 
-      // Manual toggle via Sun / Moon button
+      // Manual toggle via Sun / Moon button (no toast popup)
       themeToggleBtn?.addEventListener("click", () => {
         const nextDark = !document.documentElement.classList.contains("dark");
         try {
           localStorage.setItem("tw_map_theme_pref", nextDark ? "dark" : "light");
         } catch (e) {}
         syncThemeUI(nextDark);
-        showToast(nextDark ? "🌙 已切換為深色模式 (Dark Mode)" : "☀️ 已切換為淺色模式 (Light Mode)");
       });
 
       // Automatically follow Safari / Chrome / OS system appearance when user changes system dark mode

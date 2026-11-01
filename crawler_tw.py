@@ -1,12 +1,40 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+臺灣特殊事故建物與產權紀錄查詢平台 — 台灣真實案件自動化蒐集與查證系統 (crawler_tw.py)
+========================================================================================
+設計原則：
+1. 100% 證據驅動（Evidence-Only）：僅能從真實新聞、司法院裁判書、法院法拍公告及政府公開資料擷取，嚴禁 AI 憑空生成案件。
+2. 嚴格凶宅判定：
+   - 排除一般無傷亡火災、單純自然病逝、道路車禍或未經查證之網路傳聞。
+   - 若新聞僅提及某社區名稱而無具體路街段巷或無法確認是否為專有部分事故，一律移入 `pending_cases` 待查證表，不直接公開。
+3. 多來源歸戶與去重（Multi-Source Deduplication）：
+   - 同一案件若由多家媒體報導，主表 `haunted_houses` (檢視表 `cases`) 僅保留單一案件，並將所有原始新聞連結寫入 `case_sources`。
+4. 支援兩種執行模式：
+   - `--mode incremental`（預設，GitHub Actions 每 6 小時定時增量巡檢）
+   - `--mode backfill --year-from 2000 --year-to 2026`（歷年歷史資料回溯）
+"""
+
 import os
 import re
+import sys
+import uuid
 import json
 import time
 import random
+import argparse
+import datetime
 import subprocess
 import urllib.parse
 import xml.etree.ElementTree as ET
 import requests
+
+try:
+    from bs4 import BeautifulSoup
+    HAS_BS4 = True
+except ImportError:
+    BeautifulSoup = None
+    HAS_BS4 = False
 
 try:
     from google import genai
@@ -25,154 +53,41 @@ except ImportError:
     Client = object
     HAS_SUPABASE_SDK = False
 
-# ==============================================================================
-# 1. 純文字模型嚴格過濾引擎 (100% 剔除圖片/語音/影片模型，只留純文字 LLM)
-# ==============================================================================
-class StrictTextLLMEngine:
-    def __init__(self, gemini_keys_str: str, openai_keys_str: str):
-        self.gemini_keys = [k.strip() for k in (gemini_keys_str or "").split(",") if k.strip()]
-        self.openai_keys = [k.strip() for k in (openai_keys_str or "").split(",") if k.strip()]
-        self.gemini_clients = [genai.Client(api_key=k) for k in self.gemini_keys] if (HAS_GENAI and self.gemini_keys) else []
-        self.dead_models = set()
-        self.text_models = self._discover_strict_text_models()
-        self.cursor = 0
-        print(f"✅ 純文字 AI 引擎啟動 | 載入 {len(self.gemini_clients)} 組 Gemini 金鑰, {len(self.openai_keys)} 組 OpenAI 金鑰", flush=True)
-        print(f"📝 已排除所有圖片/多媒體模型，鎖定 {len(self.text_models)} 顆純文字模型：{self.text_models}", flush=True)
-
-    def _discover_strict_text_models(self) -> list[str]:
-        non_text_blacklist = [
-            "image", "imagen", "vision", "veo", "video", "lyria", "audio", "tts",
-            "speech", "voice", "transcribe", "embedding", "text-embedding",
-            "robotics", "computer-use", "aqa", "bisheng", "learnlm-1.5"
-        ]
-        discovered = []
-        if self.gemini_clients:
-            try:
-                for m in self.gemini_clients[0].models.list():
-                    name = m.name.replace("models/", "")
-                    low_name = name.lower()
-                    if any(bad in low_name for bad in non_text_blacklist):
-                        continue
-                    if any(k in low_name for k in ["gemini", "gemma"]):
-                        discovered.append(name)
-            except Exception as e:
-                print(f"⚠️ 模型列舉提示: {e}", flush=True)
-
-        def rank_model(m_name: str):
-            if "flash" in m_name and "latest" in m_name:
-                return 0
-            if any(x in m_name for x in ["gemini-3", "gemini-4"]) and "flash" in m_name:
-                return 1
-            if "flash" in m_name:
-                return 2
-            if "pro" in m_name:
-                return 3
-            if "gemma" in m_name:
-                return 4
-            return 5
-
-        discovered.sort(key=rank_model)
-        return discovered if discovered else ["gemini-3-flash-preview", "gemini-3.8-flash", "gemini-flash-latest"]
-
-    def _extract_json_array(self, raw_text: str) -> list:
-        if not raw_text:
-            return []
-        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw_text.strip(), flags=re.MULTILINE).strip()
-        try:
-            data = json.loads(text)
-            if isinstance(data, dict):
-                return data.get("records") or []
-            if isinstance(data, list):
-                return data
-        except Exception:
-            pass
-        match = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", text)
-        if match:
-            try:
-                data = json.loads(match.group(1))
-                if isinstance(data, dict):
-                    return data.get("records") or []
-                if isinstance(data, list):
-                    return data
-            except Exception:
-                pass
-        return []
-
-    def generate_batch(self, prompt: str) -> list:
-        active = [m for m in self.text_models if m not in self.dead_models]
-        if not active:
-            self.dead_models.clear()
-            active = list(self.text_models)
-
-        total = len(active)
-        for step in range(max(1, total)):
-            model_name = active[(self.cursor + step) % total]
-            for key_idx, client in enumerate(self.gemini_clients):
-                try:
-                    time.sleep(1.5)
-                    if "gemma" in model_name.lower():
-                        resp = client.models.generate_content(
-                            model=model_name,
-                            contents=prompt + "\n\n請直接輸出純 JSON，不要加任何說明。",
-                        )
-                    else:
-                        try:
-                            resp = client.models.generate_content(
-                                model=model_name,
-                                contents=prompt,
-                                config=types.GenerateContentConfig(
-                                    response_mime_type="application/json",
-                                    temperature=0.35,
-                                ),
-                            )
-                        except Exception as cfg_e:
-                            if "400" in str(cfg_e) or "mime" in str(cfg_e).lower():
-                                resp = client.models.generate_content(
-                                    model=model_name,
-                                    contents=prompt + "\n\n請直接輸出純 JSON。",
-                                )
-                            else:
-                                raise cfg_e
-
-                    parsed = self._extract_json_array(resp.text or "")
-                    if parsed:
-                        self.cursor = (self.cursor + step + 1) % total
-                        print(f"   🤖 模型 [{model_name}] (Key #{key_idx+1}) 成功產出 {len(parsed)} 筆門牌紀錄", flush=True)
-                        return parsed
-                except Exception as e:
-                    err_str = str(e)
-                    if any(code in err_str for code in ["404", "NOT_FOUND", "not supported", "deprecated"]):
-                        self.dead_models.add(model_name)
-                        break
-                    continue
-
-        # 備援：OpenAI API Keys
-        for o_key in self.openai_keys:
-            try:
-                r = requests.post(
-                    "https://api.openai.com/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {o_key}", "Content-Type": "application/json"},
-                    json={
-                        "model": "gpt-4o-mini",
-                        "messages": [{"role": "user", "content": prompt + "\n請直接回傳 JSON。"}],
-                        "temperature": 0.35,
-                    },
-                    timeout=35,
-                )
-                if r.status_code == 200:
-                    content = r.json()["choices"][0]["message"]["content"]
-                    parsed = self._extract_json_array(content)
-                    if parsed:
-                        print(f"   🤖 OpenAI 備援成功產出 {len(parsed)} 筆紀錄", flush=True)
-                        return parsed
-            except Exception:
-                continue
-        return []
-
 
 # ==============================================================================
-# 2. 全臺灣 22 縣市、368 鄉鎮市區完整清單
+# 1. 台灣繁體中文多維度檢索關鍵字矩陣（涵蓋新聞、裁判書、法拍、警消實證）
 # ==============================================================================
+TW_SEARCH_KEYWORD_MATRIX = {
+    "news_homicide": [
+        "住宅 命案 陳屍 警方 封鎖",
+        "公寓 砍殺 刺死 兇嫌 命案",
+        "大樓 勒斃 分屍 情殺 仇殺 陳屍",
+        "出租套房 命案 房東 發現 遺體",
+        "透天厝 逆倫 弒親 命案 相驗",
+    ],
+    "news_suicide_jump": [
+        "社區大樓 墜樓 當場死亡 報驗",
+        "公寓 燒炭 一氧化碳 輕生 陳屍",
+        "住宅 尋短 輕生 破門 明顯死亡",
+        "大樓 墜落 中庭 露台 送醫不治",
+    ],
+    "news_fatal_fire_lonely": [
+        "民宅 火警 惡火 焦屍 葬身火窟",
+        "公寓 火災 受困 嗆傷 送醫不治 1死",
+        "住宅 一氧化碳中毒 熱水器 不治身亡",
+        "獨居 孤獨死 陳屍多日 發出異味 破門",
+    ],
+    "judicial_auction": [
+        "法拍 凶宅 拍賣公告 非自然死亡 底價",
+        "地方法院 民事執行處 查封筆錄 屋內 輕生 命案",
+        "行政執行署 拍賣 事故屋 凶宅 點交",
+    ],
+    "judicial_judgment": [
+        "地方法院 民事判決 凶宅 物之瑕疵擔保 減少價金",
+        "高等法院 判決 隱瞞 非自然死亡 不動產說明書",
+    ],
+}
+
 TAIWAN_368_DISTRICTS = {
     "臺北市": ["中正區","大同區","中山區","松山區","大安區","萬華區","信義區","士林區","北投區","內湖區","南港區","文山區"],
     "新北市": ["板橋區","三重區","中和區","永和區","新莊區","新店區","土城區","蘆洲區","樹林區","汐止區","鶯歌區","三峽區","淡水區","瑞芳區","五股區","泰山區","林口區","深坑區","石碇區","坪林區","三芝區","石門區","八里區","平溪區","雙溪區","貢寮區","金山區","萬里區","烏來區"],
@@ -198,170 +113,303 @@ TAIWAN_368_DISTRICTS = {
     "連江縣": ["南竿鄉","北竿鄉","莒光鄉","東引鄉"]
 }
 
-TWELVE_KEYWORD_DIMENSIONS = [
-    "凶宅 實價登錄 特殊交易 折價",
-    "司法院 法拍屋 點交 非自然死亡 一拍 二拍 三拍",
-    "刑事 兇殺 分屍 情殺 仇殺 槍擊 砍殺 住宅 命案",
-    "輕生 自殺 燒炭 上吊 尋短 出租套房 公寓 大樓",
-    "墜樓 跳樓 中庭 露台 天井 氣窗 社區大樓",
-    "惡火 住宅火警 縱火 濃煙 嗆傷 一氧化碳中毒 瓦斯氣爆",
-    "獨居 孤獨死 久病 陳屍 白骨 乾屍 暴斃 猝死",
-    "台灣凶宅網 居易網 事故地圖 歷年重大命案 指標事故建築",
-    "地方法院 民事判決 隱瞞凶宅 瑕疵擔保 判賠 減少價金",
-    "工業區 科學園區 重劃區 眷村 國宅 學生套房 命案 輕生",
-    "PTT home-sale Gossiping 凶宅 事故屋 社區 命案 輕生",
-    "Dcard Mobile01 591 樂居 臉書 凶宅社團 租屋 事故屋 求售"
-]
 
 # ==============================================================================
-# 3. Google Maps 雙階段門牌屋頂座標定位器 (避免標點落入公園或空地)
+# 2. 台灣地址標準化與空間定位驗證器
 # ==============================================================================
-CITY_BASE_COORDS = {
-    "臺北市": (25.0478, 121.5319), "新北市": (25.0120, 121.4657), "桃園市": (24.9936, 121.3010),
-    "臺中市": (24.1618, 120.6469), "臺南市": (22.9997, 120.2270), "高雄市": (22.6273, 120.3014),
-    "基隆市": (25.1276, 121.7392), "新竹市": (24.8138, 120.9675), "新竹縣": (24.8387, 121.0177),
-    "苗栗縣": (24.5602, 120.8214), "彰化縣": (24.0518, 120.5161), "南投縣": (23.9610, 120.9719),
-    "雲林縣": (23.7092, 120.4313), "嘉義市": (23.4801, 120.4491), "嘉義縣": (23.4518, 120.2555),
-    "屏東縣": (22.6761, 120.4929), "宜蘭縣": (24.7021, 121.7378), "花蓮縣": (23.9872, 121.6015),
-    "臺東縣": (22.7583, 121.1444), "澎湖縣": (23.5711, 119.5793), "金門縣": (24.4493, 118.3767),
-    "連江縣": (26.1605, 119.9519)
+ZH_DIGIT_MAP = {"零": 0, "〇": 0, "一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+ARABIC_TO_ZH_SEC = {
+    "1段": "一段", "2段": "二段", "3段": "三段", "4段": "四段", "5段": "五段",
+    "6段": "六段", "7段": "七段", "8段": "八段", "9段": "九段", "10段": "十段"
 }
 
 
-def resolve_doorplate_and_coordinates(r: dict, city: str, dist: str, gmaps_key: str) -> tuple[str | None, float, float]:
-    raw_addr = (r.get("address") or "").replace("台", "臺").replace("某號", "").strip()
-    bldg_match = re.search(r"(社區電梯大樓|傳統公寓住宅|電梯華廈|透天厝住宅|住商混合大樓|出租套房大樓|老舊公寓|透天厝|電梯大樓|住宅大樓)", raw_addr)
-    bldg_type = bldg_match.group(1) if bldg_match else "社區電梯大樓"
+def _zh_num_to_arabic(zh_str: str) -> str:
+    if re.match(r"^\d+$", zh_str):
+        return zh_str
+    if zh_str == "十":
+        return "10"
+    if "十" in zh_str:
+        parts = zh_str.split("十")
+        t = ZH_DIGIT_MAP.get(parts[0], 1) if parts[0] else 1
+        o = ZH_DIGIT_MAP.get(parts[1], 0) if len(parts) > 1 and parts[1] else 0
+        return str(t * 10 + o)
+    return "".join(str(ZH_DIGIT_MAP.get(ch, ch)) for ch in zh_str)
 
-    clean_query = re.sub(r"[（(].*$", "", raw_addr).strip()
-    clean_query = re.sub(r"某(社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅).*$", "", clean_query)
-    clean_query = re.sub(r"(社區電梯大樓|傳統公寓住宅|電梯華廈|透天厝住宅|住商混合大樓|出租套房|老舊公寓|住宅大樓|公寓住宅|電梯大樓).*$", "", clean_query)
-    clean_query = re.sub(r"附近.*$", "", clean_query).strip()
 
-    if not clean_query.startswith(city):
-        clean_query = f"{city}{dist}{clean_query.replace(city, '').replace(dist, '')}"
+def standardize_taiwan_address(raw_addr: str, city: str, dist: str) -> dict:
+    """
+    將台灣地址標準化為：
+    - standardized_doorplate: 臺北市萬華區寶興街XX巷
+    - display_address: 臺北市萬華區寶興街XX巷（傳統公寓住宅）
+    - has_concrete_road: 是否包含明確路／街／大道／巷／村里門牌（若僅有社區名稱則為 False）
+    - is_community_only: 是否僅提及社區名稱而無具體路街與棟別
+    """
+    s = str(raw_addr or "").strip()
+    s = s.replace("台", "臺").replace("巿", "市")
+    # 全形數字轉半形
+    s = s.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
+    # 段數統一轉中文數字（一段～九段）
+    for k, v in ARABIC_TO_ZH_SEC.items():
+        s = s.replace(k, v)
+    # 巷、弄、號、樓統一轉阿拉伯數字
+    s = re.sub(
+        r"([一二三四五六七八九十〇零]{1,3})(巷|弄|號|樓)",
+        lambda m: f"{_zh_num_to_arabic(m.group(1))}{m.group(2)}",
+        s
+    )
 
-    # Must contain a concrete road, street, boulevard, or lane
-    road_match = re.search(r"([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?(?:\d+號)?)", clean_query.replace(city, "").replace(dist, ""))
+    bldg_match = re.search(
+        r"(社區電梯大樓|傳統公寓住宅|電梯華廈|透天厝住宅|住商混合大樓|出租套房大樓|老舊公寓|透天厝|電梯大樓|住宅大樓|集合住宅|出租套房|國宅)",
+        s
+    )
+    bldg_type = bldg_match.group(1) if bldg_match else "集合住宅大樓"
+
+    clean_core = re.sub(r"[（(].*?[）)]", "", s).strip()
+    clean_core = re.sub(r"某(社區|電梯|傳統|透天|出租|住商|公寓|大樓|華廈|民宅|住宅|套房|別墅|國宅).*$", "", clean_core)
+    clean_core = re.sub(r"附近.*$", "", clean_core).strip()
+
+    body_after_dist = clean_core.replace(city, "").replace(dist, "").strip()
+    road_match = re.search(
+        r"([一-龥]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?(?:\d+號)?)",
+        body_after_dist
+    )
+    comm_match = re.search(r"「([^」]{2,14})」|([一-龥]{2,8}(?:社區|國宅|大樓|華廈|新城))", body_after_dist)
+    community_name = (comm_match.group(1) or comm_match.group(2)) if comm_match else ""
+
     if not road_match:
-        return None, 0.0, 0.0
+        return {
+            "has_concrete_road": False,
+            "is_community_only": bool(community_name),
+            "standardized_doorplate": f"{city}{dist}{body_after_dist}",
+            "display_address": f"{city}{dist}{body_after_dist}（{bldg_type}）",
+            "road_part": "",
+            "community_name": community_name,
+            "building_type": bldg_type,
+        }
 
     road_part = road_match.group(1)
-    geocode_street_query = f"{city}{dist}{road_part}"
-    clean_display_addr = f"{city}{dist}{road_part}（{bldg_type}）"
+    # 重要防呆：不能因為新聞僅提及某大型社區且無門牌號數，就將整個社區直接列為凶宅
+    doorplate = f"{city}{dist}{road_part}"
+    display = f"{doorplate}（{bldg_type}）"
+    return {
+        "has_concrete_road": True,
+        "is_community_only": False,
+        "standardized_doorplate": doorplate,
+        "display_address": display,
+        "road_part": road_part,
+        "community_name": community_name,
+        "building_type": bldg_type,
+    }
 
-    active_key = gmaps_key or "AIzaSyA43RPI2-3OHJFqfLtoZjsK3PWxd5ZrtHU"
+
+def geocode_taiwan_address(doorplate: str, dist: str, gmaps_key: str) -> tuple[float, float, str]:
+    """使用 Google Maps Geocoding API 與 ArcGIS 雙重驗證台灣門牌／路段座標"""
+    active_key = gmaps_key or os.environ.get("GOOGLE_MAPS_API_KEY") or ""
+    if active_key:
+        try:
+            q_for_google = doorplate.replace("新臺五路", "新台五路")
+            url = (
+                f"https://maps.googleapis.com/maps/api/geocode/json"
+                f"?address={urllib.parse.quote(q_for_google)}&region=tw&language=zh-TW&key={active_key}"
+            )
+            res = requests.get(url, timeout=6).json()
+            if res.get("status") == "OK" and res.get("results"):
+                best = res["results"][0]
+                types_list = best.get("types") or []
+                loc_type = best.get("geometry", {}).get("location_type", "APPROXIMATE")
+                fmt = (best.get("formatted_address") or "").replace("台", "臺").replace("区", "區")
+                if not any(t in types_list for t in ["administrative_area_level_1", "administrative_area_level_2", "administrative_area_level_3"]):
+                    if dist in fmt or dist[:-1] in fmt:
+                        loc = best["geometry"]["location"]
+                        lat, lng = float(loc["lat"]), float(loc["lng"])
+                        if 21.8 <= lat <= 26.4 and 118.1 <= lng <= 122.2:
+                            return round(lat, 6), round(lng, 6), loc_type
+        except Exception:
+            pass
+
     try:
-        q_for_google = geocode_street_query.replace("新臺五路", "新台五路")
-        url1 = f"https://maps.googleapis.com/maps/api/geocode/json?address={urllib.parse.quote(q_for_google)}&region=tw&language=zh-TW&key={active_key}"
-        res1 = requests.get(url1, timeout=6).json()
-        if res1.get("status") == "OK" and res1.get("results"):
-            best = res1["results"][0]
-            types = best.get("types") or []
-            loc_type = best.get("geometry", {}).get("location_type", "APPROXIMATE")
-            fmt = (best.get("formatted_address") or "").replace("台", "臺").replace("区", "區").replace("芦", "蘆").replace("桥", "橋")
-
-            # Reject district-level APPROXIMATE fallbacks (e.g. when a road does not exist in that district)
-            if "administrative_area_level_2" in types or "administrative_area_level_1" in types or "administrative_area_level_3" in types:
-                return None, 0.0, 0.0
-            if loc_type == "APPROXIMATE" and not any(t in types for t in ["route", "street_address", "premise", "subpremise", "intersection"]):
-                return None, 0.0, 0.0
-            if dist not in fmt:
-                return None, 0.0, 0.0
-
-            loc = best["geometry"]["location"]
-            lat, lng = float(loc["lat"]), float(loc["lng"])
-            return clean_display_addr, round(lat, 6), round(lng, 6)
-    except Exception:
-        pass
-
-    # Fallback to ArcGIS World Geocoder (works without Google Maps billing/referer restrictions)
-    try:
-        q_arc = geocode_street_query.replace("新臺五路", "新台五路")
-        arc_url = f"https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine={urllib.parse.quote(q_arc)}&countryCode=TWN&maxLocations=1&f=json"
+        q_arc = doorplate.replace("新臺五路", "新台五路")
+        arc_url = (
+            f"https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates"
+            f"?SingleLine={urllib.parse.quote(q_arc)}&countryCode=TWN&maxLocations=1&f=json"
+        )
         arc_res = requests.get(arc_url, timeout=6).json()
         cands = arc_res.get("candidates") or []
-        if cands and cands[0].get("score", 0) >= 82 and cands[0].get("location"):
+        if cands and cands[0].get("score", 0) >= 84 and cands[0].get("location"):
             cand_addr = (cands[0].get("address") or "").replace("台", "臺")
             dist_short = dist[:-1] if len(dist) > 2 else dist
             if dist_short in cand_addr:
                 lat = float(cands[0]["location"]["y"])
                 lng = float(cands[0]["location"]["x"])
                 if 21.8 <= lat <= 26.4 and 118.1 <= lng <= 122.2:
-                    return clean_display_addr, round(lat, 6), round(lng, 6)
+                    return round(lat, 6), round(lng, 6), "STREET_GEOCODED"
     except Exception:
         pass
 
-    return None, 0.0, 0.0
+    return 0.0, 0.0, "UNVERIFIED"
 
 
 # ==============================================================================
-# 4. 新聞 RSS 輔助抓取 + 智慧去重核對
+# 3. 公開新聞、法拍與裁判書 RSS / HTML 擷取器
 # ==============================================================================
-def fetch_township_rss(city: str, dist: str) -> list[dict]:
+def fetch_article_body_snippet(url: str) -> str:
+    """嘗試抓取原始文章頁面內文前 600 字，提供 AI 抽取更精確之案發路段與日期"""
+    if not url or not url.startswith("http") or not HAS_BS4:
+        return ""
+    try:
+        r = requests.get(
+            url,
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+            timeout=5,
+            allow_redirects=True,
+        )
+        if r.status_code != 200 or "text/html" not in (r.headers.get("Content-Type") or ""):
+            return ""
+        soup = BeautifulSoup(r.text, "html.parser")
+        for tag in soup(["script", "style", "nav", "footer", "header", "aside"]):
+            tag.decompose()
+        paragraphs = [p.get_text(" ", strip=True) for p in soup.find_all("p") if len(p.get_text(strip=True)) >= 20]
+        body = " ".join(paragraphs)[:650]
+        return body
+    except Exception:
+        return ""
+
+
+def fetch_tw_public_sources(city: str, dist: str, year_filter: str = "") -> list[dict]:
+    """
+    結合 Google News RSS 與 Bing News RSS 抓取台灣地方社會新聞、法拍公告報導與法院判決報導
+    """
     short_c = city.replace("臺", "台")[:2]
     short_d = dist[:-1] if len(dist) > 2 else dist
-    q = f"{short_c} {short_d} (命案 OR 墜樓 OR 陳屍 OR 凶宅 OR 火警 OR 法拍)"
-    url = f"https://news.google.com/rss/search?q={urllib.parse.quote(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
-    items = []
-    try:
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=6)
-        if r.status_code == 200:
-            root = ET.fromstring(r.content)
-            for it in root.findall(".//item")[:10]:
-                items.append({
-                    "title": (it.findtext("title") or "").strip(),
-                    "link": (it.findtext("link") or "").strip(),
-                    "pub_date": (it.findtext("pubDate") or "").strip()
-                })
-    except Exception:
-        pass
-    return items
+    time_clause = f" {year_filter}" if year_filter else ""
+    queries = [
+        f"{short_c} {short_d} (命案 OR 陳屍 OR 墜樓 OR 凶宅 OR 住宅火警 OR 一氧化碳中毒){time_clause}",
+        f"{short_c} {short_d} (法拍 凶宅 OR 查封筆錄 非自然死亡 OR 判決 隱瞞凶宅){time_clause}",
+    ]
+    collected = []
+    seen_links = set()
+
+    for q in queries:
+        g_url = f"https://news.google.com/rss/search?q={urllib.parse.quote(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+        b_url = f"https://www.bing.com/news/search?q={urllib.parse.quote(q)}&format=rss&mkt=zh-TW"
+        for feed_url, feed_provider in [(g_url, "GoogleNews_TW"), (b_url, "BingNews_TW")]:
+            try:
+                r = requests.get(feed_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=7)
+                if r.status_code != 200:
+                    continue
+                root = ET.fromstring(r.content)
+                for it in root.findall(".//item")[:8]:
+                    title = (it.findtext("title") or "").strip()
+                    link = (it.findtext("link") or "").strip()
+                    pub_date = (it.findtext("pubDate") or "").strip()
+                    desc = re.sub(r"<[^>]+>", " ", (it.findtext("description") or "")).strip()
+                    source_el = it.find("source")
+                    media_name = (source_el.text.strip() if source_el is not None and source_el.text else "")
+                    if not media_name and " - " in title:
+                        media_name = title.rsplit(" - ", 1)[-1].strip()
+                    if not link.startswith("http") or link in seen_links:
+                        continue
+                    seen_links.add(link)
+                    body_snippet = fetch_article_body_snippet(link) if len(collected) < 4 else ""
+                    collected.append({
+                        "title": title,
+                        "link": link,
+                        "pub_date": pub_date,
+                        "media_name": media_name or feed_provider,
+                        "snippet": f"{desc} {body_snippet}".strip()[:700],
+                    })
+            except Exception:
+                continue
+    return collected
 
 
-def extract_road_consolidation_key(city: str, dist: str, addr: str) -> str:
-    s = (addr or "").replace("台", "臺").replace(city, "").replace(dist, "")
-    s = re.sub(r"^[一-龥]{2,3}[里村]", "", s)
-    lm = re.search(r"(西寧國宅|錦新大樓|城中城|維冠金龍|東星大樓|果貿國宅|南機場國宅|成功國宅|正義國宅|千越綠川|美麗華大樓|亞洲廣場大樓)", s)
-    if lm:
-        return f"{city}_{dist}_LM_{lm.group(1)}"
-    comm = re.search(r"「([^」]{2,12})」", s)
-    rl = re.search(r"([一-龥]{2,5}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:\d+巷)?(?:\d+弄)?)", s)
-    if rl:
-        clean_r = re.sub(r"^(?:位於|坐落於|坐落|近|鄰近|附近|轄區|區|市|鎮|鄉|里|村)", "", rl.group(1))
-        if comm:
-            return f"{city}_{dist}_{clean_r}_{comm.group(1)}"
-        return f"{city}_{dist}_{clean_r}"
-    if comm:
-        return f"{city}_{dist}_COMM_{comm.group(1)}"
-    stripped = re.sub(r"（.*）|\(.*\)", "", s)
-    stripped = re.sub(r"(?:某|附近|一處|該).*$", "", stripped)
-    stripped = re.sub(r"(?:社區|電梯|大樓|華廈|公寓|透天|民宅|套房|住宅|\d+樓).*$", "", stripped).strip()
-    return f"{city}_{dist}_{stripped or s[:8]}"
+# ==============================================================================
+# 4. 嚴格純文字 AI 證據抽取引擎（禁止憑空捏造，支援待查證分流）
+# ==============================================================================
+class EvidenceExtractorAI:
+    def __init__(self, gemini_keys_str: str, openai_keys_str: str):
+        self.gemini_keys = [k.strip() for k in (gemini_keys_str or "").split(",") if k.strip()]
+        self.openai_keys = [k.strip() for k in (openai_keys_str or "").split(",") if k.strip()]
+        self.gemini_clients = [genai.Client(api_key=k) for k in self.gemini_keys] if (HAS_GENAI and self.gemini_keys) else []
+
+    def extract_verified_incidents(self, city: str, dist: str, articles: list[dict]) -> list[dict]:
+        if not articles or not self.gemini_clients:
+            return []
+        prompt = f"""你是「臺灣特殊事故建物與產權紀錄查詢平台」的法務與新聞證據查核系統。
+請嚴格從下方提供的【真實公開文章列表】中，辨識並抽取位於【{city}{dist}】的住宅非自然死亡事故（兇殺命案、輕生／墜樓、住宅奪命火警、一氧化碳中毒、孤獨死、法院法拍凶宅或瑕疵擔保判決）。
+
+【真實公開文章列表】：
+{json.dumps(articles[:10], ensure_ascii=False)}
+
+【嚴格真實性與防幻覺規範】：
+1. 絕對禁止憑空編造案件、地址、日期或網址！每筆輸出的 `source_url` 必須 100% 來自上方文章列表的 `link`。
+2. 排除以下非凶宅事件：
+   - 一般無人員死亡之火災（「無人傷亡」、「幸無大礙」）
+   - 道路交通事故、工廠工安意外、醫院內病逝、山區／河域溺水
+   - 未經證實之靈異傳聞或都市傳說
+3. 地址精確度與社區防誤判規範：
+   - 若文章明確記載「路／街／大道／段／巷」等具體地點，請填入 `extracted_location` 並設 `has_specific_road: true`。
+   - 若文章僅提及某個大型社區名稱（如「某國宅」、「XX社區」）但無具體路街或無法確認發生於哪一棟，或者僅提及行政區而無路名，請將 `is_ambiguous_location` 設為 `true`（系統會自動將其放入 `pending_cases` 待查證資料表，不會直接公開誤傷整個社區）。
+
+請輸出純 JSON 格式 `{{"records": [...]}}`：
+{{
+  "records": [
+    {{
+      "source_url": "上方文章列表中對應的真實 link",
+      "source_title": "上方文章的原始 title",
+      "source_name": "新聞媒體或法院機構名稱",
+      "source_type": "news / judicial_auction / judicial_judgment / government_open_data",
+      "incident_date": "YYYY-MM-DD（從內文或 pub_date 推算之案發或報導日期）",
+      "extracted_location": "{city}{dist}+文章中提及的路街段巷或地點原文",
+      "building_type": "社區電梯大樓 / 傳統公寓住宅 / 透天厝住宅 / 出租套房 / 集合住宅大樓",
+      "category": "刑事命案 / 輕生事故 / 意外身亡 / 其他非自然死亡 / 法拍與其他",
+      "summary": "根據文章客觀摘錄事故發生經過、傷亡確認與警消／法院查證摘要（80~180字）",
+      "has_specific_road": true,
+      "is_ambiguous_location": false,
+      "pending_reason": "若 is_ambiguous_location 為 true，請說明原因（如 ADDRESS_TOO_VAGUE 或 COMMUNITY_ONLY_NO_UNIT），否則填空字串",
+      "ai_confidence": 0.92
+    }}
+  ]
+}}"""
+        for client in self.gemini_clients:
+            for model_name in ["gemini-2.5-flash", "gemini-flash-latest"]:
+                try:
+                    time.sleep(1.2)
+                    resp = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            temperature=0.1,
+                        ),
+                    )
+                    raw = (resp.text or "").strip()
+                    data = json.loads(raw)
+                    if isinstance(data, dict) and isinstance(data.get("records"), list):
+                        return data["records"]
+                except Exception:
+                    continue
+        return []
 
 
-def get_target_quota(city: str, dist: str) -> int:
-    # Mountain / indigenous / tiny offshore townships should never be over-allocated
-    if any(k in dist for k in ["烏坵","延平","金峰","達仁","蘭嶼","綠島","尖石","五峰","泰安","獅潭","那瑪夏","茂林","桃源","瑪家","泰武","來義","春日","獅子","牡丹","霧臺","三地門","大同","南澳","萬榮","卓溪","秀林","信義","仁愛","阿里山","大埔","坪林","平溪","雙溪","烏來","石碇","石門","望安","七美","東引","莒光","左鎮","龍崎","南化","田寮","甲仙","杉林","內門","大內","山上"]):
-        return 2
-    if city in ["臺北市", "新北市", "桃園市", "臺中市", "高雄市"] and dist in [
-        "板橋區","三重區","中和區","永和區","新莊區","新店區","土城區","蘆洲區","汐止區","淡水區",
-        "中山區","萬華區","大安區","信義區","內湖區","士林區","北投區","文山區","中正區","松山區",
-        "桃園區","中壢區","平鎮區","八德區","龜山區","蘆竹區","楊梅區",
-        "西屯區","北屯區","南屯區","北區","西區","南區","東區","太平區","大里區","豐原區",
-        "三民區","左營區","鳳山區","前鎮區","苓雅區","楠梓區","鼓山區","小港區","新興區"
-    ]:
-        return 75
-    if city in ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"] and dist.endswith("區"):
-        return 38
-    if dist.endswith("市") or dist.endswith("區"):
-        return 30
-    if dist.endswith("鎮"):
-        return 12
-    return 5
+# ==============================================================================
+# 5. 案件指紋計算與跨媒體重複案件歸戶
+# ==============================================================================
+def build_case_fingerprint(country: str, city: str, dist: str, road_part: str, incident_date: str, category: str) -> str:
+    ym = (incident_date or "2024-01")[:7]
+    clean_road = re.sub(r"\d+號.*$", "", road_part or "").strip()
+    return f"{country}_{city}_{dist}_{clean_road}_{ym}_{category}"
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Taiwan Verified Property Incident Crawler")
+    parser.add_argument("--mode", choices=["incremental", "backfill"], default="incremental")
+    parser.add_argument("--year-from", type=int, default=2015)
+    parser.add_argument("--year-to", type=int, default=datetime.datetime.now().year)
+    parser.add_argument("--max-districts", type=int, default=28)
+    args, _ = parser.parse_known_args()
+
     supabase_url = os.environ.get("SUPABASE_URL") or "https://cfmcvcscyfblcodemnkt.supabase.co"
     supabase_key = (
         os.environ.get("SUPABASE_SERVICE_KEY")
@@ -372,350 +420,243 @@ def main():
     openai_keys = os.environ.get("OPENAI_API_KEYS") or ""
     gmaps_key = os.environ.get("GOOGLE_MAPS_API_KEY") or os.environ.get("VITE_GOOGLE_MAPS_API_KEY") or ""
 
-    if not HAS_SUPABASE_SDK or (not gemini_keys and not openai_keys):
-        print("🔄 啟動無須 API Key 之全台 368 鄉鎮市區＋日本 47 都道府縣 Google News RSS 實證爬蟲與 Supabase 同步引擎...", flush=True)
-        subprocess.run(["node", "sync_supabase_historical.js"], check=False)
+    run_id = f"tw-{args.mode}-{uuid.uuid4().hex[:8]}"
+    print(f"🇹🇼 啟動台灣真實事故建物查證爬蟲 | Run ID: {run_id} | 模式: {args.mode}", flush=True)
+
+    # 先執行既有的 RSS 實證與歷史歸檔同步器，確保基礎實證庫完整
+    subprocess.run(["node", "sync_supabase_historical.js"], check=False)
+
+    if not HAS_SUPABASE_SDK or not gemini_keys:
+        print("ℹ️ 未提供額外 GEMINI_API_KEY，已完成無金鑰 Google/Bing RSS 實證同步與網站靜態庫更新。", flush=True)
         return
 
     supabase: Client = create_client(supabase_url, supabase_key)
-    ai = StrictTextLLMEngine(gemini_keys, openai_keys)
+    ai = EvidenceExtractorAI(gemini_keys, openai_keys)
 
-    print("🕷️ [新案爬蟲與相似案件比對系統] 正在盤點全臺灣 22 縣市、368 鄉鎮市區已收錄案件，準備抓取尚未收錄之新案件...", flush=True)
-    all_existing_addrs = set()
-    all_existing_road_keys = set()
-    district_existing_roads = {f"{c}_{d}": [] for c, dists in TAIWAN_368_DISTRICTS.items() for d in dists}
-    district_counts = {f"{c}_{d}": 0 for c, dists in TAIWAN_368_DISTRICTS.items() for d in dists}
-
+    # 建立 crawl_logs 初始紀錄
     try:
-        from_idx = 0
-        step = 1000
-        while True:
-            res = supabase.table("haunted_houses").select("city,district,address").range(from_idx, from_idx + step - 1).execute()
-            rows = res.data or []
-            if not rows:
-                break
-            for row in rows:
-                c = (row.get("city") or "").replace("台", "臺")
-                d = (row.get("district") or "").strip()
-                a = (row.get("address") or "").replace("台", "臺").strip()
-                all_existing_addrs.add(a)
-                rk = extract_road_consolidation_key(c, d, a)
-                all_existing_road_keys.add(rk)
-                k = f"{c}_{d}"
-                if k in district_counts:
-                    district_counts[k] += 1
-                    short_a = a.replace(c, "").replace(d, "")
-                    if short_a and len(district_existing_roads[k]) < 35:
-                        district_existing_roads[k].append(short_a)
-            if len(rows) < step:
-                break
-            from_idx += step
+        supabase.table("crawl_logs").insert({
+            "run_id": run_id,
+            "country": "TW",
+            "crawl_mode": args.mode,
+            "sources_queried": ["GoogleNews_TW", "BingNews_TW", "Judicial_Auction_News", "Judicial_Judgment_News"],
+            "status": "running",
+        }).execute()
+    except Exception:
+        pass
+
+    # 讀取既有案件建立去重索引 (address -> row, fingerprint -> row)
+    existing_by_addr = {}
+    existing_by_fp = {}
+    try:
+        res = supabase.table("haunted_houses").select(
+            "id,city,district,address,doorplate_address,incident_date,category,source_url,media_verification,merged_count,case_fingerprint"
+        ).limit(10000).execute()
+        for row in (res.data or []):
+            addr = str(row.get("address") or "").replace("台", "臺").strip()
+            existing_by_addr[addr] = row
+            fp = row.get("case_fingerprint")
+            if fp:
+                existing_by_fp[fp] = row
     except Exception as e:
-        print(f"⚠️ 盤點讀取提示: {e}", flush=True)
+        print(f"⚠️ 讀取既有案件索引提示: {e}", flush=True)
 
-    print(f"📈 盤點完成！目前資料庫總收錄：{len(all_existing_addrs)} 筆（涵蓋 {len(all_existing_road_keys)} 處獨立路段／社區點位）", flush=True)
+    all_pairs = [(c, d) for c, dists in TAIWAN_368_DISTRICTS.items() for d in dists]
+    random.shuffle(all_pairs)
+    target_pairs = all_pairs[: args.max_districts]
 
-    # Sort townships by largest urban deficit first so metropolitan hubs get crawled for new cases first!
-    under_quota_keys = [
-        k for k in district_counts.keys()
-        if district_counts[k] < get_target_quota(*k.split("_"))
-    ]
-    sorted_townships = sorted(
-        under_quota_keys,
-        key=lambda k: (district_counts[k] - get_target_quota(*k.split("_")), random.random())
-    )
-    total_added = 0
-    total_similar_filtered = 0
+    articles_fetched = 0
+    cases_inserted = 0
+    sources_linked = 0
+    pending_saved = 0
+    duplicates_merged = 0
 
-    for idx, key in enumerate(sorted_townships[:35]):
-        city, dist = key.split("_")
-        current_cnt = district_counts[key]
-        target_cnt = get_target_quota(city, dist)
-        existing_sample = district_existing_roads.get(key, [])[:25]
-        rss_news = fetch_township_rss(city, dist)
-        valid_rss_urls = {str(it.get("link") or "").strip() for it in rss_news if str(it.get("link") or "").strip().startswith("http")}
-        if not rss_news or not valid_rss_urls:
+    for idx, (city, dist) in enumerate(target_pairs):
+        year_filter = ""
+        if args.mode == "backfill":
+            picked_year = random.randint(args.year_from, args.year_to)
+            year_filter = f"{picked_year}年"
+
+        articles = fetch_tw_public_sources(city, dist, year_filter=year_filter)
+        if not articles:
             continue
-        picked_dims = random.sample(TWELVE_KEYWORD_DIMENSIONS, 4)
+        articles_fetched += len(articles)
+        valid_url_map = {a["link"]: a for a in articles}
 
-        print(f"🕷️ [{idx+1}/35] 正在搜尋新案件【{city}{dist}】(目前 {current_cnt} 筆 | 檢索到 {len(rss_news)} 則真實新聞) ...", flush=True)
-
-        prompt = f"""你是臺灣法定凶宅（建築物專有部分曾發生兇殺、自殺、一氧化碳中毒、孤獨死或住宅火警致死等非自然死亡）與公開事故查證專家。
-現在請嚴格根據下方【即時新聞線索參考】中提供的真實新聞，擷取位於【{city}{dist}】且「不在已收錄清單中」的真實法定凶宅或住宅致死案件！
-【即時新聞線索參考（僅限從此清單擷取，嚴禁無中生有或自行編造）】：{json.dumps(rss_news[:10], ensure_ascii=False)}
-【本區已收錄之舊案件清單】：{json.dumps(existing_sample, ensure_ascii=False)}
-
-【最高事實準則 - 100% 實證新聞連結與零虛構原則】：
-1. 僅能擷取上方【即時新聞線索參考】中明確記載「有人死亡／陳屍／命案／輕生／住宅奪命火警」之真實住宅案件；若新聞為「無人傷亡」或非住宅死亡事件，請直接略過！
-2. 每筆案件的 `source_url` 必須一字不差填寫上方新聞線索中的真實 `link` 網址（http/https），絕對不可填空字串，且不同案件不可共用同一個網址！
-3. 若上方新聞線索中無任何符合條件之新案件，請直接回傳 `{{"records": []}}`，絕對禁止自行憑空捏造案件！
-
-請直接輸出 JSON Object 格式 {{"records": [...]}}：
-{{
-  "records": [
-    {{
-      "city": "{city}",
-      "district": "{dist}",
-      "address": "{city}{dist}+新聞中提及之具體路街段巷或社區大樓名稱",
-      "lat": 25.00000,
-      "lng": 121.00000,
-      "incident_date": "YYYY-MM-DD（真實新聞發生或報導日期）",
-      "category": "刑事命案 / 輕生事故 / 意外身亡 / 法拍與其他",
-      "reason": "根據新聞原文詳述真實事件始末、案發日期與公開通報內容",
-      "source_url": "必填！上方新聞線索之真實 http/https link",
-      "media_verification": "具體列出新聞媒體名稱",
-      "auction_record": "",
-      "history_timeline": [
-        {{"year": "YYYY-MM-DD", "stage": "新聞公開查證紀錄", "detail": "真實案情摘要"}}
-      ]
-    }}
-  ]
-}}"""
-
-        extracted = ai.generate_batch(prompt)
-        if not extracted:
-            continue
-
-        batch_to_save = []
-        used_batch_urls = set()
-        for r in extracted:
-            if not isinstance(r, dict):
+        extracted = ai.extract_verified_incidents(city, dist, articles)
+        for item in extracted:
+            if not isinstance(item, dict):
                 continue
-            reason = (r.get("reason") or "").strip()
-            src_url = (r.get("source_url") or "").strip()
-            if len(reason) < 12 or not src_url.startswith("http") or src_url not in valid_rss_urls or src_url in used_batch_urls:
+            src_url = str(item.get("source_url") or "").strip()
+            if not src_url.startswith("http") or src_url not in valid_url_map:
                 continue
-            if re.search(r"無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡", reason):
+            summary = str(item.get("summary") or "").strip()
+            if len(summary) < 15 or re.search(r"無人傷亡|幸無人員傷亡|0人傷亡", summary):
                 continue
 
-            addr, lat, lng = resolve_doorplate_and_coordinates(r, city, dist, gmaps_key)
-            if not addr:
+            raw_loc = str(item.get("extracted_location") or "").strip()
+            std = standardize_taiwan_address(raw_loc, city, dist)
+            inc_date = str(item.get("incident_date") or datetime.date.today().isoformat())[:10]
+            cat = str(item.get("category") or "法拍與其他").strip()
+            src_name = str(item.get("source_name") or valid_url_map[src_url].get("media_name") or "台灣公開社會新聞").strip()
+            src_title = str(item.get("source_title") or valid_url_map[src_url].get("title") or "").strip()
+            src_type = str(item.get("source_type") or "news").strip()
+            confidence = float(item.get("ai_confidence") or 0.85)
+
+            # 若地點僅提及模糊社區名稱、無具體路街段巷、或 AI 判定待查證 -> 寫入 pending_cases
+            if (
+                not std["has_concrete_road"]
+                or item.get("is_ambiguous_location") is True
+                or confidence < 0.70
+            ):
+                p_reason = str(item.get("pending_reason") or ("COMMUNITY_ONLY_NO_UNIT" if std["is_community_only"] else "ADDRESS_TOO_VAGUE"))
+                try:
+                    supabase.table("pending_cases").upsert({
+                        "country": "TW",
+                        "city": city,
+                        "district": dist,
+                        "raw_location_text": raw_loc,
+                        "standardized_address": std["standardized_doorplate"],
+                        "incident_date": inc_date,
+                        "category": cat,
+                        "summary": summary,
+                        "source_name": src_name,
+                        "source_title": src_title,
+                        "source_url": src_url,
+                        "pending_reason": p_reason,
+                        "ai_confidence": confidence,
+                        "raw_payload": item,
+                        "review_status": "pending",
+                    }, on_conflict="source_url").execute()
+                    pending_saved += 1
+                except Exception:
+                    pass
                 continue
-            road_key = extract_road_consolidation_key(city, dist, addr)
 
-            if addr in all_existing_addrs or road_key in all_existing_road_keys:
-                total_similar_filtered += 1
+            # 進行台灣門牌／路段座標驗證
+            lat, lng, loc_acc = geocode_taiwan_address(std["standardized_doorplate"], dist, gmaps_key)
+            if lat == 0.0 or lng == 0.0:
+                try:
+                    supabase.table("pending_cases").upsert({
+                        "country": "TW",
+                        "city": city,
+                        "district": dist,
+                        "raw_location_text": raw_loc,
+                        "standardized_address": std["standardized_doorplate"],
+                        "incident_date": inc_date,
+                        "category": cat,
+                        "summary": summary,
+                        "source_name": src_name,
+                        "source_title": src_title,
+                        "source_url": src_url,
+                        "pending_reason": "GEOCODE_LOW_CONFIDENCE",
+                        "ai_confidence": confidence,
+                        "raw_payload": item,
+                        "review_status": "pending",
+                    }, on_conflict="source_url").execute()
+                    pending_saved += 1
+                except Exception:
+                    pass
                 continue
-            all_existing_addrs.add(addr)
-            all_existing_road_keys.add(road_key)
-            used_batch_urls.add(src_url)
 
-            inc_date = (r.get("incident_date") or "2024-06-15").replace("/", "-")[:10]
-            m_explicit = re.search(r"(19[789]\d|20[012]\d)\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日", reason)
-            if m_explicit:
-                inc_date = f"{int(m_explicit.group(1)):04d}-{int(m_explicit.group(2)):02d}-{int(m_explicit.group(3)):02d}"
+            fp = build_case_fingerprint("TW", city, dist, std["road_part"], inc_date, cat)
+            matched_existing = existing_by_addr.get(std["display_address"]) or existing_by_fp.get(fp)
 
-            batch_to_save.append({
+            # 若為同一事故的不同媒體報導 -> 不重複新增案件，僅關聯至 case_sources 並更新 merged_count
+            if matched_existing and matched_existing.get("id"):
+                case_id = matched_existing["id"]
+                duplicates_merged += 1
+                try:
+                    supabase.table("case_sources").upsert({
+                        "case_id": case_id,
+                        "country": "TW",
+                        "source_name": src_name,
+                        "source_type": src_type,
+                        "source_title": src_title,
+                        "source_url": src_url,
+                        "published_date": inc_date,
+                        "raw_excerpt": summary[:300],
+                    }, on_conflict="source_url").execute()
+                    sources_linked += 1
+                    new_merged = int(matched_existing.get("merged_count") or 1) + 1
+                    supabase.table("haunted_houses").update({
+                        "merged_count": new_merged,
+                        "verification_status": "multi_source_verified",
+                        "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                    }).eq("id", case_id).execute()
+                except Exception:
+                    pass
+                continue
+
+            # 寫入新查證案件至主表 haunted_houses
+            new_row = {
+                "country": "TW",
                 "city": city,
                 "district": dist,
-                "address": addr,
+                "address": std["display_address"],
+                "doorplate_address": std["standardized_doorplate"],
                 "lat": lat,
                 "lng": lng,
                 "incident_date": inc_date,
-                "category": r.get("category") or "法拍與其他",
-                "reason": reason,
-                "source": r.get("media_verification") or "歷年法拍與社會新聞查證",
+                "category": cat,
+                "reason": f"【{src_name}公開查證】{src_title} — {summary}",
+                "source": src_name,
+                "source_title": src_title,
                 "source_url": src_url,
-                "media_verification": r.get("media_verification") or "公開社會新聞與司法實務紀錄",
-                "auction_record": "",
-                "history_timeline": r.get("history_timeline") or [],
-                "verification_score": 98,
-                "audit_note": "4道真偽審核與真實新聞URL核實入庫"
-            })
-
-        if batch_to_save:
+                "media_verification": f"{src_name} 公開連結查證",
+                "building_type": std["building_type"],
+                "location_accuracy": loc_acc,
+                "verification_status": "verified",
+                "verification_score": int(confidence * 100),
+                "case_fingerprint": fp,
+                "source_type": src_type,
+                "db_source": "JUDICIAL_AUCTION" if "法拍" in summary else ("JUDICIAL_JUDGMENT" if "判決" in summary else "NEWS_PUBLIC_ARCHIVE"),
+                "history_timeline": [{"year": inc_date, "stage": "公開查證紀錄", "detail": summary}],
+                "merged_count": 1,
+            }
             try:
-                supabase.table("haunted_houses").upsert(batch_to_save, on_conflict="address").execute()
-                total_added += len(batch_to_save)
-                print(f"   ✔️ 【{city}{dist}】成功爬蟲入庫 {len(batch_to_save)} 筆真實新聞案件！(累計新增: {total_added} 筆)", flush=True)
+                ins = supabase.table("haunted_houses").upsert(new_row, on_conflict="address").execute()
+                inserted_rows = ins.data or []
+                cases_inserted += 1
+                if inserted_rows and inserted_rows[0].get("id"):
+                    cid = inserted_rows[0]["id"]
+                    existing_by_addr[std["display_address"]] = inserted_rows[0]
+                    existing_by_fp[fp] = inserted_rows[0]
+                    supabase.table("case_sources").upsert({
+                        "case_id": cid,
+                        "country": "TW",
+                        "source_name": src_name,
+                        "source_type": src_type,
+                        "source_title": src_title,
+                        "source_url": src_url,
+                        "published_date": inc_date,
+                        "raw_excerpt": summary[:300],
+                    }, on_conflict="source_url").execute()
+                    sources_linked += 1
             except Exception as e:
-                print(f"   ❌ 寫入異常: {e}", flush=True)
+                print(f"   ⚠️ 寫入異常: {e}", flush=True)
 
-    print(f"🎉 本輪實證新聞爬蟲完成！共新增 {total_added} 筆附真實新聞連結案件。", flush=True)
-    sync_supabase_to_website_json_files(supabase)
-    subprocess.run(["node", "sync_supabase_historical.js"], check=False)
-
-
-def infer_db_source_py(r: dict) -> str:
-    if r.get("db_source"):
-        return str(r["db_source"])
-    full = f"{r.get('source') or ''} {r.get('media_verification') or ''} {r.get('auction_record') or ''} {r.get('reason') or ''}"
-    if any(k in full for k in ["實價登錄", "內政部", "特殊交易"]):
-        return "MOI_OPEN_DATA"
-    if any(k in full for k in ["法拍", "拍賣公告", "查封筆錄", "執行處", "點交", "應買", "一拍", "二拍", "三拍"]):
-        return "JUDICIAL_AUCTION"
-    if any(k in full for k in ["裁判書", "判決", "地方法院", "高等法院", "最高法院", "字第"]):
-        return "JUDICIAL_JUDGMENT"
-    return "NEWS_PUBLIC_ARCHIVE"
-
-
-def normalize_supa_row_for_archive(r: dict) -> dict:
-    city = str(r.get("city") or "").replace("台", "臺").strip()
-    district = str(r.get("district") or "").strip()
-    address = str(r.get("address") or "").replace("台", "臺").strip()
-    doorplate = re.sub(r"[（(].*?[）)]", "", address).strip() or address
-    bldg_match = re.search(r"[（(]([^）)]+)[）)]", address)
-    bldg_type = r.get("building_type") or (bldg_match.group(1) if bldg_match else "集合住宅大樓")
-    inc_date = str(r.get("incident_date") or "2023-06-15").replace("/", "-")[:10]
-    timeline = r.get("history_timeline")
-    if isinstance(timeline, str):
-        try:
-            timeline = json.loads(timeline)
-        except Exception:
-            timeline = []
-    if not isinstance(timeline, list) or not timeline:
-        timeline = [{"year": inc_date, "stage": "公開查證紀錄", "detail": str(r.get("reason") or "").strip()}]
-    raw_auc = str(r.get("auction_record") or "").strip()
-    if any(k in raw_auc for k in ["案發日期雙重核實", "案發日期核實", "無公開法拍", "尚無法拍", "公開資訊與歷史紀錄核實"]):
-        raw_auc = ""
-    return {
-        "id": r.get("id"),
-        "city": city,
-        "district": district,
-        "doorplate_address": doorplate,
-        "address": address,
-        "lat": round(float(r.get("lat") or 25.0478), 6),
-        "lng": round(float(r.get("lng") or 121.5319), 6),
-        "location_accuracy": "ROOFTOP_GEOCODED",
-        "incident_date": inc_date,
-        "building_type": bldg_type,
-        "current_status": r.get("current_status") or "現況使用中",
-        "category": r.get("category") or "法拍與其他",
-        "db_source": infer_db_source_py(r),
-        "reason": str(r.get("reason") or "").strip(),
-        "source": str(r.get("source") or r.get("media_verification") or "公開社會新聞與司法實務紀錄").strip(),
-        "source_url": str(r.get("source_url") or "").strip(),
-        "media_verification": str(r.get("media_verification") or r.get("source") or "公開社會新聞與司法實務紀錄").strip(),
-        "auction_record": raw_auc,
-        "history_timeline": timeline,
-        "merged_count": r.get("merged_count") or 1
-    }
-
-
-def _extract_py_modus_tags(text: str) -> set[str]:
-    tags = set()
-    has_blade = bool(re.search(r"割喉|頸部.*刀|中刀|砍殺|持刀|刀傷|刺死|砍死", text))
-    has_fire = bool(re.search(r"縱火|惡火|火警|焚屍|毀屍滅跡|起火|火災|燒死|濃煙.*死|濃煙.*不治", text))
-    if has_blade and has_fire:
-        tags.add("arson_blade")
-    if has_blade:
-        tags.add("blade")
-    if has_fire:
-        tags.add("fire")
-    if re.search(r"尾隨", text):
-        tags.add("tail_stalk")
-    if re.search(r"分屍|肢解", text):
-        tags.add("dismember")
-    if re.search(r"桶屍|水泥封屍", text):
-        tags.add("barrel")
-    if re.search(r"滅門|雙屍|三屍|四屍|一家.*口", text):
-        tags.add("mass_death")
-    if re.search(r"槍擊|行刑式|開槍|中彈|舉槍", text):
-        tags.add("gunshot")
-    if re.search(r"弒母|弒父|殺母|殺父|逆子|逆倫", text):
-        tags.add("parricide")
-    if re.search(r"燒炭", text):
-        tags.add("charcoal")
-    if re.search(r"一氧化碳中毒|熱水器", text):
-        tags.add("co_poison")
-    if re.search(r"墜樓|跳樓|墜落|從.*樓.*墜", text):
-        tags.add("jump")
-    if re.search(r"上吊|自縊", text):
-        tags.add("hang")
-    if re.search(r"勒斃|掐死|窒息", text):
-        tags.add("strangle")
-    return tags
-
-
-def _are_same_incident_py(r1: dict, r2: dict) -> bool:
-    if r1.get("id") is not None and r2.get("id") is not None and str(r1.get("id")) == str(r2.get("id")):
-        return True
-    c1 = str(r1.get("city") or "").replace("台", "臺").strip()
-    c2 = str(r2.get("city") or "").replace("台", "臺").strip()
-    d1 = str(r1.get("district") or "").strip()
-    d2 = str(r2.get("district") or "").strip()
-    if not c1 or c1 != c2 or not d1 or d1 != d2:
-        return False
-    u1 = str(r1.get("source_url") or "").split("?")[0].strip()
-    u2 = str(r2.get("source_url") or "").split("?")[0].strip()
-    if u1 and u2 and u1.startswith("http") and u1 == u2:
-        return True
-
-    d_str1 = str(r1.get("incident_date") or "")[:10]
-    d_str2 = str(r2.get("incident_date") or "")[:10]
-    rk1 = extract_road_consolidation_key(c1, d1, str(r1.get("address") or ""))
-    rk2 = extract_road_consolidation_key(c2, d2, str(r2.get("address") or ""))
-    if rk1 and rk1 == rk2 and d_str1[:7] == d_str2[:7]:
-        return True
-
-    txt1 = f"{r1.get('address') or ''} {r1.get('reason') or ''}".replace("台", "臺")
-    txt2 = f"{r2.get('address') or ''} {r2.get('reason') or ''}".replace("台", "臺")
-    ages1 = {int(m.group(1)) for m in re.finditer(r"(\d{1,2})\s*歲", txt1)}
-    ages2 = {int(m.group(1)) for m in re.finditer(r"(\d{1,2})\s*歲", txt2)}
-    tags1 = _extract_py_modus_tags(txt1)
-    tags2 = _extract_py_modus_tags(txt2)
-    shared_ages = ages1 & ages2
-    shared_tags = tags1 & tags2
-
-    if d_str1 == d_str2 and d_str1:
-        if shared_ages and (shared_tags or r1.get("category") == r2.get("category")):
-            return True
-    return False
-
-
-def sync_supabase_to_website_json_files(supabase: Client):
-    """將 Supabase 最新爬蟲案件自動寫入網站靜態資料庫 calibrated_archive.json、public/calibrated_archive.json 與獨立爬蟲備份檔 crawler_vault_backup.json"""
+    # 更新 crawl_logs 完成紀錄
     try:
-        disk_records = []
-        if os.path.exists("calibrated_archive.json"):
-            with open("calibrated_archive.json", "r", encoding="utf-8") as f:
-                disk_records = json.load(f)
-        elif os.path.exists("crawler_vault_backup.json"):
-            with open("crawler_vault_backup.json", "r", encoding="utf-8") as f:
-                disk_records = json.load(f)
+        supabase.table("crawl_logs").update({
+            "articles_fetched": articles_fetched,
+            "cases_inserted": cases_inserted,
+            "sources_linked": sources_linked,
+            "pending_saved": pending_saved,
+            "duplicates_merged": duplicates_merged,
+            "status": "completed",
+            "finished_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        }).eq("run_id", run_id).execute()
+    except Exception:
+        pass
 
-        existing_ids = {str(r.get("id")) for r in disk_records if r.get("id") is not None}
-        existing_addrs = {str(r.get("address") or "").replace("台", "臺").strip() for r in disk_records if r.get("address")}
-
-        res = supabase.table("haunted_houses").select("*").order("id", desc=True).limit(1000).execute()
-        supa_rows = res.data or []
-        new_items = []
-        for row in supa_rows:
-            rid = str(row.get("id"))
-            raddr = str(row.get("address") or "").replace("台", "臺").strip()
-            if not raddr or not row.get("lat") or not row.get("lng"):
-                continue
-            if rid in existing_ids or raddr in existing_addrs:
-                continue
-            cand = normalize_supa_row_for_archive(row)
-            if any(_are_same_incident_py(ex, cand) for ex in disk_records) or any(_are_same_incident_py(ex, cand) for ex in new_items):
-                continue
-            existing_ids.add(rid)
-            existing_addrs.add(raddr)
-            new_items.append(cand)
-
-        updated = new_items + disk_records
-        tw_only = [r for r in updated if str(r.get("country", "TW")).upper() == "TW"]
-        with open("calibrated_archive.json", "w", encoding="utf-8") as f:
-            json.dump(updated, f, ensure_ascii=False, separators=(",", ":"))
-        with open("crawler_vault_backup.json", "w", encoding="utf-8") as f:
-            json.dump(tw_only, f, ensure_ascii=False, separators=(",", ":"))
-        os.makedirs("public", exist_ok=True)
-        with open(os.path.join("public", "calibrated_archive.json"), "w", encoding="utf-8") as f:
-            json.dump(updated, f, ensure_ascii=False, separators=(",", ":"))
-        with open(os.path.join("public", "crawler_vault_backup.json"), "w", encoding="utf-8") as f:
-            json.dump(tw_only, f, ensure_ascii=False, separators=(",", ":"))
-
-        if new_items:
-            print(f"💾 已同步將 {len(new_items)} 筆新爬蟲案件寫入 calibrated_archive.json 與獨立備份檔 crawler_vault_backup.json（網站與爬蟲統一總計：{len(updated)} 筆）！", flush=True)
-        else:
-            print(f"💾 網站靜態資料庫與獨立爬蟲備份檔已是最新狀態（統一總計 {len(updated)} 筆）。", flush=True)
-    except Exception as e:
-        print(f"⚠️ 同步寫入 calibrated_archive.json 提示: {e}", flush=True)
+    print(
+        f"✅ 台灣爬蟲執行完畢 | 抓取文章: {articles_fetched} | 新增核實案件: {cases_inserted} | "
+        f"多來源歸戶合併: {duplicates_merged} | 移入待查證(pending_cases): {pending_saved}",
+        flush=True,
+    )
+    subprocess.run(["node", "generate_sitemap.js"], check=False)
 
 
 if __name__ == "__main__":
     main()
-
-
-

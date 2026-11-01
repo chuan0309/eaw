@@ -4,6 +4,32 @@ on:
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:
+    inputs:
+      mode:
+        description: '執行模式 (incremental=定期增量 / backfill=歷年歷史回溯)'
+        required: false
+        default: 'incremental'
+        type: choice
+        options:
+          - incremental
+          - backfill
+      country:
+        description: '目標國家 (ALL / TW / JP)'
+        required: false
+        default: 'ALL'
+        type: choice
+        options:
+          - ALL
+          - TW
+          - JP
+      year_from:
+        description: '歷史回溯起始年份'
+        required: false
+        default: '2000'
+      year_to:
+        description: '歷史回溯結束年份'
+        required: false
+        default: '2026'
 
 permissions:
   contents: write
@@ -33,17 +59,29 @@ jobs:
           npm install --no-audit --no-fund
 
       - name: 1. Run Taiwan Independent Crawler (crawler_tw.py)
+        if: ${{ github.event.inputs.country == '' || github.event.inputs.country == 'ALL' || github.event.inputs.country == 'TW' }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: python crawler_tw.py
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          MODE="${{ github.event.inputs.mode || 'incremental' }}"
+          Y_FROM="${{ github.event.inputs.year_from || '2000' }}"
+          Y_TO="${{ github.event.inputs.year_to || '2026' }}"
+          python crawler_tw.py --mode "$MODE" --year-from "$Y_FROM" --year-to "$Y_TO"
 
       - name: 2. Run Japan Independent Crawler & Supabase Sync (crawler_jp.py)
+        if: ${{ github.event.inputs.country == '' || github.event.inputs.country == 'ALL' || github.event.inputs.country == 'JP' }}
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: python crawler_jp.py
+        run: |
+          MODE="${{ github.event.inputs.mode || 'incremental' }}"
+          Y_FROM="${{ github.event.inputs.year_from || '2000' }}"
+          Y_TO="${{ github.event.inputs.year_to || '2026' }}"
+          python crawler_jp.py --mode "$MODE" --year-from "$Y_FROM" --year-to "$Y_TO"
 
       - name: Commit and Push updated archive
         run: |
@@ -51,4 +89,3 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add -A calibrated_archive.json public/calibrated_archive.json jp_verified_archive.json public/jp_verified_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json sitemap.xml public/sitemap.xml
           git diff --staged --quiet || (git commit -m "Auto-update: TW 368 districts + JP 47 prefectures verified crawlers [skip ci]" && git pull --rebase --autostash origin main && git push)
-

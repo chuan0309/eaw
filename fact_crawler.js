@@ -7,7 +7,9 @@ import {
   JAPAN_47_PREFECTURES,
   JAPAN_PREF_COORDS,
   JAPAN_47_DISTRICTS,
-  getOfficialJpChomes
+  getOfficialJpChomes,
+  auditStigmatizedPropertyRecord,
+  isVerifiedRealIncidentRecord
 } from "./jp_47_prefectures.js";
 
 export const TAIWAN_368_DISTRICTS = {
@@ -562,15 +564,15 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     return null;
   }
 
-  // 2. Reject non-residential incident scenes (bridges, mountains, parks, construction sites, factories, KTV/hotels, prisons, roads, cars, vacant lots, bars)
+  // 2. Reject non-residential incident scenes (bridges, mountains, parks, construction sites, factories, KTV/hotels, prisons, roads, cars, vacant lots, bars, betel nut stands, parking towers, department stores, temples)
   const isExplicitHaunted = /凶宅|事故屋|隱瞞凶宅|買到凶宅|誤買凶宅/.test(fullText);
-  const nonResidentialScene = /大橋|陸橋|天橋|高架橋|橋面|橋下|河床|溪床|溪谷|草叢|路邊草叢|陳屍於?車內|橫死街頭|現場旁空地|安裝冷氣.*防火巷|知名酒吧喝酒|掩埋場|垃圾場|公墓|墓園|納骨塔|火葬場|殯儀館|國道|省道|快速道路|平交道|鐵軌|車禍|擦撞|自撞|追撞|酒駕|毒駕|騎士|工地|施工|建案工地|興建工程|鷹架|吊車|工人|工安|職災|職業安全|工廠|廠房|鐵工廠|加工區|科技廠|倉庫|錢櫃|好樂迪|KTV|酒店|夜店|舞廳|養生館|摩鐵|汽車旅館|飯店|商旅|民宿|百貨|商場|賣場|大賣場|超商|超市|餐廳|小吃店|看守所|監獄|外役監|服刑|出監|入監|軍營|營區|部隊|堂口|幫派|百果山|山區|山難|登山|步道|海邊|海岸|海域|漁港|沙灘|碼頭|水庫|魚塭|農地|果園|竹林|防風林|涵洞|水圳|大排|溝渠|溪畔|河濱|路倒|街頭|校園墜樓|校內墜樓|教學大樓|病房墜樓|醫院墜樓|護理之家|安養院|長照中心/;
+  const nonResidentialScene = /檳榔攤|聚眾鬥毆|街頭鬥毆|當街砍殺|當街|大橋|陸橋|天橋|高架橋|橋面|橋下|河床|溪床|溪谷|草叢|路邊草叢|陳屍於?車內|陳屍車旁|轎車燒炭|開車逆向|644路公車|橫死街頭|現場旁空地|安裝冷氣.*防火巷|知名酒吧喝酒|掩埋場|垃圾場|公墓|墓園|納骨塔|火葬場|殯儀館|國道|省道|快速道路|平交道|鐵軌|車禍|擦撞|自撞|追撞|酒駕|毒駕|騎士|工地|施工|建案工地|興建工程|鷹架|吊車|工人|工安|職災|職業安全|工作中墜落|成衣廠|臭豆腐工廠|廢棄工廠|鐵皮工廠|研究院路工廠|工廠|廠房|鐵工廠|加工區|科技廠|倉庫|砂石場|工寮|錢櫃|好樂迪|KTV|酒店|夜店|舞廳|養生館|停業SPA|摩鐵|汽車旅館|飯店|商旅|民宿|大葉高島屋|好市多|大型量販店|賣場電扶梯|百貨|商場|賣場|大賣場|超商|超市|餐廳|小吃店|日式料理店|停車塔|機械式停車塔|立體停車場|消防局旁|鐵皮屋宮廟|宮廟|看守所|監獄|外役監|服刑|出監|入監|軍營|營區|部隊|堂口|幫派|百果山|山區|山難|登山|步道|海邊|海岸|海域|漁港|沙灘|碼頭|水庫|魚塭|農地|果園|竹林|防風林|涵洞|水圳|大排|溝渠|溪畔|河濱|路倒|街頭|陳屍天幕下|陳屍\d+米深邊坡|陳屍廢棄屋旁|陳屍民宅騎樓地|16槍狙殺|紅色行李箱男屍|校園墜樓|校內墜樓|教學大樓|病房墜樓|醫院墜樓|護理之家|安養院|長照中心/;
   if (!isExplicitHaunted && nonResidentialScene.test(fullText)) {
     return null;
   }
 
   // 3. Reject natural deaths, illness, lonely deaths (孤獨死/猝死/病逝 are NOT statutory 凶宅!), non-fatal events, and procedural court news
-  if (/不會變凶宅|不算凶宅|想處理凶宅嗎|晚安小雞|黃明志|跨年晚會|土地公|聖筊|獸父|砲兵營|砲測中心|成功嶺|台北101|臺北101|晶品城|誠品南西|逃亡路線|斷絕退路|張文|白雪大旅社|華山大草原|中央銀行|頂樓酒吧|商旅大樓|睡夢中離世也被喊凶宅|教團籲設|私密諮商|楷模|表揚|頒獎|獲選|防詐宣導|消防演習|防災演練|鬼片|電影|影集|韓劇|日劇|分集劇情|小說|電玩|政治獻金|背信案|選舉|造勢|股價|台積電|ETF|星座|生肖|運勢|寵物貓|警犬|分離焦慮|專家：|學者：|擬強制|要跳脫|是否為巧合|懶人包|總整理|研討會|座談會|公聽會|修法|防孤獨死|求救鈴|飛安優先|超限高|棄養|健康無礙|無生命危險|意識清楚|獲救|救下|及時拉回|勸下|僅受輕傷|擦傷|虛驚一場|未遂/.test(fullText)) {
+  if (/不會變凶宅|不算凶宅|非屬專有所屬區域|想處理凶宅嗎|晚安小雞|黃明志|跨年晚會|土地公|聖筊|獸父|砲兵營|砲測中心|成功嶺|台北101|臺北101|晶品城|誠品南西|逃亡路線|斷絕退路|張文|白雪大旅社|華山大草原|中央銀行|頂樓酒吧|商旅大樓|睡夢中離世也被喊凶宅|教團籲設|私密諮商|楷模|表揚|頒獎|獲選|防詐宣導|消防演習|防災演練|鬼片|電影|影集|韓劇|日劇|分集劇情|小說|電玩|政治獻金|背信案|選舉|造勢|股價|台積電|ETF|星座|生肖|運勢|寵物貓|警犬|分離焦慮|專家：|學者：|擬強制|要跳脫|是否為巧合|懶人包|總整理|研討會|座談會|公聽會|修法|防孤獨死|求救鈴|飛安優先|超限高|棄養|健康無礙|無生命危險|意識清楚|獲救|救下|及時拉回|勸下|僅受輕傷|擦傷|虛驚一場|未遂|雙雙受傷送醫|跳樓逃生|跳樓逃逸受傷/.test(fullText)) {
     return null;
   }
   if (!isExplicitHaunted && !/法拍|拍定|一拍|二拍|三拍|四拍|點交|瑕疵擔保|減少價金/.test(fullText)) {
@@ -703,7 +705,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   if (
     commMatch &&
     commMatch[1] &&
-    !/某|該|一棟|住宅|社區大樓|公寓大樓|集合住宅|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市|台北|臺北|台中|臺中|高雄|桃園|台南|臺南|擬推|興建|推動|全台|全臺|命案|陳屍|墜樓|自家|新建|闖大樓|小模|老婦|老翁|女子|男子|猛鬼|最凶/.test(commMatch[1])
+    !/公里的|某|該|一棟|住宅|社區大樓|公寓大樓|集合住宅|北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市|台北|臺北|台中|臺中|高雄|桃園|台南|臺南|擬推|興建|推動|全台|全臺|命案|陳屍|墜樓|自家|新建|闖大樓|小模|老婦|老翁|女子|男子|猛鬼|最凶/.test(commMatch[1])
   ) {
     communityPart = commMatch[1];
   }
@@ -829,7 +831,7 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
   const [lat, lng] = getTaiwanStreetCorridorCoords(matchedCity, matchedDist, locCore, `${roadPart}_${communityPart}_${sanitizedTitle}`);
   const cleanSource = `${cleanRssHtmlEntities(article.media)}報導「${sanitizedTitle}」`;
 
-  return {
+  const candidateRec = {
     id: `tw-haunted-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     city: matchedCity,
     district: matchedDist,
@@ -858,6 +860,8 @@ export function parseVerifiedArticleToRecord(article, hintCity = "", hintDistric
     __road: roadPart,
     __community: communityPart
   };
+  if (!isVerifiedRealIncidentRecord(candidateRec)) return null;
+  return candidateRec;
 }
 
 export function extractModusOperandiTags(text = "") {
@@ -1548,6 +1552,17 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
   else if (/転落|飛び降り|自殺|心肺停止|투신|추락|극단적/.test(title)) cat = "輕生事故";
 
   if (country === "JP") {
+    // Reject non-residential, non-fatal, or general commentary/court-hearing JP headlines before creating record
+    if (/ホテル|旅館|老人ホーム|介護施設|グループホーム|病院|クリニック|学校|高校|中学|小学校|大学|いじめ|工場|倉庫|作業場|工事現場|ビル工事|足場|脚立|外壁塗装|牛舎|豚舎|鶏舎|ビニールハウス|太陽光発電|変電所|店舗|飲食店|ラーメン|居酒屋|バー|スナック|キャバクラ|風俗|パチンコ|スーパー|百貨店|デパート|ドラッグストア|コンビニ|駐車場|コインパーキング|駐輪場|ゴミ集積所|ごみ集積所|公園|河川敷|路上|道路|交差点|国道|県道|高速道路|線路|踏切|駅構内|列車|電車|乗用車|軽乗用車|トラック|バイク|自転車|車内|車両火災|交通事故|ひき逃げ|山林|海岸|漁港|港|海で|川で|池で|船火災|タグボート|漁船|山火事|林野火災|枯れ草|融雪槽|除雪|雪下ろし|クマ|熊|イノシシ|刑務所|拘置所|留置場|交番|警察署|自衛隊|基地|神社|寺|本堂|墓地|須磨シーワールド|水族館|動物園|遊園地|スキー場|キャンプ場|ゴルフ場|遺跡|けが人なし|けが人はいない|怪我人なし|負傷者なし|命に別条|命に別状|避難し無事|無事避難|全員無事|殺人未遂|放火未遂|自殺未遂|未遂容疑|初公判|公判|控訴審|上告審|判決|求刑|懲役\d+年|無期懲役|死刑求刑|再逮捕|送検|書類送検|起訴|不起訴|処分保留|鑑定留置|家宅捜索|現場検証|実況見分|訓練|防災|対策|統計|ランキング|解説|弁護士|相場|選び方|見分け方|メリット|デメリット|アニメ|映画|ドラマ|漫画|ゲーム|小説|心霊|幽霊|オカルト/.test(title)) {
+      return null;
+    }
+    if (!/マンション|アパート|住宅|民家|戸建|一戸建|自宅|自室|集合住宅|共同住宅|団地|市営住宅|県営住宅|都営住宅|府営住宅|道営住宅|公営住宅|長屋|借家|寮|社員寮|学生寮|部屋|室内|居室|ベランダ|バルコニー|敷地内|事故物件/.test(title)) {
+      return null;
+    }
+    if (!/死亡|死体|遺体|変死|殺害|刺殺|絞殺|撲殺|焼死|孤独死|孤立死|自殺|心中|無理心中|白骨|腐乱|転落死|墜落死|飛び降り.*死|首つり|首吊り|練炭|一酸化炭素|焼け跡から.*遺体|焼け跡から.*性別不明|死亡確認|死亡した/.test(title)) {
+      return null;
+    }
+
     // Resolve true Prefecture & Municipality from headline if explicitly mentioned
     for (const p of JAPAN_47_PREFECTURES) {
       const shortP = p.replace(/[都府県]$/, "");
@@ -1609,7 +1624,7 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
       ? "一戸建て住宅"
       : "分譲・賃貸マンション";
     const fullAddrJa = `${city}${district}${pinLabel}（${bldgType}）`;
-    return {
+    const jpRec = {
       id: `jp-live-${Date.now()}-${Math.floor(Math.random() * 9000)}`,
       country: "JP",
       city,
@@ -1668,6 +1683,8 @@ export function parseJpKrArticleToRecord(article, fallbackLat = 35.6895, fallbac
         }
       }
     };
+    if (!isVerifiedRealIncidentRecord(jpRec)) return null;
+    return jpRec;
   } else {
     const roadMatch = title.match(/([가-힣0-9]{2,8}(?:대로|로|길)\s*\d+)/) || title.match(/([가-힣]{2,5}동)/);
     const koDist = article.koDist || "강남구";

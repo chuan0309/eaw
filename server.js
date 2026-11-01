@@ -18,7 +18,8 @@ import {
   JAPAN_47_PREFECTURES,
   JAPAN_PREF_COORDS,
   JAPAN_47_DISTRICTS,
-  isVerifiedRealIncidentRecord
+  isVerifiedRealIncidentRecord,
+  auditStigmatizedPropertyRecord
 } from "./jp_47_prefectures.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -1121,16 +1122,18 @@ function markGeminiDepletedIfNeeded(err) {
   }
 }
 
-function isServerValidTranslatedText(text, origZh, lang) {
+function isServerValidTranslatedText(text, origText, lang) {
   const clean = String(text || "").trim();
-  const orig = String(origZh || "").trim();
+  const orig = String(origText || "").trim();
   if (!clean) return false;
-  if (lang === "zh-TW") return true;
-  if (clean === orig) return false;
+  if (orig && clean === orig) return false;
   if (lang === "en" || lang === "ko") {
-    if (/[\u4e00-\u9fff]/.test(clean)) return false;
+    if (/[\u4e00-\u9fff\u3040-\u30ff]/.test(clean)) return false;
+  } else if (lang === "zh-TW") {
+    // Reject if Japanese Hiragana or Katakana remains in Traditional Chinese translation
+    if (/[\u3040-\u309f\u30a0-\u30ff]/.test(clean)) return false;
   } else if (lang === "ja") {
-    if (/該大樓|分租套房|發生火警|警方獲報|救護人員|一氧化碳|非自然死亡|不動產說明書|實價登錄|管委會|送醫搶救|宣告不治|破門查訪|專有部分|社區住戶/.test(clean)) {
+    if (/該大樓|分租套房|發生火警|警方獲報|救護人員|一氧化碳|非自然死亡|不動產說明書|實價登錄|管委會|送醫搶救|宣告不治|破門查訪|專有部分|社區住戶|陳屍|勘驗|相驗/.test(clean)) {
       return false;
     }
     if (clean.length > 12 && !/[\u3040-\u30ff]/.test(clean)) return false;
@@ -1195,7 +1198,7 @@ app.get("/api/geo-detect", (req, res) => {
   return res.json(mapByCountry[detectedCountry] || { country: "", lang: "", regionFilter: "" });
 });
 
-// POST /api/translate-case - Translates case dossier narrative into English (en), Japanese (ja), or Korean (ko)
+// POST /api/translate-case - Translates case dossier narrative into zh-TW, en, ja, or ko
 app.post("/api/translate-case", async (req, res) => {
   const {
     id = "",
@@ -1211,11 +1214,11 @@ app.post("/api/translate-case", async (req, res) => {
     merged_cases = []
   } = req.body || {};
 
-  if (lang === "zh-TW" || !["en", "ja", "ko"].includes(lang)) {
+  if (!["zh-TW", "en", "ja", "ko"].includes(lang)) {
     return res.json({ address, district, building_type, current_status, reason, auction_record, media_verification, history_timeline, merged_cases });
   }
 
-  const cacheKey = `case_v3_${id || address}_${lang}`;
+  const cacheKey = `case_v4_${id || address}_${lang}`;
   if (caseTranslationCache.has(cacheKey)) {
     const cached = caseTranslationCache.get(cacheKey);
     if (cached && isServerValidTranslatedText(cached.reason, reason, lang)) {
@@ -1240,6 +1243,7 @@ app.post("/api/translate-case", async (req, res) => {
 
   if (process.env.GEMINI_API_KEY && !geminiCreditsDepleted) {
     const langNames = {
+      "zh-TW": "Traditional Chinese (臺灣繁體中文)",
       en: "English",
       ja: "Japanese (日本語)",
       ko: "Korean (한국어)"
@@ -1253,7 +1257,7 @@ app.post("/api/translate-case", async (req, res) => {
 
       const response = await ai.models.generateContent({
         model: "gemini-3.8-flash",
-        contents: `Translate the following Taiwan property incident record completely into natural, accurate ${langNames[lang]}. Do not leave Chinese text untranslated; translate all road names, districts, building types, media names, and case narratives into ${langNames[lang]}:
+        contents: `Translate the following property incident record completely into natural, accurate ${langNames[lang]}. Do not leave source language text untranslated; translate all road/town names, districts, building types, media names, and case narratives into ${langNames[lang]}:
 - address: ${address}
 - district: ${district}
 - building_type: ${building_type}
@@ -1316,7 +1320,7 @@ app.post("/api/translate-case", async (req, res) => {
     }
   }
 
-  // Fallback: Translate fields via Google Translate endpoint without returning untranslated Chinese strings
+  // Fallback: Translate fields via Google Translate endpoint
   try {
     const [
       tAddress,
@@ -1372,10 +1376,10 @@ app.post("/api/translate-case", async (req, res) => {
   }
 });
 
-// POST /api/translate-batch - Translates a batch of visible list cards (supports up to 200 items per page) into en, ja, or ko
+// POST /api/translate-batch - Translates a batch of visible list cards (supports up to 200 items per page) into zh-TW, en, ja, or ko
 app.post("/api/translate-batch", async (req, res) => {
   const { lang = "zh-TW", items = [] } = req.body || {};
-  if (lang === "zh-TW" || !["en", "ja", "ko"].includes(lang) || !Array.isArray(items) || items.length === 0) {
+  if (!["zh-TW", "en", "ja", "ko"].includes(lang) || !Array.isArray(items) || items.length === 0) {
     return res.json({ translations: {} });
   }
 
@@ -1383,7 +1387,7 @@ app.post("/api/translate-batch", async (req, res) => {
   const toTranslate = [];
   for (const it of items.slice(0, 200)) {
     if (!it || !it.key) continue;
-    const cKey = `batch_v4_${it.key}_${lang}`;
+    const cKey = `batch_v5_${it.key}_${lang}`;
     if (caseTranslationCache.has(cKey)) {
       const cached = caseTranslationCache.get(cKey);
       if (cached && isServerValidTranslatedText(cached.reason, it.reason, lang)) {
@@ -1405,6 +1409,7 @@ app.post("/api/translate-batch", async (req, res) => {
 
   if (process.env.GEMINI_API_KEY && !geminiCreditsDepleted && toTranslate.length <= 40) {
     const langNames = {
+      "zh-TW": "Traditional Chinese (臺灣繁體中文)",
       en: "English",
       ja: "Japanese (日本語)",
       ko: "Korean (한국어)"
@@ -1418,7 +1423,7 @@ app.post("/api/translate-batch", async (req, res) => {
 
       const response = await ai.models.generateContent({
         model: "gemini-3.8-flash",
-        contents: `Translate each Taiwan property incident item below into natural, complete ${langNames[lang]}. Translate the address, district, and the full multi-sentence reason narrative completely into ${langNames[lang]} without leaving Chinese sentences:\n${JSON.stringify(toTranslate)}`,
+        contents: `Translate each property incident item below into natural, complete ${langNames[lang]}. Translate the address, district, and the full multi-sentence reason narrative completely into ${langNames[lang]}:\n${JSON.stringify(toTranslate)}`,
         config: {
           thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
           responseMimeType: "application/json",
@@ -1442,7 +1447,7 @@ app.post("/api/translate-batch", async (req, res) => {
       if (Array.isArray(arr)) {
         for (const tr of arr) {
           if (tr && tr.key && isServerValidTranslatedText(tr.reason, "", lang)) {
-            caseTranslationCache.set(`batch_v4_${tr.key}_${lang}`, tr);
+            caseTranslationCache.set(`batch_v5_${tr.key}_${lang}`, tr);
             result[tr.key] = tr;
           }
         }
@@ -1472,7 +1477,7 @@ app.post("/api/translate-batch", async (req, res) => {
               district: isServerValidTranslatedText(tDist, item.district, lang) ? tDist : "",
               reason: tReason
             };
-            caseTranslationCache.set(`batch_v4_${item.key}_${lang}`, tr);
+            caseTranslationCache.set(`batch_v5_${item.key}_${lang}`, tr);
             result[item.key] = tr;
           }
         })
@@ -2077,12 +2082,22 @@ app.post("/api/records", async (req, res) => {
       ]
     };
 
+    const auditResult = auditStigmatizedPropertyRecord(newRecord);
+    if (!auditResult.valid) {
+      return res.status(400).json({
+        ok: false,
+        stage: auditResult.stage,
+        error: `【法定凶宅／事故物件五道核查未通過】${auditResult.reason}`
+      });
+    }
+
     dynamicRecords.unshift(newRecord);
     persistNewVerifiedRecordsToDisk([newRecord]);
     const totalCount = loadAllUnifiedRecords().length;
     return res.json({
       ok: true,
       stage: "completed",
+      audit: auditResult,
       record: newRecord,
       totalCount
     });
@@ -2093,6 +2108,31 @@ app.post("/api/records", async (req, res) => {
       error: err.message || "新增紀錄失敗"
     });
   }
+});
+
+// Statutory 5-Gate Stigmatized Property Audit & Verification Endpoint
+app.get("/api/audit-verification", (req, res) => {
+  const allRecords = loadAllUnifiedRecords();
+  let twCount = 0;
+  let jpCount = 0;
+  for (const r of allRecords) {
+    if (r.country === "JP" || /^jp-/i.test(String(r.id || ""))) jpCount++;
+    else twCount++;
+  }
+  return res.json({
+    ok: true,
+    engine: "5-Gate Statutory Stigmatized Property Verification Engine (法定凶宅／事故物件五道核查審核機制)",
+    gates: [
+      { gate: 1, code: "SOURCE_URL_VERIFICATION", name: "原始新聞／法院／官公庁來源網址實證核查" },
+      { gate: 2, code: "ADDRESS_INTEGRITY_VERIFICATION", name: "真實門牌路段與地名完整性核查（排除誤擷取字詞與地標錯置）" },
+      { gate: 3, code: "RESIDENTIAL_BUILDING_SCOPE", name: "住宅專有部分／居住用建物範圍核查（排除街頭鬥毆、檳榔攤、工廠、商場、停車場、車輛事故）" },
+      { gate: 4, code: "CONFIRMED_UNNATURAL_DEATH", name: "非自然死亡結果確認核查（排除無傷亡火警、逃生獲救、未遂與單純公判程序新聞）" },
+      { gate: 5, code: "CROSS_JURISDICTION_CONSISTENCY", name: "跨縣市知名社區與行政區一致性核查" }
+    ],
+    verifiedTotal: allRecords.length,
+    verifiedTW: twCount,
+    verifiedJP: jpCount
+  });
 });
 
 // POST /api/takedown - Dedicated Case Correction & Takedown Endpoint (Separated Validation, Permission Check & Persistent Removal)

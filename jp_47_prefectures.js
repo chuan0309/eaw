@@ -609,83 +609,180 @@ export function getJapanMunicipalityCoords(pref = "", district = "") {
   return JAPAN_PREF_COORDS[p] || [35.6895, 139.6917];
 }
 
-// 5-Stage Real Haunted Property (`凶宅` / `事故物件`), Address Integrity & Geolocation Verification Gate
-export function isVerifiedRealIncidentRecord(r) {
-  if (!r || typeof r !== "object") return false;
+// ============================================================================
+// 5-Gate Statutory Stigmatized Property (`法定凶宅` / `事故物件`) Audit & Verification Engine
+// Enforces Taiwan MOI 97年函釋 & Japan MLIT 宅建業法ガイドライン:
+// Must be an unnatural death occurring INSIDE or falling FROM a private residential building.
+// Strictly excludes street brawls, betel nut stands, factories, warehouses, temples,
+// department stores, parking structures, hotels, nursing homes, prisons, traffic accidents,
+// industrial accidents, and non-fatal fires.
+// ============================================================================
+export function auditStigmatizedPropertyRecord(r) {
+  if (!r || typeof r !== "object") {
+    return { valid: false, stage: "STAGE_0_EMPTY", reason: "空白或無效紀錄物件" };
+  }
 
-  // Stage 1: Real Source URL Gate
+  // Gate 1: Real Source URL & Evidence Authenticity Gate
   const url = String(r.source_url || "").trim();
-  if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(url)) return false;
+  if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(url)) {
+    return { valid: false, stage: "STAGE_1_SOURCE_URL", reason: "缺少可查證之原始新聞或官方公告連結" };
+  }
 
   const reason = String(r.reason || "").trim();
+  const auction = String(r.auction_record || "").trim();
   const addr = String(r.address || r.doorplate_address || "").trim();
   const door = String(r.doorplate_address || addr.replace(/（.*）|\(.*\)/g, "")).trim();
   const bldg = String(r.building_type || "").trim();
   const src = String(r.source || r.media_verification || "").trim();
   const fullText = `${addr} ${reason} ${src}`;
+  const country = inferRecordCountry(r);
 
-  // Stage 2: Strict Address Quality & Anti-Bogus Substring Gate (Blocks Screenshot 1, 2, 4 bugs!)
+  // Gate 2: Strict Address Grammar & Anti-Hallucination Gate
   if (/事發住宅建物|住宅建物（|(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東|澎湖|金門|連江)[^\s（(]{1,4}民宅/.test(addr)) {
-    return false;
+    return { valid: false, stage: "STAGE_2_ADDRESS_GRAMMAR", reason: "地址含合成佔位詞彙" };
   }
   if (/^(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東)[^\s]{1,4}民宅$/.test(bldg)) {
-    return false;
+    return { valid: false, stage: "STAGE_2_ADDRESS_GRAMMAR", reason: "建物型態格式異常" };
   }
-  if (/([一-龥]{2,3}[區鎮鄉市])\1/.test(addr)) return false;
-  if (/審過程|過程與路|路段背景|絕路|死路|慘死路|不歸路|黃泉路|逃生路|退路|末路|血路|出路|思路|道路|馬路|網路|路倒|竹市街|命案同社區|自家社區|新建大樓|闖大樓|東區大樓|高雄大樓|汐止大樓|新店社區|土城社區|男墜|女墜|陳屍.*大樓|陳屍.*社區|男社區|女社區|老婦人社區|屍命案社區|小模命案社區|最猛兇宅|最凶宅/.test(door)) {
-    return false;
+  if (/([一-龥]{2,3}[區鎮鄉市])\1/.test(addr)) {
+    return { valid: false, stage: "STAGE_2_ADDRESS_GRAMMAR", reason: "行政區重複拼接異常" };
+  }
+  if (/審過程|過程與路|路段背景|絕路|死路|慘死路|不歸路|黃泉路|逃生路|退路|末路|血路|出路|思路|道路|馬路|網路|路倒|竹市街|命案同社區|自家社區|新建大樓|闖大樓|東區大樓|高雄大樓|汐止大樓|新店社區|土城社區|男墜|女墜|陳屍.*大樓|陳屍.*社區|男社區|女社區|老婦人社區|屍命案社區|小模命案社區|最猛兇宅|最凶宅|路人逛街|橫躺路|機車停路|命喪.*街|同條路|局旁.*路|頭嚇壞路|地上路|臥倒路|為一名街|整條街|644路|公車|客運|埔里農路|歸仁路旁|天倫街路|指稱.*路|公里的/.test(door + " " + addr)) {
+    return { valid: false, stage: "STAGE_2_ADDRESS_GRAMMAR", reason: "路名或社區名稱係新聞標題誤擷取詞彙" };
   }
 
-  // Stage 3: Haunted Property (`凶宅` / `事故物件`) Focus Gate - Reject street crime, car deaths, factories, landslides, promotional articles
-  if (/UR賃貸住宅.*競売BIT|特別募集住宅.*競売BIT/i.test(fullText)) return false;
-  if (/(グランメゾン|ライオンズマンション|プラウド|ブリリア|パークハウス|コスモ|アパマン|レオパレス|ダイワハウス).*UR/i.test(fullText)) return false;
-  if (/（\d+樓\d+室）.*之單身獨居高齡住戶於室內突發疾病孤獨死/i.test(fullText)) return false;
-  if (/發生感情、財務或家庭糾紛引發之持刀殺害與傷害致死案件，轄區警察署設立搜查本部偵辦/i.test(fullText)) return false;
-  if (/於深夜發生室內一氧化碳中毒（練炭自殺）或浴室自縊輕生案件，警方現場勘驗排除他殺嫌疑/i.test(fullText)) return false;
-  if (/国道で.*事故|高速道路|新東名|東名高速|乗用車.*衝突|トラック.*横転|踏切|列車にはねられ|電車にはねられ|交通死亡事故|街頭犯罪ゼロ|断食道場|山中に.*遺体|クマに襲われ|遺跡で土壁|工場で.*転落|工場火災|倉庫火災|用水路|土砂崩れ|火災死亡リスクが|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|無人員受困傷亡|けが人なし|死者なし|けが人はいない/i.test(fullText)) return false;
-  if (/主要案發地點在街頭|發生於車內|陳屍於車內|周邊停車場|生技公司廠房|資源回收場|成衣廠|成衣大廠|倉庫火警|大廠火災|300坪鐵皮|鐵皮場|鐵皮工廠|工廠火警|廠房火警|河口湖命案主嫌背景|父擁臺南.*13年前|陳屍於樹下|工寮聚餐飲酒後突發猝死|洗外牆.*吊車|商辦大樓工地|教學大樓|大廳滑手機不動|倒臥廁所送醫亡|歇業SPA養生館|園區周邊辦公室/.test(fullText)) return false;
-  if (/(?:路竹區|湖內區)高雄路$/.test(door)) return false;
-  if (/已經營\d+年|開幕|新開幕|美食推薦/i.test(fullText) && !/命案|死亡|身亡|陳屍|輕生|墜樓|他殺/i.test(fullText)) return false;
+  // Gate 3 & Gate 4: Country-Specific Statutory Stigmatized Property Eligibility
+  if (country === "TW") {
+    const city = String(r.city || "").replace(/台/g, "臺").trim();
+    const dist = String(r.district || "").trim();
+    const twCore = door.replace(/台/g, "臺").replace(city, "").replace(dist, "").trim();
 
-  const hasIncidentFact = /死|亡|屍|殺|命案|輕生|墜樓|跳樓|燒炭|上吊|自縊|火警|火災|氣爆|一氧化碳|遺體|遺体|孤獨死|孤独死|変死|自殺|心肺停止|意識不明|法拍|拍賣|競売|特別募集|特定物件|心理的瑕疵|告知事項|凶宅|事故物件/i.test(fullText);
-  if (!hasIncidentFact) return false;
+    if (/^(?:指稱|為一名|路人|逛街|橫躺|機車停|命喪|同條|局旁|頭嚇壞|倒臥|地上|臥倒|陳屍|驚傳|發生|位於|坐落|鄰近|附近|靠近|\d+路$)/.test(twCore)) {
+      return { valid: false, stage: "STAGE_2_ADDRESS_GRAMMAR", reason: "門牌路名語法不符台灣道路規範" };
+    }
 
-  // Stage 4: Anti-Cross-City Landmark & Road Hallucination Gate
-  const city = String(r.city || "").replace(/台/g, "臺").trim();
-  const dist = String(r.district || "").trim();
-  if (/錦新大樓/.test(addr) && (city !== "臺北市" || dist !== "中山區")) return false;
-  if (/西寧國宅|西寧大樓/.test(addr) && (city !== "臺北市" || dist !== "萬華區")) return false;
-  if (/城中城/.test(addr) && (city !== "高雄市" || dist !== "鹽埕區")) return false;
-  if (/維冠金龍|維冠大樓/.test(addr) && (city !== "臺南市" || dist !== "永康區")) return false;
-  if (/東星大樓/.test(addr) && (city !== "臺北市" || dist !== "松山區")) return false;
-  if (/林肯大郡/.test(addr) && (city !== "新北市" || dist !== "汐止區")) return false;
+    // Gate 3 (TW): Non-Residential Venue & Outdoor / Street / Industrial / Commercial / Traffic Exclusion
+    if (/檳榔攤|聚眾鬥毆|街頭鬥毆|當街砍|當街殺|街頭槍擊|街頭家暴|街頭砍|16槍狙殺|主要案發地點在街頭|發生於車內|陳屍於車內|陳屍車內|轎車燒炭|車內燒炭|陳屍.*轎車|陳屍.*車上|陳屍.*小客車|陳屍.*貨車|陳屍.*公車|陳屍車旁|644路公車|開車逆向|車禍|擦撞|追撞|自撞|酒駕|毒駕|夾撞|砂石場|生技公司廠房|資源回收場|成衣廠|成衣大廠|倉庫火警|倉庫火災|大廠火災|300坪鐵皮|鐵皮場|鐵皮工廠|工廠火警|工廠火災|廠房火警|臭豆腐工廠|廢棄工廠|研究院路工廠|科技廠|化工廠|竹林旁無水電工寮|工寮聚餐|洗外牆.*吊車|商辦大樓工地|教學大樓|大廳滑手機不動|倒臥廁所送醫亡|歇業SPA養生館|停業SPA|園區周邊辦公室|鐵皮屋宮廟|宮廟火警|大型量販店|大葉高島屋|好市多旁|賣場電扶梯|信二路立體停車場|消防局旁|周邊停車場|停車塔|機械式停車塔|小吃店|日式料理店|知名酒吧|酒吧外|KTV|酒店外|夜店|摩鐵|汽車旅館|入住.*旅館|投宿.*旅館|商旅飯店|陳屍於樹下|陳屍天幕下|陳屍200米深邊坡|陳屍廢棄屋旁|陳屍民宅騎樓地|逃逸移工.*跳樓逃逸受傷|雙雙受傷送醫|幸無傷亡|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|無人員受困傷亡|工安事故|工安意外|工作中墜落|施工墜樓|紅色行李箱男屍|河口湖命案主嫌|父擁臺南.*13年前|非屬專有所屬區域內墜樓|疑似非屬專有所屬區域/.test(fullText)) {
+      return { valid: false, stage: "STAGE_3_NON_RESIDENTIAL_VENUE", reason: "案發場所為街頭、檳榔攤、工廠倉庫、商場賣場、停車場、旅館或非專有住宅部分，不屬法定凶宅" };
+    }
+    if (/(?:路竹區|湖內區)高雄路$/.test(door)) {
+      return { valid: false, stage: "STAGE_3_NON_RESIDENTIAL_VENUE", reason: "工廠倉庫火警排除" };
+    }
+    if (/命危送醫|送醫搶救中|送醫急救$/.test(reason) && !/不治|死亡|身亡|陳屍|罹難|焦屍|喪命|氣絕|慘死/.test(reason)) {
+      return { valid: false, stage: "STAGE_4_NO_CONFIRMED_DEATH", reason: "僅送醫急救未確認死亡，不構成法定凶宅" };
+    }
 
-  // Stage 5: Valid Geographic Coordinates & Canonical Street/Chome Gate
+    // Cross-city mismatch guard
+    if (city === "桃園市" && /嘉義市民生北路/.test(reason)) {
+      return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "內文縣市與標註縣市不符" };
+    }
+    if (/錦新大樓/.test(addr) && (city !== "臺北市" || dist !== "中山區")) return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "地標行政區不符" };
+    if (/西寧國宅|西寧大樓/.test(addr) && (city !== "臺北市" || dist !== "萬華區")) return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "地標行政區不符" };
+    if (/城中城/.test(addr) && (city !== "高雄市" || dist !== "鹽埕區")) return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "地標行政區不符" };
+    if (/維冠金龍|維冠大樓/.test(addr) && (city !== "臺南市" || dist !== "永康區")) return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "地標行政區不符" };
+    if (/東星大樓/.test(addr) && (city !== "臺北市" || dist !== "松山區")) return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "地標行政區不符" };
+    if (/林肯大郡/.test(addr) && (city !== "新北市" || dist !== "汐止區")) return { valid: false, stage: "STAGE_2_CROSS_CITY_MISMATCH", reason: "地標行政區不符" };
+
+    // Gate 4 (TW): Must have both Residential Property evidence AND Confirmed Unnatural Death evidence in the narrative
+    const evidenceText = `${reason} ${auction}`;
+    const hasTwResidentialEvidence = /凶宅|事故屋|民宅|住宅|住家|住處|租屋|租處|套房|雅房|公寓|透天|大樓|華廈|國宅|社宅|社區|豪宅|別墅|平房|農舍|屋內|家中|自宅|房內|臥室|房間|客廳|浴室|廚房|陽台|露台|頂樓|樓梯間|中庭|墜樓|跳樓|燒炭|上吊|自縊|法拍/.test(evidenceText);
+    if (!hasTwResidentialEvidence) {
+      return { valid: false, stage: "STAGE_4_NO_RESIDENTIAL_EVIDENCE", reason: "內文缺乏住宅建物專有部分之實證記述" };
+    }
+    const hasTwDeathEvidence = /死|亡|屍|殺|命案|不治|罹難|輕生|自殺|墜樓|跳樓|燒炭|上吊|自縊|一氧化碳中毒|葬身火窟|喪命|氣絕|奪命|凶宅|事故屋|法拍/.test(evidenceText);
+    if (!hasTwDeathEvidence) {
+      return { valid: false, stage: "STAGE_4_NO_CONFIRMED_DEATH", reason: "內文缺乏非自然死亡之實證記述" };
+    }
+  } else if (country === "JP") {
+    // Strip appended boilerplate before checking Japanese incident facts
+    if (/UR賃貸住宅.*競売BIT|特別募集住宅.*競売BIT/i.test(fullText)) {
+      return { valid: false, stage: "STAGE_3_SYNTHETIC_BOILERPLATE", reason: "排除合成模板紀錄" };
+    }
+    if (/(グランメゾン|ライオンズマンション|プラウド|ブリリア|パークハウス|コスモ|アパマン|レオパレス|ダイワハウス).*UR/i.test(fullText)) {
+      return { valid: false, stage: "STAGE_3_SYNTHETIC_BOILERPLATE", reason: "排除合成建物紀錄" };
+    }
+    if (/（\d+樓\d+室）.*之單身獨居高齡住戶於室內突發疾病孤獨死|發生感情、財務或家庭糾紛引發之持刀殺害與傷害致死案件，轄區警察署設立搜查本部偵辦|於深夜發生室內一氧化碳中毒（練炭自殺）或浴室自縊輕生案件，警方現場勘驗排除他殺嫌疑/i.test(fullText)) {
+      return { valid: false, stage: "STAGE_3_SYNTHETIC_BOILERPLATE", reason: "排除合成模板敘述" };
+    }
+
+    const coreJpReason = reason
+      .replace(/。?国土交通省「?宅地建物取引業者による人の死の告知に関するガイドライン[\s\S]*$/g, "")
+      .replace(/。?宅地建物取引業法および国交省ガイドライン[\s\S]*$/g, "")
+      .replace(/（発生・報道日：[\s\S]*$/g, "")
+      .replace(/（報道・発生日：[\s\S]*$/g, "")
+      .trim();
+
+    const isVerifiedOshimaOrBitSeed = /^jp-(verified|seed|oshima)/i.test(String(r.id || "")) && /大島てる|UR特別募集|競売|BIT/.test(src + " " + String(r.id || ""));
+
+    // Gate 3 (JP): Exclude non-residential scenes, traffic, boats, nursing homes, hotels, prisons, court trials, and non-fatal fires
+    const jpExcludePattern = /避難し無事|全員無事|無事で|けが人なし|けが人はなし|けが人はいない|死者なし|命に別条|殺人未遂|未遂容疑|意識不明(?!.*(?:死亡|遺体))|重傷(?!.*(?:死亡|遺体))|軽傷(?!.*(?:死亡|遺体))|重体(?!.*(?:死亡|遺体))|1人搬送(?!.*(?:死亡|遺体))|消火活動中(?!.*(?:死亡|遺体))|鎮火(?!.*(?:死亡|遺体))|心肺停止(?!.*(?:死亡|遺体))|タグボート|船火災|船見回り|漁師が死亡|塀崩壊|宮古島沖|ホテル|ビジネスホテル|ラブホテル|旅館|老人ホーム|介護施設|福祉施設|グループホーム|ドラッグストア|融雪槽|除雪作業|外壁塗装|脚立|塗装作業|屋根から転落|雪下ろし|工場|倉庫|作業場|工事現場|作業員|遺跡|崩落|生き埋め|牛舎|豚舎|鶏舎|太陽光発電|危険物火災|店舗.*全焼|書店兼住宅|動物病院|商業施設|パチンコ|病院内|学校|いじめ|刑務所|拘置所|地裁|高裁|最高裁|初公判|公判|求刑|懲役\d+年|不起訴|再逮捕|送検|起訴|提訴|鑑定留置|刑事責任能力|調査報告書を公表|弁護士解説|発生から\d+年|情報提供呼び掛け|駐車場で.*遺体|駐車場で.*変死|コンビニ駐車場|アパート駐車場から.*運搬|ゴミ集積所|ごみ集積所|シーワールド|パネル展|防災|火災予防|CAMPFIRE|メールの新規登録|不正アクセス|バイク|乗用車|トラック|ミニバイク|軽乗用車|車両火災|交通事故|単独事故|ひき逃げ|電柱に|国道|高速道路|新東名|東名高速|踏切|線路|列車にはねられ|電車にはねられ|河川敷|用水路|土砂崩れ|山林|山中に.*遺体|クマに襲われ|ストーカー相談|結束バンドを購入|1週間.*逃走/;
+    if (jpExcludePattern.test(coreJpReason)) {
+      return { valid: false, stage: "STAGE_3_JP_NON_RESIDENTIAL_OR_NON_FATAL", reason: "日本非住宅場所、交通・労災事故、裁判続報または死亡未確認事案を除外" };
+    }
+
+    // Cross-prefecture mismatch checks for Japan
+    if (r.city === "東京都" && /小倉北区|福岡|北九州|札幌市北区|大阪市北区|神戸市北区|京都市北区|名古屋市北区|堺市北区|岡山市北区|熊本市北区|新潟市北区|浜松市北区|さいたま市北区/.test(coreJpReason)) {
+      return { valid: false, stage: "STAGE_2_JP_PREF_MISMATCH", reason: "都道府県と記事内の自治体名が不一致" };
+    }
+    if (r.district === "松戸市" && /千葉県市原市のアパート/.test(coreJpReason)) {
+      return { valid: false, stage: "STAGE_2_JP_MUNI_MISMATCH", reason: "事件発生地（市原市）と登録自治体（松戸市）が不一致" };
+    }
+
+    // Gate 4 (JP): Must explicitly mention both a residential building AND a confirmed death in coreJpReason
+    const hasJpResidential = isVerifiedOshimaOrBitSeed || /住宅|民家|マンション|アパート|団地|集合住宅|共同住宅|一戸建|戸建|長屋|居宅|自宅|自室|室内|部屋|号室|木造.*階建|鉄筋.*階建/.test(coreJpReason);
+    if (!hasJpResidential) {
+      return { valid: false, stage: "STAGE_4_JP_NO_RESIDENTIAL_EVIDENCE", reason: "記事本文に居住用建物の記載なし" };
+    }
+    const hasJpDeath = isVerifiedOshimaOrBitSeed || /死亡|遺体|焼死|殺害|殺人|変死|自殺|孤独死|孤獨死|白骨|死体|飛び降り|転落.*死|刺され.*死|首を絞め/.test(coreJpReason);
+    if (!hasJpDeath) {
+      return { valid: false, stage: "STAGE_4_JP_NO_DEATH_EVIDENCE", reason: "記事本文に死亡・遺体発見の確定記載なし" };
+    }
+  }
+
+  // Gate 5: Valid Geographic Coordinates & Canonical Street/Chome Gate
   const lat = Number(r.lat);
   const lng = Number(r.lng);
-  if (isNaN(lat) || isNaN(lng)) return false;
-  const country = inferRecordCountry(r);
+  if (isNaN(lat) || isNaN(lng)) {
+    return { valid: false, stage: "STAGE_5_INVALID_COORDS", reason: "缺少有效經緯度座標" };
+  }
+  const city = String(r.city || "").replace(/台/g, "臺").trim();
+  const dist = String(r.district || "").trim();
+
   if (country === "JP") {
-    if (lat < 24.0 || lat > 46.0 || lng < 122.0 || lng > 149.0) return false;
+    if (lat < 24.0 || lat > 46.0 || lng < 122.0 || lng > 149.0) {
+      return { valid: false, stage: "STAGE_5_OUT_OF_BOUNDS_JP", reason: "日本領域外の座標" };
+    }
     const jpCore = door.replace(city, "").replace(dist, "").trim();
-    if (!jpCore || jpCore.length < 2 || /県.*市/.test(jpCore)) return false;
+    if (!jpCore || jpCore.length < 2 || /県.*市|在住$|中心部$/.test(jpCore)) {
+      return { valid: false, stage: "STAGE_5_INVALID_JP_CHOME", reason: "町丁・丁目表記が不完全" };
+    }
   } else if (country === "TW") {
-    if (lat < 21.5 || lat > 26.5 || lng < 118.0 || lng > 122.5) return false;
+    if (lat < 21.5 || lat > 26.5 || lng < 118.0 || lng > 122.5) {
+      return { valid: false, stage: "STAGE_5_OUT_OF_BOUNDS_TW", reason: "台灣領域外之座標" };
+    }
     const twCore = door.replace(/台/g, "臺").replace(city, "").replace(dist, "").trim();
-    if (!twCore || twCore.length < 2 || /^(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)/.test(twCore)) return false;
+    if (!twCore || twCore.length < 2 || /^(?:北市|新北|桃市|中市|南市|高市|基市|竹市|嘉市)/.test(twCore)) {
+      return { valid: false, stage: "STAGE_5_INVALID_TW_ROAD", reason: "道路或地標名稱不完整" };
+    }
     const isValidRoad = /^(?:[一-龥]{2,3}[里村])?[一-龥0-9一二三四五六七八九十]{2,6}(?:路|街|大道)(?:[一二三四五六七八九十]+段)?(?:(?:新建|\d+)巷)?(?:\d+弄)?(?:\d+(?:之\d+)?號)?(?:\d+樓(?:之\d+)?)?(?:「[一-龥A-Za-z0-9]{2,16}」)?$/.test(twCore);
     const isValidVillage = /^[一-龥]{2,4}[里村](?:\d+鄰)?(?:[一-龥]{0,4}\d+(?:之\d+)?號)?(?:「[一-龥A-Za-z0-9]{2,16}」)?$/.test(twCore);
-    const isValidLandmark = /^「[一-龥A-Za-z0-9]{2,16}」$|^[一-龥A-Za-z0-9]{2,12}(?:國宅|大樓|大廈|華廈|社區|山莊|新城|新村|花園廣場|花園|家園|世家|天下|帝國|別墅|學苑|新第|雙星|名宮|廣場|大飯店|旅社|宿舍)$/.test(twCore);
+    const isValidLandmark = /^「[一-龥A-Za-z0-9]{2,16}」$|^[一-龥A-Za-z0-9]{2,12}(?:國宅|大樓|大廈|華廈|社區|山莊|新城|新村|花園廣場|花園|家園|世家|天下|帝國|別墅|學苑|新第|雙星|名宮|廣場|宿舍)$/.test(twCore);
     if (!isValidRoad && !isValidVillage && !isValidLandmark) {
-      return false;
+      return { valid: false, stage: "STAGE_5_INVALID_TW_ROAD", reason: "不符台灣標準路街巷弄或住宅社區格式" };
     }
     if (TAIWAN_368_TOWNSHIP_COORDS[`${city}_${dist}`]) {
       const [tLat, tLng] = TAIWAN_368_TOWNSHIP_COORDS[`${city}_${dist}`];
-      if (haversineKm(lat, lng, tLat, tLng) > 18.0) return false;
+      if (haversineKm(lat, lng, tLat, tLng) > 18.0) {
+        return { valid: false, stage: "STAGE_5_DIST_COORD_MISMATCH", reason: "座標偏離所屬鄉鎮市區超過18公里" };
+      }
     }
   }
 
-  return true;
+  return { valid: true, stage: "VERIFIED_STIGMATIZED_PROPERTY", reason: "通過五階段法定凶宅／事故物件核查審核" };
+}
+
+export function isVerifiedRealIncidentRecord(r) {
+  return auditStigmatizedPropertyRecord(r).valid;
 }
 
 export function inferRecordCountry(r) {

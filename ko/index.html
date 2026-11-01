@@ -606,8 +606,8 @@
   <!-- Main Workspace Split View -->
   <div id="workspace-container" class="flex-1 flex flex-col md:flex-row overflow-hidden relative min-h-0">
 
-    <!-- Left Panel: Clean Filter Controls & Case List (Default Split View on Mobile so Map + List are both visible) -->
-    <aside id="left-panel" class="w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-20 h-[54%] md:h-full min-h-0 shrink-0">
+    <!-- Left Panel: Clean Filter Controls & Case List -->
+    <aside id="left-panel" class="w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-20 flex-1 md:flex-none h-full min-h-0 shrink-0">
 
       <!-- Clean, Streamlined Filter Bar -->
       <div class="p-3 sm:p-4 space-y-2.5 border-b border-slate-200 bg-white shrink-0">
@@ -829,8 +829,8 @@
       </div>
     </aside>
 
-    <!-- Right Viewport: Google Maps Interactive Viewport (Visible on Mobile in Split View by default) -->
-    <main id="right-map-panel" class="block flex-1 relative h-[46%] md:h-full min-h-0 overflow-hidden">
+    <!-- Right Viewport: Google Maps Interactive Viewport -->
+    <main id="right-map-panel" class="hidden md:block flex-1 relative h-full min-h-0 overflow-hidden">
       <div id="map"></div>
 
       <!-- Map Layer Switcher -->
@@ -1088,12 +1088,12 @@
   </div>
 
   <!-- Mobile Bottom Navigation Bar (< md) -->
-  <nav aria-label="Mobile View Switcher" class="md:hidden bg-white border-t border-slate-200 grid grid-cols-3 items-center h-14 px-2 shrink-0 z-40">
+  <nav aria-label="Mobile View Switcher" class="md:hidden bg-white border-t border-slate-200 grid grid-cols-2 items-center h-14 px-2 gap-1.5 shrink-0 z-40">
     <button
       type="button"
       data-mobile-view="list"
       id="m-nav-list"
-      class="mobile-view-btn flex flex-col items-center justify-center h-12 rounded-lg text-slate-500 font-medium hover:text-slate-900 transition-colors"
+      class="mobile-view-btn flex flex-col items-center justify-center h-12 rounded-lg text-slate-900 font-bold bg-slate-100 transition-colors"
     >
       <span class="text-xs leading-none" data-i18n="mnav_list">案件列表</span>
       <span id="m-nav-count" class="font-mono text-[10px] text-slate-500 mt-1 tabular-nums">...</span>
@@ -1106,15 +1106,6 @@
     >
       <span class="text-xs leading-none" data-i18n="mnav_map">地圖檢視</span>
       <span class="text-[10px] text-slate-400 mt-1" data-i18n="mnav_map_sub">Google Maps</span>
-    </button>
-    <button
-      type="button"
-      data-mobile-view="split"
-      id="m-nav-split"
-      class="mobile-view-btn flex flex-col items-center justify-center h-12 rounded-lg text-slate-900 font-bold bg-slate-100 transition-colors"
-    >
-      <span class="text-xs leading-none" data-i18n="mnav_split">上下分割</span>
-      <span class="text-[10px] text-slate-400 mt-1" data-i18n="mnav_split_sub">地圖+列表</span>
     </button>
   </nav>
 
@@ -1359,9 +1350,13 @@
     }
 
     let currentLang = (() => {
+      const savedPickedCountry = sessionStorage.getItem("haunted_map_country_picked") || localStorage.getItem("haunted_map_country_picked");
+      if (savedPickedCountry === "JP" || savedPickedCountry === "TW") {
+        initialAutoDetectedCountry = savedPickedCountry;
+      }
       const pathLang = detectRouteLanguageFromPath(window.location.pathname);
       if (pathLang === "ja") {
-        initialAutoDetectedCountry = "JP";
+        if (!initialAutoDetectedCountry) initialAutoDetectedCountry = "JP";
         return "ja";
       }
       if (pathLang === "ko") {
@@ -1371,7 +1366,7 @@
         return "en";
       }
       if (pathLang === "zh-TW") {
-        initialAutoDetectedCountry = "TW";
+        if (!initialAutoDetectedCountry) initialAutoDetectedCountry = "TW";
         return "zh-TW";
       }
       try {
@@ -1380,21 +1375,21 @@
       } catch (e) {}
       const manualPref = localStorage.getItem("user_lang_pref") || (localStorage.getItem("tw_archive_lang_explicit") === "1" ? localStorage.getItem("tw_archive_lang") : "");
       if (manualPref && ["zh-TW", "en", "ja", "ko"].includes(manualPref)) {
-        if (manualPref === "ja") initialAutoDetectedCountry = "JP";
-        else if (manualPref === "zh-TW") initialAutoDetectedCountry = "TW";
         return manualPref;
       }
       try {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-        if (tz === "Asia/Tokyo") initialAutoDetectedCountry = "JP";
-        else if (tz === "Asia/Taipei") initialAutoDetectedCountry = "TW";
+        if (!initialAutoDetectedCountry) {
+          if (tz === "Asia/Tokyo") initialAutoDetectedCountry = "JP";
+          else if (tz === "Asia/Taipei") initialAutoDetectedCountry = "TW";
+        }
       } catch (e) {}
       const navLang = String(navigator.language || "").toLowerCase();
       if (navLang.startsWith("ko")) {
         return "ko";
       }
       if (navLang.startsWith("ja")) {
-        initialAutoDetectedCountry = "JP";
+        if (!initialAutoDetectedCountry) initialAutoDetectedCountry = "JP";
         return "ja";
       }
       return "zh-TW";
@@ -2659,11 +2654,12 @@
     };
 
     const clientTranslationCache = new Map();
-    const I18N_CACHE_STORAGE_KEY = "tw_haunted_i18n_cache_v6";
+    const I18N_CACHE_STORAGE_KEY = "tw_haunted_i18n_cache_v7";
     try {
-      // Purge polluted v4/v5 caches where failed translations stored raw Chinese
+      // Purge polluted legacy caches
       localStorage.removeItem("tw_haunted_i18n_cache_v4");
       localStorage.removeItem("tw_haunted_i18n_cache_v5");
+      localStorage.removeItem("tw_haunted_i18n_cache_v6");
       const savedCache = JSON.parse(localStorage.getItem(I18N_CACHE_STORAGE_KEY) || "{}");
       if (savedCache && typeof savedCache === "object") {
         for (const [k, v] of Object.entries(savedCache)) {
@@ -2677,7 +2673,7 @@
       clearTimeout(saveI18nCacheTimer);
       saveI18nCacheTimer = setTimeout(() => {
         try {
-          const entries = Array.from(clientTranslationCache.entries()).slice(-600);
+          const entries = Array.from(clientTranslationCache.entries()).slice(-800);
           const obj = {};
           for (const [k, v] of entries) obj[k] = v;
           localStorage.setItem(I18N_CACHE_STORAGE_KEY, JSON.stringify(obj));
@@ -2685,24 +2681,27 @@
       }, 600);
     }
 
-    function isValidTranslatedText(text, origZh, lang) {
+    function isValidTranslatedText(text, origText, lang) {
       if (!text || typeof text !== "string") return false;
       const clean = text.trim();
       if (!clean) return false;
-      const orig = String(origZh || "").trim();
+      const orig = String(origText || "").trim();
       if (orig && clean === orig) return false;
       if (lang === "en" || lang === "ko") {
-        // Reject if any CJK unified ideograph remains in English or Korean output
-        if (/[\u4E00-\u9FFF]/.test(clean)) return false;
+        // Reject if any CJK unified ideograph or Japanese Kana remains in English or Korean output
+        if (/[\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF]/.test(clean)) return false;
+      } else if (lang === "zh-TW") {
+        // Reject if any Japanese Hiragana or Katakana remains in Traditional Chinese output
+        if (/[\u3040-\u309F\u30A0-\u30FF]/.test(clean)) return false;
       } else if (lang === "ja") {
         // Reject if common Chinese-only phrases remain or if longer strings lack Japanese Kana
-        if (/該大樓|該建物|該處|這棟|發生於|警消|破門|墜樓身亡|明顯死亡|送醫不治|專有部分|不動產說明書/.test(clean)) return false;
+        if (/該大樓|該建物|該處|這棟|發生於|警消|破門|墜樓身亡|明顯死亡|送醫不治|專有部分|不動產說明書|陳屍|獲報|勘驗|相驗/.test(clean)) return false;
         if (clean.length > 14 && !/[\u3040-\u309F\u30A0-\u30FF]/.test(clean)) return false;
       }
       return true;
     }
 
-    // Direct browser-side neural translation fallback (never returns raw Chinese on failure/rate-limit)
+    // Direct browser-side neural translation fallback
     async function translateTextFreeGoogleClient(text, lang) {
       const clean = String(text || "").trim();
       if (!clean) return clean;
@@ -2718,7 +2717,7 @@
         const data = await res.json();
         if (Array.isArray(data) && Array.isArray(data[0])) {
           const translated = data[0].map(seg => (Array.isArray(seg) ? seg[0] || "" : "")).join("").trim();
-          if (lang === "zh-TW" || isValidTranslatedText(translated, clean, lang)) {
+          if (isValidTranslatedText(translated, clean, lang)) {
             return translated;
           }
         }
@@ -2932,9 +2931,171 @@
       ["中央", "주오"], ["北", "기타"], ["南", "미나미"], ["東", "히가시"], ["西", "니시"], ["中", "나카"], ["港", "미나토"], ["緑", "미도리"], ["桜", "사쿠라"], ["栄", "사카에"], ["泉", "이즈미"], ["葵", "아오이"], ["昭和", "쇼와"], ["大正", "다이쇼"]
     ];
 
-    function transliterateJapaneseToKorean(str) {
+    const JP_KANA_TO_EN_MAP = {
+      "あ":"a","い":"i","う":"u","え":"e","お":"o",
+      "か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko",
+      "さ":"sa","し":"shi","す":"su","せ":"se","そ":"so",
+      "た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to",
+      "な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no",
+      "は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho",
+      "ま":"ma","み":"mi","む":"mu","め":"me","も":"mo",
+      "や":"ya","ゆ":"yu","よ":"yo",
+      "ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro",
+      "わ":"wa","を":"o","ん":"n",
+      "が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go",
+      "ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo",
+      "だ":"da","ぢ":"ji","づ":"zu","で":"de","ど":"do",
+      "ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo",
+      "ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po",
+      "っ":"","ー":"","ヶ":"ga","ケ":"ga",
+      "ア":"a","イ":"i","ウ":"u","エ":"e","オ":"o",
+      "カ":"ka","キ":"ki","ク":"ku","け":"ke","コ":"ko",
+      "サ":"sa","シ":"shi","ス":"su","セ":"se","ソ":"so",
+      "タ":"ta","チ":"chi","ツ":"tsu","テ":"te","ト":"to",
+      "ナ":"na","ニ":"ni","ヌ":"nu","ネ":"ne","ノ":"no",
+      "ハ":"ha","ヒ":"hi","フ":"fu","ヘ":"he","ホ":"ho",
+      "マ":"ma","ミ":"mi","ム":"mu","メ":"me","モ":"mo",
+      "ヤ":"ya","ユ":"yu","ヨ":"yo",
+      "ラ":"ra","リ":"ri","ル":"ru","レ":"re","ロ":"ro",
+      "ワ":"wa","ヲ":"o","ン":"n",
+      "ガ":"ga","ギ":"gi","グ":"gu","ゲ":"ge","ゴ":"go",
+      "ザ":"za","ジ":"ji","ズ":"zu","ゼ":"ze","ゾ":"zo",
+      "ダ":"da","ヂ":"ji","ヅ":"zu","デ":"de","ド":"do",
+      "バ":"ba","ビ":"bi","ブ":"bu","ベ":"be","ボ":"bo",
+      "パ":"pa","ピ":"pi","プ":"pu","ペ":"pe","ポ":"po",
+      "ッ":""
+    };
+
+    const JP_KANJI_WORD_TO_EN = [
+      ["さいたま", "Saitama"], ["つくば", "Tsukuba"], ["いわき", "Iwaki"], ["うきは", "Ukiha"], ["あわら", "Awara"], ["みどり", "Midori"],
+      ["札幌", "Sapporo"], ["函館", "Hakodate"], ["旭川", "Asahikawa"], ["苫小牧", "Tomakomai"], ["帯広", "Obihiro"], ["釧路", "Kushiro"], ["小樽", "Otaru"], ["江別", "Ebetsu"], ["北見", "Kitami"], ["千歳", "Chitose"],
+      ["青森", "Aomori"], ["八戸", "Hachinohe"], ["弘前", "Hirosaki"], ["十和田", "Towada"], ["五所川原", "Goshogawara"], ["三沢", "Misawa"],
+      ["盛岡", "Morioka"], ["一関", "Ichinoseki"], ["奥州", "Oshu"], ["花巻", "Hanamaki"], ["北上", "Kitakami"], ["宮古", "Miyako"], ["大船渡", "Ofunato"],
+      ["仙台", "Sendai"], ["青葉", "Aoba"], ["宮城野", "Miyagino"], ["太白", "Taihaku"], ["若林", "Wakabayashi"], ["石巻", "Ishinomaki"], ["大崎", "Osaki"], ["名取", "Natori"], ["多賀城", "Tagajo"], ["気仙沼", "Kesennuma"],
+      ["秋田", "Akita"], ["横手", "Yokote"], ["大仙", "Daisen"], ["由利本荘", "Yurihonjo"], ["大館", "Odate"], ["能代", "Noshiro"],
+      ["山形", "Yamagata"], ["鶴岡", "Tsuruoka"], ["酒田", "Sakata"], ["米沢", "Yonezawa"], ["天童", "Tendo"], ["東根", "Higashine"],
+      ["福島", "Fukushima"], ["郡山", "Koriyama"], ["会津若松", "Aizuwakamatsu"], ["須賀川", "Sukagawa"], ["白河", "Shirakawa"],
+      ["水戸", "Mito"], ["土浦", "Tsuchiura"], ["日立", "Hitachi"], ["古河", "Koga"], ["取手", "Toride"], ["神栖", "Kamisu"], ["筑西", "Chikusei"], ["笠原", "Kasahara"],
+      ["宇都宮", "Utsunomi야".replace("야","ya")], ["小山", "Oyama"], ["栃木", "Tochigi"], ["足利", "Ashikaga"], ["佐野", "Sano"], ["那須塩原", "Nasushiobara"], ["鹿沼", "Kanuma"],
+      ["高崎", "Takasaki"], ["前橋", "Maebashi"], ["太田", "Ota"], ["伊勢崎", "Isesaki"], ["桐生", "Kiryu"], ["館林", "Tatebayashi"], ["藤岡", "Fujioka"], ["境東", "Sakaihigashi"],
+      ["大宮", "Omiya"], ["浦和", "Urawa"], ["見沼", "Minuma"], ["岩槻", "Iwatsuki"], ["川口", "Kawaguchi"], ["蕨", "Warabi"], ["戸田", "Toda"], ["川越", "Kawagoe"], ["所沢", "Tokorozawa"], ["越谷", "Koshigaya"], ["草加", "Soka"], ["春日部", "Kasukabe"], ["上尾", "Ageo"], ["熊谷", "Kumagaya"], ["新座", "Niiza"], ["朝霞", "Asaka"], ["和光", "Wako"],
+      ["千葉", "Chiba"], ["花見川", "Hanamigawa"], ["稲毛", "Inage"], ["若葉", "Wakaba"], ["美浜", "Mihama"], ["船橋", "Funabashi"], ["松戸", "Matsudo"], ["市川", "Ichikawa"], ["柏", "Kashiwa"], ["浦安", "Urayasu"], ["習志野", "Narashino"], ["八千代", "Yachiyo"], ["流山", "Nagareyama"], ["野田", "Noda"], ["佐倉", "Sakura"], ["成田", "Narita"], ["木更津", "Kisarazu"],
+      ["新宿", "Shinjuku"], ["歌舞伎", "Kabuki"], ["豊島", "Toshima"], ["池袋", "Ikebukuro"], ["渋谷", "Shibuya"], ["世田谷", "Setagaya"], ["足立", "Adachi"], ["江戸川", "Edogawa"], ["中野", "Nakano"], ["杉並", "Suginami"], ["板橋", "Itabashi"], ["練馬", "Nerima"], ["江東", "Koto"], ["墨田", "Sumida"], ["台東", "Taito"], ["品川", "Shinagawa"], ["目黒", "Meguro"], ["荒川", "Arakawa"], ["葛飾", "Katsushika"], ["文京", "Bunkyo"], ["千代田", "Chiyoda"], ["八王子", "Hachioji"], ["立川", "Tachikawa"], ["武蔵野", "Musashino"], ["三鷹", "Mitaka"], ["青梅", "Ome"], ["府中", "Fuchu"], ["昭島", "Akishima"], ["調布", "Chofu"], ["町田", "Machida"], ["小金井", "Koganei"], ["小平", "Kodaira"], ["日野", "Hino"], ["東村山", "Higashimurayama"], ["国分寺", "Kokubunji"], ["国立", "Kunitachi"],
+      ["横浜", "Yokohama"], ["鶴見", "Tsurumi"], ["神奈川", "Kanagawa"], ["保土ケ谷", "Hodogaya"], ["港北", "Kohoku"], ["港南", "Konan"], ["戸塚", "Totsuka"], ["金沢", "Kanazawa"], ["都筑", "Tsuzuki"], ["川崎", "Kawasaki"], ["中原", "Nakahara"], ["高津", "Takatsu"], ["宮前", "Miyamae"], ["多摩", "Tama"], ["麻生", "Asao"], ["相模原", "Sagamihara"], ["座間", "Zama"], ["藤沢", "Fujisawa"], ["横須賀", "Yokosuka"], ["平塚", "Hiratsuka"], ["茅ヶ崎", "Chigasaki"], ["大和", "Yamato"], ["厚木", "Atsugi"], ["小田原", "Odawara"], ["鎌倉", "Kamakura"], ["秦野", "Hadano"], ["海老名", "Ebina"],
+      ["新潟", "Niigata"], ["長岡", "Nagaoka"], ["上越", "Joetsu"], ["三条", "Sanjo"], ["新発田", "Shibata"],
+      ["富山", "Toyama"], ["高岡", "Takaoka"], ["射水", "Imizu"], ["魚津", "Uozu"], ["砺波", "Tonami"],
+      ["白山", "Hakusan"], ["小松", "Komatsu"], ["野々市", "Nonoichi"], ["加賀", "Kaga"], ["七尾", "Nanao"],
+      ["福井", "Fukui"], ["坂井", "Sakai"], ["越前", "Echizen"], ["敦賀", "Tsuruga"], ["鯖江", "Sabae"],
+      ["甲府", "Kofu"], ["甲斐", "Kai"], ["笛吹", "Fuefuki"], ["富士吉田", "Fujiyoshida"], ["今福新田", "Imafukushinden"],
+      ["長野", "Nagano"], ["松本", "Matsumoto"], ["上田", "Ueda"], ["飯田", "Iida"], ["佐久", "Saku"], ["安曇野", "Azumino"], ["塩尻", "Shiojiri"],
+      ["岐阜", "Gifu"], ["大垣", "Ogaki"], ["各務原", "Kakamigahara"], ["多治見", "Tajimi"], ["可児", "Kani"], ["高山", "Takayama"],
+      ["静岡", "Shizuoka"], ["駿河", "Suruga"], ["浜松", "Hamamatsu"], ["沼津", "Numazu"], ["富士", "Fuji"], ["藤枝", "Fujieda"], ["焼津", "Yaizu"], ["三島", "Mishima"], ["磐田", "Iwata"],
+      ["名古屋", "Nagoya"], ["千種", "Chikusa"], ["中村", "Nakamura"], ["瑞穂", "Mizuho"], ["熱田", "Atsuta"], ["中川", "Nakagawa"], ["守山", "Moriyama"], ["名東", "Meito"], ["天白", "Tempaku"], ["豊田", "Toyota"], ["一宮", "Ichinomiya"], ["岡崎", "Okazaki"], ["豊橋", "Toyohashi"], ["春日井", "Kasugai"], ["安城", "Anjo"], ["刈谷", "Kariya"], ["小牧", "Komaki"],
+      ["四日市", "Yokkaichi"], ["鈴鹿", "Suzuka"], ["松阪", "Matsusaka"], ["桑名", "Kuwana"], ["伊勢", "Ise"],
+      ["大津", "Otsu"], ["草津", "Kusatsu"], ["長浜", "Nagahama"], ["東近江", "Higashiomi"], ["彦根", "Hikone"],
+      ["京都", "Kyoto"], ["中京", "Nakagyo"], ["下京", "Shimogyo"], ["上京", "Kamigyo"], ["左京", "Sakyo"], ["右京", "Ukyo"], ["東山", "Higashiyama"], ["山科", "Yamashina"], ["伏見", "Fushimi"], ["西京", "Nishikyo"], ["宇治", "Uji"], ["長岡京", "Nagaokakyo"], ["舞鶴", "Maizuru"],
+      ["大阪", "Osaka"], ["西成", "Nishinari"], ["浪速", "Naniwa"], ["淀川", "Yodogawa"], ["東淀川", "Higashiyodogawa"], ["西淀川", "Nishiyodogawa"], ["天王寺", "Tennoji"], ["阿倍野", "Abeno"], ["東成", "Higashinari"], ["生野", "Ikuno"], ["城東", "Joto"], ["都島", "Miyakojima"], ["此花", "Konohana"], ["住之江", "Suminoe"], ["住吉", "Sumiyoshi"], ["東住吉", "Higashisumiyoshi"], ["平野", "Hirano"], ["堺", "Sakai"], ["東大阪", "Higashiosaka"], ["吹田", "Suita"], ["豊中", "Toyonaka"], ["高槻", "Takatsuki"], ["枚方", "Hirakata"], ["茨木", "Ibaraki"], ["八尾", "Yao"], ["寝屋川", "Neyagawa"], ["岸和田", "Kishiwada"], ["和泉", "Izumi"], ["守口", "Moriguchi"], ["門真", "Kadoma"], ["箕面", "Minoo"],
+      ["神戸", "Kobe"], ["東灘", "Higashinada"], ["灘", "Nada"], ["兵庫", "Hyogo"], ["長田", "Nagata"], ["須磨", "Suma"], ["垂水", "Tarumi"], ["尼崎", "Amagasaki"], ["西宮", "Nishinomiya"], ["芦屋", "Ashiya"], ["伊丹", "Itami"], ["宝塚", "Takarazuka"], ["川西", "Kawanishi"], ["明石", "Akashi"], ["加古川", "Kakogawa"], ["姫路", "Himeji"],
+      ["奈良", "Nara"], ["橿原", "Kashihara"], ["生駒", "Ikoma"], ["大和郡山", "Yamatokoriyama"], ["香芝", "Kashiba"], ["天理", "Tenri"],
+      ["和歌山", "Wakayama"], ["田辺", "Tanabe"], ["橋本", "Hashimoto"], ["紀の川", "Kinokawa"], ["岩出", "Iwade"],
+      ["鳥取", "Tottori"], ["米子", "Yonago"], ["倉吉", "Kurayoshi"], ["境港", "Sakaiminato"],
+      ["松江", "Matsue"], ["出雲", "Izumo"], ["浜田", "Hamada"], ["益田", "Masuda"],
+      ["岡山", "Okayama"], ["倉敷", "Kurashiki"], ["津山", "Tsuyama"], ["総社", "Soja"],
+      ["広島", "Hiroshima"], ["安佐南", "Asaminami"], ["安佐北", "Asakita"], ["安芸", "Aki"], ["佐伯", "Saeki"], ["福山", "Fukuyama"], ["呉", "Kure"], ["東広島", "Higashihiroshima"], ["尾道", "Onomichi"],
+      ["下関", "Shimonoseki"], ["山口", "Yamaguchi"], ["宇部", "Ube"], ["周南", "Shunan"], ["岩国", "Iwakuni"], ["防府", "Hofu"],
+      ["徳島", "Tokushima"], ["阿南", "Anan"], ["鳴門", "Naruto"], ["吉野川", "Yoshinogawa"],
+      ["高松", "Takamatsu"], ["丸亀", "Marugame"], ["三豊", "Mitoyo"], ["坂出", "Sakaide"],
+      ["松山", "Matsuyama"], ["今治", "Imabari"], ["新居浜", "Niihama"], ["西条", "Saijo"], ["宇和島", "Uwajima"],
+      ["高知", "Kochi"], ["南国", "Nankoku"], ["四万十", "Shimanto"], ["香南", "Konan"],
+      ["福岡", "Fukuoka"], ["博多", "Hakata"], ["早良", "Sawara"], ["城南", "Jonan"], ["北九州", "Kitakyushu"], ["小倉北", "Kokurakita"], ["小倉南", "Kokuraminami"], ["八幡西", "Yahatanishi"], ["八幡東", "Yahatahigashi"], ["門司", "Moji"], ["戸畑", "Tobata"], ["若松", "Wakamatsu"], ["久留米", "Kurume"], ["春日", "Kasuga"], ["大野城", "Onojo"], ["飯塚", "Iizuka"], ["大牟田", "Omuta"],
+      ["佐賀", "Saga"], ["唐津", "Karatsu"], ["鳥栖", "Tosu"], ["伊万里", "Imari"],
+      ["長崎", "Nagasaki"], ["佐世保", "Sasebo"], ["諫早", "Isahaya"], ["大村", "Omura"],
+      ["熊本", "Kumamoto"], ["八代", "Yatsushiro"], ["合志", "Koshi"], ["荒尾", "Arao"],
+      ["大分", "Oita"], ["別府", "Beppu"], ["中津", "Nakatsu"], ["日田", "Hita"],
+      ["宮崎", "Miyazaki"], ["都城", "Miyakonojo"], ["延岡", "Nobeoka"], ["日向", "Hyuga"],
+      ["鹿児島", "Kagoshima"], ["霧島", "Kirishima"], ["鹿屋", "Kanoya"], ["薩摩川内", "Satsumasendai"], ["姶良", "Aira"],
+      ["那覇", "Naha"], ["沖縄", "Okinawa"], ["浦添", "Urasoe"], ["宜野湾", "Ginowan"], ["名護", "Nago"], ["豊見城", "Tomigusuku"], ["糸満", "Itoman"],
+      ["中央", "Chuo"], ["北", "Kita"], ["南", "Minami"], ["東", "Higashi"], ["西", "Nishi"], ["中", "Naka"], ["港", "Minato"], ["緑", "Midori"], ["桜", "Sakura"], ["栄", "Sakae"], ["泉", "Izumi"], ["葵", "Aoi"], ["昭和", "Showa"], ["大正", "Taisho"]
+    ];
+
+    function convertJapaneseAddressToZhTw(str) {
+      if (!str) return "";
+      let s = String(str)
+        .replace(/さいたま/g, "埼玉")
+        .replace(/つくばみらい/g, "筑波未來")
+        .replace(/つくば/g, "筑波")
+        .replace(/いわき/g, "磐城")
+        .replace(/うきは/g, "浮羽")
+        .replace(/あわら/g, "蘆原")
+        .replace(/みどり/g, "綠")
+        .replace(/ひたちなか/g, "常陸那珂")
+        .replace(/かすみがうら/g, "霞浦")
+        .replace(/あきる野/g, "秋留野")
+        .replace(/ふじみ野/g, "富士見野")
+        .replace(/うるま/g, "宇流麻")
+        .replace(/えびの/g, "蝦野")
+        .replace(/いちき串木野/g, "市來串木野")
+        .replace(/南アルプス/g, "南阿爾卑斯")
+        .replace(/マンション/g, "電梯大樓")
+        .replace(/アパート/g, "公寓")
+        .replace(/ハイツ|コーポ|レジデンス|メゾン/g, "住宅大樓")
+        .replace(/ビル/g, "大樓")
+        .replace(/タワー/g, "高層大樓")
+        .replace(/タウンハウス|一戸建て/g, "透天民宅")
+        .replace(/ワンルーム/g, "獨立套房")
+        .replace(/号室/g, "室")
+        .replace(/(\d+)\s*階/g, "$1樓")
+        .replace(/階建て/g, "層樓")
+        .replace(/(.)々/g, "$1$1")
+        .replace(/[ヶケ]/g, "之")
+        .replace(/の/g, "之");
+      const kanjiToTwMap = {
+        "区": "區", "県": "縣", "沢": "澤", "浜": "濱", "渋": "澀", "豊": "豐",
+        "戸": "戶", "広": "廣", "静": "靜", "緑": "綠", "桜": "櫻", "栄": "榮",
+        "国": "國", "駅": "驛", "浅": "淺", "蔵": "藏", "辺": "邊", "斎": "齋",
+        "条": "條", "号": "號", "関": "關", "鉄": "鐵", "湾": "灣", "島": "島",
+        "竜": "龍", "滝": "瀧", "塩": "鹽", "児": "兒", "縄": "繩", "栃": "櫪",
+        "茨": "茨", "媛": "媛", "岐": "岐", "阜": "阜", "岡": "岡", "潟": "潟",
+        "鶴": "鶴", "亀": "龜", "宝": "寶", "塚": "塚", "芦": "蘆", "姫": "姬",
+        "讃": "讚", "巌": "巖", "弥": "彌", "祇": "祇", "麹": "麴", "曽": "曾"
+      };
+      s = s.replace(/[区県沢浜渋豊戸広静緑桜栄国駅浅蔵辺斎条号関鉄湾竜滝塩児縄栃亀宝芦姫讃巌弥麹曽]/g, ch => kanjiToTwMap[ch] || ch);
+      // Strip any residual Hiragana/Katakana particles so zh-TW output is 100% Traditional Chinese
+      s = s.replace(/[\u3040-\u309F\u30A0-\u30FFー]+/g, "");
+      return s.replace(/\s+/g, " ").trim();
+    }
+
+    function transliterateJapaneseToEnglish(str) {
       if (!str) return "";
       let s = String(str);
+      for (const [jpWord, enWord] of JP_KANJI_WORD_TO_EN) {
+        s = s.replace(new RegExp(jpWord, "g"), `${enWord} `);
+      }
+      s = s
+        .replace(/(\d+)\s*丁目/g, " $1-chome ")
+        .replace(/丁目/g, "-chome ")
+        .replace(/(\d+)\s*番地/g, " $1 ")
+        .replace(/番地/g, " ")
+        .replace(/(\d+)\s*号室/g, " Rm. $1 ")
+        .replace(/号室/g, " ")
+        .replace(/(\d+)\s*(?:階|樓)/g, " $1F ")
+        .replace(/市/g, " City ")
+        .replace(/区|區/g, " Ward ")
+        .replace(/町/g, "-cho ")
+        .replace(/村/g, " Village ")
+        .replace(/郡/g, " Dist. ");
+      s = s.replace(/[\u3040-\u309F\u30A0-\u30FFーヶケ]/g, ch => JP_KANA_TO_EN_MAP[ch] ?? "");
+      s = transliterateRemainingCjk(s, "en").replace(/[\u4E00-\u9FFF\u3040-\u30FF]+/g, "");
+      return s.replace(/\s+-cho/g, "-cho").replace(/\s+/g, " ").trim();
+    }
+
+    function transliterateJapaneseToKorean(str) {
+      if (!str) return "";
+      let s = String(str)
+        .replace(/さいたま/g, "사이타마")
+        .replace(/つくば/g, "쓰쿠바")
+        .replace(/いわき/g, "이와키")
+        .replace(/うきは/g, "우키하");
       for (const [jpWord, koWord] of JP_KANJI_WORD_TO_KO) {
         s = s.replace(new RegExp(jpWord, "g"), koWord);
       }
@@ -2967,19 +3128,7 @@
       }
       if (currentLang === "zh-TW") {
         if (DISTRICT_I18N[raw] && DISTRICT_I18N[raw]["zh-TW"]) return DISTRICT_I18N[raw]["zh-TW"];
-        return clean
-          .replace(/区$/g, "區")
-          .replace(/沢/g, "澤")
-          .replace(/浜/g, "濱")
-          .replace(/渋/g, "澀")
-          .replace(/豊/g, "豐")
-          .replace(/戸/g, "戶")
-          .replace(/広/g, "廣")
-          .replace(/静/g, "靜")
-          .replace(/緑/g, "綠")
-          .replace(/桜/g, "櫻")
-          .replace(/栄/g, "榮")
-          .replace(/国/g, "國");
+        return convertJapaneseAddressToZhTw(clean);
       }
       if (currentLang === "ja") {
         return clean.replace(/區$/g, "区").replace(/鄉$/g, "郷").replace(/臺/g, "台").replace(/裡/g, "裏");
@@ -2994,9 +3143,12 @@
         return (koStem || stem) + suffix;
       }
       if (currentLang === "en") {
+        if (/[\u3040-\u309F\u30A0-\u30FF]|区$|市.+区$|町$|村$/.test(raw)) {
+          return transliterateJapaneseToEnglish(raw);
+        }
         const stem = clean.replace(/[區区鄉鎮市]$/g, "");
         const suffix = (clean.endsWith("區") || clean.endsWith("区")) ? " Dist." : (clean.endsWith("鄉") || clean.endsWith("鎮")) ? " Township" : clean.endsWith("市") ? " City" : "";
-        const enStem = transliterateRemainingCjk(stem, "en").trim();
+        const enStem = transliterateJapaneseToEnglish(stem).trim() || transliterateRemainingCjk(stem, "en").trim();
         return (enStem || stem) + suffix;
       }
       return clean;
@@ -3421,30 +3573,39 @@
         return item.i18n[currentLang].building_type;
       }
       const zh = String(rawType || item?.building_type || "住宅建物");
-      if (currentLang === "zh-TW") return zh;
+      if (currentLang === "zh-TW") {
+        if (/ワンルーム|원룸|오피스텔|Studio/i.test(zh)) return "獨立套房／單身公寓";
+        if (/公営団地|団地|공공주택|Public Housing/i.test(zh)) return "國民住宅／公共團地";
+        if (/一戸建|タウンハウス|木造住宅|단독주택|Townhouse|Detached/i.test(zh)) return "透天厝／獨棟民宅";
+        if (/低層階段マンション|アパート|木造アパート|다세대|빌라|Walk-up/i.test(zh)) return "低層無電梯公寓";
+        if (/中層エレベーター|중층|Mid-Rise/i.test(zh)) return "中層電梯華廈";
+        if (/住商複合|オフィスビル|複合|주상복합|Mixed-Use/i.test(zh)) return "住商混合／商辦大樓";
+        if (/集合住宅ビル|分譲マンション|マンション|공동주택|Residential Apartment/i.test(zh)) return "集合住宅大樓";
+        return zh;
+      }
       if (currentLang === "en") {
         if (/套房|ワンルーム|원룸|오피스텔/.test(zh)) return "Studio Apartment Building";
         if (/國宅|団地/.test(zh)) return "Public Housing Complex";
         if (/透天|別墅|一戸建|단독주택/.test(zh)) return "Townhouse / Detached House";
-        if (/公寓|アパート|다세대|빌라/.test(zh)) return "Low-Rise Walk-up Apartment";
+        if (/公寓|アパート|低層階段|다세대|빌라/.test(zh)) return "Low-Rise Walk-up Apartment";
         if (/華廈|中層/.test(zh)) return "Mid-Rise Elevator Condo";
-        if (/住商|商業|商辦|複合|주상복합/.test(zh)) return "Mixed-Use Commercial/Office Building";
+        if (/住商|商業|商辦|複合|オフィス|주상복합/.test(zh)) return "Mixed-Use Commercial/Office Building";
         return "Residential Apartment Building";
       } else if (currentLang === "ja") {
         if (/套房|ワンルーム|원룸|오피스텔/.test(zh)) return "ワンルームマンション";
         if (/國宅|団地/.test(zh)) return "公営団地・複合住宅";
         if (/透天|別墅|一戸建|단독주택/.test(zh)) return "一戸建て・タウンハウス";
-        if (/公寓|アパート|다세대|빌라/.test(zh)) return "低層階段マンション";
+        if (/公寓|アパート|低層階段|다세대|빌라/.test(zh)) return "低層階段マンション";
         if (/華廈|中層/.test(zh)) return "中層エレベーターマンション";
-        if (/住商|商業|商辦|複合|주상복합/.test(zh)) return "住商複合・オフィスビル";
+        if (/住商|商業|商辦|複合|オフィス|주상복합/.test(zh)) return "住商複合・オフィスビル";
         return "集合住宅ビル";
       } else if (currentLang === "ko") {
         if (/套房|ワンルーム|원룸|오피스텔/.test(zh)) return "원룸형 오피스텔·빌딩";
         if (/國宅|団地/.test(zh)) return "공공주택 단지";
         if (/透天|別墅|一戸建|단독주택/.test(zh)) return "단독주택·타운하우스";
-        if (/公寓|アパート|다세대|빌라/.test(zh)) return "저층 일반 아파트";
+        if (/公寓|アパート|低層階段|다세대|빌라/.test(zh)) return "저층 일반 아파트";
         if (/華廈|中層/.test(zh)) return "중층 엘리베이터 맨션";
-        if (/住商|商業|商辦|複合|주상복합/.test(zh)) return "상업·업무용 주상복합 빌딩";
+        if (/住商|商業|商辦|複合|オフィス|주상복합/.test(zh)) return "상업·업무용 주상복합 빌딩";
         return "공동주택 건물";
       }
       return zh;
@@ -3455,24 +3616,31 @@
         return item.i18n[currentLang].current_status;
       }
       const zh = String(rawStatus || item?.current_status || "現況使用中");
-      if (currentLang === "zh-TW") return zh;
+      if (currentLang === "zh-TW") {
+        if (/解体|철거|Demolished/i.test(zh)) return "原建物已拆除改建";
+        if (/都市再生|建替|재건축|Redevelopment/i.test(zh)) return "都市更新／改建計畫進行中";
+        if (/競売|落札|引渡|경매|낙찰|Foreclosure/i.test(zh)) return "法院拍定點交完成";
+        if (/実価登録|特殊取引|特別募集|실거래|Transferred/i.test(zh)) return "特別告知／實價登錄備註轉手";
+        if (/現在使用中|管理組合|現地確認|현재 사용 중|In Active Use/i.test(zh)) return "現況使用中（建議向管委會或管理公司現場查證）";
+        return zh;
+      }
       if (currentLang === "en") {
         if (/拆除|公園|解体|철거/.test(zh)) return "Demolished / Converted to Public Park";
         if (/都更|改建|建替|재건축/.test(zh)) return "Urban Renewal / Redevelopment Approved";
         if (/拍定|點交|競売|경매|낙찰/.test(zh)) return "Court Foreclosure Handover Completed";
-        if (/轉手|實價|実価|실거래/.test(zh)) return "Transferred with Special Transaction Disclosure";
+        if (/轉手|實價|実価|特別募集|실거래/.test(zh)) return "Transferred with Special Transaction Disclosure";
         return "In Active Use (On-site management check advised)";
       } else if (currentLang === "ja") {
         if (/拆除|公園|解体|철거/.test(zh)) return "解体済み・公共公園へ整備";
         if (/都更|改建|建替|재건축/.test(zh)) return "都市再生・建て替え計画進行中";
         if (/拍定|點交|競売|경매|낙찰/.test(zh)) return "裁判所競売による落札・引渡完了";
-        if (/轉手|實價|実価|실거래/.test(zh)) return "実価登録（特殊取引備考付）にて譲渡済";
+        if (/轉手|實價|実価|特別募集|실거래/.test(zh)) return "実価登録（特殊取引備考付）にて譲渡済";
         return "現在使用中（管理組合・現地確認推奨）";
       } else if (currentLang === "ko") {
         if (/拆除|公園|解体|철거/.test(zh)) return "기존 건물 철거 완료 · 공원 부지 전환";
         if (/都更|改建|建替|재건축/.test(zh)) return "도시재생 및 재건축 절차 진행 중";
         if (/拍定|點交|競売|경매|낙찰/.test(zh)) return "법원 경매 낙찰 및 인도 완료";
-        if (/轉手|實價|実価|실거래/.test(zh)) return "실거래가 특수거래 비고 등재 및 이전 완료";
+        if (/轉手|實價|実価|特別募集|실거래/.test(zh)) return "실거래가 특수거래 비고 등재 및 이전 완료";
         return "현재 사용 중 (관리사무소 현장 확인 권장)";
       }
       return zh;
@@ -3611,9 +3779,83 @@
         return cleanSourceOriginClient(item.i18n[currentLang].media_verification, item);
       }
       const s = cleanSourceOriginClient(rawSource, item);
-      if (currentLang === "zh-TW") return s;
+      if (currentLang === "zh-TW") {
+        return s
+          .replace(/Yahoo!ニュース|Yahoo! JAPAN ニュース/gi, "Yahoo!日本新聞")
+          .replace(/dメニューニュース|dメニュー/g, "d menu 日本新聞")
+          .replace(/テレ朝NEWS|テレビ朝日/g, "朝日電視台新聞")
+          .replace(/TBS NEWS DIG|TBSニュース/gi, "TBS新聞")
+          .replace(/FNNプライムオンライン|フジテレビ/g, "富士電視台新聞(FNN)")
+          .replace(/日テレNEWS NNN|日テレNEWS|日本テレビ/g, "日本電視台新聞(NNN)")
+          .replace(/NHKニュース|NHK/g, "NHK新聞")
+          .replace(/朝日新聞デジタル|朝日新聞/g, "朝日新聞")
+          .replace(/読売新聞オンライン|読売新聞/g, "讀賣新聞")
+          .replace(/毎日新聞/g, "每日新聞")
+          .replace(/産経ニュース|産経新聞/g, "產經新聞")
+          .replace(/日本経済新聞/g, "日本經濟新聞")
+          .replace(/北海道新聞デジタル|北海道新聞/g, "北海道新聞")
+          .replace(/中日新聞Web|中日新聞/g, "中日新聞")
+          .replace(/山陽新聞デジタル｜さんデジ|山陽新聞デジタル|山陽新聞/g, "山陽新聞")
+          .replace(/静岡新聞DIGITAL|静岡新聞/g, "靜岡新聞")
+          .replace(/沖縄タイムス社|沖縄タイムス/g, "沖繩時報")
+          .replace(/新潟日報/g, "新潟日報")
+          .replace(/埼玉新聞/g, "埼玉新聞")
+          .replace(/京都新聞/g, "京都新聞")
+          .replace(/神戸新聞NEXT|神戸新聞/g, "神戶新聞")
+          .replace(/西日本新聞me|西日本新聞/g, "西日本新聞")
+          .replace(/河北新報オンライン|河北新報/g, "河北新報")
+          .replace(/中国新聞デジタル|中国新聞/g, "中國新聞(日本)")
+          .replace(/福井新聞社|福井新聞/g, "福井新聞")
+          .replace(/福井テレビ/g, "福井電視台")
+          .replace(/QAB 琉球朝日放送/g, "琉球朝日放送")
+          .replace(/OHK 岡山放送/g, "岡山放送")
+          .replace(/時事ドットコム|時事通信/g, "時事通信社")
+          .replace(/共同通信/g, "共同通信社")
+          .replace(/弁護士ドットコム/g, "日本律師網新聞")
+          .replace(/UR都市機構/g, "UR都市機構")
+          .replace(/JKK東京/g, "JKK東京都住宅供給公社")
+          .replace(/大島てる・公開報道/g, "大島てる・公開新聞報導")
+          .replace(/公開報道/g, "公開新聞報導")
+          .replace(/・/g, "、");
+      }
       if (currentLang === "en") {
         return s
+          .replace(/Yahoo!ニュース|Yahoo! JAPAN ニュース/gi, "Yahoo! News Japan")
+          .replace(/dメニューニュース|dメニュー/g, "d menu News Japan")
+          .replace(/テレ朝NEWS|テレビ朝日/g, "TV Asahi News")
+          .replace(/TBS NEWS DIG|TBSニュース/gi, "TBS News")
+          .replace(/FNNプライムオンライン|フジテレビ/g, "FNN Fuji News")
+          .replace(/日テレNEWS NNN|日テレNEWS|日本テレビ/g, "NTV News Japan")
+          .replace(/NHKニュース|NHK/g, "NHK News")
+          .replace(/朝日新聞デジタル|朝日新聞/g, "Asahi Shimbun")
+          .replace(/読売新聞オンライン|読売新聞/g, "Yomiuri Shimbun")
+          .replace(/毎日新聞/g, "Mainichi Shimbun")
+          .replace(/産経ニュース|産経新聞/g, "Sankei News")
+          .replace(/日本経済新聞/g, "Nikkei")
+          .replace(/北海道新聞デジタル|北海道新聞/g, "Hokkaido Shimbun")
+          .replace(/中日新聞Web|中日新聞/g, "Chunichi Shimbun")
+          .replace(/山陽新聞デジタル｜さんデジ|山陽新聞デジタル|山陽新聞/g, "Sanyo Shimbun")
+          .replace(/静岡新聞DIGITAL|静岡新聞/g, "Shizuoka Shimbun")
+          .replace(/沖縄タイムス社|沖縄タイムス/g, "Okinawa Times")
+          .replace(/新潟日報/g, "Niigata Nippo")
+          .replace(/埼玉新聞/g, "Saitama Shimbun")
+          .replace(/京都新聞/g, "Kyoto Shimbun")
+          .replace(/神戸新聞NEXT|神戸新聞/g, "Kobe Shimbun")
+          .replace(/西日本新聞me|西日本新聞/g, "Nishinippon Shimbun")
+          .replace(/河北新報オンライン|河北新報/g, "Kahoku Shimpo")
+          .replace(/中国新聞デジタル|中国新聞/g, "Chugoku Shimbun")
+          .replace(/福井新聞社|福井新聞/g, "Fukui Shimbun")
+          .replace(/福井テレビ/g, "Fukui TV")
+          .replace(/QAB 琉球朝日放送/g, "QAB Ryukyu Asahi")
+          .replace(/OHK 岡山放送/g, "OHK Okayama")
+          .replace(/時事ドットコム|時事通信/g, "Jiji Press")
+          .replace(/共同通信/g, "Kyodo News")
+          .replace(/弁護士ドットコム/g, "Bengo4 News")
+          .replace(/UR都市機構/g, "UR Urban Renaissance Agency")
+          .replace(/JKK東京/g, "JKK Tokyo Housing")
+          .replace(/大島てる・公開報道/g, "Oshimaland & Public News")
+          .replace(/大島てる/g, "Oshimaland")
+          .replace(/公開報道/g, "Public News")
           .replace(/台灣凶宅網/g, "Taiwan Unluckyhouse")
           .replace(/三立新聞網|三立新聞/g, "SETN News")
           .replace(/鏡週刊/g, "Mirror Media")
@@ -3652,6 +3894,8 @@
           .replace(/中央社CNA|中央社/g, "中央社(CNA)")
           .replace(/公視新聞網|公視新聞|公視/g, "公共テレビ(PTS)")
           .replace(/民視新聞網|民視新聞|民視/g, "民視ニュース(FTV)")
+          .replace(/壹蘋新聞網/g, "壹蘋ニュース(NextApple)")
+          .replace(/東森新聞/g, "東森ニュース(EBC)")
           .replace(/蘋果日報/g, "リンゴ日報")
           .replace(/台視新聞網|台視新聞/g, "台視ニュース")
           .replace(/華視新聞/g, "華視ニュース")
@@ -3666,6 +3910,7 @@
       } else if (currentLang === "ko") {
         return s
           .replace(/Yahoo!ニュース|Yahoo! JAPAN ニュース/gi, "Yahoo! 뉴스 일본")
+          .replace(/dメニューニュース|dメニュー/g, "d메뉴 뉴스 일본")
           .replace(/Yahoo奇摩新聞|Yahoo新聞/gi, "Yahoo 대만 뉴스")
           .replace(/テレ朝NEWS|テレビ朝日/g, "TV아사히 뉴스")
           .replace(/TBS NEWS DIG|TBSニュース/gi, "TBS 뉴스")
@@ -3689,11 +3934,14 @@
           .replace(/福井テレビ/g, "후쿠이TV")
           .replace(/QAB 琉球朝日放送/g, "류큐아사히방송")
           .replace(/OHK 岡山放送/g, "오카야마방송")
-          .replace(/時事ドットコム/g, "지지통신")
+          .replace(/時事ドットコム|時事通信/g, "지지통신")
+          .replace(/共同通信/g, "교도통신")
           .replace(/弁護士ドットコム/g, "벤고시닷컴")
           .replace(/UR都市機構/g, "UR도시기구")
           .replace(/JKK東京/g, "JKK도쿄")
+          .replace(/大島てる・公開報道/g, "오시마테루 · 공개 보도")
           .replace(/大島てる/g, "오시마테루")
+          .replace(/公開報道/g, "공개 보도")
           .replace(/三立新聞網|三立新聞/g, "SETN 삼립뉴스")
           .replace(/鏡週刊/g, "미러미디어")
           .replace(/TVBS新聞網|TVBS新聞|TVBS/g, "TVBS 뉴스")
@@ -3724,23 +3972,22 @@
 
     function localizeAddressDisplay(item) {
       if (!item) return "";
-      if (item.i18n && item.i18n[currentLang] && item.i18n[currentLang].address) {
+      const isJpItem = inferCountry(item) === "JP";
+      const rawAddr = String(item.address || "");
+      if (item.i18n && item.i18n[currentLang] && item.i18n[currentLang].address && isValidTranslatedText(item.i18n[currentLang].address, rawAddr, currentLang)) {
         return item.i18n[currentLang].address;
       }
-      if (currentLang === "ja" && item.i18n?.ja?.address) {
-        return item.i18n.ja.address;
+      if (currentLang === "zh-TW" && !isJpItem) {
+        return item.i18n?.["zh-TW"]?.address || rawAddr;
       }
-      if (currentLang === "ko" && item.i18n?.ko?.address) {
-        return item.i18n.ko.address;
+      if (currentLang === "ja" && isJpItem) {
+        return item.i18n?.ja?.address || rawAddr;
       }
-      const rawAddr = String(item.address || "");
-      if (currentLang === "zh-TW") return item.i18n?.["zh-TW"]?.address || rawAddr;
-      const cached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
+      const cached = clientTranslationCache.get(`${item.__key}_${currentLang}`) || clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
       if (cached && cached.address && !/大F/.test(cached.address) && isValidTranslatedText(cached.address, rawAddr, currentLang)) {
         return cached.address;
       }
 
-      const isJpItem = inferCountry(item) === "JP";
       const cityZh = isJpItem ? String(item.city || "") : String(item.city || "").replace(/台/g, "臺");
       const distZh = String(item.district || "");
       const cityLoc = tCity(cityZh);
@@ -3753,14 +4000,17 @@
       // 1. Extract and localize parenthetical building type FIRST (handling nested parentheses cleanly)
       let bldgSuffix = "";
       rest = rest.replace(/[（(](.+)[）)]\s*$/, (_, inner) => {
-        bldgSuffix = ` (${localizeBuildingType(inner, item)})`;
+        bldgSuffix = currentLang === "zh-TW" ? `（${localizeBuildingType(inner, item)}）` : ` (${localizeBuildingType(inner, item)})`;
         return "";
       }).replace(/[（(]([^）)]+)[）)]/g, (_, inner) => {
-        if (!bldgSuffix) bldgSuffix = ` (${localizeBuildingType(inner, item)})`;
+        if (!bldgSuffix) bldgSuffix = currentLang === "zh-TW" ? `（${localizeBuildingType(inner, item)}）` : ` (${localizeBuildingType(inner, item)})`;
         return "";
       }).trim();
 
-      if (currentLang === "ja") {
+      if (currentLang === "zh-TW" && isJpItem) {
+        const zhRest = convertJapaneseAddressToZhTw(rest);
+        return `${cityLoc}${distLoc}${zhRest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
+      } else if (currentLang === "ja") {
         rest = rest
           .replace(/「([^」]+)」/g, "「$1」")
           .replace(/一段/g, "1段").replace(/二段/g, "2段").replace(/三段/g, "3段").replace(/四段/g, "4段")
@@ -3803,6 +4053,10 @@
         rest = transliterateJapaneseToKorean(rest).replace(/[\u4E00-\u9FFF]+/g, "");
         return `${cityLoc} ${distLoc} ${rest}${bldgSuffix}`.replace(/\s+/g, " ").trim();
       } else if (currentLang === "en") {
+        if (isJpItem) {
+          const enRest = transliterateJapaneseToEnglish(rest);
+          return `${enRest}${bldgSuffix}, ${distLoc}, ${cityLoc}`.replace(/\s+/g, " ").replace(/^,\s*/, "").trim();
+        }
         rest = rest
           .replace(/「[^」]+」/g, "")
           .replace(/^[^\d\s]{1,3}[里村](?=[一-龥])/g, "");
@@ -3858,7 +4112,7 @@
       const rawNote = (item.auction_record && !/尚無法拍|無公開法拍|正常行情|案發日期雙重核實|案發日期核實|公開資訊與歷史紀錄核實/.test(item.auction_record))
         ? String(item.auction_record).trim()
         : "";
-      if (currentLang === "zh-TW") {
+      if (currentLang === "zh-TW" && inferCountry(item) !== "JP") {
         return rawNote;
       }
       const cached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
@@ -3869,20 +4123,30 @@
     }
 
     function localizeCaseReasonPreview(item) {
-      if (item && item.i18n && item.i18n[currentLang] && item.i18n[currentLang].reason) {
-        return cleanCaseReasonClient(item.i18n[currentLang].reason, item);
-      }
+      const isJpItem = inferCountry(item) === "JP";
       const zhReason = cleanCaseReasonClient(item.reason || "", item);
-      if (currentLang === "zh-TW") return zhReason;
+      if (item && item.i18n && item.i18n[currentLang] && item.i18n[currentLang].reason) {
+        const candidate = cleanCaseReasonClient(item.i18n[currentLang].reason, item);
+        if (isValidTranslatedText(candidate, zhReason, currentLang)) {
+          return candidate;
+        }
+      }
+      if (currentLang === "zh-TW" && !isJpItem && !/[\u3040-\u309f\u30a0-\u30ff]/.test(zhReason)) {
+        return zhReason;
+      }
+      if (currentLang === "ja" && isJpItem) {
+        return zhReason;
+      }
 
       const fullCached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
-      if (fullCached && fullCached.reason) return cleanCaseReasonClient(fullCached.reason, item);
+      if (fullCached && fullCached.reason && isValidTranslatedText(fullCached.reason, zhReason, currentLang)) {
+        return cleanCaseReasonClient(fullCached.reason, item);
+      }
 
       const batchCached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
-      if (batchCached && batchCached.reason) return cleanCaseReasonClient(batchCached.reason, item);
-
-      const isJpItem = inferCountry(item) === "JP";
-      if (currentLang === "ja" && isJpItem) return zhReason;
+      if (batchCached && batchCached.reason && isValidTranslatedText(batchCached.reason, zhReason, currentLang)) {
+        return cleanCaseReasonClient(batchCached.reason, item);
+      }
 
       const catLabel = tCategoryLabel(item.normalizedCat);
       const dateStr = item.incident_date || (item.incidentYear ? String(item.incidentYear) : "Historical");
@@ -3895,12 +4159,32 @@
       const ageMatch = zhReason.match(/(\d+)\s*(?:歲|歳)/);
       const ageNum = ageMatch ? ageMatch[1] : null;
       const isFall = /墜樓|墜落|跳樓|転落|飛び降り/.test(zhReason);
-      const isFire = /火警|火災|惡火|濃煙|燒毀|出火|全焼/.test(zhReason);
+      const isFire = /火警|火災|惡火|濃煙|燒毀|出火|全焼|焼死/.test(zhReason);
       const isCO = /一氧化碳|一酸化炭素|瓦斯|中毒/.test(zhReason);
-      const isHomicide = (/砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺|殺人|殺害|刺殺|絞殺|死体遺棄/.test(zhReason)) && item.normalizedCat === "刑事命案";
+      const isHomicide = (/砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺|殺人|殺害|刺殺|絞殺|死体遺棄|変死/.test(zhReason)) && item.normalizedCat === "刑事命案";
+      const isSuicide = /輕生|自殺|尋短|燒炭|上吊|無理心中|心中/.test(zhReason) || item.normalizedCat === "輕生事故";
+      const isLonelyDeath = /孤獨死|孤独死|遺体発見|白骨遺体|ミイラ化|腐乱遺体/.test(zhReason);
       const isCourt = /法拍|判決|查封|點交|瑕疵擔保|競売|大島てる|特別募集|特定物件/.test(zhReason);
 
-      if (currentLang === "ko") {
+      if (currentLang === "zh-TW" && isJpItem) {
+        let body = `位於${addrLabel}之${bldgLabel}${floorNum ? floorNum + "樓" : ""}，曾發生${catLabel}紀錄。`;
+        if (isFall) {
+          body = `位於${addrLabel}之${bldgLabel}${floorNum ? floorNum + "樓" : ""}，曾發生${ageNum ? ageNum + "歲住戶" : "住戶"}墜樓身亡事故，經日本轄區警方與消防救護單位到場確認。`;
+        } else if (isFire) {
+          body = `位於${addrLabel}之${bldgLabel}${floorNum ? floorNum + "樓" : ""}室內曾發生住宅火災事故，經消防單位撲滅火勢後於屋內尋獲罹難者遺體。`;
+        } else if (isCO) {
+          body = `位於${addrLabel}之${bldgLabel}室內曾發生一氧化碳中毒身亡事故。`;
+        } else if (isHomicide) {
+          body = `位於${addrLabel}之${bldgLabel}${floorNum ? floorNum + "樓" : ""}室內曾發生重大刑事命案，經日本都道府縣警察本部現場鑑識與司法程序偵辦。`;
+        } else if (isSuicide) {
+          body = `位於${addrLabel}之${bldgLabel}${floorNum ? floorNum + "樓" : ""}專有部分室內曾發生非自然身亡（輕生）事件，列為日本宅建業法心理瑕疵告知標的。`;
+        } else if (isLonelyDeath) {
+          body = `位於${addrLabel}之${bldgLabel}${floorNum ? floorNum + "樓" : ""}室內曾發生住戶於屋內孤獨死（遺體延遲發現）事件，經警方與管理單位會同確認。`;
+        } else if (isCourt) {
+          body = `位於${addrLabel}之${bldgLabel}，經日本地方裁判所競賣紀錄或公開事故物件檔案載明屋內曾發生非自然死亡事故。`;
+        }
+        return `【${catLabel} · ${dateStr}】${body}${srcLabel ? "（來源：" + srcLabel + "）" : ""}`;
+      } else if (currentLang === "ko") {
         let body = `해당 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 발생한 ${catLabel} 기록입니다.`;
         if (isJpItem) {
           if (isFall) {
@@ -3970,14 +4254,28 @@
 
     function localizeTimelineStage(rawStage, item) {
       const s = String(rawStage || "").trim();
-      if (currentLang === "zh-TW" || !s) return s || t("sec2_title");
+      if (!s) return t("sec2_title");
+      const isJpItem = inferCountry(item) === "JP";
 
       // If stage matches one of the 4 core categories
       if (s === "刑事命案" || s === "輕生事故" || s === "意外身亡" || s === "法拍與其他") {
         return tCategoryLabel(s);
       }
 
+      if (currentLang === "zh-TW") {
+        if (!isJpItem && !/[\u3040-\u309f\u30a0-\u30ff]/.test(s)) return s;
+        if (/警察・消防通報|公開事案記録|大島てる|公開報道/.test(s)) return "日本警消通報與公開新聞紀錄";
+        if (/競売|裁判所/.test(s)) return "日本地方裁判所不動產競賣紀錄";
+        if (/特別募集|UR都市機構|JKK/.test(s)) return "日本公營住宅特別募集（心理瑕疵告知）紀錄";
+        return localizeMediaSource(s, item)
+          .replace(/における事案/g, "案件紀錄")
+          .replace(/公開報道記録|報道記録/g, "公開新聞紀錄")
+          .replace(/[\u3040-\u309f\u30a0-\u30ff]+/g, "")
+          .trim() || "日本公開新聞與實證紀錄";
+      }
+
       if (currentLang === "ja") {
+        if (isJpItem) return s;
         if (/地方警消通報|公開事故實證卷宗/.test(s)) return "警察・消防通報および公開事案記録";
         if (/司法院法拍屋查詢系統|拍賣公告筆錄|法拍筆錄|法院法拍/.test(s)) return "司法院競売公告システム（地方裁判所競売調書）";
         if (/公開消防災情通報|地方社會新聞歷史卷宗/.test(s)) {
@@ -3988,8 +4286,8 @@
         if (/內政部定義列管凶宅/.test(s)) return "内政部基準・心理的瑕疵物件記録";
         if (/一審判決|轉手瑕疵訴訟|裁判書|民事判決/.test(s)) return "司法院判決書・瑕疵担保訴訟記録";
         if (/破門發現|孤獨死/.test(s)) return "警察・消防立会い確認事案";
-        if (/公開報導|新聞|見報/.test(s)) return localizeMediaSource(s).replace(/公開報導/g, " 公開報道記録").replace(/案發與紙媒見報/g, "事案発生・報道記録");
-        return localizeMediaSource(s)
+        if (/公開報導|新聞|見報/.test(s)) return localizeMediaSource(s, item).replace(/公開報導/g, " 公開報道記録").replace(/案發與紙媒見報/g, "事案発生・報道記録");
+        return localizeMediaSource(s, item)
           .replace(/臺灣臺北地方法院/g, "台湾台北地方裁判所")
           .replace(/臺灣新北地方法院/g, "台湾新北地方裁判所")
           .replace(/臺灣桃園地方法院/g, "台湾桃園地方裁判所")
@@ -4001,42 +4299,45 @@
           .replace(/案發與/g, "事案発生・")
           .replace(/紀錄|卷宗/g, "記録");
       } else if (currentLang === "ko") {
-        if (/地方警消通報|公開事故實證卷宗/.test(s)) return "지방 경찰·소방 통보 및 공개 사건 기록";
-        if (/司法院法拍屋查詢系統|拍賣公告筆錄|法拍筆錄|法院法拍/.test(s)) return "사법원 법원경매 조회 시스템 (지방법원 경매조서)";
+        if (/地方警消通報|公開事故實證卷宗|警察・消防通報|公開事案記録|大島てる/.test(s)) return "경찰·소방 통보 및 공개 사건 기록";
+        if (/司法院法拍屋查詢系統|拍賣公告筆錄|法拍筆錄|法院法拍|競売|裁判所/.test(s)) return "법원 경매 조회 시스템 (지방법원 경매조서)";
         if (/公開消防災情通報|地方社會新聞歷史卷宗/.test(s)) {
           const ym = s.match(/(\d{4})年/);
           return `소방 재난 통보 및 사회 뉴스 기록${ym ? " (" + ym[1] + "년)" : ""}`;
         }
-        if (/實價登錄/.test(s)) return "내정부 실거래가 특수거래 기록";
-        if (/內政部定義列管凶宅/.test(s)) return "내정부 기준 특정사고건물 기록";
-        if (/一審判決|轉手瑕疵訴訟|裁判書|民事判決/.test(s)) return "사법원 판결문 및 하자담보 소송 기록";
-        if (/公開報導|新聞|見報/.test(s)) return localizeMediaSource(s).replace(/公開報導/g, " 공개 보도 기록").replace(/案發與紙媒見報/g, "사건 발생 및 언론 보도");
-        return localizeMediaSource(s)
-          .replace(/地方法院/g, "지방법원")
-          .replace(/拍賣公告筆錄/g, "경매 공고 조서")
-          .replace(/紀錄|卷宗/g, "기록");
+        if (/實價登錄|特別募集/.test(s)) return "실거래가 및 특별모집 특수거래 기록";
+        if (/內政部定義列管凶宅/.test(s)) return "특정사고건물(심리적 하자) 기록";
+        if (/一審判決|轉手瑕疵訴訟|裁判書|民事判決/.test(s)) return "법원 판결문 및 하자담보 소송 기록";
+        if (/公開報導|新聞|見報|公開報道|ニュース/.test(s)) return localizeMediaSource(s, item).replace(/公開報導|公開報道/g, " 공개 보도 기록").replace(/案發與紙媒見報/g, "사건 발생 및 언론 보도");
+        return localizeMediaSource(s, item)
+          .replace(/地方法院|地方裁判所/g, "지방법원")
+          .replace(/拍賣公告筆錄|競売公告調書/g, "경매 공고 조서")
+          .replace(/紀錄|卷宗|記録/g, "기록");
       } else if (currentLang === "en") {
-        if (/地方警消通報|公開事故實證卷宗/.test(s)) return "Local Police & Fire Dispatch Verification Dossier";
-        if (/司法院法拍屋查詢系統|拍賣公告筆錄|法拍筆錄|法院法拍/.test(s)) return "Judicial Yuan Foreclosure System (Court Auction Notes)";
+        if (/地方警消通報|公開事故實證卷宗|警察・消防通報|公開事案記録|大島てる/.test(s)) return "Police & Fire Dispatch Verification Dossier";
+        if (/司法院法拍屋查詢系統|拍賣公告筆錄|法拍筆錄|法院法拍|競売|裁判所/.test(s)) return "Court Foreclosure System (Auction Inspection Notes)";
         if (/公開消防災情通報|地方社會新聞歷史卷宗/.test(s)) {
           const ym = s.match(/(\d{4})/);
           return `Public Fire Department & Local News Archive${ym ? " (" + ym[1] + ")" : ""}`;
         }
-        if (/實價登錄/.test(s)) return "MOI Real-Price Registry (Special Transaction)";
-        if (/內政部定義列管凶宅/.test(s)) return "MOI Statutory Stigmatized Property Record";
-        if (/一審判決|轉手瑕疵訴訟|裁判書|民事判決/.test(s)) return "Judicial Yuan Civil Defect Judgment Record";
-        if (/公開報導|新聞|見報/.test(s)) return localizeMediaSource(s).replace(/公開報導/g, " Public News Report").replace(/案發與紙媒見報/g, "Incident & Press Report");
-        return localizeMediaSource(s)
-          .replace(/地方法院/g, " District Court ")
-          .replace(/拍賣公告筆錄/g, " Foreclosure Auction Record")
-          .replace(/紀錄|卷宗/g, " Archive");
+        if (/實價登錄|特別募集/.test(s)) return "Official Special Transaction & Disclosure Registry";
+        if (/內政部定義列管凶宅/.test(s)) return "Statutory Stigmatized Property Record";
+        if (/一審判決|轉手瑕疵訴訟|裁判書|民事判決/.test(s)) return "Civil Defect Judgment Record";
+        if (/公開報導|新聞|見報|公開報道|ニュース/.test(s)) return localizeMediaSource(s, item).replace(/公開報導|公開報道/g, " Public News Report").replace(/案發與紙媒見報/g, "Incident & Press Report");
+        return localizeMediaSource(s, item)
+          .replace(/地方法院|地方裁判所/g, " District Court ")
+          .replace(/拍賣公告筆錄|競売公告調書/g, " Foreclosure Auction Record")
+          .replace(/紀錄|卷宗|記録/g, " Archive");
       }
       return s;
     }
 
     function localizeTimelineDetail(tlItem, parentItem) {
       const zhDetail = String(tlItem?.detail || "").trim();
-      if (currentLang === "zh-TW" || !zhDetail) return zhDetail;
+      if (!zhDetail) return "";
+      const isJpItem = inferCountry(parentItem) === "JP";
+      if (currentLang === "zh-TW" && !isJpItem && !/[\u3040-\u309f\u30a0-\u30ff]/.test(zhDetail)) return zhDetail;
+      if (currentLang === "ja" && isJpItem) return zhDetail;
 
       const dateStr = String(tlItem?.year || parentItem?.incident_date || "Historical").trim();
       const synthItem = {
@@ -4046,23 +4347,38 @@
         normalizedCat: classifyRecord(tlItem?.stage || parentItem?.category || "", zhDetail)
       };
 
-      // Use deterministic fact extraction so timeline entries are 100% localized in EN / JA / KO even on static hosting
       const catLabel = tCategoryLabel(synthItem.normalizedCat);
       const bldgLabel = localizeBuildingType(parentItem?.building_type, synthItem);
       const addrLabel = localizeAddressDisplay(parentItem || { address: "" });
-      const floorMatch = zhDetail.match(/(\d+)\s*樓/);
+      const floorMatch = zhDetail.match(/(\d+)\s*(?:樓|階)/);
       const floorNum = floorMatch ? floorMatch[1] : null;
-      const ageMatch = zhDetail.match(/(\d+)\s*歲/);
+      const ageMatch = zhDetail.match(/(\d+)\s*(?:歲|歳)/);
       const ageNum = ageMatch ? ageMatch[1] : null;
-      const isFall = /墜樓|墜落|跳樓/.test(zhDetail);
-      const isFire = /火警|火災|惡火|濃煙|燒毀/.test(zhDetail);
-      const isCO = /一氧化碳|瓦斯|中毒/.test(zhDetail);
-      const isSuicide = /輕生|自殺|尋短|燒炭|上吊/.test(zhDetail);
-      const isHomicide = /砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺/.test(zhDetail);
-      const isForeclosure = /法拍|拍賣|查封筆錄|民事執行處/.test(zhDetail);
-      const isRealPrice = /實價登錄|特殊交易/.test(zhDetail);
+      const isFall = /墜樓|墜落|跳樓|転落|飛び降り/.test(zhDetail);
+      const isFire = /火警|火災|惡火|濃煙|燒毀|出火|全焼|焼死/.test(zhDetail);
+      const isCO = /一氧化碳|一酸化炭素|瓦斯|中毒/.test(zhDetail);
+      const isSuicide = /輕生|自殺|尋短|燒炭|上吊|無理心中|心中/.test(zhDetail);
+      const isHomicide = /砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺|殺人|殺害|刺殺|絞殺|死体遺棄/.test(zhDetail);
+      const isForeclosure = /法拍|拍賣|查封筆錄|民事執行處|競売|特別募集/.test(zhDetail);
+      const isRealPrice = /實價登錄|特殊交易|宅地建物取引業法|告知/.test(zhDetail);
 
-      if (currentLang === "ja") {
+      if (currentLang === "zh-TW") {
+        let desc = `位於${addrLabel}（${bldgLabel}${floorNum ? "，" + floorNum + "樓" : ""}）之非自然死亡核實紀錄。`;
+        if (isFire || isCO) {
+          desc = `位於${addrLabel}（${bldgLabel}${floorNum ? "，" + floorNum + "樓" : ""}）室內曾發生住宅火災或一氧化碳中毒事故並造成人員身亡，經日本消防與公開新聞報導確認。`;
+        } else if (isFall) {
+          desc = `位於${addrLabel}（${bldgLabel}${floorNum ? "，" + floorNum + "樓" : ""}）曾發生${ageNum ? ageNum + "歲住戶" : "住戶"}墜樓身亡事件，經轄區警方與救護單位通報紀錄。`;
+        } else if (isSuicide) {
+          desc = `位於${addrLabel}（${bldgLabel}${floorNum ? "，" + floorNum + "樓" : ""}）專有部分室內曾發生非自然死亡（輕生）事件，依日本《宅地建物取引業法》列為重要事項告知標的。`;
+        } else if (isHomicide) {
+          desc = `位於${addrLabel}（${bldgLabel}${floorNum ? "，" + floorNum + "樓" : ""}）曾發生重大刑事命案，經日本警方偵辦與公開媒體報導記載。`;
+        } else if (isForeclosure) {
+          desc = `位於${addrLabel}之${bldgLabel}，經日本法院競賣或公營住宅特別募集公告載明屋內曾發生非自然死亡事故。`;
+        } else {
+          desc = localizeCaseReasonPreview(parentItem || synthItem);
+        }
+        return `【發生日期：${dateStr} · ${catLabel}】${desc}`;
+      } else if (currentLang === "ja") {
         let desc = `${addrLabel}の${bldgLabel}${floorNum ? "（" + floorNum + "階）" : ""}における非自然死事案の検証記録です。`;
         if (isFire || isCO) {
           desc = `${addrLabel}の${bldgLabel}${floorNum ? "（" + floorNum + "階）" : ""}にて火災または一酸化炭素中毒事故が発生し、専有部分での死亡が確認された事案です。${isRealPrice ? "その後の所有権移転時、内政部実価登録の特殊取引備考欄に瑕疵要因が記載されています。" : "公開消防通報および社会ニュース記録により確認されています。"}`;
@@ -4081,7 +4397,7 @@
       } else if (currentLang === "ko") {
         let desc = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " (" + floorNum + "층)" : ""}에서 발생한 비자연사 검증 기록입니다.`;
         if (isFire || isCO) {
-          desc = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " (" + floorNum + "층)" : ""} 실내에서 화재 또는 일산화탄소 중독 사고가 발생하여 인명 피해가 확인된 사건입니다.${isRealPrice ? " 이후 소유권 이전 시 내정부 실거래가 등록 특수거래 비고란에 사고 이력이 명시되었습니다." : ""}`;
+          desc = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " (" + floorNum + "층)" : ""} 실내에서 화재 또는 일산화탄소 중독 사고가 발생하여 인명 피해가 확인된 사건입니다.${isRealPrice ? " 이후 소유권 이전 시 실거래가 등록 특수거래 비고란에 사고 이력이 명시되었습니다." : ""}`;
         } else if (isFall) {
           desc = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " (" + floorNum + "층)" : ""}에서 ${ageNum ? ageNum + "세 " : ""}추락 사고가 발생하여 사망이 확인된 사건입니다.`;
         } else if (isSuicide) {
@@ -4089,13 +4405,13 @@
         } else if (isHomicide) {
           desc = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " (" + floorNum + "층)" : ""}에서 중대 형사·살인 사건이 발생하여 경찰 수사 및 법원 판결 기록에 등재된 사건입니다.`;
         } else if (isForeclosure) {
-          desc = `${addrLabel} 소재 ${bldgLabel}에서 과거 실내 비자연사 사고가 발생하였으며, 지방법원 민사집행처 공개 경매 압류조서 및 관할 파출소 사실조회로 확인된 사건입니다.`;
+          desc = `${addrLabel} 소재 ${bldgLabel}에서 과거 실내 비자연사 사고가 발생하였으며, 지방법원 공개 경매 압류조서 및 관할 경찰 사실조회로 확인된 사건입니다.`;
         }
         return `[발생일: ${dateStr} · ${catLabel}] ${desc}`;
       } else if (currentLang === "en") {
         let desc = `Verified unnatural death incident at ${addrLabel} (${bldgLabel}${floorNum ? ", " + floorNum + "F" : ""}).`;
         if (isFire || isCO) {
-          desc = `A fatal residential fire or carbon monoxide poisoning incident occurred inside the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} at ${addrLabel}.${isRealPrice ? " Subsequent property transfer records in the MOI Real-Price Registry explicitly note a special transaction with stigmatized property factors." : " Confirmed via public fire department dispatch and local news archives."}`;
+          desc = `A fatal residential fire or carbon monoxide poisoning incident occurred inside the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} at ${addrLabel}.${isRealPrice ? " Subsequent property transfer records explicitly note a special transaction with stigmatized property factors." : " Confirmed via public fire department dispatch and local news archives."}`;
         } else if (isFall) {
           desc = `A ${ageNum ? ageNum + "-year-old " : ""}resident fell from${floorNum ? " the " + floorNum + "th floor of" : ""} the ${bldgLabel.toLowerCase()} at ${addrLabel} and was pronounced deceased. Documented in police and emergency dispatch records.`;
         } else if (isSuicide) {
@@ -4829,7 +5145,7 @@
     let allRecords = [];
     let activeCategory = "ALL";
     let currentDossierItem = null;
-    let currentMobileView = "split";
+    let currentMobileView = "list";
 
     function triggerGmFallbackToTileEngine() {
       usingNativeGoogleMap = false;
@@ -5551,38 +5867,34 @@
       cadastralActive = !cadastralActive;
     });
 
-    // Responsive Mobile View Switcher ("list" | "map" | "split")
+    // Responsive Mobile View Switcher ("list" | "map")
     const leftPanel = document.getElementById("left-panel");
     const rightMapPanel = document.getElementById("right-map-panel");
     const collapsibleFilters = document.getElementById("collapsible-filters");
 
     function setMobileViewMode(mode) {
-      currentMobileView = mode;
+      const targetMode = mode === "map" ? "map" : "list";
+      currentMobileView = targetMode;
       const btnList = document.getElementById("m-nav-list");
       const btnMap = document.getElementById("m-nav-map");
-      const btnSplit = document.getElementById("m-nav-split");
 
-      [btnList, btnMap, btnSplit].forEach(b => {
+      [btnList, btnMap].forEach(b => {
         if (!b) return;
-        const isCurrent = b.getAttribute("data-mobile-view") === mode;
+        const isCurrent = b.getAttribute("data-mobile-view") === targetMode;
         b.className = isCurrent
           ? "mobile-view-btn flex flex-col items-center justify-center h-12 rounded-lg text-slate-900 font-bold bg-slate-100 transition-colors"
           : "mobile-view-btn flex flex-col items-center justify-center h-12 rounded-lg text-slate-500 font-medium hover:text-slate-900 transition-colors";
       });
 
-      if (mode === "list") {
-        leftPanel.className = "w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-20 flex-1 md:flex-none md:h-full min-h-0 shrink-0";
-        rightMapPanel.className = "hidden md:block flex-1 relative md:h-full min-h-0 overflow-hidden";
-      } else if (mode === "map") {
-        leftPanel.className = "hidden md:flex w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex-col z-20 md:h-full min-h-0 shrink-0";
+      if (targetMode === "list") {
+        leftPanel.className = "w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-20 flex-1 md:flex-none h-full min-h-0 shrink-0";
+        rightMapPanel.className = "hidden md:block flex-1 relative h-full min-h-0 overflow-hidden";
+      } else {
+        leftPanel.className = "hidden md:flex w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex-col z-20 h-full min-h-0 shrink-0";
         rightMapPanel.className = "block flex-1 relative h-full min-h-0 overflow-hidden";
-      } else if (mode === "split") {
-        collapsibleFilters.classList.add("hidden");
-        leftPanel.className = "w-full md:w-[390px] lg:w-[470px] xl:w-[500px] bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col z-20 h-[54%] md:h-full min-h-0 shrink-0";
-        rightMapPanel.className = "block flex-1 relative h-[46%] md:h-full min-h-0 overflow-hidden";
       }
 
-      if (mode === "map" || mode === "split") {
+      if (targetMode === "map") {
         ensureMapEngineReady().then(() => {
           setTimeout(() => mapInvalidateSize(), 120);
         });
@@ -5659,7 +5971,7 @@
       });
 
       if (window.innerWidth < 768 && currentMobileView === "list") {
-        setMobileViewMode("split");
+        setMobileViewMode("map");
       }
 
       const popupContent = `
@@ -6041,19 +6353,23 @@
 
     countrySelect?.addEventListener("change", () => {
       const c = countrySelect.value || "TW";
+      try {
+        sessionStorage.setItem("haunted_map_country_picked", c);
+        localStorage.setItem("haunted_map_country_picked", c);
+      } catch (e) {}
       citySelect.value = "";
       populateCityDropdown(citySelect, true, c);
       populateDistrictDropdown("", districtSelect, true);
       updateDbSourceDropdownOptions(c === "ALL" ? "TW" : c);
       if (discCountry) {
         discCountry.value = c;
-        
       }
       if (formCountry && c !== "ALL") {
         formCountry.value = c;
         populateCityDropdown(formCity, false, c);
         populateDistrictDropdown(formCity.value, formDistrict, false);
       }
+      updateHeaderCountryBadge(c);
       const center = getCountryDefaultCenter(c);
       lastTargetMapCenter = center;
       mapFlyTo(center.lat, center.lng, center.zoom);
@@ -6133,29 +6449,14 @@
           window.history.pushState({ lang: targetLang }, "", targetUrl);
         }
       } catch (e) {}
-      // Switch country filter when user switches to Japanese or Traditional Chinese; for Korean/English keep current TW/JP country
-      if (targetLang === "ja" && countrySelect && countrySelect.value !== "JP") {
-        countrySelect.value = "JP";
-        citySelect.value = "";
-        populateCityDropdown(citySelect, true, "JP");
-        populateDistrictDropdown("", districtSelect, true);
-        updateDbSourceDropdownOptions("JP");
-        updateHeaderCountryBadge("JP");
-        const center = getCountryDefaultCenter("JP");
-        mapFlyTo(center.lat, center.lng, center.zoom);
-      } else if (targetLang === "zh-TW" && countrySelect && countrySelect.value !== "TW") {
-        countrySelect.value = "TW";
-        citySelect.value = "";
-        populateCityDropdown(citySelect, true, "TW");
-        populateDistrictDropdown("", districtSelect, true);
-        updateDbSourceDropdownOptions("TW");
-        updateHeaderCountryBadge("TW");
-        const center = getCountryDefaultCenter("TW");
-        mapFlyTo(center.lat, center.lng, center.zoom);
-      } else {
-        updateHeaderCountryBadge(countrySelect ? countrySelect.value : "TW");
-      }
+      // Keep the user's currently selected country (TW or JP) independent of the UI display language (zh-TW, ja, ko, en)
+      const activeCountry = (countrySelect && countrySelect.value) ? countrySelect.value : "TW";
+      try {
+        sessionStorage.setItem("haunted_map_country_picked", activeCountry);
+        localStorage.setItem("haunted_map_country_picked", activeCountry);
+      } catch (e) {}
       applyLanguageUI(targetLang);
+      updateHeaderCountryBadge(activeCountry);
     }
 
     document.querySelectorAll(".lang-btn").forEach(btn => {
@@ -6902,7 +7203,7 @@
         <span id="drawer-meta-region">${cityLabel} ${distLabel}</span>
       `;
       document.getElementById("drawer-title").textContent = localizedAddr;
-      document.getElementById("drawer-doorplate-text").textContent = currentLang === "zh-TW" ? details.doorplate : localizedAddr;
+      document.getElementById("drawer-doorplate-text").textContent = (currentLang === "zh-TW" && inferCountry(item) !== "JP") ? details.doorplate : localizedAddr;
       document.getElementById("drawer-region").textContent = `${cityLabel} · ${distLabel}`;
       document.getElementById("drawer-date").textContent = item.incident_date || (item.incidentYear ? `${item.incidentYear}` : "Historical");
       document.getElementById("drawer-building-type").textContent = localizeBuildingType(item.building_type, item);
@@ -7051,8 +7352,8 @@
         }
         if (timelineSec) timelineSec.classList.remove("hidden");
         timelineEl.innerHTML = list.map(tl => {
-          const stageText = i18nTl ? (tl.stage || "") : (currentLang === "zh-TW" ? (tl.stage || "") : localizeTimelineStage(tl.stage, item));
-          const detailText = i18nTl ? (tl.detail || "") : (currentLang === "zh-TW" ? (tl.detail || "") : localizeTimelineDetail(tl, item));
+          const stageText = i18nTl ? (tl.stage || "") : localizeTimelineStage(tl.stage, item);
+          const detailText = i18nTl ? (tl.detail || "") : localizeTimelineDetail(tl, item);
           return `
           <div class="relative pl-4 pb-3 border-l border-slate-200 last:pb-0">
             <div class="absolute -left-[4.5px] top-1.5 w-2 h-2 rounded-full bg-slate-800"></div>
@@ -7083,8 +7384,20 @@
 
       if (caseCountry === "JP") {
         const jpQuery = encodeURIComponent(`${item.city || ""}${item.district || ""}${details.shortDoor || ""}`);
-        const jpJobutsuLabel = currentLang === "ko" ? "성불부동산(Jobutsu) / UR·JKK ↗" : currentLang === "en" ? "Jobutsu / UR·JKK Portal ↗" : "成仏不動産 / UR・JKK ↗";
-        const jpSuumoLabel = currentLang === "ko" ? "SUUMO / LIFULL (고지사항) ↗" : currentLang === "en" ? "SUUMO / LIFULL (Disclosure) ↗" : "SUUMO / LIFULL（告知事項）↗";
+        const jpJobutsuLabel = currentLang === "ko"
+          ? "성불부동산(Jobutsu) / UR·JKK ↗"
+          : currentLang === "en"
+            ? "Jobutsu / UR·JKK Portal ↗"
+            : currentLang === "zh-TW"
+              ? "日本成佛不動產 / UR・JKK ↗"
+              : "成仏不動産 / UR・JKK ↗";
+        const jpSuumoLabel = currentLang === "ko"
+          ? "SUUMO / LIFULL (고지사항) ↗"
+          : currentLang === "en"
+            ? "SUUMO / LIFULL (Disclosure) ↗"
+            : currentLang === "zh-TW"
+              ? "SUUMO / LIFULL（日本瑕疵告知）↗"
+              : "SUUMO / LIFULL（告知事項）↗";
         extLinksBox.innerHTML = `
           <a href="https://www.oshimaland.co.jp/?q=${jpQuery}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${t("ext_jp_oshima")}</span></a>
           <a href="${details.directSourceUrl || "https://jobutsu.jp/"}" target="_blank" rel="noopener noreferrer" class="${unifiedBtnClass}"><span>${jpJobutsuLabel}</span></a>
@@ -7198,10 +7511,11 @@
         }
       }
 
-      if (currentLang !== "zh-TW" && !(item.i18n && item.i18n[currentLang])) {
+      const itemNativeLang = inferCountry(item) === "JP" ? "ja" : "zh-TW";
+      if (currentLang !== itemNativeLang && !(item.i18n && item.i18n[currentLang])) {
         const reqLang = currentLang;
         const cachedFull = clientTranslationCache.get(`case_${item.id || item.address}_${reqLang}`);
-        if (cachedFull && cachedFull.reason) {
+        if (cachedFull && cachedFull.reason && isValidTranslatedText(cachedFull.reason, item.reason, reqLang)) {
           applyTranslatedCaseToDrawer(cachedFull, reqLang);
         } else {
           fetch("/api/translate-case", {
@@ -7224,8 +7538,8 @@
             .then(r => (r.ok ? r.json() : null))
             .then(async tr => {
               // If server returned a valid translated narrative, apply it; otherwise run direct client neural translation fallback
-              const hasChineseLeft = !tr || !tr.reason || tr.reason === item.reason;
-              if (!hasChineseLeft) {
+              const isValidServerTr = tr && tr.reason && isValidTranslatedText(tr.reason, item.reason, reqLang);
+              if (isValidServerTr) {
                 applyTranslatedCaseToDrawer(tr, reqLang);
                 return;
               }
@@ -7411,7 +7725,7 @@
     // Multi-Anchor 2D Box-Muller Gaussian Geolocation Engine for Japan & Korea
     // Zero straight lines, zero spirals — organic dispersion around verified urban anchors
     // ============================================================================
-    const ARCHIVE_CACHE_VERSION = "20261031_verified_twjp_supa_v33";
+    const ARCHIVE_CACHE_VERSION = "20261101_verified_twjp_supa_v35";
 
     const jpGsiAddressCoordCache = new Map();
     const twArcgisAddressCoordCache = new Map();
@@ -7487,16 +7801,18 @@
     const EMBEDDED_JPKR_PREPARED = [];
     const EMBEDDED_JPKR_MAP = new Map();
 
-    // Client-side 5-Stage Real Incident, Address Integrity & URL Verification Gate
+    // Client-side 5-Gate Statutory Stigmatized Property Audit & Verification Engine (法定凶宅／事故物件五道核查審核機制)
     function isVerifiedRealIncidentClient(r) {
       if (!r || typeof r !== "object") return false;
       const url = String(r.source_url || "").trim();
       if (!/^https?:\/\/[^\s]+\.[^\s]+/i.test(url)) return false;
       const reason = String(r.reason || "");
       const addr = String(r.address || "");
+      const door = String(r.doorplate_address || "");
       const bldg = String(r.building_type || "");
       const city = String(r.city || "").replace(/台/g, "臺").trim();
       const fullText = `${addr} ${reason} ${r.source || ""}`;
+
       if (/事發住宅建物|住宅建物（|(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東|澎湖|金門|連江)[^\s（(]{1,4}民宅/.test(addr)) {
         return false;
       }
@@ -7504,7 +7820,13 @@
         return false;
       }
       if (/([一-龥]{2,3}[區鎮鄉市])\1/.test(addr)) return false;
-      if (/UR賃貸住宅.*競売BIT|グランメゾン.*UR|ライオンズマンション.*UR|プラウド.*UR|ブリリア.*UR|已經營|無人傷亡|幸無人員傷亡|未傳傷亡|0人傷亡|けが人なし|死者なし|国道で.*事故|新東名|東名高速|遺跡で土壁|工場で.*転落/i.test(fullText)) {
+      if (/路人逛街|橫躺路|機車停路|命喪.{0,3}街|同條路|局旁.{0,3}路|頭嚇壞路|地上路|臥倒路|為一名街|整條街|644路|埔里農路|歸仁路旁|天倫街路|指稱.{0,3}路|公里的/.test(addr + " " + door)) {
+        return false;
+      }
+      if (/檳榔攤|聚眾鬥毆|街頭鬥毆|當街砍殺|街頭槍擊|街頭家暴|16槍狙殺|紅色行李箱男屍|陳屍天幕下|陳屍\d+米深邊坡|陳屍廢棄屋旁|陳屍民宅騎樓地|逃逸移工.*跳樓逃逸受傷|雙雙受傷送醫|644路公車|開車逆向|轎車燒炭|陳屍車內|陳屍車旁|成衣廠|臭豆腐工廠|廢棄工廠|鐵皮工廠|研究院路工廠|砂石場|工寮|工安事故|工作中墜落|大葉高島屋|好市多|大型量販店|賣場電扶梯|停業SPA|小吃店|日式料理店|知名酒吧|商旅飯店|鐵皮屋宮廟|信二路立體停車場|消防局旁|機械式停車塔|停車塔|非屬專有所屬區域內墜樓|疑似非屬專有所屬區域/.test(fullText)) {
+        return false;
+      }
+      if (/UR賃貸住宅.*競売BIT|グランメゾン.*UR|ライオンズマンション.*UR|プラウド.*UR|ブリリア.*UR|已經營|無人傷亡|幸無人員傷亡|幸無傷亡|未傳傷亡|0人傷亡|けが人なし|けが人はいない|死者なし|命に別条|命に別状|避難し無事|無事避難|全員無事|殺人未遂|放火未遂|自殺未遂|国道で.*事故|新東名|東名高速|遺跡で土壁|工場で.*転落|船火災|タグボート|須磨シーワールド|老人ホーム|介護施設|グループホーム|ドラッグストア|刑務所|拘置所|牛舎|豚舎|鶏舎|融雪槽|コンビニ駐車場|アパート駐車場|ゴミ集積所|ごみ集積所/i.test(fullText)) {
         return false;
       }
       if (/錦新大樓/.test(addr) && city !== "臺北市") return false;
@@ -7875,6 +8197,7 @@
           if (countrySelect) countrySelect.value = qCountry;
           populateCityDropdown(citySelect, true, qCountry);
           updateDbSourceDropdownOptions(qCountry);
+          updateHeaderCountryBadge(qCountry);
         }
 
         if (qCity && TAIWAN_DISTRICTS[qCity]) {
@@ -7883,23 +8206,29 @@
             countrySelect.value = inferredC;
             populateCityDropdown(citySelect, true, inferredC);
             updateDbSourceDropdownOptions(inferredC);
+            updateHeaderCountryBadge(inferredC);
           }
           citySelect.value = qCity;
           populateDistrictDropdown(qCity, districtSelect, true);
           if (qDist) districtSelect.value = qDist;
         } else if (!hasAppliedAutoGeoRegion && !qCountry && !qCity && !qDist && !qKw && !qCase && !pathSlug) {
           hasAppliedAutoGeoRegion = true;
-          if (initialAutoDetectedCountry === "JP") {
-            if (countrySelect) countrySelect.value = initialAutoDetectedCountry;
-            populateCityDropdown(citySelect, true, initialAutoDetectedCountry);
+          const savedPicked = sessionStorage.getItem("haunted_map_country_picked") || localStorage.getItem("haunted_map_country_picked");
+          const targetInitCountry = (savedPicked === "JP" || savedPicked === "TW") ? savedPicked : initialAutoDetectedCountry;
+          if (targetInitCountry === "JP" || targetInitCountry === "TW") {
+            if (countrySelect) countrySelect.value = targetInitCountry;
+            populateCityDropdown(citySelect, true, targetInitCountry);
             populateDistrictDropdown("", districtSelect, true);
-            updateDbSourceDropdownOptions(initialAutoDetectedCountry);
+            updateDbSourceDropdownOptions(targetInitCountry);
+            updateHeaderCountryBadge(targetInitCountry);
             applyFilters(true);
-            const center = getCountryDefaultCenter(initialAutoDetectedCountry);
+            const center = getCountryDefaultCenter(targetInitCountry);
             mapFlyTo(center.lat, center.lng, center.zoom);
           } else {
             fetch("/api/geo-detect").then(r => r.ok ? r.json() : null).then(geo => {
               if (!geo || !geo.country || citySelect.value) return;
+              const nowPicked = sessionStorage.getItem("haunted_map_country_picked") || localStorage.getItem("haunted_map_country_picked");
+              if (nowPicked) return;
               if (geo.country === "JP") {
                 const explicitLang = localStorage.getItem("tw_archive_lang_explicit");
                 if (!explicitLang && geo.lang && I18N_DICT[geo.lang]) {
@@ -7909,6 +8238,7 @@
                 populateCityDropdown(citySelect, true, "JP");
                 populateDistrictDropdown("", districtSelect, true);
                 updateDbSourceDropdownOptions("JP");
+                updateHeaderCountryBadge("JP");
                 applyFilters(true);
                 const center = getCountryDefaultCenter("JP");
                 mapFlyTo(center.lat, center.lng, center.zoom);
@@ -8272,22 +8602,102 @@
       const validReason = isValidTranslatedText(tr.reason, "", lang) ? tr.reason : "";
       if (!validAddr && !validDist && !validReason) return;
 
+      const existing = clientTranslationCache.get(`${key}_${lang}`) || {};
       clientTranslationCache.set(`${key}_${lang}`, {
-        address: validAddr,
-        district: validDist,
-        reason: validReason
+        address: validAddr || existing.address || "",
+        district: validDist || existing.district || "",
+        reason: validReason || existing.reason || ""
       });
       if (cardEl) {
-        const addrEl = cardEl.querySelector(".card-addr-el");
+        const addrLinkEl = cardEl.querySelector(".card-addr-el a") || cardEl.querySelector(".card-addr-el");
         const distEl = cardEl.querySelector(".card-dist-el");
         const reasonEl = cardEl.querySelector(".card-reason-el");
-        if (addrEl && validAddr) addrEl.textContent = validAddr;
+        if (addrLinkEl && validAddr) addrLinkEl.textContent = validAddr;
         if (distEl && validDist) {
           const cityZh = cardEl.getAttribute("data-city-zh") || "";
           distEl.textContent = `${tCity(cityZh)} ${validDist}`;
         }
         if (reasonEl && validReason) reasonEl.textContent = validReason;
       }
+    }
+
+    let cardTranslationBatchToken = 0;
+    function scheduleVisibleCardsTranslation(visibleRecords, reqLang) {
+      if (!Array.isArray(visibleRecords) || visibleRecords.length === 0) return;
+      const myToken = ++cardTranslationBatchToken;
+      const pending = visibleRecords.filter(item => {
+        if (!item) return false;
+        const itemNative = inferCountry(item) === "JP" ? "ja" : "zh-TW";
+        if (reqLang === itemNative && !(reqLang === "zh-TW" && /[\u3040-\u309f\u30a0-\u30ff]/.test(item.reason || ""))) {
+          return false;
+        }
+        if (item.i18n && item.i18n[reqLang] && isValidTranslatedText(item.i18n[reqLang].reason, item.reason, reqLang)) {
+          return false;
+        }
+        const cached = clientTranslationCache.get(`${item.__key}_${reqLang}`);
+        if (cached && cached.reason && isValidTranslatedText(cached.reason, item.reason, reqLang)) {
+          return false;
+        }
+        return true;
+      });
+      if (pending.length === 0) return;
+
+      // Translate in small non-blocking chunks of 6 items via /api/translate-batch (with client fallback)
+      (async () => {
+        const chunkSize = 6;
+        for (let i = 0; i < Math.min(pending.length, 24); i += chunkSize) {
+          if (myToken !== cardTranslationBatchToken || currentLang !== reqLang) return;
+          const slice = pending.slice(i, i + chunkSize);
+          let handledByServer = false;
+          try {
+            const res = await fetch("/api/translate-batch", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                lang: reqLang,
+                items: slice.map(it => ({
+                  key: String(it.__key),
+                  address: localizeAddressDisplay(it),
+                  district: tDistrict(it.district),
+                  reason: cleanCaseReasonClient(it.reason || "", it)
+                }))
+              })
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.translations && typeof data.translations === "object") {
+                for (const it of slice) {
+                  const tr = data.translations[String(it.__key)];
+                  if (tr && isValidTranslatedText(tr.reason, it.reason, reqLang)) {
+                    handledByServer = true;
+                    applyCardTranslationToDom(it.__key, {
+                      address: localizeAddressDisplay(it),
+                      district: tDistrict(it.district),
+                      reason: cleanCaseReasonClient(tr.reason, it)
+                    }, reqLang);
+                  }
+                }
+              }
+            }
+          } catch (e) {}
+
+          if (!handledByServer) {
+            await Promise.all(slice.map(async (it) => {
+              if (myToken !== cardTranslationBatchToken || currentLang !== reqLang) return;
+              const rawR = cleanCaseReasonClient(it.reason || "", it);
+              const tReason = await translateTextFreeGoogleClient(rawR, reqLang);
+              if (tReason && isValidTranslatedText(tReason, rawR, reqLang)) {
+                applyCardTranslationToDom(it.__key, {
+                  address: localizeAddressDisplay(it),
+                  district: tDistrict(it.district),
+                  reason: cleanCaseReasonClient(tReason, it)
+                }, reqLang);
+              }
+            }));
+          }
+          persistClientTranslationCache();
+        }
+      })();
     }
 
     let lastRenderedVisibleSignature = "";
@@ -8661,6 +9071,7 @@
       });
 
       listContainer.appendChild(buildPaginationFooterElement());
+      scheduleVisibleCardsTranslation(visibleRecords, currentLang);
     }
 
     function normalizeSearchTokenVariants(token = "") {
@@ -9343,6 +9754,7 @@
       const target = ["TW", "JP"].includes(cCode) ? cCode : "TW";
       try {
         sessionStorage.setItem("haunted_map_country_picked", target);
+        localStorage.setItem("haunted_map_country_picked", target);
       } catch (e) {}
       if (countrySelect) {
         countrySelect.value = target;
@@ -9353,7 +9765,6 @@
       updateDbSourceDropdownOptions(target);
       if (discCountry) {
         discCountry.value = target;
-        
       }
       if (formCountry) {
         formCountry.value = target;
@@ -9362,9 +9773,6 @@
       }
       updateHeaderCountryBadge(target);
       countryWelcomeModal?.classList.add("hidden");
-      if (window.innerWidth < 768 && currentMobileView === "list") {
-        setMobileViewMode("split");
-      }
       const center = getCountryDefaultCenter(target);
       lastTargetMapCenter = center;
       mapFlyTo(center.lat, center.lng, center.zoom);

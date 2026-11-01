@@ -1142,7 +1142,7 @@ class VerificationPipeline:
             "lat": evaluated["lat"],
             "lng": evaluated["lng"],
             "category": evaluated["incident_type"],
-            "reason": f"【{evaluated['source_name']}公開實證】{evaluated['source_title']} — {evaluated['summary']}",
+            "reason": f"{evaluated['source_title']} — {evaluated['summary']}",
             "source": evaluated["source_name"],
             "case_fingerprint": evaluated["case_fingerprint"],
             "merged_count": 1,

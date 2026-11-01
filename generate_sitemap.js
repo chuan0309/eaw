@@ -147,9 +147,9 @@ export function renderStandaloneCaseHtml(baseHtml, record, totalCount = 9217, ba
   const updatedDate = String(record.updated_at || record.verified_at || new Date().toISOString().slice(0, 10)).slice(0, 10);
 
   const rawTitle = isJp
-    ? `${rawAddr}｜${rawCat}（${incDate}）心理的瑕疵・事故物件実証記録 — 凶宅地圖`
-    : `${rawAddr}｜${rawCat}（${incDate}）事故建物與產權查證卷宗 — 凶宅地圖`;
-  const rawDesc = `${city}${district} ${rawAddr}（${bldgType}）事故物件實證紀錄。類別：${rawCat}，案發日期：${incDate}。${rawReason.slice(0, 110)}（核實來源：${sourceName}）`;
+    ? `${rawAddr}｜${rawCat}（${incDate}）事故物件記録 — 凶宅地圖`
+    : `${rawAddr}｜${rawCat}（${incDate}）事故建物紀錄 — 凶宅地圖`;
+  const rawDesc = `${city}${district} ${rawAddr}（${bldgType}）事故紀錄。類別：${rawCat}，案發日期：${incDate}。${rawReason.slice(0, 110)}（來源：${sourceName}）`;
 
   const title = escapeHtmlAttr(rawTitle);
   const desc = escapeHtmlAttr(rawDesc);
@@ -240,8 +240,8 @@ export function renderStandaloneCaseHtml(baseHtml, record, totalCount = 9217, ba
           { "@type": "PropertyValue", name: "案發日期 (Incident Date)", value: incDate },
           { "@type": "PropertyValue", name: "事故類別 (Incident Category)", value: rawCat },
           { "@type": "PropertyValue", name: "建物型態 (Building Type)", value: bldgType },
-          { "@type": "PropertyValue", name: "核實來源 (Verification Source)", value: sourceName },
-          { "@type": "PropertyValue", name: "最後核實更新 (Last Verified)", value: updatedDate }
+          { "@type": "PropertyValue", name: "資料來源 (Source)", value: sourceName },
+          { "@type": "PropertyValue", name: "更新日期 (Last Updated)", value: updatedDate }
         ]
       }
     ]
@@ -251,7 +251,7 @@ export function renderStandaloneCaseHtml(baseHtml, record, totalCount = 9217, ba
   const headInject = `<link rel="canonical" id="canonical-link" href="${canonicalUrl}" />\n<script id="dynamic-case-jsonld" type="application/ld+json">${jsonLd}</script>\n<script>window.__PRELOADED_CASE_RECORD__ = ${safeRecordJson};</script>\n</head>`;
   html = html.replace(/<\/head>/i, headInject);
 
-  const prerenderArticle = `<article id="seo-case-prerender" class="sr-only" aria-hidden="true"><h1>${addrEsc}</h1><p>所屬地區：${escapeHtmlAttr(city)} ${escapeHtmlAttr(district)}｜案發日期：${escapeHtmlAttr(incDate)}｜類別：${catEsc}｜建物型態：${escapeHtmlAttr(bldgType)}</p><p>${reasonEsc}</p><p>查證來源：${srcEsc}（最後核實更新：${escapeHtmlAttr(updatedDate)}）</p></article>`;
+  const prerenderArticle = `<article id="seo-case-prerender" class="sr-only" aria-hidden="true"><h1>${addrEsc}</h1><p>所屬地區：${escapeHtmlAttr(city)} ${escapeHtmlAttr(district)}｜案發日期：${escapeHtmlAttr(incDate)}｜類別：${catEsc}｜建物型態：${escapeHtmlAttr(bldgType)}</p><p>${reasonEsc}</p><p>來源：${srcEsc}（更新日期：${escapeHtmlAttr(updatedDate)}）</p></article>`;
   html = html.replace(/<body([^>]*)>/i, `<body$1>${prerenderArticle}`);
   return html;
 }

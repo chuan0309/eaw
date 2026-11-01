@@ -642,7 +642,7 @@ export async function crawlRealJapanNewsAcross47Prefectures(existingRecords = []
               ? "公営・都市機構団地住宅"
               : "一戸建て住宅・居宅";
 
-            const descSnippet = item.description && item.description !== item.title ? ` — 報道内容：${item.description.slice(0, 160)}` : "";
+            const descSnippet = item.description && item.description !== item.title ? ` — ${item.description.slice(0, 160)}` : "";
             const record = {
               id: `jp-news-${Buffer.from(item.link).toString("base64url").slice(-16)}`,
               country: "JP",
@@ -655,13 +655,13 @@ export async function crawlRealJapanNewsAcross47Prefectures(existingRecords = []
               location_accuracy: loc.matchedExactChome ? "CHOME_VERIFIED_MLIT" : "CHOME_VERIFIED_NEWS",
               incident_date: item.date,
               building_type: bldgType,
-              current_status: "心理的瑕疵・告知事項調査対象物件（公開報道検証済）",
+              current_status: "現況使用中",
               category: cat,
               db_source: "NEWS_PUBLIC_ARCHIVE",
-              reason: `【${item.media}・事故物件調査記録】${item.title}${descSnippet}（発生・報道日：${item.date}／対象所在地：${loc.chomeAddr}）。`,
-              source: `${item.media}（大島てる・公開報道アーカイブ照合）`,
+              reason: `${item.title}${descSnippet}`,
+              source: item.media,
               source_url: item.link,
-              media_verification: `${item.media} 公開報道記事・事故物件履歴検証済`,
+              media_verification: item.media,
               auction_record: ""
             };
 

@@ -302,10 +302,148 @@ function isSyntheticRecord(raw) {
   return false;
 }
 
-function stripSyntheticMergedText(str = "") {
-  return String(str || "")
-    .split(/｜\s*【交叉查證(?:與媒體報導)?整合】(?=(?:【[^】]*?(?:專有部分屋內燒炭|傳統公寓4樓室內自縊|高層住宅大樓11樓|分租套房5樓陽台|透天住宅深夜電線|電梯華廈6樓住處|集合住宅7樓獨居)|【大島てる（Oshimaland）事故物件公示|【事故物件・特殊清掃および心理的瑕疵記録|【裁判所競売物件情報（BIT）3点セット|【住宅火災死亡事案・大島てる))/)[0]
+function cleanSingleSourceToken(tok = "") {
+  let s = String(tok || "").trim();
+  if (!s) return "";
+  s = s.replace(/^https?:\/\/newsdigest\.jp\/?/i, "NewsDigest");
+  s = s.replace(/^https?:\/\/[^\s]+/i, "");
+  s = s.replace(/(?:公開)?(?:新聞|媒體)?(?:報導|報道)?「[\s\S]*$/g, "");
+  s = s.replace(/UR都市機構公式ウェブサイト[\s\S]*$/g, "UR都市機構");
+  s = s.replace(/JKK東京公式ウェブサイト[\s\S]*$/g, "JKK東京");
+  s = s.replace(/[（(][^）)]*(?:unluckyhouse|Oshimaland|公開社會新聞|實務檔案|報道アーカイブ|アーカイブ照合|公開新聞|查證|検証|UDN|日本公開報道|事故ニュース)[^）)]*[）)]/gi, "");
+  s = s.replace(/\bunluckyhouse\.com\b/gi, "");
+  s = s.replace(/臺灣凶宅網/g, "台灣凶宅網");
+  s = s.replace(/公開凶宅檔案庫實證|實證資料庫|實證收錄|公開報導與門牌交叉查證|公開新聞連結查證|公開報道記事リンク検証済|公開報道記事・事故物件履歴検証済|報道リンク検証済|事故物件公示情報・裁判所競売記録・報道アーカイブ照合|事故物件公示情報・裁判所競売記録・報道ア|照合・日本公開社会ニュース・警察消防報道|公開社會新聞檔案交叉查證|公開新聞實證|媒體報導查證|實證報導查證|實證報導|實證連結|報導整合|交叉查證|交叉查核|雙重核實|報道検証|公開報道照合|事故物件調査記録|公開報道記事リンク|公開報道記事|公開新聞連|社會版報導|彙整/g, " ");
+  s = s.replace(/^[×＆&·・、,/\s｜\-]+|[×＆&·・、,/\s｜\-]+$/g, "");
+  s = s.replace(/\s+/g, " ").trim();
+  if (/^(?:Google News RSS即時新聞|地方警政通報系統|公開社會新聞|日本公開社会ニュース|警察消防報道|報|新|FN|F|TBS N|LINE T|LOOK|NCC|沖縄タ|Yahoo!フ|中日新聞W)$/i.test(s)) return "";
+  return s;
+}
+
+export function cleanSourceOrigin(rawSource = "", rawMedia = "", rawReason = "", country = "TW") {
+  let combined = `${rawMedia || ""} × ${rawSource || ""}`;
+  const jpTrailingMedia = String(rawReason || "").match(/「[^」]+?\s+-\s+([^」\s\-]+)」/);
+  if (jpTrailingMedia && jpTrailingMedia[1]) {
+    combined = `${jpTrailingMedia[1]} × ${combined}`;
+  }
+  const rawBracket = String(rawReason || "").match(/^【([^】]+)】/);
+  if (
+    rawBracket &&
+    rawBracket[1] &&
+    /凶宅網|實證|報導整合|報道検証|公開報道照合|事故物件調査記録|新聞|ニュース|報|TVBS|ETtoday|三立|民視|公視|華視|中天|東森|中時|聯合|中央社|鏡週刊|壹蘋|大島てる/.test(rawBracket[1])
+  ) {
+    combined = `${rawBracket[1]} × ${combined}`;
+  }
+
+  const rawTokens = combined.split(/[×＆&·・、,｜]+/);
+  const cleaned = [];
+  for (const rt of rawTokens) {
+    const c = cleanSingleSourceToken(rt);
+    if (!c || c.length < 2) continue;
+    cleaned.push(c);
+  }
+
+  const finalTokens = [];
+  for (const c of cleaned) {
+    const normC = c.replace(/\s+/g, "");
+    if (
+      finalTokens.some(ex => {
+        const normEx = ex.replace(/\s+/g, "");
+        return (
+          normEx === normC ||
+          (normEx.startsWith(normC) && normEx.length > normC.length) ||
+          (c === "台灣凶宅網" && ex.startsWith("台灣凶宅網 #"))
+        );
+      })
+    ) {
+      continue;
+    }
+    const shortIdx = finalTokens.findIndex(ex => {
+      const normEx = ex.replace(/\s+/g, "");
+      return (
+        (normC.startsWith(normEx) && normC.length > normEx.length && normEx.length <= 5) ||
+        (ex === "台灣凶宅網" && c.startsWith("台灣凶宅網 #"))
+      );
+    });
+    if (shortIdx !== -1) {
+      finalTokens[shortIdx] = c;
+    } else {
+      finalTokens.push(c);
+    }
+  }
+
+  if (finalTokens.length === 0) {
+    return country === "JP" ? "大島てる・公開報道" : "公開新聞報導";
+  }
+  const sep = country === "JP" ? "・" : "、";
+  return finalTokens.slice(0, 3).join(sep);
+}
+
+export function cleanCaseReasonText(rawReason = "", country = "TW") {
+  let s = stripHtmlAndBrokenLinks(rawReason);
+  if (!s) return "";
+
+  // 1. Handle JP 【大島てる・公開報道照合】...における事案：「...」
+  if (/^【大島てる・公開報道照合】/.test(s) && /における事案：「/.test(s)) {
+    s = s.replace(/^【大島てる・公開報道照合】[^「]*「([\s\S]*?)」(?:\s*。?\s*宅地建物取引業法[\s\S]*)?$/, "$1").trim();
+  }
+
+  // 2. Strip merged cross-verification suffixes
+  s = s
+    .split(/｜\s*【交叉查證(?:與媒體報導)?整合】/)[0]
+    .split(/｜\s*【交叉查證整合】/)[0]
     .trim();
+
+  // 3. Strip leading source/verification bracket 【...】 so it doesn't clutter the description with "報導整合" / "公開新聞實證"
+  const leadBracket = s.match(/^【([^】]+)】\s*([\s\S]*)$/);
+  if (leadBracket) {
+    const tag = leadBracket[1].trim();
+    const rest = leadBracket[2].trim();
+    if (
+      rest.length >= 8 &&
+      (/凶宅網|報導整合|實證收錄|公開新聞實證|公開實證|實證報導|報道検証|公開報道照合|事故物件調査記録/.test(tag) ||
+        /^(?:自由時報|聯合報|聯合新聞網|中國時報|中時新聞網|TVBS新聞網?|ETtoday(?:新聞雲|東森新聞)?|三立新聞網?|中天新聞網?|民視新聞網?|公視新聞網?|華視新聞網?|台視新聞網?|東森新聞網?|壹蘋新聞網|鏡週刊|中央社|大紀元新聞|蘋果日報|Yahoo奇摩新聞|Yahoo!ニュース)/.test(tag))
+    ) {
+      s = rest;
+    }
+  }
+
+  // 4. Clean verbose internal labels & boilerplate
+  s = s
+    .replace(/将 Yahoo 設為首選來源[^。]*?（另開新視窗）\s*/g, "")
+    .replace(/將 Yahoo 設為首選來源[^。]*?（另開新視窗）\s*/g, "")
+    .replace(/\s*—\s*(?:媒體報導與卷宗內文摘錄|報導內文摘錄|報導摘錄|報道内容)：\s*/g, " — ")
+    .replace(/（檔案編號：t-\d+）/g, "")
+    .replace(/（報導／歸檔日期：[^）]*）/g, "")
+    .replace(/（発生・報道日：[^）]*）/g, "")
+    .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
+    .replace(/（系統已自動?比對整合[\s\S]*$/, "")
+    .trim();
+
+  // 5. Strip repetitive trailing legal/procedural supplement if core description is already substantive
+  const beforeSupp = s
+    .replace(
+      /(?:。|\s)*(?:案發時社區住戶與管理人員聽聞巨響後|案發後經現場民眾或大樓管理室通報119救護車|事故發生時現場竄出濃煙與火舌|本案係因住宅室內或加裝窗戶之陽台熱水器|案發後轄區警分局偵查隊與鑑識人員立即封鎖|本案於不動產買賣移轉後|該.{1,15}標的於進入.{1,15}民事執行處強制執行拍賣程序時|案發時因家屬、房東或鄰里察覺異狀)[\s\S]*$/g,
+      ""
+    )
+    .trim();
+  if (beforeSupp.length >= 12) {
+    s = beforeSupp;
+  } else {
+    s = s
+      .replace(/，?實地看屋時建議向管委會、鄰里長及內政部實價登錄特殊交易備註欄進行交叉查證/g, "")
+      .replace(/，?買方亦可透過(?:台灣凶宅網、)?司法院裁判書系統與[^。]*進一步交叉核對/g, "")
+      .replace(/經法院公文書與警政紀錄雙重核實，/g, "");
+  }
+
+  // Strip trailing " - MediaName" in TW headlines if redundant
+  s = s.replace(/\s+-\s+(?:中天新聞網|TVBS新聞網|公視新聞網?|自由時報|聯合新聞網|三立新聞網|ETtoday新聞雲|Yahoo奇摩新聞)\s*。?$/, "");
+  s = s.replace(/\s+/g, " ").trim();
+  return s;
+}
+
+function stripSyntheticMergedText(str = "") {
+  return cleanCaseReasonText(str);
 }
 
 export function mergeRecordsIntoDossier(existing, incoming) {
@@ -319,28 +457,20 @@ export function mergeRecordsIntoDossier(existing, incoming) {
 
   const primary = (!exHasSpecific && inHasSpecific) ? { ...incoming } : { ...existing };
   const secondary = primary === incoming ? existing : incoming;
+  const country = inferRecordCountry(primary);
 
-  const r1 = stripSyntheticMergedText(primary.reason);
-  const r2 = stripSyntheticMergedText(secondary.reason);
-  primary.reason = r1;
-  if (r2 && !r1.includes(r2.slice(0, 24))) {
-    const cleanR2 = r2.replace(/案發時社區住戶.*$|案發後經現場民眾.*$|本案係因住宅室內.*$|案發時因家屬.*$/g, "").trim();
-    if (cleanR2 && !r1.includes(cleanR2.slice(0, 20))) {
-      primary.reason = `${r1} ｜ 【交叉查證與媒體報導整合】${cleanR2}`.slice(0, 520);
-    }
-  }
+  const r1 = cleanCaseReasonText(primary.reason, country);
+  const r2 = cleanCaseReasonText(secondary.reason, country);
+  primary.reason = r1.length >= r2.length ? r1 : r2;
 
-  const m1 = String(primary.media_verification || "").trim();
-  const m2 = String(secondary.media_verification || "").trim();
-  if (m2 && !m1.includes(m2)) {
-    primary.media_verification = `${m1} × ${m2}`.slice(0, 120);
-  }
-
-  const s1 = String(primary.source || "").trim();
-  const s2 = String(secondary.source || "").trim();
-  if (s2 && !s1.includes(s2.slice(0, 16))) {
-    primary.source = `${s1} ＆ ${s2}`.slice(0, 140);
-  }
+  const cleanOrigin = cleanSourceOrigin(
+    `${primary.source || ""} × ${secondary.source || ""}`,
+    `${primary.media_verification || ""} × ${secondary.media_verification || ""}`,
+    primary.reason,
+    country
+  );
+  primary.source = cleanOrigin;
+  primary.media_verification = cleanOrigin;
 
   if (
     String(secondary.source_url || "").includes("showthread.php?t=") &&
@@ -360,10 +490,11 @@ export function repairAndCalibrateRecord(raw) {
 
   const payload = raw.raw_payload && typeof raw.raw_payload === "object" ? raw.raw_payload : {};
   const merged = { ...payload, ...raw };
-  merged.reason = stripSyntheticMergedText(merged.reason || "");
+  const country = inferRecordCountry(merged);
+  merged.reason = cleanCaseReasonText(merged.reason || "", country);
   if (isSyntheticRecord(merged)) return null;
 
-  const country = inferRecordCountry(merged);
+  const cleanOrigin = cleanSourceOrigin(merged.source, merged.media_verification, raw.reason || merged.reason, country);
 
   if (country === "TW") {
     let city = String(merged.city || "").replace(/巿/g, "市").replace(/台/g, "臺").trim();
@@ -381,15 +512,13 @@ export function repairAndCalibrateRecord(raw) {
     }
 
     let addr = normalizeChineseAddressNumbers(stripHtmlAndBrokenLinks(merged.address || merged.doorplate_address || "")).trim();
-    const fullReason = normalizeChineseAddressNumbers(stripHtmlAndBrokenLinks(merged.reason || "")).trim();
-    const headlineOnlyReason = fullReason
-      .split(/案發時社區住戶|案發後經現場民眾|事故發生時現場|本案係因住宅室內|案發後轄區警分局|本案於不動產買賣|該.{1,12}標的於進入|案發時因家屬/)[0]
-      .trim();
+    const fullReason = normalizeChineseAddressNumbers(merged.reason || "").trim();
+    const headlineOnlyReason = fullReason;
 
     const fullText = `${headlineOnlyReason} ${addr}`;
 
     if (
-      /主要案發地點在街頭|當街刺殺|當街砍|發生於車內|陳屍於車內|生技公司廠房|資源回收場|成衣廠|成衣大廠|倉庫火警|大廠火災|300坪鐵皮|鐵皮場|鐵皮工廠|工廠火警|廠房火警|河口湖命案主嫌背景|父擁臺南.*13年前|陳屍於樹下|工寮聚餐飲酒後突發猝死|周邊停車場|洗外牆.*吊車|商辦大樓工地|教學大樓|大廳滑手機不動|倒臥廁所送醫亡|歇業SPA養生館|園區周邊辦公室|住警器宣導|住宅火災.*住警器|客機險撞幽浮/.test(
+      /主要案發地點在街頭|當街刺殺|當街砍|發生於車內|陳屍於車內|溺水|溪流域|生技公司廠房|資源回收場|成衣廠|成衣大廠|倉庫火警|大廠火災|300坪鐵皮|鐵皮場|鐵皮工廠|工廠火警|廠房火警|河口湖命案主嫌背景|父擁臺南.*13年前|陳屍於樹下|工寮聚餐飲酒後突發猝死|周邊停車場|洗外牆.*吊車|商辦大樓工地|教學大樓|大廳滑手機不動|倒臥廁所送醫亡|歇業SPA養生館|園區周邊辦公室|住警器宣導|住宅火災.*住警器|客機險撞幽浮/.test(
         fullText
       )
     ) {
@@ -440,9 +569,19 @@ export function repairAndCalibrateRecord(raw) {
       dist = "中區";
     }
 
-    let bldgType = String(merged.building_type || "集合住宅大樓").trim();
-    if (/^(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東)[^\s]{1,4}民宅$/.test(bldgType)) {
-      bldgType = /透天/.test(fullText) ? "透天厝住宅" : /套房/.test(fullText) ? "出租套房大樓" : /公寓/.test(fullText) ? "傳統公寓住宅" : "社區電梯大樓";
+    let bldgType = String(merged.building_type || "社區電梯大樓").trim();
+    if (
+      /^(?:台北|臺北|新北|桃園|台中|臺中|台南|臺南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|臺東|恆春|頭城|日上)/.test(
+        bldgType
+      )
+    ) {
+      bldgType = /透天/.test(fullText)
+        ? "獨棟透天住宅"
+        : /套房/.test(fullText)
+        ? "獨立套房社區"
+        : /公寓/.test(fullText)
+        ? "五層樓老舊公寓"
+        : "社區電梯大樓";
     }
 
     const isUnluckyHouseRecord =
@@ -534,9 +673,7 @@ export function repairAndCalibrateRecord(raw) {
       `${cleanDoorplate}_${merged.incident_date || ""}_${merged.id || ""}`
     );
 
-    const cleanedReason = fullReason
-      .replace(/相關刑案偵審過程與路段背景均載明於公開社會新聞與司法卷宗/g, "相關屋內非自然死亡始末與產權現況均載明於公開實證檔案與司法卷宗")
-      .slice(0, 480);
+    const cleanedReason = fullReason.slice(0, 480);
 
     const calibrated = enrichCaseNarrativeAndTimeline({
       ...merged,
@@ -546,14 +683,17 @@ export function repairAndCalibrateRecord(raw) {
       address: cleanDisplayAddr,
       doorplate_address: cleanDoorplate,
       building_type: bldgType,
+      current_status: "產權存續",
       reason: cleanedReason,
+      source: cleanOrigin,
+      media_verification: cleanOrigin,
       lat: corridorLat,
       lng: corridorLng
     });
     return isVerifiedRealIncidentRecord(calibrated) ? calibrated : null;
   }
 
-  const rawReason = stripHtmlAndBrokenLinks(merged.reason || "").trim();
+  const rawReason = cleanCaseReasonText(merged.reason || "", "JP");
   const rawAddr = stripHtmlAndBrokenLinks(merged.address || merged.doorplate_address || "").trim();
   const fullJpText = `${rawReason} ${rawAddr}`;
 
@@ -564,11 +704,7 @@ export function repairAndCalibrateRecord(raw) {
   const isLandmarkCase = String(merged.id || "").startsWith("jp-verified-");
   const cleanJpHeadline = isLandmarkCase
     ? `${rawAddr} ${rawReason}`
-    : rawReason
-        .replace(/^【大島てる・公開報道照合】[^「]*「([\s\S]*?)」[\s\S]*$/, "$1")
-        .replace(/（発生・報道日：[\s\S]*$/, "")
-        .replace(/｜\s*【交叉查證[\s\S]*$/, "")
-        .trim();
+    : rawReason;
 
   const hintPref = JAPAN_47_PREFECTURES.includes(String(merged.city || "").trim())
     ? String(merged.city).trim()
@@ -596,7 +732,10 @@ export function repairAndCalibrateRecord(raw) {
     district: resolved.district,
     doorplate_address: cleanJpDoorplate,
     address: cleanJpAddress,
+    current_status: "現況使用中",
     reason: rawReason,
+    source: cleanOrigin,
+    media_verification: cleanOrigin,
     building_type: bldgType,
     location_accuracy: merged.location_accuracy || "CHOME_VERIFIED_MLIT",
     lat: resolved.lat,
@@ -1110,16 +1249,13 @@ async function harvestAllUnluckyHouseArchivePages(existingUrls) {
       .trim()
       .slice(0, 260);
 
-    const headerTag = mediaOutlet
-      ? `【台灣凶宅網 #${tid} × ${mediaOutlet} 報導整合】`
-      : `【台灣凶宅網 unluckyhouse.com 實證收錄 #${tid}】`;
     const integratedReason = cleanBodyExcerpt
-      ? `${headerTag}[${resolvedDist}] ${rawTitle} — 媒體報導與卷宗內文摘錄：${cleanBodyExcerpt}（檔案編號：t-${tid}）`
-      : `${headerTag}[${resolvedDist}] ${rawTitle}（檔案編號：t-${tid}）`;
+      ? `[${resolvedDist}] ${rawTitle} — ${cleanBodyExcerpt}`
+      : `[${resolvedDist}] ${rawTitle}`;
 
-    const mediaVerif = mediaOutlet
-      ? `台灣凶宅網 (unluckyhouse.com) #${tid} × ${mediaOutlet} 交叉查證`
-      : `台灣凶宅網 (unluckyhouse.com) 公開凶宅檔案庫實證 #${tid}`;
+    const cleanSrcLabel = mediaOutlet
+      ? `台灣凶宅網 #${tid}、${mediaOutlet}`
+      : `台灣凶宅網 #${tid}`;
 
     const rawAddressCandidate = `${resolvedCity} ${resolvedDist} ${rawTitle} ${rawBody.slice(0, 900)}`;
     const calibrated = repairAndCalibrateRecord({
@@ -1131,18 +1267,14 @@ async function harvestAllUnluckyHouseArchivePages(existingUrls) {
       doorplate_address: rawAddressCandidate,
       incident_date: incDate,
       building_type: bldg,
-      current_status: mediaOutlet
-        ? `產權存續（台灣凶宅網 #${tid} × ${mediaOutlet} 媒體報導查證）`
-        : "產權存續（台灣凶宅網 unluckyhouse.com 實證收錄）",
+      current_status: "產權存續",
       category: cat,
       db_source: mediaOutlet.includes("司法院") ? "JUDICIAL_AUCTION" : "UNLUCKYHOUSE_ARCHIVE",
       reason: integratedReason,
-      source: mediaOutlet
-        ? `台灣凶宅網 (unluckyhouse.com) #${tid} ＆ ${mediaOutlet} 報導整合`
-        : `台灣凶宅網 (unluckyhouse.com) 實證資料庫 #${tid}`,
+      source: cleanSrcLabel,
       source_url: showthreadUrl,
-      media_verification: mediaVerif,
-      auction_record: "凶宅事故揭露紀錄（買賣移轉應記載於不動產說明書）"
+      media_verification: cleanSrcLabel,
+      auction_record: "凶宅事故揭露紀錄"
     });
 
     if (calibrated) {
@@ -1253,13 +1385,13 @@ async function crawlTaiwanLocalNewsRssWithRoadVerification(seenUrls) {
               doorplate_address: `${city}${matchedDist} ${combined}`,
               incident_date: dateIso,
               building_type: /公寓/.test(combined) ? "傳統公寓住宅" : /透天/.test(combined) ? "透天厝住宅" : /套房/.test(combined) ? "出租套房大樓" : "社區電梯大樓",
-              current_status: `產權存續（${media} 實證報導查證）`,
+              current_status: "產權存續",
               category: cat,
               db_source: "NEWS_PUBLIC_ARCHIVE",
-              reason: `【${media} 實證報導】${title}${desc && !desc.includes(title.slice(0, 10)) ? ` — 報導摘錄：${desc}` : ""}`,
-              source: `${media}（公開社會新聞檔案交叉查證）`,
+              reason: `${title}${desc && !desc.includes(title.slice(0, 10)) ? ` — ${desc}` : ""}`,
+              source: media,
               source_url: link,
-              media_verification: `${media} 公開報導與門牌交叉查證`,
+              media_verification: media,
               auction_record: "凶宅事故揭露紀錄"
             });
 
@@ -1338,17 +1470,20 @@ async function upsertSupabaseBatch(records = [], existingFingerprints = new Set(
 
 // Compact record for JSON persistence so calibrated_archive.json stays well under 18 MiB (Cloudflare Pages 25 MiB limit)
 function compactRecordForStorage(rec) {
+  const country = rec.country || "TW";
+  const cleanOrigin = cleanSourceOrigin(rec.source, rec.media_verification, rec.reason, country);
+  const cleanReason = cleanCaseReasonText(rec.reason || "", country).slice(0, 260);
   const timeline = Array.isArray(rec.history_timeline)
     ? rec.history_timeline.slice(0, 1).map(t => ({
         year: String(t?.year || "").slice(0, 10),
         stage: stripHtmlAndBrokenLinks(t?.stage || "").slice(0, 32),
-        detail: stripHtmlAndBrokenLinks(t?.detail || "").slice(0, 95)
+        detail: cleanCaseReasonText(t?.detail || "", country).slice(0, 95)
       }))
     : [];
 
   return {
     id: rec.id,
-    country: rec.country || "TW",
+    country,
     city: rec.city,
     district: rec.district,
     doorplate_address: stripHtmlAndBrokenLinks(rec.doorplate_address),
@@ -1358,13 +1493,13 @@ function compactRecordForStorage(rec) {
     location_accuracy: rec.location_accuracy || "ROOFTOP_GOOGLE_MAPS",
     incident_date: String(rec.incident_date || "2024-06-15").slice(0, 10),
     building_type: String(rec.building_type || "").slice(0, 28),
-    current_status: String(rec.current_status || "").slice(0, 44),
+    current_status: country === "JP" ? "現況使用中" : "產權存續",
     category: rec.category || "法拍與其他",
     db_source: rec.db_source || "NEWS_PUBLIC_ARCHIVE",
-    reason: stripHtmlAndBrokenLinks(rec.reason || "").slice(0, 260),
-    source: stripHtmlAndBrokenLinks(rec.source || "").slice(0, 80),
+    reason: cleanReason,
+    source: cleanOrigin.slice(0, 80),
     source_url: String(rec.source_url || ""),
-    media_verification: stripHtmlAndBrokenLinks(rec.media_verification || "").slice(0, 72),
+    media_verification: cleanOrigin.slice(0, 72),
     auction_record: stripHtmlAndBrokenLinks(rec.auction_record || "").slice(0, 72),
     history_timeline: timeline,
     merged_count: rec.merged_count || 1

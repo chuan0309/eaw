@@ -1570,9 +1570,9 @@
         lbl_incident_note: "案發時間與查證備註：",
         lbl_verified_date_prefix: "案發日期核實：",
         lbl_orig_report_link: "原始報導連結 ↗",
-        lbl_verified_source: "核實來源：",
-        btn_copy_kw: "📋 複製查證關鍵字",
-        toast_copied_kw: "已複製查證關鍵字：",
+        lbl_verified_source: "來源：",
+        btn_copy_kw: "📋 複製關鍵字",
+        toast_copied_kw: "已複製關鍵字：",
         ext_btn_orig: "🔗 查看此案原始新聞報導／裁判書 ↗",
         ext_btn_news: "📰 新聞檔案庫檢索",
         ext_btn_judicial: "⚖️ 司法院裁判／法拍查證",
@@ -1817,9 +1817,9 @@
         lbl_incident_note: "Incident Time & Verification Note: ",
         lbl_verified_date_prefix: "Verified Incident Date: ",
         lbl_orig_report_link: "Original Report ↗",
-        lbl_verified_source: "Verified Source: ",
-        btn_copy_kw: "📋 Copy Verification Keyword",
-        toast_copied_kw: "Copied verification keyword: ",
+        lbl_verified_source: "Source: ",
+        btn_copy_kw: "📋 Copy Keyword",
+        toast_copied_kw: "Copied keyword: ",
         ext_btn_orig: "🔗 View Original News / Court Record ↗",
         ext_btn_news: "📰 News Archive Search",
         ext_btn_judicial: "⚖️ Judicial / Foreclosure Check",
@@ -2064,9 +2064,9 @@
         lbl_incident_note: "発生日時・検証備考：",
         lbl_verified_date_prefix: "発生日確認済：",
         lbl_orig_report_link: "元記事・出典リンク ↗",
-        lbl_verified_source: "検証出典：",
-        btn_copy_kw: "📋 検証キーワードをコピー",
-        toast_copied_kw: "検証キーワードをコピーしました：",
+        lbl_verified_source: "出典：",
+        btn_copy_kw: "📋 キーワードをコピー",
+        toast_copied_kw: "キーワードをコピーしました：",
         ext_btn_orig: "🔗 元記事・裁判所判例を開く ↗",
         ext_btn_news: "📰 ニュースアーカイブ検索",
         ext_btn_judicial: "⚖️ 司法院判例・競売照会",
@@ -2312,9 +2312,9 @@
         lbl_incident_note: "발생 일시 및 검증 비고: ",
         lbl_verified_date_prefix: "발생 일자 확인: ",
         lbl_orig_report_link: "원본 보도 링크 ↗",
-        lbl_verified_source: "검증 출처: ",
-        btn_copy_kw: "📋 검증 키워드 복사",
-        toast_copied_kw: "검증 키워드가 복사되었습니다: ",
+        lbl_verified_source: "출처: ",
+        btn_copy_kw: "📋 키워드 복사",
+        toast_copied_kw: "키워드가 복사되었습니다: ",
         ext_btn_orig: "🔗 사건 원본 뉴스 보도 / 판결문 보기 ↗",
         ext_btn_news: "📰 뉴스 아카이브 검색",
         ext_btn_judicial: "⚖️ 사법원 판결 / 경매 검증",
@@ -3478,92 +3478,246 @@
       return zh;
     }
 
+    function cleanSingleSourceTokenClient(tok) {
+      let s = String(tok || "").trim();
+      if (!s) return "";
+      s = s.replace(/^https?:\/\/newsdigest\.jp\/?/i, "NewsDigest");
+      s = s.replace(/^https?:\/\/[^\s]+/i, "");
+      s = s.replace(/(?:公開)?(?:新聞|媒體)?(?:報導|報道)?「[\s\S]*$/g, "");
+      s = s.replace(/UR都市機構公式ウェブサイト[\s\S]*$/g, "UR都市機構");
+      s = s.replace(/JKK東京公式ウェブサイト[\s\S]*$/g, "JKK東京");
+      s = s.replace(/[（(][^）)]*(?:unluckyhouse|Oshimaland|公開社會新聞|實務檔案|報道アーカイブ|アーカイブ照合|公開新聞|查證|検証|UDN|日本公開報道|事故ニュース)[^）)]*[）)]/gi, "");
+      s = s.replace(/\bunluckyhouse\.com\b/gi, "");
+      s = s.replace(/臺灣凶宅網/g, "台灣凶宅網");
+      s = s.replace(/公開凶宅檔案庫實證|實證資料庫|實證收錄|公開報導與門牌交叉查證|公開新聞連結查證|公開報道記事リンク検証済|公開報道記事・事故物件履歴検証済|報道リンク検証済|事故物件公示情報・裁判所競売記録・報道アーカイブ照合|事故物件公示情報・裁判所競売記録・報道ア|照合・日本公開社会ニュース・警察消防報道|公開社會新聞檔案交叉查證|公開新聞實證|媒體報導查證|實證報導查證|實證報導|實證連結|報導整合|交叉查證|交叉查核|雙重核實|報道検証|公開報道照合|事故物件調査記録|公開報道記事リンク|公開報道記事|公開新聞連|社會版報導|彙整/g, " ");
+      s = s.replace(/^[×＆&·・、,/\s｜\-]+|[×＆&·・、,/\s｜\-]+$/g, "");
+      s = s.replace(/\s+/g, " ").trim();
+      if (/^(?:Google News RSS即時新聞|地方警政通報系統|公開社會新聞|日本公開社会ニュース|警察消防報道|報|新|FN|F|TBS N|LINE T|LOOK|NCC|沖縄タ|Yahoo!フ|中日新聞W)$/i.test(s)) return "";
+      return s;
+    }
+
+    function cleanSourceOriginClient(rawSource, item) {
+      const country = item ? inferCountry(item) : "TW";
+      const rawReason = item ? String(item.reason || "") : "";
+      const rawMedia = item ? String(item.media_verification || "") : "";
+      const rawSrc = item ? String(item.source || "") : "";
+      let combined = `${rawSource || ""} × ${rawMedia} × ${rawSrc}`;
+      const jpTrailingMedia = rawReason.match(/「[^」]+?\s+-\s+([^」\s\-]+)」/);
+      if (jpTrailingMedia && jpTrailingMedia[1]) {
+        combined = `${jpTrailingMedia[1]} × ${combined}`;
+      }
+      const rawBracket = rawReason.match(/^【([^】]+)】/);
+      if (
+        rawBracket &&
+        rawBracket[1] &&
+        /凶宅網|實證|報導整合|報道検証|公開報道照合|事故物件調査記録|新聞|ニュース|報|TVBS|ETtoday|三立|民視|公視|華視|中天|東森|中時|聯合|中央社|鏡週刊|壹蘋|大島てる/.test(rawBracket[1])
+      ) {
+        combined = `${rawBracket[1]} × ${combined}`;
+      }
+      const rawTokens = combined.split(/[×＆&·・、,｜]+/);
+      const cleaned = [];
+      for (const rt of rawTokens) {
+        const c = cleanSingleSourceTokenClient(rt);
+        if (!c || c.length < 2) continue;
+        cleaned.push(c);
+      }
+      const finalTokens = [];
+      for (const c of cleaned) {
+        const normC = c.replace(/\s+/g, "");
+        if (
+          finalTokens.some(ex => {
+            const normEx = ex.replace(/\s+/g, "");
+            return (
+              normEx === normC ||
+              (normEx.startsWith(normC) && normEx.length > normC.length) ||
+              (c === "台灣凶宅網" && ex.startsWith("台灣凶宅網 #"))
+            );
+          })
+        ) {
+          continue;
+        }
+        const shortIdx = finalTokens.findIndex(ex => {
+          const normEx = ex.replace(/\s+/g, "");
+          return (
+            (normC.startsWith(normEx) && normC.length > normEx.length && normEx.length <= 5) ||
+            (ex === "台灣凶宅網" && c.startsWith("台灣凶宅網 #"))
+          );
+        });
+        if (shortIdx !== -1) {
+          finalTokens[shortIdx] = c;
+        } else {
+          finalTokens.push(c);
+        }
+      }
+      if (finalTokens.length === 0) {
+        return country === "JP" ? "大島てる・公開報道" : "公開新聞報導";
+      }
+      const sep = country === "JP" ? "・" : "、";
+      return finalTokens.slice(0, 3).join(sep);
+    }
+
+    function cleanCaseReasonClient(rawReason, item) {
+      let s = sanitizeHtmlEntitiesAndText(rawReason || "");
+      if (!s) return "";
+      if (/^【大島てる・公開報道照合】/.test(s) && /における事案：「/.test(s)) {
+        s = s.replace(/^【大島てる・公開報道照合】[^「]*「([\s\S]*?)」(?:\s*。?\s*宅地建物取引業法[\s\S]*)?$/, "$1").trim();
+      }
+      s = s
+        .split(/｜\s*【交叉查證(?:與媒體報導)?整合】/)[0]
+        .split(/｜\s*【交叉查證整合】/)[0]
+        .trim();
+      const leadBracket = s.match(/^【([^】]+)】\s*([\s\S]*)$/);
+      if (leadBracket) {
+        const tag = leadBracket[1].trim();
+        const rest = leadBracket[2].trim();
+        if (
+          rest.length >= 8 &&
+          (/凶宅網|報導整合|實證收錄|公開新聞實證|公開實證|實證報導|報道検証|公開報道照合|事故物件調査記録/.test(tag) ||
+            /^(?:自由時報|聯合報|聯合新聞網|中國時報|中時新聞網|TVBS新聞網?|ETtoday(?:新聞雲|東森新聞)?|三立新聞網?|中天新聞網?|民視新聞網?|公視新聞網?|華視新聞網?|台視新聞網?|東森新聞網?|壹蘋新聞網|鏡週刊|中央社|大紀元新聞|蘋果日報|Yahoo奇摩新聞|Yahoo!ニュース)/.test(tag))
+        ) {
+          s = rest;
+        }
+      }
+      s = s
+        .replace(/将 Yahoo 設為首選來源[^。]*?（另開新視窗）\s*/g, "")
+        .replace(/將 Yahoo 設為首選來源[^。]*?（另開新視窗）\s*/g, "")
+        .replace(/\s*—\s*(?:媒體報導與卷宗內文摘錄|報導內文摘錄|報導摘錄|報道内容)：\s*/g, " — ")
+        .replace(/（檔案編號：t-\d+）/g, "")
+        .replace(/（報導／歸檔日期：[^）]*）/g, "")
+        .replace(/（発生・報道日：[^）]*）/g, "")
+        .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
+        .replace(/（系統已自動?比對整合[\s\S]*$/, "")
+        .trim();
+      const beforeSupp = s
+        .replace(
+          /(?:。|\s)*(?:案發時社區住戶與管理人員聽聞巨響後|案發後經現場民眾或大樓管理室通報119救護車|事故發生時現場竄出濃煙與火舌|本案係因住宅室內或加裝窗戶之陽台熱水器|案發後轄區警分局偵查隊與鑑識人員立即封鎖|本案於不動產買賣移轉後|該.{1,15}標的於進入.{1,15}民事執行處強制執行拍賣程序時|案發時因家屬、房東或鄰里察覺異狀)[\s\S]*$/g,
+          ""
+        )
+        .trim();
+      if (beforeSupp.length >= 12) {
+        s = beforeSupp;
+      } else {
+        s = s
+          .replace(/，?實地看屋時建議向管委會、鄰里長及內政部實價登錄特殊交易備註欄進行交叉查證/g, "")
+          .replace(/，?買方亦可透過(?:台灣凶宅網、)?司法院裁判書系統與[^。]*進一步交叉核對/g, "")
+          .replace(/經法院公文書與警政紀錄雙重核實，/g, "");
+      }
+      s = s.replace(/\s+-\s+(?:中天新聞網|TVBS新聞網|公視新聞網?|自由時報|聯合新聞網|三立新聞網|ETtoday新聞雲|Yahoo奇摩新聞)\s*。?$/, "");
+      return s.replace(/\s+/g, " ").trim();
+    }
+
     function localizeMediaSource(rawSource, item) {
       if (item && item.i18n && item.i18n[currentLang] && item.i18n[currentLang].media_verification) {
-        return item.i18n[currentLang].media_verification;
+        return cleanSourceOriginClient(item.i18n[currentLang].media_verification, item);
       }
-      const s = String(rawSource || "歷年公開社會新聞與司法實務卷宗");
+      const s = cleanSourceOriginClient(rawSource, item);
       if (currentLang === "zh-TW") return s;
       if (currentLang === "en") {
         return s
-          .replace(/三立新聞/g, "SETN News")
+          .replace(/台灣凶宅網/g, "Taiwan Unluckyhouse")
+          .replace(/三立新聞網|三立新聞/g, "SETN News")
           .replace(/鏡週刊/g, "Mirror Media")
-          .replace(/TVBS新聞網|TVBS/g, "TVBS News")
+          .replace(/TVBS新聞網|TVBS新聞|TVBS/g, "TVBS News")
           .replace(/自由時報/g, "Liberty Times (LTN)")
-          .replace(/聯合新聞網|聯合報/g, "UDN News")
-          .replace(/ETtoday新聞雲|ETtoday/g, "ETtoday News")
+          .replace(/聯合報／UDN|UDN聯合新聞網|聯合新聞網|聯合報/g, "UDN News")
+          .replace(/ETtoday新聞雲|ETtoday東森新聞|ETtoday/g, "ETtoday News")
           .replace(/中時新聞網|中國時報/g, "China Times")
-          .replace(/中央社/g, "CNA Taiwan")
-          .replace(/公視新聞|公視/g, "PTS News")
-          .replace(/民視新聞|民視/g, "FTV News")
+          .replace(/中央社CNA|中央社/g, "CNA Taiwan")
+          .replace(/公視新聞網|公視新聞|公視/g, "PTS News")
+          .replace(/民視新聞網|民視新聞|民視/g, "FTV News")
           .replace(/壹蘋新聞網/g, "NextApple News")
           .replace(/華視新聞|華視/g, "CTS News")
+          .replace(/台視新聞網|台視新聞|台視/g, "TTV News")
           .replace(/東森新聞/g, "EBC News")
-          .replace(/中天新聞/g, "CTi News")
-          .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "Judicial Yuan Foreclosure Notice")
+          .replace(/中天新聞網|中天新聞/g, "CTi News")
+          .replace(/蘋果日報/g, "Apple Daily")
+          .replace(/大紀元新聞/g, "Epoch Times")
+          .replace(/NOWnews今日新聞/g, "NOWnews")
+          .replace(/Yahoo奇摩新聞/g, "Yahoo News TW")
+          .replace(/司法院法拍筆錄／裁判書|司法院法拍屋公告系統|司法院法拍公告/g, "Judicial Yuan Court & Foreclosure Record")
           .replace(/司法院裁判書查詢系統|司法院裁判書/g, "Judicial Yuan Court Judgment")
           .replace(/內政部實價登錄/g, "MOI Real-Price Registry")
-          .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "Public News & Judicial Archive")
-          .replace(/、/g, ", ");
+          .replace(/公開新聞報導|歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "Public News Archive")
+          .replace(/、|・/g, ", ");
       } else if (currentLang === "ja") {
         return s
-          .replace(/三立新聞/g, "三立ニュース(SETN)")
+          .replace(/台灣凶宅網/g, "台湾凶宅網")
+          .replace(/三立新聞網|三立新聞/g, "三立ニュース(SETN)")
           .replace(/鏡週刊/g, "鏡週刊(Mirror Media)")
-          .replace(/TVBS新聞網/g, "TVBSニュース")
+          .replace(/TVBS新聞網|TVBS新聞/g, "TVBSニュース")
           .replace(/自由時報/g, "自由時報(LTN)")
-          .replace(/聯合新聞網|聯合報/g, "聯合ニュース(UDN)")
-          .replace(/ETtoday新聞雲/g, "ETtodayニュース")
+          .replace(/聯合報／UDN|UDN聯合新聞網|聯合新聞網|聯合報/g, "聯合ニュース(UDN)")
+          .replace(/ETtoday新聞雲|ETtoday東森新聞/g, "ETtodayニュース")
           .replace(/中時新聞網|中國時報/g, "中時ニュース")
-          .replace(/中央社/g, "中央社(CNA)")
-          .replace(/公視新聞|公視/g, "公共テレビ(PTS)")
-          .replace(/民視新聞|民視/g, "民視ニュース(FTV)")
-          .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "司法院競売公告システム")
-          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "司法院判決書検索システム")
+          .replace(/中央社CNA|中央社/g, "中央社(CNA)")
+          .replace(/公視新聞網|公視新聞|公視/g, "公共テレビ(PTS)")
+          .replace(/民視新聞網|民視新聞|民視/g, "民視ニュース(FTV)")
+          .replace(/蘋果日報/g, "リンゴ日報")
+          .replace(/台視新聞網|台視新聞/g, "台視ニュース")
+          .replace(/華視新聞/g, "華視ニュース")
+          .replace(/中天新聞網|中天新聞/g, "中天ニュース")
+          .replace(/大紀元新聞/g, "大紀元ニュース")
+          .replace(/Yahoo奇摩新聞/g, "Yahoo!ニュース台湾")
+          .replace(/司法院法拍筆錄／裁判書|司法院法拍屋公告系統|司法院法拍公告/g, "司法院競売・裁判記録")
+          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "司法院判決書システム")
           .replace(/內政部實價登錄/g, "内政部実価登録")
-          .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "公開報道・司法記録アーカイブ");
+          .replace(/公開新聞報導|歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "公開報道アーカイブ")
+          .replace(/、/g, "・");
       } else if (currentLang === "ko") {
-        let out = s
+        return s
           .replace(/Yahoo!ニュース|Yahoo! JAPAN ニュース/gi, "Yahoo! 뉴스 일본")
           .replace(/Yahoo奇摩新聞|Yahoo新聞/gi, "Yahoo 대만 뉴스")
           .replace(/テレ朝NEWS|テレビ朝日/g, "TV아사히 뉴스")
           .replace(/TBS NEWS DIG|TBSニュース/gi, "TBS 뉴스")
           .replace(/FNNプライムオンライン|フジテレビ/g, "FNN 후지뉴스")
-          .replace(/日テレNEWS|日本テレビ/g, "닛테레 뉴스")
+          .replace(/日テレNEWS NNN|日テレNEWS|日本テレビ/g, "닛테레 뉴스")
           .replace(/NHKニュース|NHK/g, "NHK 뉴스")
-          .replace(/朝日新聞/g, "아사히신문")
-          .replace(/読売新聞/g, "요미우리신문")
+          .replace(/朝日新聞デジタル|朝日新聞/g, "아사히신문")
+          .replace(/読売新聞オンライン|読売新聞/g, "요미우리신문")
           .replace(/毎日新聞/g, "마이니치신문")
-          .replace(/産経新聞/g, "산케이신문")
+          .replace(/産経ニュース|産経新聞/g, "산케이신문")
           .replace(/日本経済新聞/g, "니혼게이자이신문")
-          .replace(/大島てる/g, "오시마테루(사고물건 공시)")
-          .replace(/事故物件調査記録|事故物件公示/g, "사고물건 조사 기록")
+          .replace(/北海道新聞デジタル|北海道新聞/g, "홋카이도신문")
+          .replace(/中日新聞Web|中日新聞/g, "주니치신문")
+          .replace(/山陽新聞デジタル｜さんデジ|山陽新聞デジタル|山陽新聞/g, "산요신문")
+          .replace(/静岡新聞DIGITAL|静岡新聞/g, "시즈오카신문")
+          .replace(/沖縄タイムス社|沖縄タイムス/g, "오키나와타임스")
+          .replace(/新潟日報/g, "니가타일보")
+          .replace(/埼玉新聞/g, "사이타마신문")
+          .replace(/京都新聞/g, "교토신문")
+          .replace(/福井新聞社|福井新聞/g, "후쿠이신문")
+          .replace(/福井テレビ/g, "후쿠이TV")
+          .replace(/QAB 琉球朝日放送/g, "류큐아사히방송")
+          .replace(/OHK 岡山放送/g, "오카야마방송")
+          .replace(/時事ドットコム/g, "지지통신")
+          .replace(/弁護士ドットコム/g, "벤고시닷컴")
+          .replace(/UR都市機構/g, "UR도시기구")
+          .replace(/JKK東京/g, "JKK도쿄")
+          .replace(/大島てる/g, "오시마테루")
           .replace(/三立新聞網|三立新聞/g, "SETN 삼립뉴스")
           .replace(/鏡週刊/g, "미러미디어")
           .replace(/TVBS新聞網|TVBS新聞|TVBS/g, "TVBS 뉴스")
           .replace(/自由時報/g, "자유시보(LTN)")
-          .replace(/聯合新聞網|聯合報/g, "연합보(UDN)")
-          .replace(/ETtoday新聞雲|ETtoday/g, "ETtoday 뉴스")
+          .replace(/聯合報／UDN|UDN聯合新聞網|聯合新聞網|聯合報/g, "연합보(UDN)")
+          .replace(/ETtoday新聞雲|ETtoday東森新聞|ETtoday/g, "ETtoday 뉴스")
           .replace(/中時新聞網|中國時報/g, "중국시보")
-          .replace(/中央社/g, "중앙통신사(CNA)")
+          .replace(/中央社CNA|中央社/g, "중앙통신사(CNA)")
           .replace(/公視新聞網|公視新聞|公視/g, "공공TV(PTS) 뉴스")
           .replace(/民視新聞網|民視新聞|民視/g, "민시뉴스(FTV)")
           .replace(/壹蘋新聞網/g, "넥스트애플 뉴스")
           .replace(/華視新聞|華視/g, "화시뉴스(CTS)")
+          .replace(/台視新聞網|台視新聞|台視/g, "타이시뉴스(TTV)")
           .replace(/東森新聞/g, "동삼뉴스(EBC)")
-          .replace(/中天新聞/g, "중천뉴스(CTi)")
+          .replace(/中天新聞網|中天新聞/g, "중천뉴스(CTi)")
+          .replace(/蘋果日報/g, "빈과일보")
+          .replace(/大紀元新聞/g, "대기원신문")
+          .replace(/NOWnews今日新聞/g, "NOWnews")
           .replace(/台灣凶宅網/g, "대만 흉가망")
-          .replace(/司法院法拍屋公告系統|司法院法拍公告/g, "사법원 법원경매 공고")
-          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "사법원 판결문 조회 시스템")
+          .replace(/司法院法拍筆錄／裁判書|司法院法拍屋公告系統|司法院法拍公告/g, "사법원 경매·판결 기록")
+          .replace(/司法院裁判書查詢系統|司法院裁判書/g, "사법원 판결문 시스템")
           .replace(/內政部實價登錄/g, "내정부 실거래가 등록")
-          .replace(/公開新聞實證|實證報導|公開報導/g, "공개 보도 검증")
-          .replace(/歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "공개 사회뉴스 및 사법 기록")
+          .replace(/公開新聞報導|歷年公開社會新聞與司法實務卷宗|公開實證檔案/g, "공개 뉴스 보도")
           .replace(/、|・/g, " · ");
-        if (/[\u4E00-\u9FFF\u3040-\u30FF]/.test(out)) {
-          out = inferCountry(item) === "JP"
-            ? "일본 언론 보도 및 오시마테루 사고물건 검증 기록"
-            : "공개 언론 보도 및 사법원·실거래가 검증 기록";
-        }
-        return out;
       }
       return s;
     }
@@ -3716,16 +3870,16 @@
 
     function localizeCaseReasonPreview(item) {
       if (item && item.i18n && item.i18n[currentLang] && item.i18n[currentLang].reason) {
-        return sanitizeHtmlEntitiesAndText(item.i18n[currentLang].reason);
+        return cleanCaseReasonClient(item.i18n[currentLang].reason, item);
       }
-      const zhReason = sanitizeHtmlEntitiesAndText(item.reason || "");
+      const zhReason = cleanCaseReasonClient(item.reason || "", item);
       if (currentLang === "zh-TW") return zhReason;
 
       const fullCached = clientTranslationCache.get(`case_${item.id || item.address}_${currentLang}`);
-      if (fullCached && fullCached.reason) return fullCached.reason;
+      if (fullCached && fullCached.reason) return cleanCaseReasonClient(fullCached.reason, item);
 
       const batchCached = clientTranslationCache.get(`${item.__key}_${currentLang}`);
-      if (batchCached && batchCached.reason) return batchCached.reason;
+      if (batchCached && batchCached.reason) return cleanCaseReasonClient(batchCached.reason, item);
 
       const isJpItem = inferCountry(item) === "JP";
       if (currentLang === "ja" && isJpItem) return zhReason;
@@ -3750,64 +3904,64 @@
         let body = `해당 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 발생한 ${catLabel} 기록입니다.`;
         if (isJpItem) {
           if (isFall) {
-            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 거주자 " : ""}추락 사망 사고가 발생하여 관할 경찰서 및 소방 구급대가 현장 검증을 실시한 사건입니다. 일본 국토교통성 심리적 하자 가이드라인 및 택지건물거래업법상 중요사항설명(고지사항) 대상 물건으로 분류되며, 오시마테루 공시 기록과 대조 확인되었습니다.`;
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 거주자 " : ""}추락 사망 사고가 발생하여 관할 경찰서 및 소방 구급대가 현장 출동한 사건입니다.`;
           } else if (isFire) {
-            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 실내에서 주택 화재 및 일산화탄소 흡입 사고가 발생하여 소방대 출동 및 병원 이송 후 사망이 확인된 사건입니다. 일본 택지건물거래업법 및 국토교통성 가이드라인에 따른 사고물건(심리적 하자) 고지 대상이며, 건물 수리 이력 및 중요사항설명서 확인이 권장됩니다.`;
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 실내에서 주택 화재 및 일산화탄소 흡입 사고가 발생하여 사망이 확인된 사건입니다.`;
           } else if (isCO) {
-            body = `${addrLabel} 소재 ${bldgLabel} 실내에서 일산화탄소 중독 사고로 인한 인명 피해가 확인된 사건입니다. 일본 부동산 거래 실무상 심리적 하자 고지사항 대상에 해당합니다.`;
+            body = `${addrLabel} 소재 ${bldgLabel} 실내에서 일산화탄소 중독 사고로 인한 인명 피해가 확인된 사건입니다.`;
           } else if (isHomicide) {
-            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 중대 형사·살인 사건이 발생하여 도도부현 경찰본부 수사 및 사법 절차가 진행된 검증 사건입니다. 일본 국토교통성 가이드라인상 기간 제한 없이 매매·임대차 계약 시 필수 고지사항(告知事項)에 해당합니다.`;
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 중대 형사·살인 사건이 발생하여 경찰 수사 및 사법 절차가 진행된 사건입니다.`;
           } else if (isCourt) {
-            body = `${addrLabel} 소재 ${bldgLabel}에 대하여 일본 지방재판소 부동산 경매 BIT(3종 세트) 또는 사고물건 공시 기록에 실내 비자연사(심리적 하자) 사실이 명시된 검증 사건입니다.`;
+            body = `${addrLabel} 소재 ${bldgLabel}에 대하여 일본 지방재판소 경매 기록 또는 사고물건 공시 기록에 실내 비자연사 사실이 등재된 사건입니다.`;
           } else {
-            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 실내에서 발생한 ${catLabel} 사건으로, 관할 경찰서 검시 및 현지 언론 보도·사고물건 공시 데이터베이스를 통해 교차 검증된 기록입니다.`;
+            body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 실내에서 발생한 ${catLabel} 사건 기록입니다.`;
           }
           return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (출처: " + srcLabel + ")" : ""}`;
         }
         if (isFall) {
-          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 " : ""}추락 사고가 발생하여 119 구급대 및 관할 경찰이 현장에 긴급 출동하였으나 사망이 확인된 사건입니다. 경찰 감식반의 현장 조사 및 검찰 검시 결과 외력 개입 혐의는 배제되었습니다. 대만 내정부 부동산설명서 기준 및 법원 판례상 전용부분 또는 약정전용 노대(테라스) 추락 사건은 매매·임대 시 주요 고지 대상에 해당하므로, 관리위원회 및 내정부 실거래가 특수거래 비고란을 통한 사전 확인이 권장됩니다.`;
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 ${ageNum ? ageNum + "세 " : ""}추락 사고가 발생하여 119 구급대 및 관할 경찰이 현장에 출동하였으나 사망이 확인된 사건입니다.`;
         } else if (isFire) {
-          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 주택 화재가 발생하여 관할 소방당국이 진화 및 인명 구조 작업을 벌였으나 실내 거주자가 사망한 사건입니다. 화재 조사 및 경찰 감식을 통해 발화 원인이 규명되었으며, 전용부분 내 비자연사 발생 및 화재 수리 이력에 대해 부동산설명서 고지 대상에 해당합니다.`;
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 주택 화재가 발생하여 관할 소방당국이 진화 및 인명 구조 작업을 벌였으나 실내 거주자가 사망한 사건입니다.`;
         } else if (isCO) {
-          body = `${addrLabel} 소재 ${bldgLabel} 실내에서 온수기 환기 불량 등으로 인한 일산화탄소 중독 사고가 발생하여 인명 피해가 확인된 사건입니다. 대만 내정부 부동산 거래 규정에 따라 일산화탄소 중독 사망은 법정 비자연사(특수사고) 고지 대상에 포함됩니다.`;
+          body = `${addrLabel} 소재 ${bldgLabel} 실내에서 온수기 환기 불량 등으로 인한 일산화탄소 중독 사고가 발생하여 인명 피해가 확인된 사건입니다.`;
         } else if (isHomicide) {
-          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 중대 형사·살인 사건이 발생하여 관할 경찰서 수사대 현장 감식 및 검찰 기소·사법 절차가 진행된 사건입니다. 전용부분 내 중대 형사사건 이력으로 매매 시 법정 필수 고지 및 금융권 담보대출 심사 대상에 해당합니다.`;
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""}에서 중대 형사·살인 사건이 발생하여 관할 경찰서 현장 감식 및 사법 절차가 진행된 사건입니다.`;
         } else if (isCourt) {
-          body = `${addrLabel} 소재 ${bldgLabel}에 대하여 사법원 지방법원 민사집행처 법원경매 압류조서 또는 민사 판결문에 실내 비자연사(특수사고) 이력이 공식 확인된 검증 사건입니다. 법원 공문서와 관할 경찰서 조회 기록을 통해 교차 검증되었으며 매매·경매 입찰 시 필수 확인 대상입니다.`;
+          body = `${addrLabel} 소재 ${bldgLabel}에 대하여 지방법원 민사집행처 법원경매 조서 또는 민사 판결문에 실내 비자연사 이력이 기재된 사건입니다.`;
         } else {
-          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 전용부분 실내에서 발생한 ${catLabel} 사건으로, 관할 경찰 및 소방 구급대 출동·검시를 통해 확인되었습니다. 대만 내정부 부동산설명서 규정에 따른 비자연사 고지 대상 물건으로 관리위원회 및 실거래가 특수거래 기록 대조가 권장됩니다.`;
+          body = `${addrLabel} 소재 ${bldgLabel}${floorNum ? " " + floorNum + "층" : ""} 전용부분 실내에서 발생한 ${catLabel} 사건 기록입니다.`;
         }
         return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (출처: " + srcLabel + ")" : ""}`;
       } else if (currentLang === "ja") {
-        let body = `該当${bldgLabel}${floorNum ? floorNum + "階" : ""}において発生した${catLabel}の検証済み記録です。`;
+        let body = `該当${bldgLabel}${floorNum ? floorNum + "階" : ""}において発生した${catLabel}の記録です。`;
         if (isFall) {
-          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて${ageNum ? ageNum + "歳の" : ""}転落事案が発生し、通報を受けた消防救急隊と管轄警察が現場へ出動しましたが死亡が確認されました。警察鑑識による現場検証および検察官の検視により他殺等の事件性は排除されています。内政部の不動産説明書基準および裁判実務上、専有部分や専用ルーフバルコニーに関わる転落事案は売買・賃貸時の重要な心理的瑕疵確認対象となるため、管理委員会および実価登録の特殊取引備考の照会が推奨されます。`;
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて${ageNum ? ageNum + "歳の" : ""}転落事案が発生し、消防救急隊と管轄警察が出動しましたが死亡が確認された事案です。`;
         } else if (isFire) {
-          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて住宅火災が発生し、消防隊が消火・救助活動を行いましたが室内で死亡者が確認された事案です。消防局火災調査科と警察鑑識により出火原因の検証が行われ、専有部分での非自然死および内装修復履歴として不動産説明書の重要告知対象に該当します。`;
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて住宅火災が発生し、消火・救助活動が行われましたが室内で死亡者が確認された事案です。`;
         } else if (isCO) {
-          body = `${addrLabel}の${bldgLabel}室内にて給湯器の換気不良等による一酸化炭素中毒事故が発生し、死亡者が確認された事案です。内政部の不動産取引規定により、一酸化炭素中毒死は法定の心理的瑕疵（事故物件）告知対象に指定されています。`;
+          body = `${addrLabel}の${bldgLabel}室内にて給湯器の換気不良等による一酸化炭素中毒事故が発生し、死亡者が確認された事案です。`;
         } else if (isHomicide) {
-          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて重大な刑事・殺人事件が発生し、管轄警察署による現場封鎖・鑑識採証および検察庁への送致・裁判手続が行われた事案です。専有部分における重大刑事事案として売買時の法定告知義務および住宅ローン審査上の重要確認対象となります。`;
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}にて重大な刑事・殺人事件が発生し、管轄警察署による捜査および司法手続が行われた事案です。`;
         } else if (isCourt) {
-          body = `${addrLabel}の${bldgLabel}について、司法院地方裁判所民事執行処の競売差押調書または民事判決書に非自然死（心理的瑕疵）の記録が明記された事案です。裁判所公文書および管轄警察署の照会記録により裏付けられており、取引時は不動産説明書および実価登録での確認が推奨されます。`;
+          body = `${addrLabel}の${bldgLabel}について、地方裁判所民事執行処の競売差押調書または民事判決書に非自然死の記録が記載された事案です。`;
         } else {
-          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}専有部分にて発生した${catLabel}事案であり、管轄警察および消防救急隊の臨場・検視により確認されています。内政部の不動産説明書規定に基づく告知対象物件として、管理委員会や実価登録特殊取引備考との照合が推奨されます。`;
+          body = `${addrLabel}の${bldgLabel}${floorNum ? floorNum + "階" : ""}専有部分にて発生した${catLabel}事案の記録です。`;
         }
         return `【${catLabel} · ${dateStr}】${body}${srcLabel ? "（出典：" + srcLabel + "）" : ""}`;
       } else if (currentLang === "en") {
-        let body = `Verified ${catLabel.toLowerCase()} incident recorded at this ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""}.`;
+        let body = `${catLabel} incident recorded at this ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""}.`;
         if (isFall) {
-          body = `A ${ageNum ? ageNum + "-year-old " : ""}resident fell from${floorNum ? " the " + floorNum + "th floor of" : ""} the ${bldgLabel.toLowerCase()} at ${addrLabel} and was pronounced deceased following emergency response. Police forensic inspection and official examination confirmed the fatality. Under statutory property disclosure regulations, falls involving a private unit carry material stigmatized-property disclosure impacts.`;
+          body = `A ${ageNum ? ageNum + "-year-old " : ""}resident fell from${floorNum ? " the " + floorNum + "th floor of" : ""} the ${bldgLabel.toLowerCase()} at ${addrLabel} and was pronounced deceased following emergency response.`;
         } else if (isFire) {
-          body = `A residential fire broke out at the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, resulting in indoor fatalities despite fire department rescue operations. Following fire investigation and police forensic examination, the unit is classified under statutory unnatural-death disclosure rules.`;
+          body = `A residential fire broke out at the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, resulting in indoor fatalities despite fire department rescue operations.`;
         } else if (isCO) {
-          body = `A fatal carbon monoxide poisoning incident occurred inside the ${bldgLabel.toLowerCase()} at ${addrLabel}, confirmed by emergency responders and police examination. Carbon monoxide fatalities are explicitly listed among statutory stigmatized-property categories requiring mandatory disclosure.`;
+          body = `A fatal carbon monoxide poisoning incident occurred inside the ${bldgLabel.toLowerCase()} at ${addrLabel}.`;
         } else if (isHomicide) {
-          body = `A major criminal homicide case occurred inside the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, with crime-scene forensics conducted by police and prosecution proceedings documented in public archives. Mandatory seller disclosure applies.`;
+          body = `A major criminal homicide case occurred inside the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} on ${addrLabel}, documented in police and judicial archives.`;
         } else if (isCourt) {
-          body = `Court foreclosure inspection notes or public defect records explicitly document an indoor unnatural death history at this ${bldgLabel.toLowerCase()} on ${addrLabel}. Cross-verified via official court and police records, this property is subject to statutory disclosure in real estate transactions.`;
+          body = `Court foreclosure inspection notes or judicial records document an indoor unnatural death history at this ${bldgLabel.toLowerCase()} on ${addrLabel}.`;
         } else {
-          body = `An indoor ${catLabel.toLowerCase()} incident occurred within the private unit of the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} at ${addrLabel}, verified by police and emergency dispatch records.`;
+          body = `An indoor ${catLabel.toLowerCase()} incident occurred within the ${bldgLabel.toLowerCase()}${floorNum ? " (" + floorNum + "F)" : ""} at ${addrLabel}.`;
         }
         return `[${catLabel} · ${dateStr}] ${body}${srcLabel ? " (Source: " + srcLabel + ")" : ""}`;
       }
@@ -6567,33 +6721,14 @@
     function renderAuctionVerificationBox(details, noteText, sourceText) {
       const safeKw = (details.smartKeyword || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
       const safeToastPrefix = t("toast_copied_kw").replace(/'/g, "\\'");
-      const verifiedDateStr = (currentDossierItem && (currentDossierItem.updated_at || currentDossierItem.verified_at))
-        ? String(currentDossierItem.updated_at || currentDossierItem.verified_at).slice(0, 10)
-        : "2026-10-31";
-      const verifiedLabel = currentLang === "ja"
-        ? `最終検証更新：${verifiedDateStr}`
-        : currentLang === "ko"
-          ? `최종 검증 업데이트: ${verifiedDateStr}`
-          : currentLang === "en"
-            ? `Last Verified: ${verifiedDateStr}`
-            : `最後核實更新：${verifiedDateStr}`;
-      const statusBadge = details.directSourceUrl
-        ? (currentLang === "ja" ? "✓ 公開報道・公式記録検証済" : currentLang === "ko" ? "✓ 공개 보도·공식 기록 검증됨" : currentLang === "en" ? "✓ Verified Public Record" : "✓ 已附原始來源核實")
-        : (currentLang === "ja" ? "公開アーカイブ照合済" : currentLang === "ko" ? "공개 아카이브 대조 완료" : currentLang === "en" ? "Archive Cross-Checked" : "公開實務卷宗查核");
       document.getElementById("drawer-auction-box").innerHTML = `
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center justify-between gap-2 flex-wrap">
-            <div class="text-xs"><span class="font-semibold text-slate-800">${t("lbl_verified_source")}</span><span class="text-slate-700">${sourceText}</span></div>
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">${statusBadge}</span>
-          </div>
-          <div class="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-slate-200/70">
-            <span class="font-mono text-[11px] text-slate-500 tabular-nums">${verifiedLabel}</span>
-            <div class="flex items-center gap-2">
-              ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold text-xs">${t("lbl_orig_report_link")}</a>` : ""}
-              <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1 cursor-pointer">
-                <span>${t("btn_copy_kw")}</span>
-              </button>
-            </div>
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="text-xs"><span class="font-semibold text-slate-800">${t("lbl_verified_source")}</span><span class="text-slate-700">${sourceText}</span></div>
+          <div class="flex items-center gap-2">
+            ${details.directSourceUrl ? `<a href="${details.directSourceUrl}" target="_blank" rel="noopener noreferrer" class="text-sky-700 hover:underline font-semibold text-xs">${t("lbl_orig_report_link")}</a>` : ""}
+            <button type="button" onclick="navigator.clipboard.writeText('${safeKw}'); showToast('${safeToastPrefix}' + '${safeKw}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors flex items-center gap-1 cursor-pointer">
+              <span>${t("btn_copy_kw")}</span>
+            </button>
           </div>
         </div>
       `;
@@ -7189,125 +7324,42 @@
     }
 
     function prepareRecord(r, index) {
-      // Fast path for pre-calibrated archive records or records with multi-language i18n
-      const rawAddrFast = sanitizeHtmlEntitiesAndText(r.address || "");
-      const rawReasonFast = sanitizeHtmlEntitiesAndText(r.reason || "");
-      const isAlreadyCalibrated =
-        Boolean(r.i18n) ||
-        inferCountry(r) !== "TW" ||
-        (rawReasonFast.length >= 185 &&
-          Array.isArray(r.history_timeline) &&
-          r.history_timeline.length >= 2 &&
-          !/&amp;|&nbsp;|&#/.test(rawAddrFast + rawReasonFast));
-
-      let cleanAddress;
-      let cleanReason;
-      let cleanSource;
-      let cleanMedia;
-      let cleanAuction;
-      let cleanTimeline;
-
-      if (isAlreadyCalibrated) {
-        cleanAddress = rawAddrFast;
-        cleanReason = rawReasonFast;
-        cleanSource = sanitizeHtmlEntitiesAndText(r.source || "");
-        cleanMedia = sanitizeHtmlEntitiesAndText(r.media_verification || r.source || "");
-        const rawA = sanitizeHtmlEntitiesAndText(r.auction_record || "");
-        cleanAuction = /案發日期雙重核實|案發日期核實|無公開法拍|尚無法拍|公開資訊與歷史紀錄核實/.test(rawA) ? "" : rawA;
-        cleanTimeline = r.history_timeline;
-      } else {
-        cleanAddress = sanitizeHtmlEntitiesAndText(r.address)
-          .replace(/（([^）·]+)·\s*[^）]*[？?！!／「][^）]*）/g, "（$1）");
-        cleanReason = sanitizeHtmlEntitiesAndText(r.reason)
-          .replace(/(前天清晨|前天凌晨|前天晚間|前天|前日|昨日清晨|昨日凌晨|昨日上午|昨日下午|昨日晚間|昨日深夜|昨天清晨|昨天凌晨|昨天上午|昨天下午|昨天晚間|昨晚|昨夜|昨晨|昨日|昨天)（(?:19\d{2}|20\d{2})年\d{1,2}月\d{1,2}日）/g, "$1")
-          .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
-          .replace(/（系統已自動?比對整合[\s\S]*$/, "")
-          .trim();
-        const dupMatch = cleanReason.match(/^【([^】]+)】\s*(.+)$/);
-        if (dupMatch) {
-          const h = dupMatch[1].trim();
-          const body = dupMatch[2].trim();
-          if (body.replace(/\s+/g, "").startsWith(h.replace(/\s+/g, "").slice(0, 10))) {
-            cleanReason = body;
-          }
-        }
-        cleanSource = sanitizeHtmlEntitiesAndText(r.source);
-        cleanMedia = sanitizeHtmlEntitiesAndText(r.media_verification || r.source);
-        const rawAuction = sanitizeHtmlEntitiesAndText(r.auction_record);
-        cleanAuction = /案發日期雙重核實|案發日期核實|無公開法拍|尚無法拍|公開資訊與歷史紀錄核實/.test(rawAuction) ? "" : rawAuction;
-
-        if (cleanReason && !cleanReason.endsWith("。") && !cleanReason.endsWith("！") && !cleanReason.endsWith("）")) {
-          cleanReason += "。";
-        }
-        const cityNorm = String(r.city || "臺北市").replace(/台/g, "臺").trim();
-        const distNorm = String(r.district || "").trim();
-        const bldgNorm = String(r.building_type || "住宅建物").trim();
-        const courtName = (OFFICIAL_JURISDICTION_MAP[cityNorm] && OFFICIAL_JURISDICTION_MAP[cityNorm].courtName) || "管轄地方法院";
-        const srcLabelForEnrich = cleanMedia || cleanSource || "公開社會新聞與警消實務紀錄";
-
-        if (cleanReason.length < 185 && !cleanReason.includes("《不動產說明書》") && !cleanReason.includes("實地訪查與產權查核")) {
-          const fullTxt = `${cleanReason} ${r.category || ""} ${r.db_source || ""} ${srcLabelForEnrich}`;
-          let supplement = "";
-          if (/露台|中庭|遮雨棚|平台/.test(cleanReason) && /墜樓|墜落|跳樓/.test(cleanReason)) {
-            supplement = `案發時社區住戶與管理人員聽聞巨響後立即通報119救護人員與轄區警方趕抵現場封鎖處置，惟當事人因高處墜落傷勢過重不治，鑑識人員勘驗起跳位置與門窗跡證後報請檢察官完成相驗。依內政部凶宅函釋與法院實務見解，由高樓層墜落至低樓層「約定專用露台」或中庭之案件，起跳專有部分與陳屍露台戶於買賣移轉時均涉及《不動產說明書》重大瑕疵揭露爭議；看屋查核時建議向${distNorm}社區管委會確認實際起跳樓層與受影響露台戶別，並比對內政部實價登錄同棟特殊交易備註。`;
-          } else if (/墜樓|墜落|跳樓/.test(fullTxt)) {
-            supplement = `案發後經現場民眾或大樓管理室通報119救護車與轄區警方到場封鎖搶救，惟當事人仍因高處墜落重創宣告不治，警方調閱周邊監視器並勘查頂樓或室內門窗跡證後報請檢察官相驗確認死因。依內政部《不動產說明書應記載事項》與最高法院見解，若當事人係由自身專有部分（屋內陽台或窗戶）起跳墜樓，該專有部分即構成法定應揭露之事故建物；看屋與產權查核時建議向社區管委會、鄰里或透過${courtName}公開筆錄查明實際起跳樓層與戶別。`;
-          } else if (/火警|火災|惡火|濃煙|燒毀|自焚|氣爆/.test(fullTxt)) {
-            supplement = `事故發生時現場竄出濃煙與火舌，轄區消防局獲報後立即派遣多輛消防車與救護人員趕赴${distNorm}現場佈線灌救及破門搜救，惟受困住戶仍因濃煙嗆傷或燒燙傷勢過重不幸於屋內罹難，後續由消防局火調科會同警方鑑識人員完成起火原因勘驗。此類曾發生奪命火警之${bldgNorm}，除因專有部分非自然死亡而須於《不動產說明書》依法勾選揭露外，看屋時亦應一併查核室內結構修繕紀錄與內政部實價登錄之特殊交易折價備註。`;
-          } else if (/一氧化碳|瓦斯|熱水器|中毒/.test(fullTxt)) {
-            supplement = `本案係因住宅室內或加裝窗戶之陽台熱水器通風不良，導致一氧化碳氣體蓄積，經親友或鄰居察覺異狀通報119消防救護人員到場破門搶救，惟屋內住戶已因一氧化碳中毒缺氧不幸身亡，並由轄區警方與檢察官完成相驗。依內政部不動產交易現況說明書規範，一氧化碳中毒致死明確列為四大法定非自然死亡（凶宅）應揭露項目之一，產權移轉與銀行核貸估價時均會反映事故折價。`;
-          } else if (/砍殺|槍擊|分屍|情殺|仇殺|兇殺|命案|他殺|虐死|家暴|持刀|鐵鎚|行凶/.test(fullTxt) && (r.category === "刑事命案" || /命案|兇殺|他殺|砍殺|槍擊/.test(cleanReason))) {
-            supplement = `案發後轄區警分局偵查隊與鑑識人員立即封鎖該${bldgNorm}現場進行採證，並報請地方檢察署檢察官指揮偵辦及率法醫相驗，相關刑案偵審過程與路段背景均載明於公開社會新聞與司法卷宗。由於建物專有部分曾發生重大刑事命案，屬不動產市場心理畏懼程度最高之法定凶宅類型，出賣人於買賣時負有絕對據實揭露義務，買方亦可透過司法院裁判書系統與${courtName}公告進一步交叉核對。`;
-          } else if (r.db_source === "JUDICIAL_JUDGMENT" || /裁判書|判決|減少價金|瑕疵擔保|隱瞞/.test(fullTxt)) {
-            supplement = `本案於不動產買賣移轉後，因買受人查知屋內曾發生非自然死亡事故，遂向${courtName}提起民事「物之瑕疵擔保減少價金」或解除契約訴訟；審理期間經法院向轄區警消機關調閱當年報案與相驗卷宗核實，判決認定該${bldgNorm}確屬交易價值減損之事故建物。意向買方與租客可透過司法院法學資料檢索系統查閱歷審裁判書原文，核對具體案發年份與法院認定之折價比例。`;
-          } else if (r.db_source === "JUDICIAL_AUCTION" || /法拍|拍賣|查封筆錄|民事執行處|點交/.test(fullTxt)) {
-            supplement = `該${bldgNorm}標的於進入${courtName}民事執行處強制執行拍賣程序時，經法院書記官依職權發函向轄區警察分局查證，並於公開《拍賣公告暨查封筆錄》使用現況欄明確註記屋內曾發生非自然死亡事件。經法院公文書與警政紀錄雙重核實，該戶屬明確列管之事故建物；無論法拍投標或日後二手轉售，均須納入《不動產說明書》揭露範圍並評估銀行專案核貸成數。`;
-          } else {
-            supplement = `案發時因家屬、房東或鄰里察覺異狀，會同轄區派出所員警與119消防救護人員到場破門查訪，確認當事人於該${bldgNorm}室內專有部分發生非自然死亡，經鑑識人員勘驗現場排除外力介入並報請檢察官相驗結案。由於非自然死亡結果發生於建物專有部分內，依內政部函釋與法院實務標準，該戶屬買賣及租賃時應於《不動產說明書》據實揭露之事故標的，實地看屋時建議向管委會、鄰里長及內政部實價登錄特殊交易備註欄進行交叉查證。`;
-          }
-          cleanReason = `${cleanReason}${supplement}`;
-        }
-
-        cleanTimeline = Array.isArray(r.history_timeline)
-          ? r.history_timeline.map(t => {
-              let st = sanitizeHtmlEntitiesAndText(t?.stage);
-              if (st === "司法院法學資料檢索系統民") st = "司法院民事裁判書查證紀錄";
-              else if (st === "重大社會刑案新聞與刑事判") st = "重大社會刑案新聞與刑事判決";
-              else if (st === "消防局火警災情彙報與社會") st = "消防局火警災情彙報與社會新聞";
-              else if (st === "地方社會版新聞與警消救援") st = "地方社會新聞與警消救援通報";
-              return {
-                ...t,
-                stage: st,
-                detail: sanitizeHtmlEntitiesAndText(t?.detail)
-                  .replace(/(前天清晨|前天凌晨|前天晚間|前天|前日|昨日清晨|昨日凌晨|昨日上午|昨日下午|昨日晚間|昨日深夜|昨天清晨|昨天凌晨|昨天上午|昨天下午|昨天晚間|昨晚|昨夜|昨晨|昨日|昨天)（(?:19\d{2}|20\d{2})年\d{1,2}月\d{1,2}日）/g, "$1")
-                  .replace(/（來源連結可點擊直接查閱原篇報導）/g, "")
-                  .replace(/（同址／同路段整合紀錄[\s\S]*$/, "")
-                  .replace(/（系統已自動?比對整合[\s\S]*$/, "")
-                  .trim()
-              };
-            })
-          : [];
-
-        const incDateStr = String(r.incident_date || "2023-06-15").slice(0, 10);
-        const incYearStr = incDateStr.slice(0, 4);
-        if (
-          cleanTimeline.length <= 1 &&
-          (!cleanTimeline[0] || cleanTimeline[0].detail.length < 45 || cleanTimeline[0].detail.slice(0, 35) === cleanReason.slice(0, 35))
-        ) {
-          cleanTimeline = [
-            {
-              year: incDateStr,
-              stage: "案發通報與警消／檢警相驗",
-              detail: cleanReason.split("。")[0] + `。經轄區警方與救護人員到場處置，完成現場封鎖採證與檢察官相驗程序（核實來源：${srcLabelForEnrich}）。`
-            },
-            {
-              year: `${incYearStr}–2026`,
-              stage: "產權列管與不動產說明書查核",
-              detail: `該位於${cityNorm}${distNorm}之${bldgNorm}已納入公開事故建物實證檔案（狀態：${r.current_status || "現況列管中"}），買賣或租賃簽約前建議對照《不動產說明書》、${courtName}法拍公告及內政部實價登錄特殊交易備註欄。`
-            }
-          ];
+      const cleanAddress = sanitizeHtmlEntitiesAndText(r.address || "")
+        .replace(/（([^）·]+)·\s*[^）]*[？?！!／「][^）]*）/g, "（$1）");
+      let cleanReason = cleanCaseReasonClient(r.reason || "", r);
+      const dupMatch = cleanReason.match(/^【([^】]+)】\s*(.+)$/);
+      if (dupMatch) {
+        const h = dupMatch[1].trim();
+        const body = dupMatch[2].trim();
+        if (body.replace(/\s+/g, "").startsWith(h.replace(/\s+/g, "").slice(0, 10))) {
+          cleanReason = body;
         }
       }
+      if (cleanReason && !cleanReason.endsWith("。") && !cleanReason.endsWith("！") && !cleanReason.endsWith("）")) {
+        cleanReason += "。";
+      }
+      const cleanOrigin = cleanSourceOriginClient(r.media_verification || r.source || "", r);
+      const cleanSource = cleanOrigin;
+      const cleanMedia = cleanOrigin;
+      const rawA = sanitizeHtmlEntitiesAndText(r.auction_record || "");
+      const cleanAuction = /案發日期雙重核實|案發日期核實|無公開法拍|尚無法拍|公開資訊與歷史紀錄核實/.test(rawA) ? "" : rawA;
+      const cleanTimeline = Array.isArray(r.history_timeline)
+        ? r.history_timeline.map(t => {
+            let st = sanitizeHtmlEntitiesAndText(t?.stage);
+            if (st === "司法院法學資料檢索系統民") st = "司法院民事裁判書紀錄";
+            else if (st === "重大社會刑案新聞與刑事判") st = "重大社會刑案新聞與刑事判決";
+            else if (st === "消防局火警災情彙報與社會") st = "消防局火警災情彙報與社會新聞";
+            else if (st === "地方社會版新聞與警消救援") st = "地方社會新聞與警消救援通報";
+            return {
+              ...t,
+              stage: st,
+              detail: cleanCaseReasonClient(t?.detail || "", r)
+                .replace(/（核實來源：[^）]*）/g, "")
+                .replace(/（來源連結可點擊直接查閱原篇報導）/g, "")
+                .trim()
+            };
+          })
+        : [];
 
       const sanitizedRecord = {
         ...r,
@@ -7773,13 +7825,13 @@
           const winner = getClientAuthorityScore(cand) > getClientAuthorityScore(ex) ? { ...cand } : { ...ex };
           const loser = winner === cand ? ex : cand;
           if (!winner.source_url && loser.source_url) winner.source_url = loser.source_url;
-          if (loser.reason && winner.reason && !winner.reason.includes(loser.reason.slice(0, 22))) {
-            winner.reason = `${winner.reason} ｜ 【交叉查證整合】${loser.reason}`.slice(0, 650);
-          } else if ((loser.reason || "").length > (winner.reason || "").length) {
+          if ((loser.reason || "").length > (winner.reason || "").length) {
             winner.reason = loser.reason;
           }
           if (loser.media_verification && winner.media_verification && !winner.media_verification.includes(loser.media_verification)) {
-            winner.media_verification = `${winner.media_verification} · ${loser.media_verification}`;
+            const mergedSrc = cleanSourceOriginClient(`${winner.media_verification} × ${loser.media_verification}`, winner);
+            winner.media_verification = mergedSrc;
+            winner.source = mergedSrc;
           }
           winner.merged_count = (winner.merged_count || 1) + (loser.merged_count || 1);
           bucket[dupIdx] = winner;

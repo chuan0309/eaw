@@ -1,24 +1,13 @@
-User-agent: Mediapartners-Google
+User-agent: *
 Allow: /
-
-User-agent: AdsBot-Google
-Allow: /
-
-User-agent: AdsBot-Google-Mobile
-Allow: /
+Allow: /google6a317e59d3daa28c.html
+Allow: /sitemap.xml
+Allow: /calibrated_archive.json
 
 User-agent: Googlebot
 Allow: /
 
 User-agent: Google-Site-Verification
 Allow: /
-
-User-agent: *
-Allow: /
-Allow: /ads.txt
-Allow: /favicon.svg
-Allow: /google6a317e59d3daa28c.html
-Allow: /sitemap.xml
-Allow: /calibrated_archive.json
 
 Sitemap: https://chuancn.org/sitemap.xml

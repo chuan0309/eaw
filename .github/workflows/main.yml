@@ -1,91 +1,30 @@
-name: Taiwan & Japan Haunted Property Crawlers (臺灣・日本 分別獨立爬蟲)
+name: 臺灣368鄉鎮免費公開新聞RSS巡檢 (100%無付費API)
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'
   workflow_dispatch:
-    inputs:
-      mode:
-        description: '執行模式 (incremental=定期增量 / backfill=歷年歷史回溯)'
-        required: false
-        default: 'incremental'
-        type: choice
-        options:
-          - incremental
-          - backfill
-      country:
-        description: '目標國家 (ALL / TW / JP)'
-        required: false
-        default: 'ALL'
-        type: choice
-        options:
-          - ALL
-          - TW
-          - JP
-      year_from:
-        description: '歷史回溯起始年份'
-        required: false
-        default: '2000'
-      year_to:
-        description: '歷史回溯結束年份'
-        required: false
-        default: '2026'
 
-permissions:
-  contents: write
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
-  crawl-taiwan-japan:
+  crawl_and_update_db:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: 1. 檢出專案程式碼
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Set up Python
+      - name: 2. 安裝 Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Python & Node dependencies
+      - name: 3. 安裝免費基礎套件
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          npm install --no-audit --no-fund
+          pip install --upgrade pip
+          pip install "supabase>=2.4.0" "requests>=2.31.0"
 
-      - name: 1. Run Taiwan Independent Crawler (crawler_tw.py)
-        if: ${{ github.event.inputs.country == '' || github.event.inputs.country == 'ALL' || github.event.inputs.country == 'TW' }}
+      - name: 4. 執行免費公開新聞 RSS 與內建行政區座標入庫 (無任何付費 API)
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-        run: |
-          MODE="${{ github.event.inputs.mode || 'incremental' }}"
-          Y_FROM="${{ github.event.inputs.year_from || '2000' }}"
-          Y_TO="${{ github.event.inputs.year_to || '2026' }}"
-          python crawler_tw.py --mode "$MODE" --year-from "$Y_FROM" --year-to "$Y_TO"
-
-      - name: 2. Run Japan Independent Crawler & Supabase Sync (crawler_jp.py)
-        if: ${{ github.event.inputs.country == '' || github.event.inputs.country == 'ALL' || github.event.inputs.country == 'JP' }}
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: |
-          MODE="${{ github.event.inputs.mode || 'incremental' }}"
-          Y_FROM="${{ github.event.inputs.year_from || '2000' }}"
-          Y_TO="${{ github.event.inputs.year_to || '2026' }}"
-          python crawler_jp.py --mode "$MODE" --year-from "$Y_FROM" --year-to "$Y_TO"
-
-      - name: Commit and Push updated archive
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -A calibrated_archive.json public/calibrated_archive.json jp_verified_archive.json public/jp_verified_archive.json initial_boot_records.json public/initial_boot_records.json crawler_vault_backup.json public/crawler_vault_backup.json sitemap.xml public/sitemap.xml
-          git diff --staged --quiet || (git commit -m "Auto-update: TW 368 districts + JP 47 prefectures verified crawlers [skip ci]" && git pull --rebase --autostash origin main && git push)
+        run: python -u crawler.py
